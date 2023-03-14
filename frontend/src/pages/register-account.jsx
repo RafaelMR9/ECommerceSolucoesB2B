@@ -8,12 +8,12 @@ export default function RegisterAccount() {
           <h1 className="text-3xl text-gray-900 font-bold text-center mb-8">Registrar Conta</h1>
           <form>
             <div className="mb-4">
-              <label className="block text-gray-700 font-bold mb-2" htmlFor="login">
-                Login
+              <label className="block text-gray-700 font-bold mb-2" htmlFor="username">
+                Usuário
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="login"
+                id="username"
                 type="text"
               />
             </div>
@@ -85,7 +85,7 @@ export default function RegisterAccount() {
                 className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline"
                 type="submit"
               >
-                Registrar
+                Cadastrar
               </button>
             </div>
           </form>
@@ -97,7 +97,7 @@ export default function RegisterAccount() {
         </div>
         <div className="flex justify-center items-center mt-6">
           <Link href="/login" className="bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded w-full block mx-auto">
-            Clique aqui para Entrar
+            Clique Aqui para Entrar
           </Link>
         </div>
       </div>
