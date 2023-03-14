@@ -8,13 +8,13 @@ export default function Login() {
           <h1 className="text-3xl text-gray-900 font-bold text-center mb-8">Fazer Login</h1>
           <form>
             <div className="mb-4">
-              <label className="block text-gray-700 font-bold mb-2" htmlFor="email">
-                Email
+              <label className="block text-gray-700 font-bold mb-2" htmlFor="username">
+                Usuário
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="email"
-                type="email"
+                id="username"
+                type="text"
               />
             </div>
             <div className="mb-4">
@@ -35,7 +35,7 @@ export default function Login() {
                 Entrar
               </button>
               <Link href="/forgot-password" className="inline-block align-baseline font-bold text-sm text-blue-600 hover:text-blue-800">
-                  Esqueci Minha Senha ????
+                Esqueci Minha Senha ????
               </Link>
             </div>
           </form>

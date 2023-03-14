@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Inter } from 'next/font/google'
 import { AuthContext } from '../contexts/authContext'
 import Nav from '../components/shared/Nav'
+import Footer from '../components/shared/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,9 +22,9 @@ export default function Home() {
       </Head>
       <main className="bg-blue-50 min-h-screen">
         <Nav />
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-8 py-8">
           <h1 className="text-4xl font-bold text-slate-800 text-center mb-8">
-            Os Melhores Produtos a Venda para Todos os Tipos de Empresas.
+            Os Melhores Produtos a Venda para Todos os Tipos de Empresas
           </h1>
           <section className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
@@ -59,12 +60,13 @@ export default function Home() {
               />
               <h2 className="text-xl font-bold mb-2">Produto 1</h2>
               <p className="text-gray-600 mb-4">
-                Descrição breve do produto. Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Vivamus vestibulum ipsum et orci
-                mattis feugiat. Praesent auctor, erat a suscipit commodo.
+                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
+              </p>
+              <p className="text-gray-800 font-bold text-xl mb-4">
+                R$ 99,99
               </p>
               <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Comprar
+                Mais Informações
               </button>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-4">
@@ -73,14 +75,15 @@ export default function Home() {
                 alt="Imagem do produto"
                 className="w-full rounded-lg mb-4"
               />
-              <h2 className="text-xl font-bold mb-2">Produto 2</h2>
+              <h2 className="text-xl font-bold mb-2">Produto 1</h2>
               <p className="text-gray-600 mb-4">
-                Descrição breve do produto. Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Vivamus vestibulum ipsum et orci
-                mattis feugiat. Praesent auctor, erat a suscipit commodo.
+                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
+              </p>
+              <p className="text-gray-800 font-bold text-xl mb-4">
+                R$ 99,99
               </p>
               <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Comprar
+                Mais Informações
               </button>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-4">
@@ -89,14 +92,15 @@ export default function Home() {
                 alt="Imagem do produto"
                 className="w-full rounded-lg mb-4"
               />
-              <h2 className="text-xl font-bold mb-2">Produto 3</h2>
+              <h2 className="text-xl font-bold mb-2">Produto 1</h2>
               <p className="text-gray-600 mb-4">
-                Descrição breve do produto. Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Vivamus vestibulum ipsum et orci
-                mattis feugiat. Praesent auctor, erat a suscipit commodo.
+                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
+              </p>
+              <p className="text-gray-800 font-bold text-xl mb-4">
+                R$ 99,99
               </p>
               <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Comprar
+                Mais Informações
               </button>
             </div>
           </section>
@@ -111,13 +115,19 @@ export default function Home() {
                 className="w-full rounded-lg mb-4"
               />
               <h2 className="text-xl font-bold mb-2">Produto 1</h2>
-              <p className="text-gray-600 mb-4">
-                Descrição breve do produto. Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Vivamus vestibulum ipsum et orci
-                mattis feugiat. Praesent auctor, erat a suscipit commodo.
+              <p className="text-gray-600 mb-2">
+                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
               </p>
+              <div className="flex mb-4">
+                <p className="text-green-600 font-bold text-xl">
+                  R$ 99,99
+                </p>
+                <p className="text-gray-500 font-bold text-xl ml-2 line-through">
+                  R$ 129,99
+                </p>
+              </div>
               <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Comprar
+                Mais Informações
               </button>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-4">
@@ -126,14 +136,20 @@ export default function Home() {
                 alt="Imagem do produto"
                 className="w-full rounded-lg mb-4"
               />
-              <h2 className="text-xl font-bold mb-2">Produto 2</h2>
-              <p className="text-gray-600 mb-4">
-                Descrição breve do produto. Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Vivamus vestibulum ipsum et orci
-                mattis feugiat. Praesent auctor, erat a suscipit commodo.
+              <h2 className="text-xl font-bold mb-2">Produto 1</h2>
+              <p className="text-gray-600 mb-2">
+                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
               </p>
+              <div className="flex mb-4">
+                <p className="text-green-600 font-bold text-xl">
+                  R$ 99,99
+                </p>
+                <p className="text-gray-500 font-bold text-xl ml-2 line-through">
+                  R$ 129,99
+                </p>
+              </div>
               <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Comprar
+                Mais Informações
               </button>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-4">
@@ -142,14 +158,20 @@ export default function Home() {
                 alt="Imagem do produto"
                 className="w-full rounded-lg mb-4"
               />
-              <h2 className="text-xl font-bold mb-2">Produto 3</h2>
-              <p className="text-gray-600 mb-4">
-                Descrição breve do produto. Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Vivamus vestibulum ipsum et orci
-                mattis feugiat. Praesent auctor, erat a suscipit commodo.
+              <h2 className="text-xl font-bold mb-2">Produto 1</h2>
+              <p className="text-gray-600 mb-2">
+                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
               </p>
+              <div className="flex mb-4">
+                <p className="text-green-600 font-bold text-xl">
+                  R$ 99,99
+                </p>
+                <p className="text-gray-500 font-bold text-xl ml-2 line-through">
+                  R$ 129,99
+                </p>
+              </div>
               <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Comprar
+                Mais Informações
               </button>
             </div>
           </section>
@@ -158,7 +180,7 @@ export default function Home() {
           <h1 className="text-4xl font-bold text-white text-center mb-4 pt-9">
             Ficou com Alguma Dúvida?
           </h1>
-          <h2 className="text-2xl font-bold text-white text-center mb-4">
+          <h2 className="text-2xl font-bold text-white text-center mb-6">
             Sem Problemas! Envie um Ticket Agora Para o Nosso Suporte.
           </h2>
           <div className="flex justify-center items-center">
@@ -166,15 +188,8 @@ export default function Home() {
               Suporte
             </Link>
           </div>
-          
         </div>
-        <footer className="bg-slate-800 text-white py-4">
-          <div className="container mx-auto px-4">
-            <p className="text-center">
-              © 2023 - Desenvolvido por Rafael
-            </p>
-          </div>
-        </footer>
+        <Footer />
       </main>
     </>
   )
