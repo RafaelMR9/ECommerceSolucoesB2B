@@ -65,9 +65,9 @@ export default function Home() {
               <p className="text-gray-800 font-bold text-xl mb-4">
                 R$ 99,99
               </p>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Mais Informações
-              </button>
+              </Link>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-4">
               <img
@@ -82,9 +82,9 @@ export default function Home() {
               <p className="text-gray-800 font-bold text-xl mb-4">
                 R$ 99,99
               </p>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Mais Informações
-              </button>
+              </Link>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-4">
               <img
@@ -99,9 +99,9 @@ export default function Home() {
               <p className="text-gray-800 font-bold text-xl mb-4">
                 R$ 99,99
               </p>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Mais Informações
-              </button>
+              </Link>
             </div>
           </section>
           <h1 className="text-4xl font-bold text-slate-800 mt-8 mb-4">
@@ -126,9 +126,9 @@ export default function Home() {
                   R$ 129,99
                 </p>
               </div>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Mais Informações
-              </button>
+              </Link>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-4">
               <img
@@ -148,9 +148,9 @@ export default function Home() {
                   R$ 129,99
                 </p>
               </div>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Mais Informações
-              </button>
+              </Link>
             </div>
             <div className="bg-white rounded-lg shadow-lg p-4">
               <img
@@ -170,9 +170,9 @@ export default function Home() {
                   R$ 129,99
                 </p>
               </div>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                 Mais Informações
-              </button>
+              </Link>
             </div>
           </section>
         </div>

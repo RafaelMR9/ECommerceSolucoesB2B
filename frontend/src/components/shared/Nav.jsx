@@ -3,13 +3,13 @@ import Link from 'next/link';
 export default function Nav() {
   return (
     <nav className="bg-gray-800">
-      <div className="max-w-7xl mx-auto">
+      <div className="px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="text-white font-bold text-lg">
             Logo da Loja
           </Link>
-          <div className="ml-4 flex-shrink-0 flex-grow">
-            <form className="flex px-32">
+          <div className="flex-shrink-0 flex-grow">
+            <form className="flex px-20">
               <input
                 className="bg-gray-700 text-white rounded-md py-2 px-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 type="text"
