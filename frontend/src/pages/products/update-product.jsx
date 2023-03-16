@@ -1,3 +1,4 @@
+import Link from "next/link";
 import BaseLayout from "../../components/shared/BaseLayout";
 
 export default function UpdateProduct() {
@@ -95,14 +96,12 @@ export default function UpdateProduct() {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white"
             />
           </div>
-          <div class="flex istems-center justify-center">
-            <button
-              class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              Atualizar
-            </button>
-          </div>
+          <button
+            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+          >
+            Atualizar
+          </button>
         </form>
         <div class="flex items-center justify-center">
           <div class="w-90 h-80 mx-auto mt-4">
@@ -114,6 +113,12 @@ export default function UpdateProduct() {
             />
           </div>
         </div>
+      </div>
+      <hr className="my-4 border border-gray-400"/>
+      <div className="mt-8 text-center">
+        <p className="text-gray-700">
+          Não quer Atualizar o Produto? <Link href="/products/1" className="text-blue-600">Voltar para a Página do Produto</Link>.
+        </p>
       </div>
     </BaseLayout>
   )

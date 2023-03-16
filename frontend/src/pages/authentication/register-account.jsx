@@ -63,22 +63,23 @@ export default function RegisterAccount() {
               </label>
               <input
                 className="mr-2 leading-tight"
-                id="authorizePurchase"
+                id="authorizeFature"
                 type="checkbox"
               />
-              <label className="text-sm" htmlFor="authorizePurchase">
+              <label className="text-sm" htmlFor="authorizeFature">
                 Quero poder realizar compras faturadas.
               </label>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 font-bold mb-2" htmlFor="address">
+              <label className="block text-gray-700 font-bold mb-2" htmlFor="adress">
                 Endereço
               </label>
-              <textarea
+              <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="address"
-                rows="3"
-              ></textarea>
+                id="adress"
+                type="text"
+                placeholder="Digite o Endereço"
+              />
             </div>
             <div className="flex items-center justify-between">
               <button
@@ -96,7 +97,7 @@ export default function RegisterAccount() {
           <hr className="border-gray-600 w-2/6" />
         </div>
         <div className="flex justify-center items-center mt-6">
-          <Link href="/login" className="bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded w-full block mx-auto">
+          <Link href="/authentication" className="bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded w-full block mx-auto">
             Clique Aqui para Entrar
           </Link>
         </div>

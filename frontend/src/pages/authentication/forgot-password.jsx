@@ -27,7 +27,7 @@ export default function ForgotPassword() {
               >
                 Enviar
               </button>
-              <Link href="/login" className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
+              <Link href="/authentication" className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
                 Voltar ????
               </Link>
             </div>
