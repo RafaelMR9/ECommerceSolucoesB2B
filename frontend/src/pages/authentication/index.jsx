@@ -34,21 +34,21 @@ export default function Login() {
               >
                 Entrar
               </button>
-              <Link href="/forgot-password" className="inline-block align-baseline font-bold text-sm text-blue-600 hover:text-blue-800">
+              <Link href="/authentication/forgot-password" className="inline-block align-baseline font-bold text-sm text-blue-600 hover:text-blue-800">
                 Esqueci Minha Senha ????
               </Link>
             </div>
           </form>
         </div>
         <div className="flex justify-between items-center mt-6 text-gray-600">
-            <hr className="border-gray-600 w-2/6" />
-            <span>Novo por Aqui?</span>
-            <hr className="border-gray-600 w-2/6" />
+          <hr className="border-gray-600 w-2/6" />
+          <span>Novo por Aqui?</span>
+          <hr className="border-gray-600 w-2/6" />
         </div>
         <div className="flex justify-center items-center mt-6">
-            <Link href="/register-account" className="bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded w-full block mx-auto">
-                Cadastre Sua Conta
-            </Link>
+          <Link href="/authentication/register-account" className="bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded w-full block mx-auto">
+              Cadastre Sua Conta
+          </Link>
         </div>
       </div>
     </div>

@@ -58,7 +58,7 @@ export default function Nav() {
           <Link href="/" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
             Suporte
           </Link>
-          <Link href="/" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
+          <Link href="/profile" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
             Perfil
           </Link>
         </div>
