@@ -13,7 +13,7 @@ export default function Nav() {
               <input
                 className="bg-gray-700 text-white rounded-md py-2 px-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 type="text"
-                placeholder="Buscar produtos"
+                placeholder="Buscar Produtos"
               />
               <button className="ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
                 Pesquisar
@@ -43,7 +43,7 @@ export default function Nav() {
           <Link href="/products" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
             Produtos
           </Link>
-          <Link href="/" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+          <Link href="/categories" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
             Categorias
           </Link>
           <Link href="/" className="text-gray-300 hover:text-white px-6 rounded-md text-sm font-medium">
