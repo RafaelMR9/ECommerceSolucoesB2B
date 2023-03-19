@@ -8,11 +8,11 @@ export default function RegisterPromotion() {
       <form>
         <div className="mb-4">
           <label htmlFor="startDate" className="block text-base font-medium text-gray-700 mb-2">Data Inicial</label>
-          <input type="date" id="startDate" name="start_date" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+          <input type="date" id="startDate" name="startDate" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className="mb-4">
           <label htmlFor="endDate" className="block text-base font-medium text-gray-700 mb-2">Data Final</label>
-          <input type="date" id="endDate" name="end_date" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+          <input type="date" id="endDate" name="endDate" className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className="mb-4">
           <label htmlFor="price" className="block text-base font-medium text-gray-700 mb-2">Preço de Venda</label>
