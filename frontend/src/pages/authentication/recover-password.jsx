@@ -17,7 +17,7 @@ export default function RecoverPassword() {
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2" htmlFor="confirmPassword">
-                Confirmar Senha ?????
+                Confirmar Senha
               </label>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -25,14 +25,12 @@ export default function RecoverPassword() {
                 type="password"
               />
             </div>
-            <div className="flex items-center justify-between">
-              <button
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline"
-                type="submit"
-              >
-                Atualizar
-              </button>
-            </div>
+            <button
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Atualizar
+            </button>
           </form>
         </div>
       </div>

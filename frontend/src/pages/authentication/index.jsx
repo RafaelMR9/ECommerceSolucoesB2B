@@ -35,7 +35,7 @@ export default function Login() {
                 Entrar
               </button>
               <Link href="/authentication/forgot-password" className="inline-block align-baseline font-bold text-sm text-blue-600 hover:text-blue-800">
-                Esqueci Minha Senha ????
+                Esqueci Minha Senha
               </Link>
             </div>
           </form>

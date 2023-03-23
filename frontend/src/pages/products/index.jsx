@@ -5,10 +5,8 @@ export default function Products() {
   return (
     <BaseLayout>
       <div className="flex justify-between mb-4">
-        <h1 className="text-4xl font-bold text-slate-800">
-          Produtos
-        </h1>
-        <Link href="/products/register-product" className="bg-white hover:bg-slate-100 border-2 border-blue-600 text-blue-600 flex items-center font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
+        <h1 className="text-4xl font-bold text-slate-800">Produtos</h1>
+        <Link href="/products/register" className="hover:bg-white border-2 border-blue-600 text-blue-600 flex items-center font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
           Cadastrar Produto
         </Link>
       </div>

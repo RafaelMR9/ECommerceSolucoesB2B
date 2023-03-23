@@ -38,10 +38,10 @@ export default function Profile() {
       </div>
       <hr className="my-16 border- border-gray-400"/>
       <div className="flex justify-around items-center">
-          <Link href="/profile/update-profile" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline">
+          <Link href="/profile/update" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline">
             Editar Dados de Cadastro
           </Link>
-          <Link href="/auth" className="hover:bg-white border-2 border-red-600 text-red-600 font-bold py-4 px-12 rounded focus:outline-none focus:shadow-outline">
+          <Link href="/auth" className="hover:bg-white border-2 border-red-600 text-red-600 font-bold py-4 px-16 rounded focus:outline-none focus:shadow-outline">
             Sair
           </Link>
       </div>

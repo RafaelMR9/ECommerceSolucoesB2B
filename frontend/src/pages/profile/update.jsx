@@ -39,16 +39,14 @@ export default function UpdateProfile() {
             placeholder="Digite o E-Mail"
           />
         </div>
-        <div className="flex items-center justify-between">
-          <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
-          >
-            Atualizar
-          </button>
-        </div>
+        <button
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="button"
+        >
+          Atualizar
+        </button>
       </form>
-      <hr className="my-6 border border-gray-400"/>
+      <hr className="mt-6 border border-gray-400"/>
       <div className="mt-8 text-center">
         <p className="text-gray-700">
           Não quer Atualizar o Perfil? <Link href="/profile" className="text-blue-600">Voltar para a Página de Perfil</Link>.

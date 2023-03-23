@@ -42,10 +42,10 @@ export default function Product() {
             <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white text-3xl font-bold py-6 px-16 rounded focus:outline-none focus:shadow-outline">
               Comprar
             </Link>
-            <Link href="/products/update-product" className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
+            <Link href="/products/update" className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-7 px-8 rounded focus:outline-none focus:shadow-outline">
               Atualizar Produto
             </Link>
-            <Link href="/products/register-promotion" className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
+            <Link href="/products/register-promotion" className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-7 px-8 rounded focus:outline-none focus:shadow-outline">
               Cadastrar Promoção
             </Link>
           </div>
