@@ -81,14 +81,12 @@ export default function RegisterAccount() {
                 placeholder="Digite o Endereço"
               />
             </div>
-            <div className="flex items-center justify-between">
-              <button
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline"
-                type="submit"
-              >
-                Cadastrar
-              </button>
-            </div>
+            <button
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Cadastrar
+            </button>
           </form>
         </div>
         <div className="flex justify-between items-center mt-6 text-gray-600">

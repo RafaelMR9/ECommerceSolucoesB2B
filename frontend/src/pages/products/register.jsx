@@ -114,7 +114,7 @@ export default function RegisterProduct() {
           </div>
         </div>
       </div>
-      <hr className="my-4 border border-gray-400"/>
+      <hr className="mt-6 border border-gray-400"/>
       <div className="mt-8 text-center">
         <p className="text-gray-700">
           Não quer Cadastrar um Produto? <Link href="/products" className="text-blue-600">Voltar para a Página de Produtos</Link>.

@@ -5,9 +5,7 @@ export default function Categories() {
   return (
     <BaseLayout>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-4xl font-bold text-slate-800">
-          Categorias
-        </h1>
+        <h1 className="text-4xl font-bold text-slate-800">Categorias</h1>
         <div className="flex-shrink-0 flex-grow">
           <form className="flex px-20">
             <input
@@ -20,7 +18,7 @@ export default function Categories() {
             </button>
           </form>
         </div>
-        <Link href="/categories/register-categorie" className="bg-white hover:bg-slate-100 border-2 border-blue-600 text-blue-600 flex items-center font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
+        <Link href="/categories/register" className="hover:bg-white border-2 border-blue-600 text-blue-600 flex items-center font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
           Cadastrar Categoria
         </Link>
       </div>

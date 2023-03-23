@@ -1,7 +1,7 @@
 import Link from "next/link";
 import BaseLayout from "../../components/shared/BaseLayout";
 
-export default function RegisterCategorie() {
+export default function RegisterCategory() {
   return (
     <BaseLayout>
       <h1 className="text-4xl font-bold text-slate-800 mb-8">Registrar Categoria</h1>
@@ -19,13 +19,11 @@ export default function RegisterCategorie() {
             <option value="categoria3">Categoria 3</option>
           </select>
         </div>
-        <div className="mt-6">
-          <button type="submit" className="inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600">
-            Registrar
-          </button>
-        </div>
+        <button type="submit" className="inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600">
+          Registrar
+        </button>
       </form>
-      <hr className="my-6 border border-gray-400" />
+      <hr className="mt-6 border border-gray-400" />
       <div className="mt-8 text-center">
         <p className="text-gray-700">
           Não quer Cadastrar a Categoria? <Link href="/categories" className="text-blue-600">Voltar para a Página de Categorias</Link>.

@@ -114,7 +114,7 @@ export default function UpdateProduct() {
           </div>
         </div>
       </div>
-      <hr className="my-4 border border-gray-400"/>
+      <hr className="mt-6 border border-gray-400"/>
       <div className="mt-8 text-center">
         <p className="text-gray-700">
           Não quer Atualizar o Produto? <Link href="/products/1" className="text-blue-600">Voltar para a Página do Produto</Link>.
