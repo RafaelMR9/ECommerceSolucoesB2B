@@ -184,7 +184,7 @@ export default function Home() {
             Sem Problemas! Envie um Ticket Agora Para o Nosso Suporte.
           </h2>
           <div className="flex justify-center items-center">
-            <Link href="/suport" className="bg-white hover:bg-slate-100 text-xl text-blue-600 text-center font-bold py-6 px-20 rounded">
+            <Link href="/support" className="bg-white hover:bg-slate-100 text-xl text-blue-600 text-center font-bold py-6 px-20 rounded">
               Suporte
             </Link>
           </div>
