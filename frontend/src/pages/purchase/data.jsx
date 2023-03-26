@@ -96,7 +96,7 @@ export default function PurchaseData() {
             </div>
           </>
         )}
-        <div className="mb-4">
+        <div className="mb-1">
           <label htmlFor="paymentDate" className="block text-base font-medium text-gray-700 mb-2">
             Data Solicitada para Pagamento
           </label>
@@ -109,23 +109,9 @@ export default function PurchaseData() {
             onChange={handleInputChange}
           />
         </div>
-        <div className="mb-4">
-          <label htmlFor="paymentMethod" className="block text-base font-medium text-gray-700 mb-2">
-            Forma de Pagamento
-          </label>
-          <select
-            id="paymentMethod"
-            name="paymentMethod"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            onChange={handleInputChange}
-            value={formData.paymentMethod}
-          >
-            <option value="" disabled>Selecione uma forma de pagamento</option>
-            <option value="creditCard">Cartão de Crédito</option>
-            <option value="debitCard">Cartão de Débito</option>
-            <option value="boleto">Boleto Bancário</option>
-          </select>
-        </div>
+        <p className="text-gray-600 mb-4">
+          Se este campo não for preenchido o pagamento vai ser feito na hora do recebimento do produto.
+        </p>
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           type="button"
@@ -136,7 +122,7 @@ export default function PurchaseData() {
       <hr className="mt-6 border border-gray-400" />
       <div className="mt-8 text-center">
         <p className="text-gray-700">
-          Não quer Atualizar Comprar este Produto ou quer Mudar a Quantidade? <Link href="/purchase" className="text-blue-600">Voltar para a Página de Compra</Link>.
+          Não quer Comprar este Produto ou quer Mudar a Quantidade? <Link href="/purchase" className="text-blue-600">Voltar para a Página de Compra</Link>.
         </p>
       </div>
     </BaseLayout>

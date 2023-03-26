@@ -26,7 +26,7 @@ export default function UpdateCategory() {
       <hr className="mt-6 border border-gray-400" />
       <div className="mt-8 text-center">
         <p className="text-gray-700">
-          Não quer Atualizar a Categoria? <Link href="/categories" className="text-blue-600">Voltar para a Página de Categorias</Link>.
+          Não quer Atualizar a Categoria? <Link href="/categories" className="text-blue-600">Voltar para a Página de Categoria Consultada</Link>.
         </p>
       </div>
     </BaseLayout>

@@ -37,6 +37,7 @@ export default function RegisterProduct() {
               id="costPrice"
               type="number"
               placeholder="Preço de Custo do Produto"
+              min={0}
             />
           </div>
           <div class="mb-4">
@@ -48,6 +49,7 @@ export default function RegisterProduct() {
               id="salePrice"
               type="number"
               placeholder="Preço de Venda do Produto"
+              min={0}
             />
           </div>
           <div class="mb-4">
@@ -87,7 +89,7 @@ export default function RegisterProduct() {
           </div>
           <div className="mb-4">
             <label htmlFor="imageUpload" className="block text-gray-700 font-bold mb-2">
-              Imagem ?????
+              Imagem
             </label>
             <input
               type="file"

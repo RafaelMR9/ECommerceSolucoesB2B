@@ -16,7 +16,7 @@ export default function Product() {
           <div>
             <div className="flex flex-wrap justify-between items-center mb-2">
               <h1 className="text-4xl font-bold text-slate-800 ">Nome do Produto</h1>
-              <button className="hover:bg-white border-2 border-red-600 text-red-600 font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
+              <button className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
                 Remover Produto
               </button>
             </div>

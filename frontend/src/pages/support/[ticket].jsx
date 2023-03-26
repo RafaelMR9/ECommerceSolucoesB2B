@@ -93,7 +93,7 @@ export default function AnswerTicket() {
       <hr className="mt-6 border border-gray-400" />
       <div className="mt-8 text-center">
         <p className="text-gray-700">
-          Não Quer Responder ou Resolvemos sua Questão? <Link href="/support" className="text-blue-600">Voltar para a Página do Ticket</Link>.
+          Não quer Responder ou Resolvemos sua Questão? <Link href="/support" className="text-blue-600">Voltar para a Página de Suporte</Link>.
         </p>
       </div>
     </BaseLayout>
