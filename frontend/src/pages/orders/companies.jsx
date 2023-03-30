@@ -3,10 +3,10 @@ import BaseLayout from "../../components/shared/BaseLayout";
 
 export default function CompaniesClientOrders() {
   const orders = [
-    { id: 1, name: "A", date: "20/10/2022" },
-    { id: 2, name: "B", date: "21/10/2022" },
-    { id: 3, name: "C", date: "22/10/2022" },
-    { id: 4, name: "D", date: "23/10/2022" },
+    { id: 1, name: "A", orderDate: "20/10/2023", expectedDate: "22/10/2023", deliveryDate: "25/10/2023" },
+    { id: 2, name: "B", orderDate: "21/10/2023", expectedDate: "23/10/2023", deliveryDate: "26/10/2023" },
+    { id: 3, name: "C", orderDate: "22/10/2023", expectedDate: "24/10/2023", deliveryDate: "-" },
+    { id: 4, name: "D", orderDate: "23/10/2023", expectedDate: "25/10/2023", deliveryDate: "28/10/2023" },
   ]
 
   return (
@@ -22,8 +22,23 @@ export default function CompaniesClientOrders() {
               >
                 Pedidos
               </th>
-              <th scope="col" className="relative px-6 py-3">
-                <span className="sr-only">Data</span>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Realização do Pedido
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Previsão de Entrega
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Realização da Entrega
               </th>
               <th scope="col" className="relative px-6 py-3">
                 <span className="sr-only">Cancelar Pedido</span>
@@ -34,12 +49,16 @@ export default function CompaniesClientOrders() {
             {orders.map((order) => (
               <tr key={order.id}>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    {order.name}
-                  </div>
+                  <div className="text-sm font-medium text-gray-900">{order.name}</div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  {order.date}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-800">{order.orderDate}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-800">{order.expectedDate}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-800">{order.deliveryDate}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button className="text-red-600 hover:text-red-700">
