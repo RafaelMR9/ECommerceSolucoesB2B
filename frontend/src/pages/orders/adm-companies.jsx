@@ -3,10 +3,10 @@ import BaseLayout from "../../components/shared/BaseLayout";
 
 export default function CompaniesOrders() {
   const companies = [
-    { id: 1, cnpj: "00.000.000/0001-01" },
-    { id: 2, cnpj: "00.000.000/0001-02" },
-    { id: 3, cnpj: "00.000.000/0001-03" },
-    { id: 4, cnpj: "00.000.000/0001-04" },
+    { id: 1, cnpj: "00.000.000/0001-01", orderDate: "20/10/2023", expectedDate: "25/10/2023", deliveryDate: "-" },
+    { id: 2, cnpj: "00.000.000/0001-02", orderDate: "21/10/2023", expectedDate: "26/10/2023", deliveryDate: "28/10/2023" },
+    { id: 3, cnpj: "00.000.000/0001-03", orderDate: "22/10/2023", expectedDate: "27/10/2023", deliveryDate: "-" },
+    { id: 4, cnpj: "00.000.000/0001-04", orderDate: "23/10/2023", expectedDate: "28/10/2023", deliveryDate: "30/10/2023" },
   ]
 
   return (
@@ -22,14 +22,29 @@ export default function CompaniesOrders() {
               >
                 CNPJ
               </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Realização do Pedido
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Previsão de Entrega
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Realização da Entrega
+              </th>
               <th scope="col" className="relative px-6 py-3">
                 <span className="sr-only">Enviar</span>
               </th>
               <th scope="col" className="relative px-6 py-3">
                 <span className="sr-only">Não Enviar</span>
-              </th>
-              <th scope="col" className="relative px-6 py-3">
-                <span className="sr-only">Cancelar Pedido</span>
               </th>
             </tr>
           </thead>
@@ -41,6 +56,21 @@ export default function CompaniesOrders() {
                     {company.cnpj}
                   </div>
                 </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-800">
+                    {company.orderDate}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-800">
+                    {company.expectedDate}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-800">
+                    {company.deliveryDate}
+                  </div>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button className="text-blue-600 hover:text-blue-700">
                     Enviar
@@ -49,11 +79,6 @@ export default function CompaniesOrders() {
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button className="text-red-600 hover:text-red-700">
                     Não Enviar
-                  </button>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button className="text-red-600 hover:text-red-700">
-                    Cancelar Pedido
                   </button>
                 </td>
               </tr>

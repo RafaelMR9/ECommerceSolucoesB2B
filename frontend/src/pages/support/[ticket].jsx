@@ -8,21 +8,25 @@ export default function AnswerTicket() {
       id: 1,
       sender: "user",
       message: "Olá, estou tendo problemas para acessar minha conta.",
+      timestamp: "2023-02-20T10:30:00.000Z"
     },
     {
       id: 2,
       sender: "admin",
       message: "Olá, em que posso ajudá-lo?",
+      timestamp: "2023-02-20T10:32:00.000Z"
     },
     {
       id: 3,
       sender: "user",
       message: "Não consigo fazer login, aparece uma mensagem de erro.",
+      timestamp: "2023-02-20T10:33:00.000Z"
     },
     {
       id: 4,
       sender: "admin",
       message: "Por favor, me informe qual é a mensagem de erro que aparece.",
+      timestamp: "2023-02-20T10:35:00.000Z"
     },
   ])
 
@@ -63,9 +67,14 @@ export default function AnswerTicket() {
                 <dt className="text-md font-medium text-gray-700">
                   {message.sender === "user" ? "Você" : "Administrador"}
                 </dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {message.message}
-                </dd>
+                <div className="flex flex-row items-center justify-between sm:col-span-2">
+                  <p className="text-sm text-gray-600">
+                    {new Date().toLocaleString()}
+                  </p>
+                  <dd className="mt-1 text-sm text-gray-900">
+                    {message.message}
+                  </dd>
+                </div>
               </div>
             ))}
           </dl>
@@ -84,11 +93,11 @@ export default function AnswerTicket() {
           ></textarea>
         </div>
         <button
-            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
-            type="submit"
-          >
-            Enviar
-          </button>
+          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+          type="submit"
+        >
+          Enviar
+        </button>
       </form>
       <hr className="mt-6 border border-gray-400" />
       <div className="mt-8 text-center">

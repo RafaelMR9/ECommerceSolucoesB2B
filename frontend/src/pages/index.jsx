@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import Link from 'next/link';
 
 import { Inter } from 'next/font/google'
@@ -15,7 +14,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Nome da loja</title>
+        <title>Web Vendas</title>
         <meta name="description" content="Aplicação Web de Vendas" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
