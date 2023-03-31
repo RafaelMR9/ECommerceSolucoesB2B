@@ -23,80 +23,65 @@ export default function Categories() {
         </Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
-        <Link href="/categoria1" className="bg-white rounded-full shadow-lg p-4 flex flex-col items-center justify-center">
+        <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
           <h2 className="text-xl font-bold mb-2">Categoria</h2>
-          <img src="https://dummyimage.com/150x150/000/fff" alt="Categoria" className="w-16 h-16 mb-2" />
-          <p className="text-gray-600">Descrição breve da categoria</p>
+          <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
         </Link>
       </div>
     </BaseLayout>

@@ -28,23 +28,71 @@ export default function Cart() {
     <BaseLayout>
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Carrinho de Compra</h1>
       <div className="bg-white shadow overflow-hidden rounded-lg">
-        <div className="px-4 py-5">
-          <h3 className="text-lg leading-6 font-medium text-gray-900">
-            Produtos no Carrinho
-          </h3>
-        </div>
-        <div className="border-t border-gray-200 px-4">
-          {cartItems.map((item, index) => (
-            <div key={item.id} className={`flex items-center py-4 ${index !== cartItems.length - 1 ? 'border-b border-gray-300' : ''}`}>
-              <div className="flex-1">
-                <h4 className="text-lg font-medium text-gray-900">{item.name}</h4>
-                <p className="text-md text-gray-500">{item.price.toFixed(2)} x {item.quantity}</p>
-              </div>
-              <button onClick={() => handleRemoveItem(item.id)} className="ml-4 bg-red-500 hover:bg-red-600 text-white font-medium px-4 py-2 rounded">
-                Remover
-              </button>
-            </div>
-          ))}
+        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase tracking-wider"
+                >
+                  Produtos no Carrinho
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Preço Unitário
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Quantidade
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Preço Total
+                </th>
+                <th scope="col" className="relative px-6 py-3">
+                  <span className="sr-only">Remover</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {cartItems.map((cartItem) => (
+                <tr key={cartItem.id}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {cartItem.name}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-800">
+                      R$ {cartItem.price}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-800">
+                      {cartItem.quantity}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-800">
+                      R$ {(cartItem.price * cartItem.quantity).toFixed(2)}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button className="text-red-600 hover:text-red-700" onClick={() => handleRemoveItem(cartItem.id)}>
+                      Remover
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
       <div className="bg-white shadow overflow-hidden rounded-lg flex items-center justify-between border-t border-gray-200 px-4 py-6 mt-6">
