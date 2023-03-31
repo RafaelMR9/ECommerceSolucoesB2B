@@ -6,7 +6,7 @@ export default function Nav() {
       <div className="px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="text-white font-bold text-lg">
-            Logo da Loja
+            Web Vendas
           </Link>
           <div className="flex-shrink-0 flex-grow">
             <form className="flex px-20">
