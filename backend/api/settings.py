@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework_jwt'
+    'rest_framework_simplejwt',
+    'core'
 ]
 
 MIDDLEWARE = [
@@ -73,15 +74,28 @@ TEMPLATES = [
 WSGI_APPLICATION = 'api.wsgi.application'
 
 
-# JWT Settings
+# Rest Framework Settings
 
-JWT_AUTH = {
-    'JWT_SECRET_KEY': 'fq(ivve7h::+%$&?|[yp];8j6)8o_(}q',
-    'JWT_ALGORITHM': 'HS256',
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_REFRESH_EXPIRATION_DELTA': timedelta(days=7),
-    'JWT_EXPIRATION_DELTA': timedelta(minutes=15),
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
+
+
+# Simple JWT Settings
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer'),
+    'BLACKLIST_AFTER_ROTATION': False,
+}
+
+
+# Custom User
+
+AUTH_USER_MODEL = 'core.User'
 
 
 # Database

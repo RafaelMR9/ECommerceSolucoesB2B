@@ -3,10 +3,10 @@ import BaseLayout from "../../components/shared/BaseLayout";
 
 export default function SuppliersOrders() {
   const suppliers = [
-    { id: 1, cnpj: "A", orderDate: "20/10/2023", expectedDate: "22/10/2023", deliveryDate: "25/10/2023" },
-    { id: 2, cnpj: "B", orderDate: "21/10/2023", expectedDate: "23/10/2023", deliveryDate: "26/10/2023" },
-    { id: 3, cnpj: "C", orderDate: "22/10/2023", expectedDate: "24/10/2023", deliveryDate: "-" },
-    { id: 4, cnpj: "D", orderDate: "23/10/2023", expectedDate: "25/10/2023", deliveryDate: "28/10/2023" },
+    { id: 1, cnpj: "00.000.000/0001-1", orderDate: "20/10/2023", expectedDate: "22/10/2023", deliveryDate: "25/10/2023" },
+    { id: 2, cnpj: "00.000.000/0001-2", orderDate: "21/10/2023", expectedDate: "23/10/2023", deliveryDate: "26/10/2023" },
+    { id: 3, cnpj: "00.000.000/0001-3", orderDate: "22/10/2023", expectedDate: "24/10/2023", deliveryDate: "-" },
+    { id: 4, cnpj: "00.000.000/0001-4", orderDate: "23/10/2023", expectedDate: "25/10/2023", deliveryDate: "28/10/2023" },
   ]
 
   return (

@@ -3,7 +3,7 @@ export default function RecoverPassword() {
     <div className="bg-gray-100 min-h-screen">
       <div className="mx-auto max-w-lg py-20">
         <div className="bg-white shadow-md rounded px-8 py-10">
-          <h1 className="text-3xl text-gray-900 font-bold text-center mb-8">Recuperação de Conta</h1>
+          <h1 className="text-3xl text-gray-900 font-bold text-center mb-8">Redefinição de Senha</h1>
           <form>
           <div className="mb-2">
               <label className="block text-gray-700 font-bold mb-2" htmlFor="password">
