@@ -9,6 +9,7 @@ export default function App({ Component, pageProps }) {
         <title>Web Vendas</title>
         <meta name="description" content="Aplicação Web de Vendas" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta httpEquiv="Content-Language" content="pt-br" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AuthProvider>
