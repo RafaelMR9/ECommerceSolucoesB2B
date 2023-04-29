@@ -1,15 +1,32 @@
 import { apiUserUrl } from '../config'
 
-const getUserInfo = async () => {
-  const token = localStorage.getItem('token')
-  const response = await fetch(`${apiUserUrl}/info/`, {
-    headers: { Authorization: `Bearer ${token}` }
-  })
-  const data = await response.json()
-  if (!response.ok) {
-    throw new Error(data.detail);
+export const registerUser = async (formData) => {
+  const options = {
+    method: 'post',
+    headers: new Headers({ 
+      'Content-Type': 'application/json' }),
+    body: JSON.stringify({ 
+      email: formData.email,
+      username: formData.username,
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+      cnpj: formData.cnpj,
+      cpf: null,
+      endereco: formData.address, 
+      podeFaturada: formData.podeFaturada ? false : null,
+      podeComprar: true
+    })
   }
-  return data
+  const response = await fetch(`${apiUserUrl}/create/`, options)
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    const data = await response.json()
+    const modifiedData =  Object.keys(data).reduce((acc, key) => {
+      acc[key] = data[key].join('\n');
+      return acc;
+    }, {})
+    throw new Error(JSON.stringify(modifiedData))
+  }
 }
-
-export default { getUserInfo }
