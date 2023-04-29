@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         CustomSerializersValidation.validate_cpf(validated_data['cpf'])
-        #CustomSerializersValidation.validate_cnpj(validated_data['cnpj'])
+        CustomSerializersValidation.validate_cnpj(validated_data['cnpj'])
         CustomSerializersValidation.validate_email(validated_data['email'])
         CustomSerializersValidation.validate_password(validated_data['password'])
         user = User.objects.create_user(**validated_data)
