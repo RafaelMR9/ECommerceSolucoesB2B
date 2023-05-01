@@ -1,30 +1,32 @@
 import { createContext, useState, useEffect } from 'react'
-import { getUserInfo } from '../services/userService'
+import jwt_decode from 'jwt-decode'
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    async function setUserInfo() {
-        const token = localStorage.getItem('token')
-        if (token) {
-            try {
-                const userData = await getUserInfo()
-                setUser(userData)
-            } catch (e) {
-                console.log(e)
-            }
-        }
+    console.log(user)
+    const storedUser = localStorage.getItem('authTokens')
+    if (storedUser) {
+      setAuthTokens(JSON.parse(storedUser))
+      setUser(jwt_decode(storedUser))
     }
-    
-    setUserInfo()
-  }, []);
+  }, [])
+
+  const [authTokens, setAuthTokens] = useState(null)
+  const [user, setUser] = useState(null)
+
+  let contextData = {
+    authTokens: authTokens,
+    user: user,
+    setAuthTokens,
+    setUser
+  }
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={ contextData }>
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}

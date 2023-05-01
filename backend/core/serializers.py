@@ -1,5 +1,5 @@
-from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .validators import CustomSerializersValidation
 from .models import User
 
@@ -28,3 +28,20 @@ class UserSerializer(serializers.ModelSerializer):
         instance.podeComprar = validated_data.get('podeComprar', instance.podeComprar)
         instance.save()
         return instance
+    
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['email'] = user.email
+        token['username'] = user.username
+        token['eAdministrador'] = user.is_superuser
+        token['cpf'] = user.cpf
+        token['cnpj'] = user.cnpj
+        token['endereco'] = user.endereco
+        token['podeComprar'] = user.podeComprar
+        token['podeFaturada'] = user.podeFaturada
+
+        return token

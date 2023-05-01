@@ -19,7 +19,7 @@ class CustomSerializersValidation:
         try:
             validate_email(value)
         except ValidationError as e:
-            raise serializers.ValidationError({'email': e})
+            raise serializers.ValidationError({'email': list(e)})
     
     @staticmethod
     def validate_cnpj(value):
@@ -31,7 +31,7 @@ class CustomSerializersValidation:
     def validate_cpf(value):
       pattern = re.compile(r'^\d{3}\.\d{3}\.\d{3}\-\d{2}$')
       if value and not pattern.match(value):
-        raise serializers.ValidationError('CPF inválido.')
+        raise serializers.ValidationError({'cpf': ['Certifique-se de que este campo esteja no formato certo.']})
     
 
 class CustomViewsValidation:
@@ -39,4 +39,4 @@ class CustomViewsValidation:
     @staticmethod
     def validate_password(value1, value2):
         if value1 != value2:
-            raise ValidationError('As senhas não coincidem.')
+            raise serializers.ValidationError({'password': ['As senhas não coincidem.']})

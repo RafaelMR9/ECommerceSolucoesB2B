@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { handleChange, validateCnpj, validateEmail, validatePassword, validateConfirmPassword } from '@/utils/utils'
-import { registerUser } from '@/services/userService'
+import { registerUser } from '@/services/authService'
+import { useRouter } from 'next/router'
 
 export default function RegisterAccount() {
+  const router = useRouter()
 
   const [formData, setFormData] = useState({
     username: "",
@@ -31,8 +33,8 @@ export default function RegisterAccount() {
       errors[name] = "Email inválido." 
     else if (name === "cnpj" && value.length !== 0 && !validateCnpj(value))
       errors[name] = "CNPJ inválido."
-    //else if (name === "password" && value.length !== 0 && !validatePassword(value))
-    //  errors[name] = "Senha inválida."
+    else if (name === "password" && value.length !== 0 && !validatePassword(value))
+      errors[name] = "Senha inválida."
     else if (name === "confirmPassword" && value.length !== 0 && !validateConfirmPassword(formData.password, formData.confirmPassword))
       errors[name] = "Senha não coincidem."
     else
@@ -47,7 +49,8 @@ export default function RegisterAccount() {
       return
 
     try {
-      const data = await registerUser(formData)
+      await registerUser(formData)
+      router.push('/authentication')
     } catch (e) {
       const errorObj = JSON.parse(e.message)
       if ('endereco' in errorObj) {
@@ -79,7 +82,7 @@ export default function RegisterAccount() {
                 onChange={e => handleChange(e, setFormData)}
                 onBlur={handleBlur}
               />
-              {formErrors.username && <div className="mt-2 text-red-600">{formErrors.username}</div>}
+              {formErrors.username && <p className="mt-2 text-red-600">{formErrors.username}</p>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2" htmlFor="password">
@@ -99,7 +102,7 @@ export default function RegisterAccount() {
                 <li>Senha deve possuir no mínimo 8 caracteres.</li>
                 <li>Senha não deve ser inteiramente numérica.</li>
               </ul>
-              {formErrors.password && <div className="mt-2 text-red-600">{formErrors.password}</div>}
+              {formErrors.password && <p className="mt-2 text-red-600">{formErrors.password}</p>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2" htmlFor="confirmPassword">
@@ -115,7 +118,7 @@ export default function RegisterAccount() {
                 onChange={e => handleChange(e, setFormData)}
                 onBlur={handleBlur}
               />
-              {formErrors.confirmPassword && <div className="mt-2 text-red-600">{formErrors.confirmPassword}</div>}
+              {formErrors.confirmPassword && <p className="mt-2 text-red-600">{formErrors.confirmPassword}</p>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2" htmlFor="cnpj">
@@ -132,7 +135,7 @@ export default function RegisterAccount() {
                 onChange={e => handleChange(e, setFormData)}
                 onBlur={handleBlur}
               />
-              {formErrors.cnpj && <div className="mt-2 text-red-600">{formErrors.cnpj}</div>}
+              {formErrors.cnpj && <p className="mt-2 text-red-600">{formErrors.cnpj}</p>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2" htmlFor="email">
@@ -148,7 +151,7 @@ export default function RegisterAccount() {
                 onChange={e => handleChange(e, setFormData)}
                 onBlur={handleBlur}
               />
-              {formErrors.email && <div className="mt-2 text-red-600">{formErrors.email}</div>}
+              {formErrors.email && <p className="mt-2 text-red-600">{formErrors.email}</p>}
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2">
@@ -180,7 +183,7 @@ export default function RegisterAccount() {
                 onChange={e => handleChange(e, setFormData)}
                 onBlur={handleBlur}
               />
-              {formErrors.address && <div className="mt-2 text-red-600">{formErrors.address}</div>}
+              {formErrors.address && <p className="mt-2 text-red-600">{formErrors.address}</p>}
             </div>
             <button
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline"
