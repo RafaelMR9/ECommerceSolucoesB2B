@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { handleChange, validateCnpj, validateEmail, validatePassword, validateConfirmPassword } from '@/utils/utils'
 import { registerUser } from '@/services/authService'
 import { useRouter } from 'next/router'
+import ProtectedRoute from '@/components/routes/ProtectedRoute'
 
 export default function RegisterAccount() {
   const router = useRouter()
