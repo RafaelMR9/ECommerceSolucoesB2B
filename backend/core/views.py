@@ -1,7 +1,8 @@
 from rest_framework import generics
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .validators import CustomViewsValidation
+from .serializers import UserSerializer, CustomTokenObtainPairSerializer
 from .models import User
-from .serializers import UserSerializer
 
 # Create your views here.
 class UserList(generics.ListAPIView):
@@ -27,3 +28,6 @@ class UserCreate(generics.CreateAPIView):
   def perform_create(self, serializer):
     CustomViewsValidation.validate_password(serializer.validated_data['password'], self.request.data.get('confirmPassword'))
     serializer.save()
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+  serializer_class = CustomTokenObtainPairSerializer
