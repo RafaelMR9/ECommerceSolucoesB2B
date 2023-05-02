@@ -1,24 +1,23 @@
-import { useContext } from 'react'
-import { AuthContext } from '../contexts/AuthContext'
+import { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { AuthContext } from '@/contexts/authContext'
 
 export default function ProtectedRoute(props) {
-    const { user } = useContext(AuthContext)
-    const router = useRouter()
-    const isAuthorized = !props.isProtected || (props.isAdminOnly && user.eAdministrador === true)
+  const { user } = useContext(AuthContext)
+  const router = useRouter()
 
-    if (props.isAuthPage && user) {
+  useEffect(() => {
+    if (props.isProtected && !user)
+      router.push('/authentication')
+    else if (props.isAuthPage && user)
         router.push('/')
-        return null
-    }
-    if (props.isProtected && !user) {
-        router.push('/authentication')
-        return null
-    }
-    if (isAuthorized) 
-        return props.children
-    else {
-        router.push('/')
-        return null
-    }
+    else if (props.isAdminOnly && user && !user.eAdministrador)
+      router.push('/')
+  }, [user])
+
+  if (!user) {
+    return null
+  }
+
+  return props.children
 }
