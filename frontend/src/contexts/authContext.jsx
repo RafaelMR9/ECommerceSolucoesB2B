@@ -6,7 +6,6 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
-    console.log(user)
     const storedUser = localStorage.getItem('authTokens')
     if (storedUser) {
       setAuthTokens(JSON.parse(storedUser))
