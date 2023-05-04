@@ -1,6 +1,4 @@
-import { useContext } from 'react'
-import { apiAuthUrl } from '../config'
-import { AuthContext } from '../contexts/authContext'
+import { apiUsersUrl } from '../config'
 import jwt_decode from 'jwt-decode'
 
 export const registerUser = async (formData) => {
@@ -20,7 +18,7 @@ export const registerUser = async (formData) => {
       podeComprar: true
     })
   }
-  const response = await fetch(`${apiAuthUrl}/register/`, options)
+  const response = await fetch(`${apiUsersUrl}/register/`, options)
   if (!response.ok) {
     const data = await response.json()
     const modifiedData =  Object.keys(data).reduce((acc, key) => {

@@ -14,71 +14,71 @@ export default function UpdateProduct() {
 
   return (
     <BaseLayout>
-      <h1 class="text-4xl font-bold text-slate-800 mb-8">Atualizar Produto</h1>
-      <div class="grid grid-cols-2 gap-8">
-        <form class="max-w-lg ">
-          <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" htmlFor="name">
+      <h1 className="text-4xl font-bold text-slate-800 mb-8">Atualizar Produto</h1>
+      <div className="grid grid-cols-2 gap-8">
+        <form className="max-w-lg ">
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="name">
               Nome
             </label>
             <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="name"
               type="text"
               placeholder="Nome do Produto"
             />
           </div>
-          <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" htmlFor="costPrice">
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="costPrice">
               Preço de Custo
             </label>
             <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="costPrice"
               type="number"
               placeholder="Preço de Custo do Produto"
               min={0}
             />
           </div>
-          <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" htmlFor="salePrice">
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="salePrice">
               Preço de Venda
             </label>
             <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="salePrice"
               type="number"
               placeholder="Preço de Venda do Produto"
               min={0}
             />
           </div>
-          <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" htmlFor="description">
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="description">
               Descrição
             </label>
             <textarea
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="description"
               placeholder="Descrição do Produto"
             ></textarea>
           </div>
-          <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" htmlFor="packaging">
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="packaging">
               Unidades por Embalagem
             </label>
             <input
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="packaging"
               type="number"
               placeholder="Unidades por Embalagem do Produto"
             />
           </div>
-          <div class="mb-4">
-            <label class="block text-gray-700 font-bold mb-2" htmlFor="category">
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="category">
               Categoria
             </label>
             <select
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="category"
             >
               <option>Selecione uma categoria</option>
@@ -99,17 +99,17 @@ export default function UpdateProduct() {
             />
           </div>
           <button
-            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
             Atualizar
           </button>
         </form>
-        <div class="flex items-center justify-center">
-          <div class="w-90 h-80 mx-auto mt-4">
+        <div className="flex items-center justify-center">
+          <div className="w-90 h-80 mx-auto mt-4">
             <img
               id="imagePreview"
-              class="w-full h-full object-contain border-4 border-blue-600 rounded"
+              className="w-full h-full object-contain border-4 border-blue-600 rounded"
               src="https://dummyimage.com/150x150/000/fff"
               alt="Preview da Imagem"
             />

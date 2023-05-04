@@ -16,6 +16,7 @@ class UserDelete(generics.DestroyAPIView):
 class UserUpdate(generics.UpdateAPIView):
   queryset = User.objects.all()
   serializer_class = UserSerializer
+  lookup_field = 'pk'
 
 class UserDetail(generics.RetrieveAPIView):
   queryset = User.objects.all()
