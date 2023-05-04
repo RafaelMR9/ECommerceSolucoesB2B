@@ -9,6 +9,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {'password': {'write_only': True}}
         read_only_fields = ('is_staff', 'is_superuser')
+    
+    email = serializers.EmailField(required=False)
+    password = serializers.CharField(required=False)
+    username = serializers.CharField(required=False)
 
     def create(self, validated_data):
         CustomSerializersValidation.validate_cpf(validated_data['cpf'])
@@ -21,9 +25,10 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.email = validated_data.get('email', instance.email)
         instance.password = validated_data.get('password', instance.password)
+        instance.cpf = validated_data.get('cpf', instance.cpf)
         instance.cnpj = validated_data.get('cnpj', instance.cnpj)
         instance.endereco = validated_data.get('endereco', instance.endereco)
-        instance.credito = validated_data.get('credito', instance.credito)
+        instance.podeFaturada = validated_data.get('podeFaturada', instance.podeFaturada)
         instance.prazoPagamento = validated_data.get('prazoPagamento', instance.prazoPagamento)
         instance.podeComprar = validated_data.get('podeComprar', instance.podeComprar)
         instance.save()

@@ -4,7 +4,7 @@ import jwt_decode from 'jwt-decode'
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-
+  
   useEffect(() => {
     const storedUser = localStorage.getItem('authTokens')
     if (storedUser) {
@@ -23,6 +23,9 @@ export const AuthProvider = ({ children }) => {
     setUser
   }
 
+  if (!user)
+    return null
+    
   return (
     <AuthContext.Provider value={ contextData }>
       {children}

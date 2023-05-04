@@ -10,14 +10,13 @@ export default function ProtectedRoute(props) {
     if (props.isProtected && !user)
       router.push('/authentication')
     else if (props.isAuthPage && user)
-        router.push('/')
+      router.push('/')
     else if (props.isAdminOnly && user && !user.eAdministrador)
       router.push('/')
   }, [user])
 
-  if (!user) {
+  if (!user && props.isProtected)
     return null
-  }
 
   return props.children
 }

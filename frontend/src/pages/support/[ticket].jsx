@@ -82,18 +82,18 @@ export default function AnswerTicket() {
       </div>
       <form onSubmit={handleSendMessage} className="mt-4">
         <div className="mb-2">
-          <label class="block text-gray-700 font-bold mb-2" htmlFor="response">
+          <label className="block text-gray-700 font-bold mb-2" htmlFor="response">
             Resposta
           </label>
           <textarea
             rows={4}
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="response"
             placeholder="Digite sua Resposta..."
           ></textarea>
         </div>
         <button
-          class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
           type="submit"
         >
           Enviar

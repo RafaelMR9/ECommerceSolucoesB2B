@@ -8,29 +8,29 @@ export default function Profile() {
         Meu Perfil
       </h1>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div class="max-w-sm rounded overflow-hidden shadow-lg">
-          <div class="h-24 bg-blue-600"/>
-          <div class="flex flex-col justify-center items-center px-6 py-4">
-            <div class="text-lg font-bold text-slate-800 mb-2">CNPJ</div>
-            <p class="text-gray-700 text-base">
+        <div className="max-w-sm rounded overflow-hidden shadow-lg">
+          <div className="h-24 bg-blue-600"/>
+          <div className="flex flex-col justify-center items-center px-6 py-4">
+            <div className="text-lg font-bold text-slate-800 mb-2">CNPJ</div>
+            <p className="text-gray-700 text-base">
               42.978.452/0001-92
             </p>
           </div>
         </div>
-        <div class="max-w-sm rounded overflow-hidden shadow-lg">
-          <div class="h-24 bg-blue-600"/>
-          <div class="flex flex-col justify-center items-center px-6 py-4">
-            <div class="text-lg font-bold text-slate-800 mb-2">Endereço</div>
-            <p class="text-gray-700 text-base">
+        <div className="max-w-sm rounded overflow-hidden shadow-lg">
+          <div className="h-24 bg-blue-600"/>
+          <div className="flex flex-col justify-center items-center px-6 py-4">
+            <div className="text-lg font-bold text-slate-800 mb-2">Endereço</div>
+            <p className="text-gray-700 text-base">
               Rua tal tal tal tal
             </p>
           </div>
         </div>
-        <div class="max-w-sm rounded overflow-hidden shadow-lg">
-          <div class="h-24 bg-blue-600"/>
-          <div class="flex flex-col justify-center items-center px-6 py-4">
-            <div class="text-lg font-bold text-slate-800 mb-2">E-Mail</div>
-            <p class="text-gray-700 text-base">
+        <div className="max-w-sm rounded overflow-hidden shadow-lg">
+          <div className="h-24 bg-blue-600"/>
+          <div className="flex flex-col justify-center items-center px-6 py-4">
+            <div className="text-lg font-bold text-slate-800 mb-2">E-Mail</div>
+            <p className="text-gray-700 text-base">
               exemplo@gmail.com
             </p>
           </div>
