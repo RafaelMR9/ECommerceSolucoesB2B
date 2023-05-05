@@ -5,7 +5,7 @@ from rest_framework import serializers
 from .models import User
 import re
 
-class CustomSerializersValidation:
+class CustomValidators:
     
     @staticmethod
     def validate_password(value):
@@ -33,10 +33,32 @@ class CustomSerializersValidation:
       if value and not pattern.match(value):
         raise serializers.ValidationError({'cpf': ['Certifique-se de que este campo esteja no formato certo.']})
     
-
-class CustomViewsValidation:
-    
     @staticmethod
-    def validate_password(value1, value2):
+    def validate_equal_password(value1, value2):
         if value1 != value2:
             raise serializers.ValidationError({'password': ['As senhas não coincidem.']})
+        
+    @staticmethod
+    def validate_unique_email(value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError({'email': ['Já existe um Usuário com este Email.']})
+
+    @staticmethod
+    def validate_unique_username(value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError({'username': ['Já existe um Usuário com este Nome.']})
+
+    @staticmethod
+    def validate_unique_cpf(value):
+        if User.objects.filter(cpf=value).exists():
+            raise serializers.ValidationError({'cpf': ['Já existe um Usuário com este CPF.']})
+
+    @staticmethod
+    def validate_unique_cnpj(value):
+        if User.objects.filter(cnpj=value).exists():
+            raise serializers.ValidationError({'cnpj': ['Já existe um Usuário com este CNPJ.']})
+
+    @staticmethod
+    def validate_unique_endereco(value):
+        if User.objects.filter(endereco=value).exists():
+            raise serializers.ValidationError({'endereco': ['Já existe um Usuário com este Endereço.']})
