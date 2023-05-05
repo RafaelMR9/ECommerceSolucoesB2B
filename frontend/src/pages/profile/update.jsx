@@ -5,8 +5,10 @@ import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import { updateUser } from '@/services/userService'
 import { handleChange, validateCnpj, validateEmail, validateCpf } from '@/utils/utils'
 import { AuthContext } from "@/contexts/authContext"
+import { useRouter } from 'next/router'
 
 export default function UpdateProfile() {
+  const router = useRouter()
   const { user, setUser } = useContext(AuthContext)
 
   const [formData, setFormData] = useState({
@@ -46,16 +48,17 @@ export default function UpdateProfile() {
 
     try {
       const data = await updateUser(formData, user.user_id)
-      console.log(data)
+      console.log("AAAAAAAAAAAAAAAA")
       setUser({
         ...user,
         cpf: data.cpf,
         cnpj: data.cnpj,
         email: data.email,
         endereco: data.endereco
-
       })
+      router.push('/profile')
     } catch (e) {
+      console.log("BBBBBBBBBBBBBBBB")
       const errorObj = JSON.parse(e.message)
       if ('endereco' in errorObj) {
         errorObj.address = errorObj.endereco

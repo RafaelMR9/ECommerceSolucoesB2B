@@ -39,7 +39,7 @@ export const loginUser = async (formData, authContext) => {
       password: formData.password,
     })
   }
-  const response = await fetch(`${apiAuthUrl}/token/`, options)
+  const response = await fetch(`${apiUsersUrl}/token/`, options)
   if (response.ok) {
     const data = await response.json()
     authContext.setAuthTokens(data)
@@ -54,6 +54,6 @@ export const loginUser = async (formData, authContext) => {
 
 export const logoutUser = (authContext) => {
   authContext.setAuthTokens(null)
-  authContext.setUser(jwt_decode(null))
+  authContext.setUser(null)
   localStorage.removeItem('authTokens')
 }

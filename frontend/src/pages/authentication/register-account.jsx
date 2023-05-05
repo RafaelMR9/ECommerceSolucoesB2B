@@ -19,6 +19,7 @@ export default function RegisterAccount() {
   })
 
   const [formErrors, setFormErrors] = useState({
+    username: "",
     email: "",
     cnpj: "",
     password: "",
@@ -46,13 +47,14 @@ export default function RegisterAccount() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (formErrors.email || formErrors.cnpj || formErrors.password || formErrors.confirmPassword)
+    if (formErrors.username || formErrors.email || formErrors.cnpj || formErrors.password || formErrors.confirmPassword)
       return
 
     try {
       await registerUser(formData)
       router.push('/authentication')
     } catch (e) {
+      console.log(e)
       const errorObj = JSON.parse(e.message)
       if ('endereco' in errorObj) {
         errorObj.address = errorObj.endereco

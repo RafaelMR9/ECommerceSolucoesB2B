@@ -1,4 +1,4 @@
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.db import models
 
 class UserManager(BaseUserManager):
@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
         
 
 class User(AbstractBaseUser):
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, error_messages={'unique': 'Já existe um Usuário com este Email.'})
     username = models.CharField(max_length=255, unique=True, error_messages={'unique': 'Já existe um Usuário com este Nome.'})
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

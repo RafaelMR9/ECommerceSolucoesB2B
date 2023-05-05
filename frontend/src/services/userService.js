@@ -1,8 +1,8 @@
 import { apiUsersUrl } from '../config'
 
-export const registerUser = async (formData, uId) => {
+export const updateUser = async (formData, uId) => {
   const options = {
-    method: 'post',
+    method: 'put',
     headers: new Headers({ 
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 

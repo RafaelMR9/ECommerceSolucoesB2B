@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .validators import CustomSerializersValidation
+from .validators import CustomValidators
 from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
@@ -10,27 +10,33 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
         read_only_fields = ('is_staff', 'is_superuser')
     
-    email = serializers.EmailField(required=False)
     password = serializers.CharField(required=False)
-    username = serializers.CharField(required=False)
 
     def create(self, validated_data):
-        CustomSerializersValidation.validate_cpf(validated_data['cpf'])
-        CustomSerializersValidation.validate_cnpj(validated_data['cnpj'])
-        CustomSerializersValidation.validate_email(validated_data['email'])
-        CustomSerializersValidation.validate_password(validated_data['password'])
+        CustomValidators.validate_cpf(validated_data['cpf'])
+        CustomValidators.validate_cnpj(validated_data['cnpj'])
+        CustomValidators.validate_email(validated_data['email'])
+        CustomValidators.validate_password(validated_data['password'])
         user = User.objects.create_user(**validated_data)
         return user
     
     def update(self, instance, validated_data):
-        instance.email = validated_data.get('email', instance.email)
-        instance.password = validated_data.get('password', instance.password)
-        instance.cpf = validated_data.get('cpf', instance.cpf)
-        instance.cnpj = validated_data.get('cnpj', instance.cnpj)
-        instance.endereco = validated_data.get('endereco', instance.endereco)
-        instance.podeFaturada = validated_data.get('podeFaturada', instance.podeFaturada)
-        instance.prazoPagamento = validated_data.get('prazoPagamento', instance.prazoPagamento)
-        instance.podeComprar = validated_data.get('podeComprar', instance.podeComprar)
+        for key, value in validated_data.items():
+            if value is not None:
+                setattr(instance, key, value)
+                if key == 'cpf':
+                    CustomValidators.validate_cpf(value)
+                    CustomValidators.validate_unique_cpf(value)
+                elif key == 'cnpj':
+                    CustomValidators.validate_cnpj(value)
+                    CustomValidators.validate_unique_cnpj(value)
+                elif key == 'email':
+                    CustomValidators.validate_email(value)
+                    CustomValidators.validate_unique_email(value)
+                elif key == 'password':
+                    CustomValidators.validate_password(value)
+                elif key == 'endereco':
+                    CustomValidators.validate_unique_endereco(value)
         instance.save()
         return instance
     
@@ -48,5 +54,4 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['endereco'] = user.endereco
         token['podeComprar'] = user.podeComprar
         token['podeFaturada'] = user.podeFaturada
-
         return token
