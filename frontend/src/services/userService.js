@@ -1,15 +1,17 @@
 import { apiUsersUrl } from '../config'
 
 export const updateUser = async (formData, uId) => {
+  if ('endereco' in formData) {
+    formData.address = formData.endereco
+    delete formData.address
+  }
+
   const options = {
     method: 'put',
     headers: new Headers({ 
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
-      email: formData.email,
-      cnpj: formData.cnpj,
-      cpf: formData.cpf,
-      endereco: formData.address
+      ...formData
     })
   }
   const response = await fetch(`${apiUsersUrl}/${uId}/update/`, options)
