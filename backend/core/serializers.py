@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .validators import CustomValidators
 from .models import User
 
@@ -39,19 +38,3 @@ class UserSerializer(serializers.ModelSerializer):
                     CustomValidators.validate_unique_endereco(value)
         instance.save()
         return instance
-    
-
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        token['email'] = user.email
-        token['username'] = user.username
-        token['eAdministrador'] = user.is_superuser
-        token['cpf'] = user.cpf
-        token['cnpj'] = user.cnpj
-        token['endereco'] = user.endereco
-        token['podeComprar'] = user.podeComprar
-        token['podeFaturada'] = user.podeFaturada
-        return token
