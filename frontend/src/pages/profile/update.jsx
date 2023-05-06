@@ -3,7 +3,7 @@ import { useState, useContext } from 'react'
 import BaseLayout from "../../components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import { updateUser } from '@/services/userService'
-import { handleChange, validateCnpj, validateEmail, validateCpf } from '@/utils/utils'
+import { validateCnpj, validateEmail, validateCpf } from '@/utils/utils'
 import { AuthContext } from "@/contexts/authContext"
 import { useRouter } from 'next/router'
 
@@ -13,9 +13,9 @@ export default function UpdateProfile() {
 
   const [formData, setFormData] = useState({
     email: user.email,
-    cpf: user.eAdministrador ? user.cpf : null,
-    cnpj: user.eAdministrador ? null : user.cnpj,
-    adress: user.eAdministrador ? null : user.endereco
+    cpf: user.is_superuser ? user.cpf : null,
+    cnpj: user.is_superuser ? null : user.cnpj,
+    adress: user.is_superuser ? null : user.endereco
   })
 
   const [formErrors, setFormErrors] = useState({
@@ -25,39 +25,44 @@ export default function UpdateProfile() {
     address: ""
   })
 
-  const handleBlur = (e) => {
-    const { name, value } = e.target
-    const errors = { ...formErrors }
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target
+    const newValue = type === "checkbox" ? checked : value
+    setFormData((prevStateData) => ({
+      ...prevStateData,
+      [name]: newValue,
+    }))
 
-    if (name === "email" && value.length !== 0 && !validateEmail(value))
-      errors[name] = "Email inválido." 
-    else if (name === "cnpj" && value.length !== 0 && !validateCnpj(value))
-      errors[name] = "CNPJ inválido."
-    else if (name === "cpf" && value.length !== 0 && !validateCpf(value))
-      errors[name] = "CPF inválido."
-    else
-      delete errors[name]
-
-    setFormErrors(errors)
+    setFormErrors((prevErrors) => {
+      const errors = { ...prevErrors }
+      if (name === "email" && validateEmail(value))
+        errors.email = "" 
+      if (name === "cnpj" && validateCnpj(value))
+        errors.cnpj = ""
+      if (name === "cpf" && validateCpf(value))
+        errors.cpf = ""
+      return errors
+    })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     const errors = { ...formErrors }
-    if (formErrors.email && validateEmail(formData.email))
-      delete errors.email
-    else if (formErrors.cnpj && validateCnpj(formData.cnpj))
-      delete errors.cnpj
-    else if (formErrors.cpf && validateCpf(formData.cpf))
-      delete errors.cpf
-    setFormErrors(errors)
-
-    if (Object.keys(formErrors).length !== 0)
+    if (formData.email && !validateEmail(formData.email))
+      errors.email = 'Email inválido.'
+    if (formData.cnpj && !validateCnpj(formData.cnpj))
+      errors.cnpj = 'CNPJ inválido.'
+    if (formData.cpf && !validateCpf(formData.cpf))
+      errors.cpf = 'CPF inválido.'
+      
+      if (Object.values(errors).some(value => value !== "")) {
+      setFormErrors(errors)
       return
+    }
 
     try {
-      const data = await updateUser(formData, user.user_id)
+      const data = await updateUser(formData, user.id, user.username)
       setUser({
         ...user,
         cpf: data.cpf,
@@ -82,7 +87,7 @@ export default function UpdateProfile() {
       <BaseLayout>
         <h1 className="text-4xl font-bold text-slate-800 mb-8">Atualizar Perfil</h1>
         <form onSubmit={handleSubmit}>
-          { user.eAdministrador ? 
+          { user.is_superuser ? 
             <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2" htmlFor="cpf">
                 CPF
@@ -94,8 +99,7 @@ export default function UpdateProfile() {
                 placeholder="XXX.XXX.XXX-XX"
                 name="cpf"
                 value={formData.cpf}
-                onChange={e => handleChange(e, setFormData)}
-                onBlur={handleBlur}
+                onChange={handleChange}
                 required
               />
               {formErrors.cpf && <p className="mt-2 text-red-600">{formErrors.cpf}</p>}
@@ -113,8 +117,7 @@ export default function UpdateProfile() {
                   placeholder="XX.XXX.XXX/XXX-XX"
                   name="cnpj"
                   value={formData.cnpj}
-                  onChange={e => handleChange(e, setFormData)}
-                  onBlur={handleBlur}
+                  onChange={handleChange}
                   required
                 />
                 {formErrors.cnpj && <p className="mt-2 text-red-600">{formErrors.cnpj}</p>}
@@ -130,8 +133,7 @@ export default function UpdateProfile() {
                   placeholder="Digite o Endereço"
                   name="address"
                   value={formData.adress}
-                  onChange={e => handleChange(e, setFormData)}
-                  onBlur={handleBlur}
+                  onChange={handleChange}
                   required
                 />
                 {formErrors.address && <p className="mt-2 text-red-600">{formErrors.address}</p>}
@@ -148,8 +150,7 @@ export default function UpdateProfile() {
               type="email"
               name="email"
               value={formData.email}
-              onChange={e => handleChange(e, setFormData)}
-              onBlur={handleBlur}
+              onChange={handleChange}
               required
             />
             {formErrors.email && <p className="mt-2 text-red-600">{formErrors.email}</p>}

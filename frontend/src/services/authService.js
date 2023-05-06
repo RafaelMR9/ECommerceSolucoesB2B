@@ -1,4 +1,5 @@
 import { apiUsersUrl } from '../config'
+import { getUser } from '@/services/userService'
 import jwt_decode from 'jwt-decode'
 
 export const registerUser = async (formData) => {
@@ -42,8 +43,11 @@ export const loginUser = async (formData, authContext) => {
   const response = await fetch(`${apiUsersUrl}/token/`, options)
   if (response.ok) {
     const data = await response.json()
+    const decodedJwt = jwt_decode(data.access)
     authContext.setAuthTokens(data)
-    authContext.setUser(jwt_decode(data.access))
+
+    const user = await getUser(decodedJwt.user_id)
+    authContext.setUser(user)
     localStorage.setItem('authTokens', JSON.stringify(data))
     return
   } else {

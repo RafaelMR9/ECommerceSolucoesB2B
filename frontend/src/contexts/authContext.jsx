@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react'
+import { getUser } from '@/services/userService'
 import jwt_decode from 'jwt-decode'
 
 export const AuthContext = createContext();
@@ -11,10 +12,21 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('authTokens')
     if (storedUser) {
+      const jwtObj = jwt_decode(storedUser)
+      const fetchUserData = async () => {
+        try {
+          const data = await getUser(jwtObj.user_id)
+          setUser(data)
+          setIsLoading(false)
+        } catch (e) {
+          alert(e)
+        }
+      }
       setAuthTokens(JSON.parse(storedUser))
-      setUser(jwt_decode(storedUser))
+      fetchUserData()
     }
-    setIsLoading(false)
+    else
+      setIsLoading(false)
   }, [])
 
   let contextData = {
