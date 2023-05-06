@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
-import { handleChange, validateCnpj, validateEmail, validatePassword, validateConfirmPassword } from '@/utils/utils'
+import { validateCnpj, validateEmail, validatePassword, validateConfirmPassword } from '@/utils/utils'
 import { registerUser } from '@/services/authService'
 import { useRouter } from 'next/router'
 import ProtectedRoute from '@/components/routes/ProtectedRoute'
@@ -27,34 +27,54 @@ export default function RegisterAccount() {
     address: ""
   })
 
-  const handleBlur = (e) => {
-    const { name, value } = e.target
-    const errors = { ...formErrors }
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target
+    const newValue = type === "checkbox" ? checked : value
+    setFormData((prevStateData) => ({
+      ...prevStateData,
+      [name]: newValue,
+    }))
 
-    if (name === "email" && value.length !== 0 && !validateEmail(value))
-      errors[name] = "Email inválido." 
-    else if (name === "cnpj" && value.length !== 0 && !validateCnpj(value))
-      errors[name] = "CNPJ inválido."
-    else if (name === "password" && value.length !== 0 && !validatePassword(value))
-      errors[name] = "Senha inválida."
-    else if (name === "confirmPassword" && value.length !== 0 && !validateConfirmPassword(formData.password, formData.confirmPassword))
-      errors[name] = "Senha não coincidem."
-    else
-      delete errors[name]
-
-    setFormErrors(errors)
+    setFormErrors((prevErrors) => {
+      const errors = { ...prevErrors }
+      if (name === 'email' && validateEmail(value))
+        errors.email = ''
+      if (name === 'cnpj' && validateCnpj(value))
+        errors.cnpj = ''
+      if (name === 'password' && validatePassword(value))
+        errors.password = ''
+      if (name === 'confirmPassword' && validateConfirmPassword(formData.password, value))
+        errors.confirmPassword = ''
+      if (name === 'username')
+        errors.username = ''
+      if (name === 'address')
+        errors.address = ''
+      return errors
+    })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (formErrors.username || formErrors.email || formErrors.cnpj || formErrors.password || formErrors.confirmPassword)
+    
+    const errors = { ...formErrors }
+    if (formData.email && !validateEmail(formData.email))
+      errors.email = 'Email inválido.'
+    if (formData.cnpj && !validateCnpj(formData.cnpj))
+      errors.cnpj = 'CNPJ inválido.'
+    if (formData.password && !validatePassword(formData.password))
+      errors.password = 'Senha inválida.'
+    if (formData.confirmPassword && !validateConfirmPassword(formData.password, formData.confirmPassword))
+      errors.confirmPassword = 'Senhas não coincidem.'
+
+    if (Object.values(errors).some(value => value !== "")) {
+      setFormErrors(errors)
       return
+    }
 
     try {
       await registerUser(formData)
       router.push('/authentication')
     } catch (e) {
-      console.log(e)
       const errorObj = JSON.parse(e.message)
       if ('endereco' in errorObj) {
         errorObj.address = errorObj.endereco
@@ -83,8 +103,7 @@ export default function RegisterAccount() {
                   name="username"
                   type="text"
                   value={formData.username}
-                  onChange={e => handleChange(e, setFormData)}
-                  onBlur={handleBlur}
+                  onChange={handleChange}
                 />
                 {formErrors.username && <p className="mt-2 text-red-600">{formErrors.username}</p>}
               </div>
@@ -99,8 +118,7 @@ export default function RegisterAccount() {
                   name="password"
                   type="password"
                   value={formData.password}
-                  onChange={e => handleChange(e, setFormData)}
-                  onBlur={handleBlur}
+                  onChange={handleChange}
                 />
                 <ul className="mt-2 pl-5 list-disc text-sm text-gray-600">
                   <li>Senha deve possuir no mínimo 8 caracteres.</li>
@@ -119,8 +137,7 @@ export default function RegisterAccount() {
                   name="confirmPassword"
                   type="password"
                   value={formData.confirmPassword}
-                  onChange={e => handleChange(e, setFormData)}
-                  onBlur={handleBlur}
+                  onChange={handleChange}
                 />
                 {formErrors.confirmPassword && <p className="mt-2 text-red-600">{formErrors.confirmPassword}</p>}
               </div>
@@ -136,8 +153,7 @@ export default function RegisterAccount() {
                   type="text"
                   placeholder="XX.XXX.XXX/XXX-XX"
                   value={formData.cnpj}
-                  onChange={e => handleChange(e, setFormData)}
-                  onBlur={handleBlur}
+                  onChange={handleChange}
                 />
                 {formErrors.cnpj && <p className="mt-2 text-red-600">{formErrors.cnpj}</p>}
               </div>
@@ -152,8 +168,7 @@ export default function RegisterAccount() {
                   name="email"
                   type="email"
                   value={formData.email}
-                  onChange={e => handleChange(e, setFormData)}
-                  onBlur={handleBlur}
+                  onChange={handleChange}
                 />
                 {formErrors.email && <p className="mt-2 text-red-600">{formErrors.email}</p>}
               </div>
@@ -166,7 +181,7 @@ export default function RegisterAccount() {
                   id="authorizeFature"
                   name="authorizeFature"
                   type="checkbox"
-                  onChange={e => handleChange(e, setFormData)}
+                  onChange={handleChange}
                   checked={formData.authorizeFature}
                 />
                 <label className="text-sm" htmlFor="authorizeFature">
@@ -184,8 +199,7 @@ export default function RegisterAccount() {
                   name="address"
                   type="text"
                   value={formData.address}
-                  onChange={e => handleChange(e, setFormData)}
-                  onBlur={handleBlur}
+                  onChange={handleChange}
                 />
                 {formErrors.address && <p className="mt-2 text-red-600">{formErrors.address}</p>}
               </div>

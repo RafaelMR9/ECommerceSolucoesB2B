@@ -43,12 +43,21 @@ export default function UpdateProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (formErrors.email || formErrors.cnpj || formErrors.password || formErrors.confirmPassword)
+
+    const errors = { ...formErrors }
+    if (formErrors.email && validateEmail(formData.email))
+      delete errors.email
+    else if (formErrors.cnpj && validateCnpj(formData.cnpj))
+      delete errors.cnpj
+    else if (formErrors.cpf && validateCpf(formData.cpf))
+      delete errors.cpf
+    setFormErrors(errors)
+
+    if (Object.keys(formErrors).length !== 0)
       return
 
     try {
       const data = await updateUser(formData, user.user_id)
-      console.log("AAAAAAAAAAAAAAAA")
       setUser({
         ...user,
         cpf: data.cpf,
@@ -58,7 +67,6 @@ export default function UpdateProfile() {
       })
       router.push('/profile')
     } catch (e) {
-      console.log("BBBBBBBBBBBBBBBB")
       const errorObj = JSON.parse(e.message)
       if ('endereco' in errorObj) {
         errorObj.address = errorObj.endereco
