@@ -1,6 +1,6 @@
 import { apiUsersUrl } from '../config'
 
-export const updateUser = async (formData, uId, username) => {
+export const updateUser = async (formData, id, username) => {
   if ('endereco' in formData) {
     formData.address = formData.endereco
     delete formData.address
@@ -14,7 +14,7 @@ export const updateUser = async (formData, uId, username) => {
       username
     })
   }
-  const response = await fetch(`${apiUsersUrl}/${uId}/update/`, options)
+  const response = await fetch(`${apiUsersUrl}/${id}/update/`, options)
   if (response.ok) {
     const data = await response.json()
     return data
@@ -30,8 +30,8 @@ export const updateUser = async (formData, uId, username) => {
   }
 }
 
-export const getUser = async (uId) => {
-  const response = await fetch(`${apiUsersUrl}/${uId}/detail/`)
+export const getUser = async (id) => {
+  const response = await fetch(`${apiUsersUrl}/${id}/detail/`)
   if (response.ok) {
     const data = await response.json()
     return data

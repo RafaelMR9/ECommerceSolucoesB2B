@@ -1,15 +1,15 @@
-import Link from "next/link";
-import BaseLayout from "../../components/shared/BaseLayout";
+import Link from "next/link"
+import BaseLayout from "@/components/shared/BaseLayout"
 
 export default function UpdateProduct() {
 
   function imagePreview(e) {
     const reader = new FileReader();
     reader.onload = () => {
-      const preview = document.getElementById("imagePreview");
-      preview.src = reader.result;
+      const preview = document.getElementById("imagePreview")
+      preview.src = reader.result
     }
-    reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(e.target.files[0])
   }
 
   return (

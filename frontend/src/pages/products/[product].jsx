@@ -1,5 +1,5 @@
-import Link from "next/link";
-import BaseLayout from "../../components/shared/BaseLayout";
+import Link from "next/link"
+import BaseLayout from "@/components/shared/BaseLayout"
 
 export default function Product() {
   return (

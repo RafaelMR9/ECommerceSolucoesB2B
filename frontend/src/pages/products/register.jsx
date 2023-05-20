@@ -1,15 +1,42 @@
-import Link from "next/link";
-import BaseLayout from "../../components/shared/BaseLayout";
+import { useState } from 'react'
+import Link from "next/link"
+import BaseLayout from "@/components/shared/BaseLayout"
 
 export default function RegisterProduct() {
 
-  function imagePreview(e) {
-    const reader = new FileReader();
+  const [formData, setFormData] = useState({
+    name: "",
+    costPrice: "",
+    salePrice: "",
+    description: "",
+    packaging: "",
+    category: "",
+    image: null,
+  })
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }))
+  }
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0]
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      image: file,
+    }))
+  }
+
+  const imagePreview = (e) => {
+    const reader = new FileReader()
     reader.onload = () => {
-      const preview = document.getElementById("imagePreview");
-      preview.src = reader.result;
+      const preview = document.getElementById("imagePreview")
+      preview.src = reader.result
     }
-    reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(e.target.files[0])
   }
 
   return (
@@ -24,8 +51,12 @@ export default function RegisterProduct() {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               type="text"
               placeholder="Nome do Produto"
+              required
             />
           </div>
           <div className="mb-4">
@@ -35,9 +66,13 @@ export default function RegisterProduct() {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="costPrice"
+              name="costPrice"
+              value={formData.costPrice}
+              onChange={handleChange}
               type="number"
               placeholder="Preço de Custo do Produto"
               min={0}
+              required
             />
           </div>
           <div className="mb-4">
@@ -47,9 +82,13 @@ export default function RegisterProduct() {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="salePrice"
+              name="salePrice"
+              value={formData.salePrice}
+              onChange={handleChange}
               type="number"
               placeholder="Preço de Venda do Produto"
               min={0}
+              required
             />
           </div>
           <div className="mb-4">
@@ -59,7 +98,11 @@ export default function RegisterProduct() {
             <textarea
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
               placeholder="Descrição do Produto"
+              required
             ></textarea>
           </div>
           <div className="mb-4">
@@ -69,8 +112,12 @@ export default function RegisterProduct() {
             <input
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="packaging"
+              name="packaging"
+              value={formData.packaging}
+              onChange={handleChange}
               type="number"
               placeholder="Unidades por Embalagem do Produto"
+              required
             />
           </div>
           <div className="mb-4">
@@ -80,6 +127,7 @@ export default function RegisterProduct() {
             <select
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="category"
+              required
             >
               <option>Selecione uma categoria</option>
               <option value="1">Categoria 1</option>
@@ -96,6 +144,7 @@ export default function RegisterProduct() {
               id="imageUpload"
               onChange={imagePreview}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white"
+              required
             />
           </div>
           <button

@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import Nav from '../components/shared/Nav'
-import Footer from '../components/shared/Footer'
+import Nav from '@/components/shared/Nav'
+import Footer from '@/components/shared/Footer'
 import ProtectedRoute from '@/components/routes/ProtectedRoute'
 
 export default function Home() {

@@ -4,24 +4,24 @@ from .serializers import UserSerializer
 from .models import User
 
 # Create your views here.
-class UserList(generics.ListAPIView):
+class UserListView(generics.ListAPIView):
   queryset = User.objects.all()
   serializer_class = UserSerializer
 
-class UserDelete(generics.DestroyAPIView):
+class UserDestroyView(generics.DestroyAPIView):
   queryset = User.objects.all()
   serializer_class = UserSerializer
 
-class UserUpdate(generics.UpdateAPIView):
+class UserUpdateView(generics.UpdateAPIView):
   queryset = User.objects.all()
   serializer_class = UserSerializer
   lookup_field = 'pk'
 
-class UserDetail(generics.RetrieveAPIView):
+class UserRetrieveView(generics.RetrieveAPIView):
   queryset = User.objects.all()
   serializer_class = UserSerializer
 
-class UserCreate(generics.CreateAPIView):
+class UserCreateView(generics.CreateAPIView):
   queryset = User.objects.all()
   serializer_class = UserSerializer
 

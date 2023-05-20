@@ -23,8 +23,8 @@ export const registerUser = async (formData) => {
   if (!response.ok) {
     const data = await response.json()
     const modifiedData =  Object.keys(data).reduce((acc, key) => {
-      acc[key] = data[key].join('\n');
-      return acc;
+      acc[key] = data[key].join('\n')
+      return acc
     }, {})
     throw new Error(JSON.stringify(modifiedData))
   }
