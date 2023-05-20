@@ -36,6 +36,9 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'cpf']
 
+    def __str__(self):
+        return self.username
+
     def has_perm(self, perm, obj=None):
         return self.is_superuser
 

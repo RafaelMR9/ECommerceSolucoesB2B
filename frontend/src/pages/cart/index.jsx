@@ -1,5 +1,5 @@
-import BaseLayout from "../../components/shared/BaseLayout";
-import { useState } from 'react';
+import BaseLayout from "@/components/shared/BaseLayout"
+import { useState } from 'react'
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([

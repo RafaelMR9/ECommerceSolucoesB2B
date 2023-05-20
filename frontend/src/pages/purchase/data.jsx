@@ -1,6 +1,6 @@
-import Link from "next/link";
-import BaseLayout from "../../components/shared/BaseLayout";
-import { useState } from 'react';
+import Link from "next/link"
+import BaseLayout from "@/components/shared/BaseLayout"
+import { useState } from 'react'
 
 export default function PurchaseData() {
   const [formData, setFormData] = useState({

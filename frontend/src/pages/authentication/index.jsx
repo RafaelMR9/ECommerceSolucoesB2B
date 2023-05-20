@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { useContext, useState } from 'react'
-import { handleChange } from '@/utils/utils'
 import { AuthContext } from '@/contexts/authContext'
 import { loginUser } from '@/services/authService'
 import { useRouter } from 'next/router'
@@ -16,6 +15,14 @@ export default function Login() {
   })
 
   const [formErrors, setFormErrors] = useState("")
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setFormData((prevStateData) => ({
+      ...prevStateData,
+      [name]: value,
+    }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -46,7 +53,7 @@ export default function Login() {
                   type="text"
                   name="username"
                   value={formData.username}
-                  onChange={e => handleChange(e, setFormData)}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -60,7 +67,7 @@ export default function Login() {
                   type="password"
                   name="password"
                   value={formData.password}
-                  onChange={e => handleChange(e, setFormData)}
+                  onChange={handleChange}
                   required
                 />
               </div>

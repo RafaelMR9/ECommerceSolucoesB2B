@@ -1,12 +1,3 @@
-export const handleChange = (e, setState) => {
-  const { name, value, type, checked } = e.target
-  const newValue = type === "checkbox" ? checked : value
-  setState((prevStateData) => ({
-    ...prevStateData,
-    [name]: newValue,
-  }))
-}
-
 export const validateEmail = (email) => {
   const re = /^[\w-\.]+@([\w-]+\.)+com(\.br)?$/
   return re.test(email)

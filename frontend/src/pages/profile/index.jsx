@@ -1,10 +1,10 @@
 import Link from "next/link"
 import { useContext } from 'react'
-import BaseLayout from "../../components/shared/BaseLayout"
 import { AuthContext } from "@/contexts/authContext"
-import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import { logoutUser } from '@/services/authService'
 import { useRouter } from 'next/router'
+import ProtectedRoute from "@/components/routes/ProtectedRoute"
+import BaseLayout from "@/components/shared/BaseLayout"
 
 export default function Profile() {
   const authContext = useContext(AuthContext)

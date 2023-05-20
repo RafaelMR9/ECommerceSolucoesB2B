@@ -1,5 +1,4 @@
-import Link from "next/link";
-import BaseLayout from "../../components/shared/BaseLayout";
+import BaseLayout from "@/components/shared/BaseLayout"
 
 export default function CreditAnalysis() {
   const companies = [

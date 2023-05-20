@@ -1,7 +1,7 @@
 import Link from "next/link"
-import { useState, useContext } from 'react'
-import BaseLayout from "../../components/shared/BaseLayout"
+import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
+import { useState, useContext } from 'react'
 import { updateUser } from '@/services/userService'
 import { validateCnpj, validateEmail, validateCpf } from '@/utils/utils'
 import { AuthContext } from "@/contexts/authContext"
@@ -26,11 +26,10 @@ export default function UpdateProfile() {
   })
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    const newValue = type === "checkbox" ? checked : value
+    const { name, value } = e.target
     setFormData((prevStateData) => ({
       ...prevStateData,
-      [name]: newValue,
+      [name]: value,
     }))
 
     setFormErrors((prevErrors) => {
