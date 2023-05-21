@@ -1,20 +1,23 @@
 import { useState, useEffect } from "react"
+import { useRouter } from "next/router"
 import { getCategories, getCategory, updateCategory } from "@/services/productService"
 import Link from "next/link"
 import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 
 export default function UpdateCategory() {
+  const router = useRouter()
+  const { categoryId } = router.query
 
-  const [formData, setFormData] = useState({
-    name: "",
-    subCategory: "",
-  })
   const [formErrors, setFormErrors] = useState("")
   const [successMessage, setSuccessMessage] = useState("")
   const [categories, setCategories] = useState([])
-  const [category, setCategory] = useState([])
-
+  const [category, setCategory] = useState({})
+  const [formData, setFormData] = useState({
+    name: category.nome,
+    subCategory: category.categoria,
+  })
+  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -26,7 +29,7 @@ export default function UpdateCategory() {
     }
     const fetchCategory = async () => {
       try {
-        const category = await getCategory()
+        const category = await getCategory(categoryId)
         setCategory(category)
       } catch (e) {
         setFormErrors(e.message)
@@ -34,6 +37,7 @@ export default function UpdateCategory() {
     }
 
     fetchCategories()
+    fetchCategory()
   }, [])
 
   const handleChange = (e) => {
@@ -49,7 +53,7 @@ export default function UpdateCategory() {
     setFormErrors("")
     setSuccessMessage("")
     try {
-      await registerCategorie(formData)
+      await updateCategory(formData)
       setSuccessMessage("Categoria atualizada com sucesso.")
     } catch (e) {
       setFormErrors(e.message)
