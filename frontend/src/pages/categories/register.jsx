@@ -5,14 +5,14 @@ import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 
 export default function RegisterCategory() {
-
+  
+  const [formErrors, setFormErrors] = useState("")
+  const [successMessage, setSuccessMessage] = useState("")
+  const [categories, setCategories] = useState([])
   const [formData, setFormData] = useState({
     name: "",
     subCategory: "",
   })
-  const [formErrors, setFormErrors] = useState("")
-  const [successMessage, setSuccessMessage] = useState("")
-  const [categories, setCategories] = useState([])
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -52,7 +52,7 @@ export default function RegisterCategory() {
   }
 
   return (
-    <ProtectedRoute isAdminOnly>
+    <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
         <h1 className="text-4xl font-bold text-slate-800 mb-8">Cadastrar Categoria</h1>
         <form onSubmit={handleSubmit}>
