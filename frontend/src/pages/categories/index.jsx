@@ -1,13 +1,15 @@
 import Link from "next/link"
 import BaseLayout from "@/components/shared/BaseLayout"
+import Modal from "@/components/shared/Modal"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
-import { getCategories } from "@/services/productService"
+import { getCategories, removeCategory } from "@/services/productService"
 import { AuthContext } from "@/contexts/authContext"
 import { useEffect, useState, useContext } from "react"
 
 export default function Categories() {
   const { user } = useContext(AuthContext)
   const [categories, setCategories] = useState([])
+  const [modalState, setModalState] = useState(false)
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -21,6 +23,17 @@ export default function Categories() {
 
     fetchCategories()
   }, [])
+
+  const handleRemoveItem = async (category) => {
+    try {
+      await removeCategory(category)
+      const categories = await getCategories()
+      setCategories(buildCategoryTree(categories))
+    } catch (e) {
+      alert(e)
+    }
+    setModalState({})
+  }
 
   const buildCategoryTree = (categories, parentId = null) => {
     const tree = []
@@ -39,7 +52,25 @@ export default function Categories() {
   const renderCategories = (category) => {
     return (
       <div key={category.id}>
-        <h2 className="text-xl font-bold mb-2">{category.nome}</h2>
+        <div className="flex items-center">
+          <Link className="text-xl font-bold hover:text-blue-700 mb-2" href={`/products?categoryId=${category.id}`}>{category.nome}</Link>
+          <div className="flex ml-auto">
+            <Link href={`/categories/update?categoryId=${category.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
+            <button 
+              onClick={() => setModalState({ [category.id]: true })}
+              className="ml-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded">
+              Remover
+            </button>
+            <Modal
+              isOpen={modalState[category.id] || false}
+              onClose={() => setModalState({})}
+              onConfirm={() => handleRemoveItem(category.id)}
+              title="Confirmação de Remoção"
+              message={`Tem certeza que deseja remover a categoria '${category.nome}'?`}
+              leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
+            />
+          </div>
+        </div>
         {category.subcategorias && renderSubcategories(category.subcategorias)}
       </div>
     )
@@ -50,7 +81,24 @@ export default function Categories() {
       <ul className="pl-8 list-disc">
         {subcategories.map((subcategory) => (
           <li key={subcategory.id} className="mb-4 mt-2">
-            {subcategory.nome}
+            <div className="flex items-center">
+              <Link className="font-semibold hover:text-blue-700" href={`/products?categoryId=${subcategory.id}`}>{subcategory.nome}</Link>
+              <div className="flex ml-auto">
+                <Link href={`/categories/update?categoryId=${subcategory.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
+                <button 
+                  onClick={() => setModalState({ [subcategory.id]: true })}
+                  className="ml-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded">
+                  Remover
+                </button>
+                <Modal
+                  isOpen={modalState[subcategory.id] || false}
+                  onClose={() => setModalState({})}
+                  onConfirm={() => handleRemoveItem(subcategory.id)}
+                  title="Confirmação de Remoção"
+                  message={`Tem certeza que deseja remover a categoria '${subcategory.nome}'?`}
+                />
+              </div>
+            </div>
             {subcategory.subcategorias && renderSubcategories(subcategory.subcategorias)}
           </li>
         ))}
@@ -81,7 +129,7 @@ export default function Categories() {
             </Link>
           }
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {categories.map((category) => {
             return (
               <ul key={category.id}>
