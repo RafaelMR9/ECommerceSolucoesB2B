@@ -9,6 +9,7 @@ import { useEffect, useState, useContext } from "react"
 export default function Categories() {
   const { user } = useContext(AuthContext)
   const [categories, setCategories] = useState([])
+  const [formData, setFormData] = useState("")
   const [modalState, setModalState] = useState(false)
 
   useEffect(() => {
@@ -33,6 +34,10 @@ export default function Categories() {
       alert(e)
     }
     setModalState({})
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
   }
 
   const buildCategoryTree = (categories, parentId = null) => {
@@ -96,6 +101,7 @@ export default function Categories() {
                   onConfirm={() => handleRemoveItem(subcategory.id)}
                   title="Confirmação de Remoção"
                   message={`Tem certeza que deseja remover a categoria '${subcategory.nome}'?`}
+                  leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
                 />
               </div>
             </div>
@@ -117,6 +123,8 @@ export default function Categories() {
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
                 placeholder="Buscar Categoria"
+                value={searchQuery}
+                onChange={(e) => setFormData(e.target.value)}
               />
               <button className="ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
                 Pesquisar
