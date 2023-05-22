@@ -20,6 +20,16 @@ export const getCategory = async (id) => {
     throw new Error("Erro ao obter categoria.")
 }
 
+export const searchCategories = async (formData) => {
+  const response = await fetch(`${apiProductsUrl}/categories/filter/`)
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  }
+  else
+    throw new Error("Erro ao obter categoria.")
+}
+
 export const registerCategory = async (formData) => {
   const options = {
     method: 'post',
