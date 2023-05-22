@@ -41,6 +41,8 @@ export default function RegisterCategory() {
     setSuccessMessage("")
     try {
       await registerCategory(formData)
+      const categories = await getCategories()
+      setCategories(categories)
       setSuccessMessage("Categoria criada com sucesso.")
       setFormData({
         name: "",

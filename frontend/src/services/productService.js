@@ -48,18 +48,21 @@ export const updateCategory = async (formData, id) => {
       categoria: formData.subCategory ? formData.subCategory : null
     })
   }
-  const response = await fetch(`${apiUsersUrl}/${id}/update/`, options)
+  const response = await fetch(`${apiProductsUrl}/categories/${id}/update/`, options)
   if (response.ok) {
     const data = await response.json()
     return data
   }
   else {
     const data = await response.json()
-    console.log(JSON.stringify(data))
-    const modifiedData =  Object.keys(data).reduce((acc, key) => {
-      acc[key] = data[key].join('\n')
-      return acc
-    }, {})
-    throw new Error(JSON.stringify(modifiedData))
+    const modifiedData = Object.values(data).flat().join('\n')
+    throw new Error(modifiedData)
   }
+}
+
+export const removeCategory = async (id) => {
+  const options = {
+    method: 'delete'
+  }
+  await fetch(`${apiProductsUrl}/categories/${id}/delete/`, options)
 }

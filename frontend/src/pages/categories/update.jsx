@@ -8,14 +8,13 @@ import ProtectedRoute from "@/components/routes/ProtectedRoute"
 export default function UpdateCategory() {
   const router = useRouter()
   const { categoryId } = router.query
-
   const [formErrors, setFormErrors] = useState("")
   const [successMessage, setSuccessMessage] = useState("")
-  const [categories, setCategories] = useState([])
   const [category, setCategory] = useState({})
+  const [categories, setCategories] = useState([])
   const [formData, setFormData] = useState({
-    name: category.nome,
-    subCategory: category.categoria,
+    name: "",
+    subCategory: "",
   })
   
   useEffect(() => {
@@ -31,6 +30,10 @@ export default function UpdateCategory() {
       try {
         const category = await getCategory(categoryId)
         setCategory(category)
+        setFormData({
+          name: category.nome,
+          subCategory: category.categoria 
+        })
       } catch (e) {
         setFormErrors(e.message)
       }
@@ -53,7 +56,7 @@ export default function UpdateCategory() {
     setFormErrors("")
     setSuccessMessage("")
     try {
-      await updateCategory(formData)
+      await updateCategory(formData, categoryId)
       setSuccessMessage("Categoria atualizada com sucesso.")
     } catch (e) {
       setFormErrors(e.message)
@@ -79,25 +82,29 @@ export default function UpdateCategory() {
               required
             />
           </div>
-          <div className="mb-4">
-            <label htmlFor="subCategory" className="block text-base font-medium text-gray-700 mb-2">
-              Categoria Pai
-            </label>
-            <select
-              id="subCategory"
-              name="subCategory"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              value={formData.subCategory}
-              onChange={handleChange}
-            >
-              <option value="">Selecione uma Sub-Categoria (Opcional)</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.nome}
-                </option>
-              ))}
-            </select>
-          </div>
+          {category.categoria ? 
+            <div className="mb-4">
+              <label htmlFor="subCategory" className="block text-base font-medium text-gray-700 mb-2">
+                Categoria Pai
+              </label>
+              <select
+                id="subCategory"
+                name="subCategory"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                value={formData.subCategory}
+                onChange={handleChange}
+              >
+                <option value="">Selecione uma Sub-Categoria (Opcional)</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.nome}
+                  </option>
+                ))}
+              </select>
+            </div>
+            :
+            <p className="mb-4 font-semibold">Não é possível mudar a subcategoria de uma categoria que está no topo da hierarquia.</p>
+          }
           { formErrors && <p className="mb-4 text-red-600">{formErrors}</p>}
           { successMessage && <p className="mb-4 text-green-600">{successMessage}</p>}
           <button
