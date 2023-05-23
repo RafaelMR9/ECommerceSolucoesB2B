@@ -20,14 +20,14 @@ export const getCategory = async (id) => {
     throw new Error("Erro ao obter categoria.")
 }
 
-export const searchCategories = async (formData) => {
-  const response = await fetch(`${apiProductsUrl}/categories/filter/`)
+export const filterCategories = async (formData) => {
+  const response = await fetch(`${apiProductsUrl}/categories/filter?category=${formData}`)
   if (response.ok) {
     const data = await response.json()
     return data
   }
   else
-    throw new Error("Erro ao obter categoria.")
+    throw new Error("Erro ao buscar categorias.")
 }
 
 export const registerCategory = async (formData) => {

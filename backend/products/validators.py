@@ -5,7 +5,6 @@ class CustomValidators:
     @staticmethod
     def validate_category_circular_relationship(category, subCategory):
       visited = set()
-      print("AAAAAAAAAAAAAAA", visited)
       while subCategory is not None:
           if subCategory in visited:
               raise serializers.ValidationError("Não é permitido criar uma dependência circular entre categorias.")
