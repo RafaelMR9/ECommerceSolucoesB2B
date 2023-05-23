@@ -2,7 +2,7 @@ import Link from "next/link"
 import BaseLayout from "@/components/shared/BaseLayout"
 import Modal from "@/components/shared/Modal"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
-import { getCategories, removeCategory } from "@/services/productService"
+import { getCategories, removeCategory, filterCategories } from "@/services/productService"
 import { AuthContext } from "@/contexts/authContext"
 import { useEffect, useState, useContext } from "react"
 
@@ -10,6 +10,7 @@ export default function Categories() {
   const { user } = useContext(AuthContext)
   const [categories, setCategories] = useState([])
   const [formData, setFormData] = useState("")
+  const [formErrors, setFormErrors] = useState("")
   const [modalState, setModalState] = useState(false)
 
   useEffect(() => {
@@ -18,10 +19,11 @@ export default function Categories() {
         const categories = await getCategories()
         setCategories(buildCategoryTree(categories))
       } catch (e) {
-        alert(e)
+        setFormErrors(e.message)
       }
     }
-
+    
+    setFormErrors("")
     fetchCategories()
   }, [])
 
@@ -36,8 +38,29 @@ export default function Categories() {
     setModalState({})
   }
 
-  const handleSubmit = (e) => {
+  const handleResetFilter = async () => {
+    setFormErrors("")
+    try {
+      const categories = await getCategories()
+      setCategories(buildCategoryTree(categories))
+    } catch (e) {
+      setFormErrors(e.message)
+    }
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
+    if (!formData)
+      return
+
+    setFormErrors("")
+    try {
+      const categories = await filterCategories(formData)
+      setCategories(categories)
+    } catch (e) {
+      setFormErrors(e.message)
+    }
   }
 
   const buildCategoryTree = (categories, parentId = null) => {
@@ -61,7 +84,7 @@ export default function Categories() {
           <Link className="text-xl font-bold hover:text-blue-700 mb-2" href={`/products?categoryId=${category.id}`}>{category.nome}</Link>
           <div className="flex ml-auto">
             <Link href={`/categories/update?categoryId=${category.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
-            <button 
+            <button
               onClick={() => setModalState({ [category.id]: true })}
               className="ml-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded">
               Remover
@@ -90,7 +113,7 @@ export default function Categories() {
               <Link className="font-semibold hover:text-blue-700" href={`/products?categoryId=${subcategory.id}`}>{subcategory.nome}</Link>
               <div className="flex ml-auto">
                 <Link href={`/categories/update?categoryId=${subcategory.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
-                <button 
+                <button
                   onClick={() => setModalState({ [subcategory.id]: true })}
                   className="ml-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded">
                   Remover
@@ -118,25 +141,30 @@ export default function Categories() {
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-4xl font-bold text-slate-800">Categorias</h1>
           <div className="flex-shrink-0 flex-grow">
-            <form className="flex px-20">
+            <form className="flex pl-20" onSubmit={handleSubmit}>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
                 placeholder="Buscar Categoria"
-                value={searchQuery}
+                value={formData}
                 onChange={(e) => setFormData(e.target.value)}
               />
-              <button className="ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
+              <button className="ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md" type="submit">
                 Pesquisar
               </button>
             </form>
           </div>
+          <button className="mx-8 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md" onClick={handleResetFilter}>
+              Resetar Busca
+          </button>
           {user.is_superuser &&
             <Link href="/categories/register" className="hover:bg-white border-2 border-blue-600 text-blue-600 flex items-center font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
               Cadastrar Categoria
             </Link>
           }
         </div>
+        {categories.length === 0 && <p className="text-red-600 font-semibold text-lg mb-2">Não foi possível encontar categorias com esse nome.</p>}
+        {formErrors && <p className="text-red-600 font-semibold text-lg mb-2">{formErrors}</p>}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {categories.map((category) => {
             return (

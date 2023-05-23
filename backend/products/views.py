@@ -12,8 +12,8 @@ class CategoriaFilterView(generics.ListAPIView):
     serializer_class = CategoriaSerializer
 
     def get_queryset(self):
-        search_query = self.request.query_params.get('search', '')
-        return Categoria.objects.filter(nome__regex=search_query)
+        search_query = self.request.query_params.get('category', '')
+        return Categoria.objects.all().filter(nome__iregex=search_query)
 
 class CategoriaCreateView(generics.CreateAPIView):
     queryset = Categoria.objects.all()
