@@ -10,12 +10,13 @@ class Categoria(models.Model):
   
 class Produto(models.Model):
   nome = models.CharField(max_length=255, unique=True, error_messages={'unique': 'Já existe um Produto com este Nome.'})
-  quantidadeAtualEstoque = models.IntegerField()
+  quantidadeAtualEstoque = models.IntegerField(null=True, blank=True)
   precoCusto = models.FloatField()
   precoVenda = models.FloatField()
   descricao = models.TextField()
-  imagem = models.ImageField(upload_to='produtos/')
-  disponivel = models.BooleanField(default=True)
+  imagem = models.ImageField()
+  unidadePorEmbalagem = models.IntegerField(default=1)
+  visivel = models.BooleanField(default=True)
   categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
 
   def __str__(self):

@@ -42,6 +42,7 @@ export default function RegisterCategory() {
     try {
       await registerCategory(formData)
       const categories = await getCategories()
+
       setCategories(categories)
       setSuccessMessage("Categoria criada com sucesso.")
       setFormData({
@@ -91,8 +92,8 @@ export default function RegisterCategory() {
               ))}
             </select>
           </div>
-          { formErrors && <p className="mb-4 text-red-600">{formErrors}</p>}
-          { successMessage && <p className="mb-4 text-green-600">{successMessage}</p>}
+          {formErrors && <p className="mb-4 text-red-600">{formErrors}</p>}
+          {successMessage && <p className="mb-4 text-green-600">{successMessage}</p>}
           <button
             type="submit"
             className="inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"

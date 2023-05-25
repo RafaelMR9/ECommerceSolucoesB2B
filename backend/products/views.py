@@ -48,8 +48,17 @@ class CategoriaDestroyView(generics.DestroyAPIView):
     serializer_class = CategoriaSerializer
 
 class ProdutoListView(generics.ListAPIView):
-    queryset = Produto.objects.all()
     serializer_class = ProdutoSerializer
+
+    def get_queryset(self):
+        return Produto.objects.all().filter(visivel=True)
+    
+class ProdutoFilterView(generics.ListAPIView):
+    serializer_class = ProdutoSerializer
+
+    def get_queryset(self):
+        search_query = self.request.query_params.get('product', '')
+        return Produto.objects.all().filter(nome__iregex=search_query)
 
 class ProdutoCreateView(generics.CreateAPIView):
     queryset = Produto.objects.all()
@@ -60,5 +69,9 @@ class ProdutoRetrieveView(generics.RetrieveAPIView):
     serializer_class = ProdutoSerializer
 
 class ProdutoUpdateView(generics.UpdateAPIView):
+    queryset = Produto.objects.all()
+    serializer_class = ProdutoSerializer
+
+class ProdutoDestroyView(generics.DestroyAPIView):
     queryset = Produto.objects.all()
     serializer_class = ProdutoSerializer
