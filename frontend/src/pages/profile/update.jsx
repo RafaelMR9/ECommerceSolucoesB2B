@@ -15,7 +15,7 @@ export default function UpdateProfile() {
     email: user.email,
     cpf: user.is_superuser ? user.cpf : null,
     cnpj: user.is_superuser ? null : user.cnpj,
-    adress: user.is_superuser ? null : user.endereco
+    address: user.is_superuser ? null : user.address
   })
 
   const [formErrors, setFormErrors] = useState({
@@ -40,6 +40,8 @@ export default function UpdateProfile() {
         errors.cnpj = ""
       if (name === "cpf" && validateCpf(value))
         errors.cpf = ""
+      if (name === 'address')
+        errors.address = ''
       return errors
     })
   }
@@ -55,7 +57,7 @@ export default function UpdateProfile() {
     if (formData.cpf && !validateCpf(formData.cpf))
       errors.cpf = 'CPF inválido.'
       
-      if (Object.values(errors).some(value => value !== "")) {
+    if (Object.values(errors).some(value => value !== "")) {
       setFormErrors(errors)
       return
     }
@@ -67,16 +69,11 @@ export default function UpdateProfile() {
         cpf: data.cpf,
         cnpj: data.cnpj,
         email: data.email,
-        endereco: data.endereco
+        address: data.address
       })
       router.push('/profile')
     } catch (e) {
       const errorObj = JSON.parse(e.message)
-      if ('endereco' in errorObj) {
-        errorObj.address = errorObj.endereco
-        delete errorObj.endereco
-      }
-
       setFormErrors(errorObj)
     }
   }
@@ -122,16 +119,16 @@ export default function UpdateProfile() {
                 {formErrors.cnpj && <p className="mt-2 text-red-600">{formErrors.cnpj}</p>}
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="adress">
+                <label className="block text-gray-700 font-bold mb-2" htmlFor="address">
                   Endereço
                 </label>
                 <input
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="adress"
+                  id="address"
                   type="text"
                   placeholder="Digite o Endereço"
                   name="address"
-                  value={formData.adress}
+                  value={formData.address}
                   onChange={handleChange}
                   required
                 />

@@ -26,10 +26,9 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     cpf = models.CharField(default=None, max_length=15, null=True, blank=True, unique=True, error_messages={'unique': 'Já existe um Usuário com este CPF.'})
     cnpj = models.CharField(default=None, max_length=18, null=True, blank=True, unique=True, error_messages={'unique': 'Já existe um Usuário com este CNPJ.'})
-    endereco = models.CharField(default=None, max_length=255, null=True, blank=True, unique=True, error_messages={'unique': 'Já existe um Usuário com este Endereço.'})
-    podeFaturada = models.BooleanField(default=None, null=True, blank=True)
-    prazoPagamento = models.IntegerField(default=None, null=True, blank=True)
-    podeComprar = models.BooleanField(default=None, null=True, blank=True)
+    address = models.CharField(default=None, max_length=255, null=True, blank=True, unique=True, error_messages={'unique': 'Já existe um Usuário com este Endereço.'})
+    authorizeFature = models.BooleanField(default=None, null=True, blank=True)
+    canPurchase = models.BooleanField(default=None, null=True, blank=True)
 
     objects = UserManager()
 

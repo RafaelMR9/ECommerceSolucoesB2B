@@ -59,6 +59,6 @@ class CustomValidators:
             raise serializers.ValidationError({'cnpj': ['Já existe um Usuário com este CNPJ.']})
 
     @staticmethod
-    def validate_unique_endereco(value):
-        if User.objects.filter(endereco=value).exists():
-            raise serializers.ValidationError({'endereco': ['Já existe um Usuário com este Endereço.']})
+    def validate_unique_address(value):
+        if User.objects.filter(address=value).exists():
+            raise serializers.ValidationError({'address': ['Já existe um Usuário com este Endereço.']})

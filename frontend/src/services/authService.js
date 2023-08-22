@@ -14,9 +14,9 @@ export const registerUser = async (formData) => {
       confirmPassword: formData.confirmPassword,
       cnpj: formData.cnpj,
       cpf: null,
-      endereco: formData.address, 
-      podeFaturada: formData.podeFaturada ? false : null,
-      podeComprar: true
+      address: formData.address, 
+      authorizeFature: formData.authorizeFature ? false : null,
+      canPurchase: true
     })
   }
   const response = await fetch(`${apiUsersUrl}/register/`, options)

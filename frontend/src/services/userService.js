@@ -21,7 +21,6 @@ export const updateUser = async (formData, id, username) => {
   }
   else {
     const data = await response.json()
-    console.log(JSON.stringify(data))
     const modifiedData =  Object.keys(data).reduce((acc, key) => {
       acc[key] = data[key].join('\n')
       return acc

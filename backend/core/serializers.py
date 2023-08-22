@@ -34,7 +34,7 @@ class UserSerializer(serializers.ModelSerializer):
                     CustomValidators.validate_unique_email(value)
                 elif key == 'password':
                     CustomValidators.validate_password(value)
-                elif key == 'endereco':
-                    CustomValidators.validate_unique_endereco(value)
+                elif key == 'address':
+                    CustomValidators.validate_unique_address(value)
         instance.save()
         return instance
