@@ -62,7 +62,7 @@ export default function RegisterAccount() {
     if (formData.cnpj && !validateCnpj(formData.cnpj))
       errors.cnpj = 'CNPJ inválido.'
     if (formData.password && !validatePassword(formData.password))
-      errors.password = 'Senha inválida.'
+      errors.password = 'Senha deve possuir pelo menos 8 caracteres e possuir letras.'
     if (formData.confirmPassword && !validateConfirmPassword(formData.password, formData.confirmPassword))
       errors.confirmPassword = 'Senhas não coincidem.'
 
@@ -76,11 +76,6 @@ export default function RegisterAccount() {
       router.push('/authentication')
     } catch (e) {
       const errorObj = JSON.parse(e.message)
-      if ('endereco' in errorObj) {
-        errorObj.address = errorObj.endereco
-        delete errorObj.endereco
-      }
-
       setFormErrors(errorObj)
     }
   }

@@ -48,7 +48,7 @@ export default function Profile() {
                 <div className="flex flex-col justify-center items-center px-6 py-4">
                   <div className="text-lg font-bold text-slate-800 mb-2">Endereço</div>
                   <p className="text-gray-700 text-base">
-                    { authContext.user && authContext.user.endereco }
+                    { authContext.user && authContext.user.address }
                   </p>
                 </div>
               </div>
