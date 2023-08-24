@@ -87,7 +87,7 @@ export default function RegisterCategory() {
               <option value="">Selecione uma Sub-Categoria (Opcional)</option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
-                  {category.nome}
+                  {category.name}
                 </option>
               ))}
             </select>

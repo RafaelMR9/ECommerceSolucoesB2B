@@ -1,22 +1,22 @@
 from django.urls import path
 from .views import (
-    CategoriaListView, CategoriaCreateView, CategoriaRetrieveView, CategoriaDestroyView, CategoriaUpdateView, CategoriaFilterView,
-    ProdutoListView, ProdutoCreateView, ProdutoRetrieveView, ProdutoUpdateView, ProdutoDestroyView, ProdutoFilterView,
+    CategoryListView, CategoryCreateView, CategoryRetrieveView, CategoryDestroyView, CategoryUpdateView, CategoryFilterView,
+    ProductListView, ProductCreateView, ProductRetrieveView, ProductUpdateView, ProductDestroyView, ProductFilterView,
 )
 
 app_name = 'products'
 
 urlpatterns = [
-    path('', ProdutoListView.as_view()),
-    path('register/', ProdutoCreateView.as_view()),
-    path('filter/', ProdutoFilterView.as_view()),
-    path('<int:pk>/update/', ProdutoUpdateView.as_view()),
-    path('<int:pk>/detail/', ProdutoRetrieveView.as_view()),
-    path('<int:pk>/delete/', ProdutoDestroyView.as_view()),
-    path('categories/', CategoriaListView.as_view()),
-    path('categories/register/', CategoriaCreateView.as_view()),
-    path('categories/filter/', CategoriaFilterView.as_view()),
-    path('categories/<int:pk>/update/', CategoriaUpdateView.as_view()),
-    path('categories/<int:pk>/detail/', CategoriaRetrieveView.as_view()),
-    path('categories/<int:pk>/delete/', CategoriaDestroyView.as_view()),
+    path('', ProductListView.as_view()),
+    path('register/', ProductCreateView.as_view()),
+    path('filter/', ProductFilterView.as_view()),
+    path('<int:pk>/update/', ProductUpdateView.as_view()),
+    path('<int:pk>/detail/', ProductRetrieveView.as_view()),
+    path('<int:pk>/delete/', ProductDestroyView.as_view()),
+    path('categories/', CategoryListView.as_view()),
+    path('categories/register/', CategoryCreateView.as_view()),
+    path('categories/filter/', CategoryFilterView.as_view()),
+    path('categories/<int:pk>/update/', CategoryUpdateView.as_view()),
+    path('categories/<int:pk>/detail/', CategoryRetrieveView.as_view()),
+    path('categories/<int:pk>/delete/', CategoryDestroyView.as_view()),
 ]

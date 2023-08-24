@@ -25,13 +25,13 @@ class CustomValidators:
     def validate_cnpj(value):
       pattern = re.compile(r'^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$')
       if value and not pattern.match(value):
-        raise serializers.ValidationError({'cnpj': ['Certifique-se de que este campo esteja no formato certo.']})
+        raise serializers.ValidationError({'cnpj': ['CNPJ inválido.']})
       
     @staticmethod
     def validate_cpf(value):
       pattern = re.compile(r'^\d{3}\.\d{3}\.\d{3}\-\d{2}$')
       if value and not pattern.match(value):
-        raise serializers.ValidationError({'cpf': ['Certifique-se de que este campo esteja no formato certo.']})
+        raise serializers.ValidationError({'cpf': ['CPF inválido.']})
     
     @staticmethod
     def validate_equal_password(value1, value2):

@@ -1,23 +1,23 @@
 from django.db import models
 
 # Create your models here.
-class Categoria(models.Model):
-  nome = models.CharField(max_length=255, unique=True, error_messages={'unique': 'Já existe uma Categoria com este Nome.'})
-  categoria = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subcategoria')
+class Category(models.Model):
+  name = models.CharField(max_length=255, unique=True, error_messages={'unique': 'Já existe uma Categoria com este Nome.'})
+  category = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='subcategory')
 
   def __str__(self):
-    return self.nome
+    return self.name
   
-class Produto(models.Model):
-  nome = models.CharField(max_length=255, unique=True, error_messages={'unique': 'Já existe um Produto com este Nome.'})
-  quantidadeAtualEstoque = models.IntegerField(null=True, blank=True)
-  precoCusto = models.FloatField()
-  precoVenda = models.FloatField()
-  descricao = models.TextField()
-  imagem = models.ImageField()
-  unidadePorEmbalagem = models.IntegerField(default=1)
-  visivel = models.BooleanField(default=True)
-  categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+class Product(models.Model):
+  name = models.CharField(max_length=255, unique=True, error_messages={'unique': 'Já existe um Produto com este Nome.'})
+  currentStockQuantity = models.IntegerField(null=True, blank=True)
+  costPrice = models.FloatField()
+  salePrice = models.FloatField()
+  description = models.TextField()
+  image = models.ImageField()
+  packaging = models.IntegerField(default=1)
+  visible = models.BooleanField(default=True)
+  category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
   def __str__(self):
-      return self.nome
+      return self.name
