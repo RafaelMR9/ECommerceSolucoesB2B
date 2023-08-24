@@ -31,8 +31,8 @@ export default function UpdateCategory() {
         const category = await getCategory(categoryId)
         setCategory(category)
         setFormData({
-          name: category.nome,
-          subCategory: category.categoria 
+          name: category.name,
+          subCategory: category.category 
         })
       } catch (e) {
         setFormErrors(e.message)
@@ -82,7 +82,7 @@ export default function UpdateCategory() {
               required
             />
           </div>
-          {category.categoria ? 
+          {category.category ? 
             <div className="mb-4">
               <label htmlFor="subCategory" className="block text-base font-medium text-gray-700 mb-2">
                 Categoria Pai
@@ -97,7 +97,7 @@ export default function UpdateCategory() {
                 <option value="">Selecione uma Sub-Categoria (Opcional)</option>
                 {categories.map((category) => (
                   <option key={category.id} value={category.id}>
-                    {category.nome}
+                    {category.name}
                   </option>
                 ))}
               </select>

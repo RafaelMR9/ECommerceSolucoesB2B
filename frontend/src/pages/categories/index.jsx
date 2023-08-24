@@ -42,6 +42,7 @@ export default function Categories() {
     setFormErrors("")
     try {
       const categories = await getCategories()
+      setFormData("")
       setCategories(buildCategoryTree(categories))
     } catch (e) {
       setFormErrors(e.message)
@@ -66,11 +67,11 @@ export default function Categories() {
   const buildCategoryTree = (categories, parentId = null) => {
     const tree = []
     categories
-      .filter((category) => category.categoria === parentId)
+      .filter((category) => category.category === parentId)
       .forEach((category) => {
         const subcategories = buildCategoryTree(categories, category.id)
         if (subcategories.length > 0) {
-          category.subcategorias = subcategories
+          category.subcategories = subcategories
         }
         tree.push(category)
       })
@@ -81,7 +82,7 @@ export default function Categories() {
     return (
       <div key={category.id}>
         <div className="flex items-center">
-          <Link className="text-xl font-bold hover:text-blue-700 mb-2" href={`/products?categoryId=${category.id}`}>{category.nome}</Link>
+          <Link className="text-xl font-bold hover:text-blue-700 mb-2" href={`/products?categoryId=${category.id}`}>{category.name}</Link>
           <div className="flex ml-auto">
             <Link href={`/categories/update?categoryId=${category.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
             <button
@@ -94,12 +95,12 @@ export default function Categories() {
               onClose={() => setModalState({})}
               onConfirm={() => handleRemoveItem(category.id)}
               title="Confirmação de Remoção"
-              message={`Tem certeza que deseja remover a categoria '${category.nome}'?`}
+              message={`Tem certeza que deseja remover a categoria '${category.name}'?`}
               leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
             />
           </div>
         </div>
-        {category.subcategorias && renderSubcategories(category.subcategorias)}
+        {category.subcategories && renderSubcategories(category.subcategories)}
       </div>
     )
   }
@@ -110,7 +111,7 @@ export default function Categories() {
         {subcategories.map((subcategory) => (
           <li key={subcategory.id} className="mb-4 mt-2">
             <div className="flex items-center">
-              <Link className="font-semibold hover:text-blue-700" href={`/products?categoryId=${subcategory.id}`}>{subcategory.nome}</Link>
+              <Link className="font-semibold hover:text-blue-700" href={`/products?categoryId=${subcategory.id}`}>{subcategory.name}</Link>
               <div className="flex ml-auto">
                 <Link href={`/categories/update?categoryId=${subcategory.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
                 <button
@@ -123,12 +124,12 @@ export default function Categories() {
                   onClose={() => setModalState({})}
                   onConfirm={() => handleRemoveItem(subcategory.id)}
                   title="Confirmação de Remoção"
-                  message={`Tem certeza que deseja remover a categoria '${subcategory.nome}'?`}
+                  message={`Tem certeza que deseja remover a categoria '${subcategory.name}'?`}
                   leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
                 />
               </div>
             </div>
-            {subcategory.subcategorias && renderSubcategories(subcategory.subcategorias)}
+            {subcategory.subcategories && renderSubcategories(subcategory.subcategories)}
           </li>
         ))}
       </ul>

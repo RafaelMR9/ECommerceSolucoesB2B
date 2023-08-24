@@ -92,19 +92,6 @@ export default function RegisterProduct() {
       }))
     } catch (e) {
       const errorObj = JSON.parse(e.message)
-      if ('nome' in errorObj) {
-        errorObj.name = errorObj.nome
-        delete errorObj.nome
-      }
-      if ('imagem' in errorObj) {
-        errorObj.image = errorObj.imagem
-        delete errorObj.imagem
-      }
-      if ('categoria' in errorObj) {
-        errorObj.category = errorObj.categoria
-        delete errorObj.categoria
-      }
-
       setFormErrors(errorObj)
     }
     return
@@ -210,7 +197,7 @@ export default function RegisterProduct() {
                 </option>
                 {categories.map((category) => (
                   <option key={category.id} value={category.id}>
-                    {category.nome}
+                    {category.name}
                   </option>
                 ))}
               </select>

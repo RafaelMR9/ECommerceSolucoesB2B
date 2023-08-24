@@ -36,8 +36,8 @@ export const registerCategory = async (formData) => {
     headers: new Headers({ 
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
-      nome: formData.name,
-      categoria: formData.subCategory ? formData.subCategory : null
+      name: formData.name,
+      category: formData.subCategory ? formData.subCategory : null
     })
   }
   const response = await fetch(`${apiProductsUrl}/categories/register/`, options)
@@ -54,8 +54,8 @@ export const updateCategory = async (formData, id) => {
     headers: new Headers({ 
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
-      nome: formData.name,
-      categoria: formData.subCategory ? formData.subCategory : null
+      name: formData.name,
+      category: formData.subCategory ? formData.subCategory : null
     })
   }
   const response = await fetch(`${apiProductsUrl}/categories/${id}/update/`, options)
@@ -110,15 +110,15 @@ export const filterProducts = async (formData) => {
 export const registerProduct = async (formData) => {
   const form = new FormData()
 
-  form.append('nome', formData.name)
+  form.append('name', formData.name)
   form.append('quantidadeAtualEstoque', 0)
-  form.append('visivel', true)
-  form.append('precoCusto', formData.costPrice)
-  form.append('precoVenda', formData.salePrice)
-  form.append('descricao', formData.description)
-  form.append('unidadePorEmbalagem', formData.packaging)
-  form.append('categoria', formData.category)
-  form.append('imagem', formData.image)
+  form.append('visible', true)
+  form.append('costPrice', formData.costPrice)
+  form.append('salePrice', formData.salePrice)
+  form.append('description', formData.description)
+  form.append('packaging', formData.packaging)
+  form.append('category', formData.category)
+  form.append('image', formData.image)
 
   const options = {
     method: 'post',
@@ -128,7 +128,6 @@ export const registerProduct = async (formData) => {
   const response = await fetch(`${apiProductsUrl}/register/`, options)
   if (!response.ok) {
     const data = await response.json()
-    console.log(data)
     const modifiedData =  Object.keys(data).reduce((acc, key) => {
       acc[key] = data[key].join('\n')
       return acc

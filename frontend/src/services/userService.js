@@ -1,10 +1,6 @@
 import { apiUsersUrl } from '../config'
 
 export const updateUser = async (formData, id, username) => {
-  if ('endereco' in formData) {
-    formData.address = formData.endereco
-    delete formData.address
-  }
   const options = {
     method: 'put',
     headers: new Headers({ 
