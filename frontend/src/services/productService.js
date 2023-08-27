@@ -59,11 +59,7 @@ export const updateCategory = async (formData, id) => {
     })
   }
   const response = await fetch(`${apiProductsUrl}/categories/${id}/update/`, options)
-  if (response.ok) {
-    const data = await response.json()
-    return data
-  }
-  else {
+  if (!response.ok) {
     const data = await response.json()
     const modifiedData = Object.values(data).flat().join('\n')
     throw new Error(modifiedData)
@@ -111,7 +107,7 @@ export const registerProduct = async (formData) => {
   const form = new FormData()
 
   form.append('name', formData.name)
-  form.append('quantidadeAtualEstoque', 0)
+  form.append('currentStockQuantity', 0)
   form.append('visible', true)
   form.append('costPrice', formData.costPrice)
   form.append('salePrice', formData.salePrice)
@@ -134,4 +130,40 @@ export const registerProduct = async (formData) => {
     }, {})
     throw new Error(JSON.stringify(modifiedData))
   }
+}
+
+export const updateProduct = async (formData, id) => {
+  const form = new FormData()
+
+  form.append('name', formData.name)
+  form.append('currentStockQuantity', 0)
+  form.append('visible', true)
+  form.append('costPrice', formData.costPrice)
+  form.append('salePrice', formData.salePrice)
+  form.append('description', formData.description)
+  form.append('packaging', formData.packaging)
+  form.append('category', formData.category)
+  form.append('image', formData.image)
+
+  const options = {
+    method: 'put',
+    body: form
+  }
+
+  const response = await fetch(`${apiProductsUrl}/${id}/update/`, options)
+  if (!response.ok) {
+    const data = await response.json()
+    const modifiedData =  Object.keys(data).reduce((acc, key) => {
+      acc[key] = data[key].join('\n')
+      return acc
+    }, {})
+    throw new Error(JSON.stringify(modifiedData))
+  }
+}
+
+export const removeProduct = async (id) => {
+  const options = {
+    method: 'delete'
+  }
+  await fetch(`${apiProductsUrl}/${id}/delete/`, options)
 }

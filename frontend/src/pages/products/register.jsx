@@ -11,7 +11,6 @@ export default function RegisterProduct() {
     name: "",
     image: ""
   })
-  const [image, setImage] = useState(null)
   const [successMessage, setSuccessMessage] = useState("")
   const [categories, setCategories] = useState([])
   const [formData, setFormData] = useState({
@@ -57,7 +56,6 @@ export default function RegisterProduct() {
   const handleImageUpload = (e) => {
     const file = e.target.files[0]
     
-    setImage(file)
     setFormData((prevFormData) => ({
       ...prevFormData,
       image: file,
@@ -230,7 +228,7 @@ export default function RegisterProduct() {
                 <img
                   id="imagePreview"
                   className="w-full h-full object-contain border-4 border-blue-600 rounded"
-                  src={URL.createObjectURL(image)}
+                  src={URL.createObjectURL(formData.image)}
                   alt="Imagem"
                 />
               }

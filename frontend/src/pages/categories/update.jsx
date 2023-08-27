@@ -6,6 +6,7 @@ import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 
 export default function UpdateCategory() {
+  
   const router = useRouter()
   const { categoryId } = router.query
   const [formErrors, setFormErrors] = useState("")
@@ -64,7 +65,7 @@ export default function UpdateCategory() {
   }
 
   return (
-    <ProtectedRoute isAdminOnly>
+    <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
         <h1 className="text-4xl font-bold text-slate-800 mb-8">Atualizar Categoria</h1>
         <form onSubmit={handleSubmit}>
