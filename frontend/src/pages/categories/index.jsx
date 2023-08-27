@@ -10,7 +10,6 @@ export default function Categories() {
   const { user } = useContext(AuthContext)
   const [categories, setCategories] = useState([])
   const [formData, setFormData] = useState("")
-  const [formErrors, setFormErrors] = useState("")
   const [modalState, setModalState] = useState(false)
 
   useEffect(() => {
@@ -19,15 +18,14 @@ export default function Categories() {
         const categories = await getCategories()
         setCategories(buildCategoryTree(categories))
       } catch (e) {
-        setFormErrors(e.message)
+        alert(e.message)
       }
     }
     
-    setFormErrors("")
     fetchCategories()
   }, [])
 
-  const handleRemoveItem = async (category) => {
+  const handleRemoveCategory = async (category) => {
     try {
       await removeCategory(category)
       const categories = await getCategories()
@@ -38,14 +36,13 @@ export default function Categories() {
     setModalState({})
   }
 
-  const handleResetFilter = async () => {
-    setFormErrors("")
+  const handleResetSearch = async () => {
     try {
       const categories = await getCategories()
       setFormData("")
       setCategories(buildCategoryTree(categories))
     } catch (e) {
-      setFormErrors(e.message)
+      alert(e.message)
     }
   }
 
@@ -55,12 +52,11 @@ export default function Categories() {
     if (!formData)
       return
 
-    setFormErrors("")
     try {
       const categories = await filterCategories(formData)
       setCategories(categories)
     } catch (e) {
-      setFormErrors(e.message)
+      alert(e.message)
     }
   }
 
@@ -93,7 +89,7 @@ export default function Categories() {
             <Modal
               isOpen={modalState[category.id] || false}
               onClose={() => setModalState({})}
-              onConfirm={() => handleRemoveItem(category.id)}
+              onConfirm={() => handleRemoveCategory(category.id)}
               title="Confirmação de Remoção"
               message={`Tem certeza que deseja remover a categoria '${category.name}'?`}
               leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
@@ -122,7 +118,7 @@ export default function Categories() {
                 <Modal
                   isOpen={modalState[subcategory.id] || false}
                   onClose={() => setModalState({})}
-                  onConfirm={() => handleRemoveItem(subcategory.id)}
+                  onConfirm={() => handleRemoveCategory(subcategory.id)}
                   title="Confirmação de Remoção"
                   message={`Tem certeza que deseja remover a categoria '${subcategory.name}'?`}
                   leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
@@ -155,7 +151,7 @@ export default function Categories() {
               </button>
             </form>
           </div>
-          <button className="mx-8 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md" onClick={handleResetFilter}>
+          <button className="mx-8 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md" onClick={handleResetSearch}>
               Resetar Busca
           </button>
           {user.is_superuser &&
@@ -165,7 +161,6 @@ export default function Categories() {
           }
         </div>
         {categories.length === 0 && <p className="text-red-600 font-semibold text-lg mb-2">Não foi possível encontar categorias com esse nome.</p>}
-        {formErrors && <p className="text-red-600 font-semibold text-lg mb-2">{formErrors}</p>}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {categories.map((category) => {
             return (

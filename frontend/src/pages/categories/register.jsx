@@ -20,7 +20,7 @@ export default function RegisterCategory() {
         const categories = await getCategories()
         setCategories(categories)
       } catch (e) {
-        setFormErrors(e.message)
+        alert(e.message)
       }
     }
 
