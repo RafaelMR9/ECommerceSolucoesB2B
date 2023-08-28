@@ -222,6 +222,7 @@ export default function UpdateProduct() {
                 id="imageUpload"
                 onChange={handleImageUpload}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white"
+                defaultValue={formData.image}
                 required
               />
               {formErrors.image && <p className="mt-2 text-red-600">{formErrors.image}</p>}
@@ -250,7 +251,7 @@ export default function UpdateProduct() {
         <hr className="mt-6 border border-gray-400"/>
         <div className="mt-8 text-center">
           <p className="text-gray-700">
-            Não quer Atualizar o Produto? <Link href="/products/1" className="text-blue-600">Voltar para a Página do Produto</Link>.
+            Não quer Atualizar o Produto? <Link href={`/products/${productId}`} className="text-blue-600">Voltar para a Página do Produto</Link>.
           </p>
         </div>
       </BaseLayout>
