@@ -12,7 +12,7 @@ class CategoryFilterView(generics.ListAPIView):
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        search_query = self.request.query_params.get('category', '')
+        search_query = self.request.query_params.get('categoryId', '')
         return Category.objects.all().filter(name__iregex=search_query)
 
 class CategoryCreateView(generics.CreateAPIView):
@@ -51,12 +51,19 @@ class ProductListView(generics.ListAPIView):
     def get_queryset(self):
         return Product.objects.all().filter(visible=True)
     
-class ProductFilterView(generics.ListAPIView):
+class ProductFilterNameView(generics.ListAPIView):
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        search_query = self.request.query_params.get('product', '')
-        return Product.objects.all().filter(nome__iregex=search_query)
+        search_query = self.request.query_params.get('fetchProduct', '')
+        return Product.objects.all().filter(visible=True, name__iregex=search_query)
+
+class ProductFilterCategoryView(generics.ListAPIView):
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        search_query = self.request.query_params.get('categoryId', '')
+        return Product.objects.all().filter(visible=True, category__id=search_query)
 
 class ProductCreateView(generics.CreateAPIView):
     queryset = Product.objects.all()

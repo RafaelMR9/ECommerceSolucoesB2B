@@ -8,6 +8,7 @@ import { AuthContext } from "@/contexts/authContext"
 import { useRouter } from 'next/router'
 
 export default function UpdateProfile() {
+  
   const router = useRouter()
   const { user, setUser } = useContext(AuthContext)
 

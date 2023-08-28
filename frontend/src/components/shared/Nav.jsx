@@ -1,6 +1,21 @@
-import Link from 'next/link';
+import Link from 'next/link'
+import { useState } from "react"
+import { useRouter } from "next/router"
 
 export default function Nav() {
+
+  const router = useRouter()
+  const [formData, setFormData] = useState("")
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    if (!formData)
+      return
+
+    router.push(`/products?fetchProduct=${formData}`)
+  }
+
   return (
     <nav className="bg-gray-800">
       <div className="px-8">
@@ -9,11 +24,13 @@ export default function Nav() {
             Web Vendas
           </Link>
           <div className="flex-shrink-0 flex-grow">
-            <form className="flex px-20">
+            <form className="flex px-20" onSubmit={handleSubmit}>
               <input
                 className="bg-gray-700 text-white rounded-md py-2 px-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 type="text"
                 placeholder="Buscar Produtos"
+                value={formData}
+                onChange={(e) => setFormData(e.target.value)}
               />
               <button className="ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
                 Pesquisar

@@ -21,7 +21,7 @@ export const getCategory = async (id) => {
 }
 
 export const filterCategories = async (formData) => {
-  const response = await fetch(`${apiProductsUrl}/categories/filter?category=${formData}`)
+  const response = await fetch(`${apiProductsUrl}/categories/filter?categoryId=${formData}`)
   if (response.ok) {
     const data = await response.json()
     return data
@@ -93,14 +93,24 @@ export const getProduct = async (id) => {
     throw new Error("Erro ao obter produto.")
 }
 
-export const filterProducts = async (formData) => {
-  const response = await fetch(`${apiProductsUrl}/filter?product=${formData}`)
+export const filterProductsByName = async (name) => {
+  const response = await fetch(`${apiProductsUrl}/filterName?fetchProduct=${name}`)
   if (response.ok) {
     const data = await response.json()
     return data
   }
   else
-    throw new Error("Erro ao buscar produtos.")
+    throw new Error("Erro ao buscar produto.")
+}
+
+export const filterProductsByCategory = async (category) => {
+  const response = await fetch(`${apiProductsUrl}/filterCategory?categoryId=${category}`)
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  }
+  else
+    throw new Error("Erro ao buscar produto.")
 }
 
 export const registerProduct = async (formData) => {

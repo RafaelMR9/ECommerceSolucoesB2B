@@ -7,15 +7,20 @@ import { AuthContext } from "@/contexts/authContext"
 import { useEffect, useState, useContext } from "react"
 
 export default function Categories() {
+
   const { user } = useContext(AuthContext)
   const [categories, setCategories] = useState([])
   const [formData, setFormData] = useState("")
   const [modalState, setModalState] = useState(false)
+  const [message, setMessage] = useState("")
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const categories = await getCategories()
+        if (categories.length === 0) {
+          setMessage(`Ainda não existem categorias cadastradas.`)
+        }
         setCategories(buildCategoryTree(categories))
       } catch (e) {
         alert(e.message)
@@ -29,6 +34,9 @@ export default function Categories() {
     try {
       await removeCategory(category)
       const categories = await getCategories()
+      if (categories.length === 0) {
+        setMessage(`Ainda não existem categorias cadastradas.`)
+      }
       setCategories(buildCategoryTree(categories))
     } catch (e) {
       alert(e)
@@ -40,6 +48,10 @@ export default function Categories() {
     try {
       const categories = await getCategories()
       setFormData("")
+      setMessage("")
+      if (categories.length === 0) {
+        setMessage(`Ainda não existem categorias cadastradas.`)
+      }
       setCategories(buildCategoryTree(categories))
     } catch (e) {
       alert(e.message)
@@ -52,8 +64,12 @@ export default function Categories() {
     if (!formData)
       return
 
+    setMessage("")
     try {
       const categories = await filterCategories(formData)
+      if (categories.length === 0) {
+        setMessage(`Nenhum resultado para a busca '${formData}'.`)
+      }
       setCategories(categories)
     } catch (e) {
       alert(e.message)
@@ -79,22 +95,24 @@ export default function Categories() {
       <div key={category.id}>
         <div className="flex items-center">
           <Link className="text-xl font-bold hover:text-blue-700 mb-2" href={`/products?categoryId=${category.id}`}>{category.name}</Link>
-          <div className="flex ml-auto">
-            <Link href={`/categories/update?categoryId=${category.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
-            <button
-              onClick={() => setModalState({ [category.id]: true })}
-              className="ml-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded">
-              Remover
-            </button>
-            <Modal
-              isOpen={modalState[category.id] || false}
-              onClose={() => setModalState({})}
-              onConfirm={() => handleRemoveCategory(category.id)}
-              title="Confirmação de Remoção"
-              message={`Tem certeza que deseja remover a categoria '${category.name}'?`}
-              leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
-            />
-          </div>
+          { user.is_superuser && 
+            <div className="flex ml-auto">
+              <Link href={`/categories/update?categoryId=${category.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
+              <button
+                onClick={() => setModalState({ [category.id]: true })}
+                className="ml-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded">
+                Remover
+              </button>
+              <Modal
+                isOpen={modalState[category.id] || false}
+                onClose={() => setModalState({})}
+                onConfirm={() => handleRemoveCategory(category.id)}
+                title="Confirmação de Remoção"
+                message={`Tem certeza que deseja remover a categoria '${category.name}'?`}
+                leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
+              />
+            </div>
+          }
         </div>
         {category.subcategories && renderSubcategories(category.subcategories)}
       </div>
@@ -108,22 +126,24 @@ export default function Categories() {
           <li key={subcategory.id} className="mb-4 mt-2">
             <div className="flex items-center">
               <Link className="font-semibold hover:text-blue-700" href={`/products?categoryId=${subcategory.id}`}>{subcategory.name}</Link>
-              <div className="flex ml-auto">
-                <Link href={`/categories/update?categoryId=${subcategory.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
-                <button
-                  onClick={() => setModalState({ [subcategory.id]: true })}
-                  className="ml-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded">
-                  Remover
-                </button>
-                <Modal
-                  isOpen={modalState[subcategory.id] || false}
-                  onClose={() => setModalState({})}
-                  onConfirm={() => handleRemoveCategory(subcategory.id)}
-                  title="Confirmação de Remoção"
-                  message={`Tem certeza que deseja remover a categoria '${subcategory.name}'?`}
-                  leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
-                />
-              </div>
+              { user.is_superuser && 
+                <div className="flex ml-auto">
+                  <Link href={`/categories/update?categoryId=${subcategory.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
+                  <button
+                    onClick={() => setModalState({ [subcategory.id]: true })}
+                    className="ml-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded">
+                    Remover
+                  </button>
+                  <Modal
+                    isOpen={modalState[subcategory.id] || false}
+                    onClose={() => setModalState({})}
+                    onConfirm={() => handleRemoveCategory(subcategory.id)}
+                    title="Confirmação de Remoção"
+                    message={`Tem certeza que deseja remover a categoria '${subcategory.name}'?`}
+                    leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
+                  />
+                </div>
+              }
             </div>
             {subcategory.subcategories && renderSubcategories(subcategory.subcategories)}
           </li>
@@ -160,7 +180,7 @@ export default function Categories() {
             </Link>
           }
         </div>
-        {categories.length === 0 && <p className="text-red-600 font-semibold text-lg mb-2">Não foi possível encontar categorias com esse nome.</p>}
+        {message && <p className="text-red-600 font-semibold text-lg mb-2">{message}</p>}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {categories.map((category) => {
             return (

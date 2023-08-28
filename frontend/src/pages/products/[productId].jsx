@@ -2,13 +2,15 @@ import Link from "next/link"
 import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import Modal from "@/components/shared/Modal"
-import { useState, useEffect } from "react"
+import { AuthContext } from "@/contexts/authContext"
+import { useState, useEffect, useContext } from "react"
 import { getProduct, getCategory, removeProduct } from "@/services/productService"
 import { useRouter } from "next/router"
 
 export default function Product() {
 
   const router = useRouter()
+  const { user } = useContext(AuthContext)
   const { productId } = router.query
   const [product, setProduct] = useState({})
   const [category, setCategory] = useState({})
@@ -54,18 +56,22 @@ export default function Product() {
             <div>
               <div className="flex flex-wrap justify-between items-center mb-2">
                 <h1 className="text-4xl font-bold text-slate-800 ">{product.name}</h1>
-                <button
-                  onClick={() => setModalState({ [productId]: true })}
-                  className="ml-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded">
-                  Remover Produto
-                </button>
-                <Modal
-                  isOpen={modalState[productId] || false}
-                  onClose={() => setModalState({})}
-                  onConfirm={() => handleRemoveProduct(productId)}
-                  title="Confirmação de Remoção"
-                  message={`Tem certeza que deseja remover o produto '${product.name}'?`}
-                />
+                {user.is_superuser &&
+                <>
+                  <button
+                    onClick={() => setModalState({ [productId]: true })}
+                    className="ml-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded">
+                    Remover Produto
+                  </button>
+                  <Modal
+                    isOpen={modalState[productId] || false}
+                    onClose={() => setModalState({})}
+                    onConfirm={() => handleRemoveProduct(productId)}
+                    title="Confirmação de Remoção"
+                    message={`Tem certeza que deseja remover o produto '${product.name}'?`}
+                  />
+                </>
+                }
               </div>
               <hr className="border-gray-400 mb-6" />
               <div className="flex items-baseline mb-6">
@@ -88,12 +94,16 @@ export default function Product() {
               <Link href={`/purchase?productId=${productId}`} className="bg-blue-600 hover:bg-blue-700 text-white text-3xl font-bold py-6 px-16 rounded focus:outline-none focus:shadow-outline">
                 Comprar
               </Link>
-              <Link href={`/products/update?productId=${productId}`} className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-7 px-8 rounded focus:outline-none focus:shadow-outline">
-                Atualizar Produto
-              </Link>
-              <Link href={`/products/register-promotion?productId=${productId}`} className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-7 px-8 rounded focus:outline-none focus:shadow-outline">
-                Cadastrar Promoção
-              </Link>
+              {user.is_superuser &&
+              <>
+                <Link href={`/products/update?productId=${productId}`} className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-7 px-8 rounded focus:outline-none focus:shadow-outline">
+                  Atualizar Produto
+                </Link>
+                <Link href={`/products/register-promotion?productId=${productId}`} className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-7 px-8 rounded focus:outline-none focus:shadow-outline">
+                  Cadastrar Promoção
+                </Link>
+              </>
+              }
             </div>
           </div>
         </div>
