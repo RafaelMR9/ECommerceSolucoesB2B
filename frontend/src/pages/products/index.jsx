@@ -23,7 +23,7 @@ export default function Products() {
         if (queryParams.categoryId) {
           products = await filterProductsByCategory(queryParams.categoryId)
           if (products.length === 0)
-            setMessage(`Não existem produtos na categoria ${findCategoryName(queryParams.categoryId)}`)
+            setMessage(`Não existem produtos na categoria pesquisada.`)
         }
         else if (queryParams.fetchProduct) {
           products = await filterProductsByName(queryParams.fetchProduct)
