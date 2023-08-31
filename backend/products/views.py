@@ -35,7 +35,7 @@ class CategoryUpdateView(generics.UpdateAPIView):
         newInstance = Category.objects.get(pk=instance.pk)
         newInstance.category = newSubcategory
 
-        CustomValidators.validate_category_subcategory(instance, newSubcategory)
+        CustomValidators.validate_category_same_subcategory(instance, newSubcategory)
         CustomValidators.validate_category_circular_relationship(newInstance, newSubcategory)
 
         self.perform_update(serializer)

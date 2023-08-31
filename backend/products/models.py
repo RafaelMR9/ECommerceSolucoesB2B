@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from marketing.models import Promotion
 
 # Create your models here.
 class Category(models.Model):
@@ -18,6 +20,18 @@ class Product(models.Model):
   packaging = models.IntegerField(default=1)
   visible = models.BooleanField(default=True)
   category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+  def get_promotion_price(self):
+    current_date = timezone.now()
+    active_promotions = Promotion.objects.filter(
+      product=self,
+      startDate__lte=current_date,
+      endDate__gte=current_date
+    )
+
+    if active_promotions.exists():
+        return active_promotions.first().salePrice
+    return self.salePrice
 
   def __str__(self):
       return self.name
