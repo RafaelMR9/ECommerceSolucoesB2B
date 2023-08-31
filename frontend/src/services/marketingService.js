@@ -22,3 +22,13 @@ export const registerPromotion = async (formData) => {
     throw new Error(JSON.stringify(modifiedData))
   }
 }
+
+export const getProductPromotion = async (id) => {
+  const response = await fetch(`${apiMarketingUrl}/promotion/${id}/`)
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  }
+  else
+    throw new Error("Erro ao obter promoção.")
+}

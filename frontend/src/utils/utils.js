@@ -1,3 +1,5 @@
+export const checkNullObject = (obj) => Object.values(obj).every(value => value === null)
+
 export const validateEmail = (email) => {
   const re = /^[\w-\.]+@([\w-]+\.)+com(\.br)?$/
   return re.test(email)

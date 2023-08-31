@@ -1,4 +1,5 @@
 from rest_framework import generics
+from django.utils import timezone
 from .models import Promotion
 from .serializers import PromotionSerializer
 from .validators import CustomValidators
@@ -20,3 +21,17 @@ class PromotionCreateView(generics.CreateAPIView):
         CustomValidators.validate_end_before_today(endDate)
 
         serializer.save()
+
+class PromotionRetrieveProductView(generics.RetrieveAPIView):
+    serializer_class = PromotionSerializer
+
+    def get_object(self):
+        currentDate = timezone.now()
+        try:
+            return Promotion.objects.get(
+                product_id=self.kwargs['pk'],
+                startDate__lte=currentDate,
+                endDate__gte=currentDate
+            )
+        except Promotion.DoesNotExist:
+            return None

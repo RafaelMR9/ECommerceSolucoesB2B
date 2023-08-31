@@ -5,7 +5,9 @@ import Modal from "@/components/shared/Modal"
 import { AuthContext } from "@/contexts/authContext"
 import { useState, useEffect, useContext } from "react"
 import { getProduct, getCategory, removeProduct } from "@/services/productService"
+import { getProductPromotion } from "@/services/marketingService"
 import { useRouter } from "next/router"
+import { checkNullObject } from "@/utils/utils"
 
 export default function Product() {
 
@@ -13,6 +15,7 @@ export default function Product() {
   const { user } = useContext(AuthContext)
   const { productId } = router.query
   const [product, setProduct] = useState({})
+  const [promotion, setPromotion] = useState({})
   const [category, setCategory] = useState({})
   const [modalState, setModalState] = useState(false)
 
@@ -21,8 +24,10 @@ export default function Product() {
       try {
         const product = await getProduct(productId)
         const category = await getCategory(product.category)
+        const promotion = await getProductPromotion(productId)
         setProduct(product)
         setCategory(category)
+        setPromotion(promotion)
       } catch (e) {
         alert(e.message)
       }
@@ -75,7 +80,15 @@ export default function Product() {
               </div>
               <hr className="border-gray-400 mb-6" />
               <div className="flex items-baseline mb-6">
-                <p className="text-3xl text-green-600 font-bold mr-2">{product.salePrice} R$</p>
+                {
+                  checkNullObject(promotion) ?
+                    <p className="text-3xl text-green-600 font-bold mr-2">{product.salePrice} R$</p>
+                    :
+                    <p className="text-3xl text-red-600 font-bold mr-2">
+                      <span className="line-through">{product.salePrice} R$</span>
+                      <span className="text-green-600 font-bold"> {promotion.salePrice} R$</span>
+                    </p>
+                }
                 <p className="text-lg text-gray-500">por embalagem</p>
               </div>
               <p className="text-xl text-gray-700 mb-6">
