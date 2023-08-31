@@ -34,3 +34,13 @@ export const getUser = async (id) => {
   else
     throw new Error("Erro ao obter usuário.")
 }
+
+export const getUsers = async (id) => {
+  const response = await fetch(`${apiUsersUrl}/`)
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  }
+  else
+    throw new Error("Erro ao obter usuários.")
+}
