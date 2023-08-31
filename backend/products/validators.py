@@ -18,6 +18,6 @@ class CustomValidators:
             subCategory = subCategory.category
 
     @staticmethod
-    def validate_category_subcategory(category, subCategory):
+    def validate_category_same_subcategory(category, subCategory):
         if category == subCategory:
             raise serializers.ValidationError("Uma categoria não pode ser subcategoria de si própria.")
