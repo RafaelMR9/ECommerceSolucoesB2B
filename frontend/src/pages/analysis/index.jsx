@@ -21,25 +21,16 @@ export default function CreditAnalysis() {
     fetchUsers()
   }, [])
 
-  const handleAuthorizeUser = async (user) => {
+  const handleAuthorizeUser = async (e, user, flag) => {
     try {
       await updateUser(
-        { ...user, authorizeFature: true }, 
+        { authorizeFature: flag }, 
         user.id, 
         user.username
       )
-    } catch (e) {
-      alert(e)
-    }
-  }
-
-  const handleDontAuthorizeUser = async (user) => {
-    try {
-      await updateUser(
-        { ...user, authorizeFature: null }, 
-        user.id, 
-        user.username
-      )
+      let companies = await getUsers()
+      companies = companies.filter((user) => user.authorizeFature === false)
+      setCompanies(companies)
     } catch (e) {
       alert(e)
     }
@@ -76,12 +67,12 @@ export default function CreditAnalysis() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-700" onClick={handleAuthorizeUser}>
+                    <button className="text-blue-600 hover:text-blue-700" onClick={e => handleAuthorizeUser(e, company, true)}>
                       Permitir
                     </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-red-600 hover:text-red-700" onClick={handleDontAuthorizeUser}>
+                    <button className="text-red-600 hover:text-red-700" onClick={e => handleAuthorizeUser(e, company, "")}>
                       Não Permitir
                     </button>
                   </td>

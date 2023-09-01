@@ -6,9 +6,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True}, 'email': {'required': False}}
         read_only_fields = ('is_staff', 'is_superuser')
-    
+
     password = serializers.CharField(required=False)
 
     def create(self, validated_data):
@@ -21,7 +21,9 @@ class UserSerializer(serializers.ModelSerializer):
     
     def update(self, instance, validated_data):
         for key, value in validated_data.items():
-            if value is not None:
+            if value is not None or key in ['authorizeFature']:
+                if key in ['cpf', 'email'] and getattr(instance, key) == value:
+                    continue
                 setattr(instance, key, value)
                 if key == 'cpf':
                     CustomValidators.validate_cpf(value)
