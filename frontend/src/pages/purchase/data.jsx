@@ -21,8 +21,6 @@ export default function PurchaseData() {
 
   const handleFormSubmit = (e) => {
     e.preventDefault()
-    console.log(formData)
-    // implementar lógica de compra aqui
   }
 
   return (

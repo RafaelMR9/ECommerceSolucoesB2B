@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         for key, value in validated_data.items():
             if value is not None or key in ['authorizeFature']:
-                if key in ['cpf', 'email'] and getattr(instance, key) == value:
+                if key in ['cpf', 'email', 'cnpj', 'address'] and getattr(instance, key) == value:
                     continue
                 setattr(instance, key, value)
                 if key == 'cpf':

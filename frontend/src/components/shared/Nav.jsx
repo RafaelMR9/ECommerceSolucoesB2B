@@ -1,10 +1,12 @@
 import Link from 'next/link'
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useRouter } from "next/router"
+import { AuthContext } from '@/contexts/authContext'
 
 export default function Nav() {
 
   const router = useRouter()
+  const { user } = useContext(AuthContext)
   const [formData, setFormData] = useState("")
 
   const handleSubmit = async (e) => {
@@ -69,9 +71,11 @@ export default function Nav() {
           <Link href="/" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
             Histórico de Vendas
           </Link>
-          <Link href="/analysis" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
-            Análise de Créditos
-          </Link>
+          { user.is_superuser &&
+            <Link href="/analysis" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
+              Análise de Créditos
+            </Link>
+          }
           <Link href="/support" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
             Suporte
           </Link>
