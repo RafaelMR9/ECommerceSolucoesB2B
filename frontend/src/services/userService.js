@@ -44,3 +44,13 @@ export const getUsers = async (id) => {
   else
     throw new Error("Erro ao obter usuários.")
 }
+
+export const getAdministrator = async () => {
+  const response = await fetch(`${apiUsersUrl}/admin_id`)
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  }
+  else
+    throw new Error("Erro ao obter administrador.")
+}
