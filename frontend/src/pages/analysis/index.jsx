@@ -1,10 +1,13 @@
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import BaseLayout from "@/components/shared/BaseLayout"
+import { AuthContext } from "@/contexts/authContext"
+import { registerTicket } from "@/services/supportService"
 import { getUsers, updateUser } from "@/services/userService"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 
 export default function CreditAnalysis() {
 
+  const { user } = useContext(AuthContext)
   const [companies, setCompanies] = useState([])
 
   useEffect(() => {
@@ -21,13 +24,30 @@ export default function CreditAnalysis() {
     fetchUsers()
   }, [])
 
-  const handleAuthorizeUser = async (e, user, flag) => {
+  const handleAuthorizeUser = async (e, company, flag) => {
     try {
       await updateUser(
         { authorizeFature: flag }, 
-        user.id, 
-        user.username
+        company.id, 
+        company.username
       )
+      if (flag)
+        await registerTicket({
+          sender: user.id,
+          recipient: company.id,
+          subject: "Resultado da Análise de Crédito para compras faturadas",
+          content: "Após ser feita a análise de créditos não está permitida sua realização de compras faturadas.",
+          answer: null
+        })
+      else
+        await registerTicket({
+          sender: user.id,
+          recipient: company.id,
+          subject: "Resultado da Análise de Crédito para compras faturadas",
+          content: "Após a análise de créditos está permitida sua realização de compras faturadas.",
+          answer: null
+        })
+
       let companies = await getUsers()
       companies = companies.filter((user) => user.authorizeFature === false)
       setCompanies(companies)

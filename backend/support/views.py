@@ -1,4 +1,5 @@
 from rest_framework import generics
+from django.db.models import Q
 from .validators import CustomValidators
 from .models import Ticket
 from .serializers import TicketSerializer
@@ -29,7 +30,7 @@ class TicketFilterView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.query_params.get('user')
-        queryset = Ticket.objects.filter(sender=user, answer=None)
+        queryset = Ticket.objects.filter(Q(sender=user) | Q(recipient=user), answer__isnull=True)
         return queryset
     
 class TicketRetrieveView(generics.RetrieveAPIView):
