@@ -7,7 +7,9 @@ export const registerSalesOrder = async (formData) => {
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
       orderDate: formData.orderDate,
+      deliveryDate: formData.deliveryDate,
       cancelled: false,
+      faturedPayment: formData.faturedPayment,
       finished: false,
       totalSaleValue: formData.totalSaleValue,
       deliveryFrequency: formData.deliveryFrequency,
@@ -24,11 +26,41 @@ export const registerSalesOrder = async (formData) => {
   }
 }
 
+export const updateSalesOrder = async (formData, id) => {
+  const options = {
+    method: 'put',
+    headers: new Headers({ 
+      'Content-Type': 'application/json' }),
+    body: JSON.stringify({ 
+      orderDate: formData.orderDate,
+      deliveryDate: formData.deliveryDate,
+      cancelled: formData.cancelled,
+      faturedPayment: formData.faturedPayment,
+      finished: formData.finished,
+      totalSaleValue: formData.totalSaleValue,
+      deliveryFrequency: formData.deliveryFrequency,
+      user: formData.user
+    })
+  }
+  const response = await fetch(`${apiOrdersUrl}/salesOrder/${id}/update/`, options)
+  if (!response.ok) {
+    const data = await response.json()
+    const modifiedData =  Object.keys(data).reduce((acc, key) => {
+      acc[key] = data[key].join('\n')
+      return acc
+    }, {})
+    throw new Error(JSON.stringify(modifiedData))
+  }
+}
+
 export const getUnfinishedSalesOrder = async (id) => {
   const response = await fetch(`${apiOrdersUrl}/salesOrder/getUnfinished/?user=${id}`)
   if (response.ok) {
     const data = await response.json()
-    return data[0].id
+    if (data.length !== 0)
+      return data[0].id
+    else
+      return data
   }
   else
     throw new Error("Erro ao obter pedido não finalizado.")
@@ -40,8 +72,9 @@ export const getProductsInSalesOrder = async (saleOrderId, userId) => {
     const data = await response.json()
     return data
   }
-  else
+  else {
     throw new Error("Erro ao obter itens do pedido.")
+  }
 }
 
 export const registerItemSalesOrder = async (formData) => {

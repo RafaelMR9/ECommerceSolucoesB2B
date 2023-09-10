@@ -1,20 +1,27 @@
-import ProtectedRoute from "@/components/routes/ProtectedRoute";
+import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import BaseLayout from "@/components/shared/BaseLayout"
-import { AuthContext } from "@/contexts/authContext";
+import Link from "next/link"
+import { AuthContext } from "@/contexts/authContext"
 import { getProductsInSalesOrder, removeItemSaleOrder, getUnfinishedSalesOrder } from "@/services/orderService"
-import { getProducts } from "@/services/productService";
+import { getProducts } from "@/services/productService"
 import { useState, useEffect, useContext } from 'react'
+import { getPromotions } from "@/services/marketingService"
+import { checkNullObject } from "@/utils/utils"
 
 export default function Cart() {
 
   const { user } = useContext(AuthContext)
   const [cartItems, setCartItems] = useState([])
   const [products, setProducts] = useState([])
+  const [promotions, setPromotions] = useState([])
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
         const saleOrder = await getUnfinishedSalesOrder(user.id)
+        if (saleOrder == false)
+          return
+
         const cartItems = await getProductsInSalesOrder(saleOrder, user.id)
         setCartItems(cartItems)
       } catch (e) {
@@ -31,8 +38,18 @@ export default function Cart() {
       }
     }
 
+    const fetchPromotions = async () => {
+      try {
+        const promotions = await getPromotions()
+        setPromotions(promotions)
+      } catch (e) {
+        alert(e.message)
+      }
+    }
+
     fetchCartItems()
     fetchProducts()
+    fetchPromotions()
   }, [])
 
   const handleRemoveItem = async (id) => {
@@ -42,7 +59,7 @@ export default function Cart() {
     setCartItems(cartItems)
   }
 
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.salePrice * item.quantity, 0)
+  const totalPrice = cartItems.reduce((acc, item) => acc + item.salePrice, 0)
 
   return (
     <ProtectedRoute isProtected>
@@ -85,6 +102,7 @@ export default function Cart() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {cartItems.map((cartItem) => {
                   const product = products.find(p => p.id === cartItem.product)
+                  const promotion = promotions.find(p => p.product === cartItem.product && new Date(p.endDate) >= new Date())
                   return (
                     <tr key={cartItem.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -94,7 +112,7 @@ export default function Cart() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-800">
-                          R$ {cartItem.salePrice}
+                          R$ {promotion ? promotion.salePrice : product.salePrice}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -104,7 +122,7 @@ export default function Cart() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-800">
-                          R$ {(cartItem.salePrice * cartItem.quantity).toFixed(2)}
+                          R$ {(cartItem.salePrice).toFixed(2)}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -123,9 +141,13 @@ export default function Cart() {
             <h3 className="text-2xl font-medium text-gray-900">Total:</h3>
             <h3 className="text-2xl font-medium text-green-900">R$ {totalPrice.toFixed(2)}</h3>
           </div>
-          <button className="rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-            Comprar
-          </button>
+          { totalPrice === 0 ?
+            <span className="text-gray-600 text-lg">Você deve adicionar pelo menos 1 produto ao carrinho para realizar uma compra.</span>
+            :
+            <Link href='/purchase/data' className="rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              Comprar
+            </Link>
+          }
         </div>
       </BaseLayout>
     </ProtectedRoute>
