@@ -86,7 +86,7 @@ export default function Product() {
                     :
                     <p className="text-3xl text-red-600 font-bold mr-2">
                       <span className="line-through">R$ {product.salePrice}</span>
-                      <span className="text-green-600 font-bold">R$ {promotion.salePrice}</span>
+                      <span className="text-green-600 font-bold"> R$ {promotion.salePrice}</span>
                     </p>
                 }
                 <p className="text-lg text-gray-500">por embalagem</p>
