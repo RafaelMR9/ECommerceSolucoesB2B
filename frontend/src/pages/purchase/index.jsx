@@ -39,8 +39,10 @@ export default function Purchase() {
       if (saleOrder == false) {
         saleOrder = await registerSalesOrder({
           cancelled: false,
+          faturedPayment: false,
+          finished: false,
           totalSaleValue: 0,
-          deliveryFrequency: false,
+          deliveryFrequency: 0,
           user: user.id
         })
       }

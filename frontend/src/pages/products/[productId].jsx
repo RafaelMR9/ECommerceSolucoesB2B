@@ -29,7 +29,7 @@ export default function Product() {
         setCategory(category)
         setPromotion(promotion)
       } catch (e) {
-        alert(e.message)
+        router.push('/products')
       }
     }
 
@@ -104,9 +104,11 @@ export default function Product() {
               </div>
             </div>
             <div className="flex flex-wrap justify-between items-center mt-autos">
-              <Link href={`/purchase?productId=${productId}`} className="bg-blue-600 hover:bg-blue-700 text-white text-3xl font-bold py-6 px-16 rounded focus:outline-none focus:shadow-outline">
-                Comprar
-              </Link>
+              {!user.is_superuser && 
+                <Link href={`/purchase?productId=${productId}`} className="bg-blue-600 hover:bg-blue-700 text-white text-3xl font-bold py-6 px-16 rounded focus:outline-none focus:shadow-outline">
+                  Comprar
+                </Link>
+              }
               {user.is_superuser &&
               <>
                 <Link href={`/products/update?productId=${productId}`} className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-7 px-8 rounded focus:outline-none focus:shadow-outline">
