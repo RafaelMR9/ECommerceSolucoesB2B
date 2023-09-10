@@ -1,5 +1,15 @@
 import { apiMarketingUrl } from '../config'
 
+export const getPromotions = async () => {
+  const response = await fetch(`${apiMarketingUrl}/`)
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  }
+  else
+    throw new Error("Erro ao obter promoções.")
+}
+
 export const registerPromotion = async (formData) => {
   const options = {
     method: 'post',

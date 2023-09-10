@@ -4,6 +4,7 @@ import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import { AuthContext } from "@/contexts/authContext"
 import { useState, useEffect, useContext } from "react"
 import { getProducts, filterProductsByName, filterProductsByCategory, getCategories } from "@/services/productService"
+import { getPromotions } from "@/services/marketingService"
 import { useRouter } from "next/router"
 
 export default function Products() {
@@ -13,6 +14,7 @@ export default function Products() {
   const { user } = useContext(AuthContext)
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
+  const [promotions, setPromotions] = useState([])
   const [message, setMessage] = useState("")
 
   useEffect(() => {
@@ -35,7 +37,7 @@ export default function Products() {
           if (products.length === 0)
             setMessage(`Ainda não existem produtos cadastrados.`)
         }
-
+        
         setProducts(products)
       } catch (e) {
         alert(e.message)
@@ -50,9 +52,19 @@ export default function Products() {
         alert(e.message)
       }
     }
+
+    const fetchPromotions = async () => {
+      try {
+        const promotions = await getPromotions()
+        setPromotions(promotions)
+      } catch (e) {
+        alert(e.message)
+      }
+    }
     
     fetchProducts()
     fetchCategories()
+    fetchPromotions()
   }, [queryParams])
 
   const handleResetSearch = async () => {
@@ -93,6 +105,7 @@ export default function Products() {
         {message && <p className="text-red-600 font-semibold text-lg mb-2">{message}</p>}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {products.map((product) => {
+            const promotion = promotions.find((promotion) => promotion.product === product.id && new Date(promotion.endDate) >= new Date())
             return (
               <div key={product.id} className="bg-white rounded-lg shadow-lg px-4 py-6">
                 <img
@@ -104,9 +117,14 @@ export default function Products() {
                 <p className="text-gray-600 text-lg font-semibold mb-4">
                   Categoria: <Link href={`/products?categoryId=${product.category}`} className="text-blue-800 hover:underline">{findCategoryName(product.category)}</Link>
                 </p>
-                <p className="text-gray-800 font-bold text-xl mb-4">
-                  R$ {product.salePrice}
-                </p>
+                {promotion ? (
+                  <p className="mb-4">
+                    <span className="text-gray-800 font-bold text-xl line-through">R$ {product.salePrice}</span>
+                    <span className="text-green-800 font-bold text-xl "> R$ {promotion.salePrice}</span>
+                  </p>
+                ) : (
+                  <p className="text-gray-800 font-bold text-xl mb-4">R$ {product.salePrice}</p>
+                )}
                 <Link href={`/products/${product.id}`} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                   Mais Informações
                 </Link>

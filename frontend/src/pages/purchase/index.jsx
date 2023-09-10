@@ -1,13 +1,18 @@
 import Link from "next/link"
 import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { getProduct } from "@/services/productService"
 import { useRouter } from "next/router"
+import { getUnfinishedSalesOrder, registerItemSalesOrder, registerSalesOrder } from "@/services/orderService"
+import { getProductPromotion } from "@/services/marketingService"
+import { checkNullObject } from "@/utils/utils"
+import { AuthContext } from "@/contexts/authContext"
 
 export default function Purchase() {
 
   const router = useRouter()
+  const { user } = useContext(AuthContext)
   const { productId } = router.query
   const [product, setProduct] = useState({})
   const [quantity, setQuantity] = useState(0)
@@ -25,13 +30,42 @@ export default function Purchase() {
     fetchProduct()
   }, [])
 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+      const promotion = await getProductPromotion(productId)
+      let saleOrder = await getUnfinishedSalesOrder(user.id)
+      if (saleOrder == false) {
+        saleOrder = await registerSalesOrder({
+          cancelled: false,
+          totalSaleValue: 0,
+          deliveryFrequency: false,
+          user: user.id
+        })
+      }
+
+      await registerItemSalesOrder({
+        salePrice: checkNullObject(promotion) ? product.salePrice * quantity : promotion.salePrice * quantity,
+        quantity: quantity,
+        product: productId,
+        salesOrder: saleOrder
+      })
+
+      router.push(`/cart`)
+    } catch (e) {
+      alert(e.message)
+    }
+    return
+  }
+
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
         <h1 className="text-4xl font-bold text-slate-800 mb-8">
           Comprar - {product.name}
         </h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-6">
             <label htmlFor="quantity" className="block text-base font-medium text-gray-700 mb-2">Quantidade</label>
             <input 
@@ -40,10 +74,11 @@ export default function Purchase() {
               id="quantity" 
               name="quantity"
               value={quantity}
+              min={1}
               onChange={e => setQuantity(e.target.value)}
             />
           </div>
-          <button type="submit" className="px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600">
+          <button type="submit" className="mb-6 px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600">
             Adicionar ao Carrinho
           </button>
         </form>
