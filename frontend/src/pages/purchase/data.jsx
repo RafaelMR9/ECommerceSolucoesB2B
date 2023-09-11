@@ -3,7 +3,7 @@ import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import { useState, useContext } from 'react'
 import { AuthContext } from "@/contexts/authContext"
-import { updateSalesOrder, getUnfinishedSalesOrder, getProductsInSalesOrder } from "@/services/orderService"
+import { updateSalesOrder, getUserUnfinishedSalesOrder, getUserProductsInSalesOrder } from "@/services/orderService"
 import { registerTicket } from "@/services/supportService"
 import { getAdministrator } from "@/services/userService"
 import { useRouter } from "next/router"
@@ -50,14 +50,14 @@ export default function PurchaseData() {
   
     try {
       const admin = await getAdministrator()
-      const salesOrder = await getUnfinishedSalesOrder(user.id)
+      const salesOrder = await getUserUnfinishedSalesOrder(user.id)
 
       if (salesOrder == false) {
         alert("Você deve adicionar pelo menos 1 produto ao carrinho para realizar uma compra.")
         return
       }
 
-      const cartItems = await getProductsInSalesOrder(salesOrder, user.id)
+      const cartItems = await getUserProductsInSalesOrder(salesOrder, user.id)
       const totalSaleValue = cartItems.reduce((acc, item) => acc + item.salePrice, 0)
 
       await updateSalesOrder({

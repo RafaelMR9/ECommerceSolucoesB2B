@@ -2,11 +2,10 @@ import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import BaseLayout from "@/components/shared/BaseLayout"
 import Link from "next/link"
 import { AuthContext } from "@/contexts/authContext"
-import { getProductsInSalesOrder, removeItemSaleOrder, getUnfinishedSalesOrder } from "@/services/orderService"
+import { getUserProductsInSalesOrder, removeItemSaleOrder, getUserUnfinishedSalesOrder } from "@/services/orderService"
 import { getProducts } from "@/services/productService"
 import { useState, useEffect, useContext } from 'react'
 import { getPromotions } from "@/services/marketingService"
-import { checkNullObject } from "@/utils/utils"
 
 export default function Cart() {
 
@@ -18,11 +17,11 @@ export default function Cart() {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const saleOrder = await getUnfinishedSalesOrder(user.id)
+        const saleOrder = await getUserUnfinishedSalesOrder(user.id)
         if (saleOrder == false)
           return
 
-        const cartItems = await getProductsInSalesOrder(saleOrder, user.id)
+        const cartItems = await getUserProductsInSalesOrder(saleOrder, user.id)
         setCartItems(cartItems)
       } catch (e) {
         alert(e.message)
@@ -54,8 +53,8 @@ export default function Cart() {
 
   const handleRemoveItem = async (id) => {
     await removeItemSaleOrder(id)
-    const saleOrder = await getUnfinishedSalesOrder(user.id)
-    const cartItems = await getProductsInSalesOrder(saleOrder, user.id)
+    const saleOrder = await getUserUnfinishedSalesOrder(user.id)
+    const cartItems = await getUserProductsInSalesOrder(saleOrder, user.id)
     setCartItems(cartItems)
   }
 

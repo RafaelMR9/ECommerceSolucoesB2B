@@ -33,11 +33,21 @@ class SalesOrderUpdateView(generics.UpdateAPIView):
 
         if deliveryDate is not None:
             CustomValidators.validate_delivery_date_before_today(deliveryDate)
-        CustomValidators.validate_delivery_frequency(deliveryFrequency)
+        if deliveryFrequency is not None:
+            CustomValidators.validate_delivery_frequency(deliveryFrequency)
 
         self.perform_update(serializer)
 
         return Response(serializer.data)
+
+class UserSalesOrderListView(generics.ListAPIView):
+    serializer_class = SalesOrderSerializer
+
+    def get_queryset(self):
+        user = self.request.query_params.get('user')
+        queryset = SalesOrder.objects.filter(user=user, finished=True)
+
+        return queryset
 
 class CheckOpenSalesOrderView(generics.ListAPIView):
     serializer_class = SalesOrderSerializer

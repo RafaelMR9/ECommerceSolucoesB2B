@@ -65,7 +65,7 @@ export default function Nav() {
           <Link href="/categories" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
             Categorias
           </Link>
-          <Link href="/" className="text-gray-300 hover:text-white px-6 rounded-md text-sm font-medium">
+          <Link href={user.is_superuser ? '/orders' : '/orders/companies'} className="text-gray-300 hover:text-white px-6 rounded-md text-sm font-medium">
             Pedidos
           </Link>
           <Link href="/" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">

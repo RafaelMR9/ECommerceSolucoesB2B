@@ -53,7 +53,17 @@ export const updateSalesOrder = async (formData, id) => {
   }
 }
 
-export const getUnfinishedSalesOrder = async (id) => {
+export const getUserSalesOrder = async (id) => {
+  const response = await fetch(`${apiOrdersUrl}/salesOrder/user/?user=${id}`)
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  }
+  else
+    throw new Error("Erro ao obter pedidos do usuário.")
+}
+
+export const getUserUnfinishedSalesOrder = async (id) => {
   const response = await fetch(`${apiOrdersUrl}/salesOrder/getUnfinished/?user=${id}`)
   if (response.ok) {
     const data = await response.json()
@@ -66,7 +76,7 @@ export const getUnfinishedSalesOrder = async (id) => {
     throw new Error("Erro ao obter pedido não finalizado.")
 }
 
-export const getProductsInSalesOrder = async (saleOrderId, userId) => {
+export const getUserProductsInSalesOrder = async (saleOrderId, userId) => {
   const response = await fetch(`${apiOrdersUrl}/itemSalesOrder/${saleOrderId}/?user=${userId}`)
   if (response.ok) {
     const data = await response.json()
