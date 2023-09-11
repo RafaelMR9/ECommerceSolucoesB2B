@@ -4,7 +4,7 @@ import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import { useState, useEffect, useContext } from "react"
 import { getProduct } from "@/services/productService"
 import { useRouter } from "next/router"
-import { getUnfinishedSalesOrder, registerItemSalesOrder, registerSalesOrder } from "@/services/orderService"
+import { getUserUnfinishedSalesOrder, registerItemSalesOrder, registerSalesOrder } from "@/services/orderService"
 import { getProductPromotion } from "@/services/marketingService"
 import { checkNullObject } from "@/utils/utils"
 import { AuthContext } from "@/contexts/authContext"
@@ -35,7 +35,7 @@ export default function Purchase() {
 
     try {
       const promotion = await getProductPromotion(productId)
-      let saleOrder = await getUnfinishedSalesOrder(user.id)
+      let saleOrder = await getUserUnfinishedSalesOrder(user.id)
       if (saleOrder == false) {
         saleOrder = await registerSalesOrder({
           cancelled: false,
