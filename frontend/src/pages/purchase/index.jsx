@@ -42,7 +42,11 @@ export default function Purchase() {
     if (errorMessage)
       return
 
-    if (product.currentStockQuantity - quantity < 0) {
+    if (product.currentStockQuantity < 0) {
+      setErrorMessage(`Estoque do produto acabou.`)
+      return
+    }
+    else if (product.currentStockQuantity - quantity < 0) {
       setErrorMessage(`Estoque do produto insufienciente para compra. Quantidade restando do produto: ${product.currentStockQuantity}.`)
       return
     }

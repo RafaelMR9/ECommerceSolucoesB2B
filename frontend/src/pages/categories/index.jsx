@@ -110,6 +110,8 @@ export default function Categories() {
                 title="Confirmação de Remoção"
                 message={`Tem certeza que deseja remover a categoria '${category.name}'?`}
                 leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
+                option1="Remover"
+                option2="Cancelar"
               />
             </div>
           }
@@ -141,6 +143,8 @@ export default function Categories() {
                     title="Confirmação de Remoção"
                     message={`Tem certeza que deseja remover a categoria '${subcategory.name}'?`}
                     leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
+                    option1="Remover"
+                    option2="Cancelar"
                   />
                 </div>
               }

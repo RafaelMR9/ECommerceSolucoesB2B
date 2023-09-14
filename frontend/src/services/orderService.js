@@ -53,6 +53,16 @@ export const updateSalesOrder = async (formData, id) => {
   }
 }
 
+export const getSalesOrders = async () => {
+  const response = await fetch(`${apiOrdersUrl}/salesOrder`)
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  }
+  else
+    throw new Error("Erro ao obter pedidos.")
+}
+
 export const getUserSalesOrder = async (id) => {
   const response = await fetch(`${apiOrdersUrl}/salesOrder/user/?user=${id}`)
   if (response.ok) {

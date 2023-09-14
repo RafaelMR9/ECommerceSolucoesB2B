@@ -19,6 +19,14 @@ class SalesOrderCreateView(generics.CreateAPIView):
 
         serializer.save()
 
+class SalesOrderListView(generics.ListAPIView):
+    serializer_class = SalesOrderSerializer
+
+    def get_queryset(self):
+        queryset = SalesOrder.objects.filter(finished=True)
+
+        return queryset
+
 class SalesOrderUpdateView(generics.UpdateAPIView):
     queryset = SalesOrder.objects.all()
     serializer_class = SalesOrderSerializer
@@ -66,7 +74,7 @@ class ProductsInSalesOrderListView(generics.ListAPIView):
         queryset = ItemSalesOrder.objects.filter(
             salesOrder__user=user,
             salesOrder__id=self.kwargs['pk'],
-            salesOrder__finished=False)
+        )
 
         return queryset
 

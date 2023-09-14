@@ -6,7 +6,7 @@ from core.models import User
 class SalesOrder(models.Model):
   orderDate = models.DateTimeField(auto_now_add=True)
   deliveryDate = models.DateField(null=True)
-  cancelled = models.BooleanField(default=False)
+  cancelled = models.BooleanField(default=False, null=True)
   faturedPayment = models.BooleanField(default=False)
   finished = models.BooleanField(default=False)
   totalSaleValue = models.FloatField()

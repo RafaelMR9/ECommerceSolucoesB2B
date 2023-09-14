@@ -82,8 +82,8 @@ export default function Products() {
   }
 
   const findCategoryName = (categoryId) => {
-    const category = categories.find(category => category.id === categoryId);
-    return category ? category.name : '';
+    const category = categories.find(category => category.id === categoryId)
+    return category ? category.name : ''
   }
 
   return (
