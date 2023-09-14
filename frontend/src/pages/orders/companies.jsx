@@ -4,7 +4,8 @@ import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import Modal from "@/components/shared/Modal"
 import { useState, useEffect, useContext } from "react"
 import { AuthContext } from "@/contexts/authContext"
-import { getUserSalesOrder, updateSalesOrder } from "@/services/orderService"
+import { getUserSalesOrder, updateSalesOrder, getUserProductsInSalesOrder } from "@/services/orderService"
+import { getProduct, updateProduct } from "@/services/productService"
 
 export default function CompaniesClientOrders() {
   
@@ -27,7 +28,18 @@ export default function CompaniesClientOrders() {
 
   const handleCancelOrder = async (order) => {
     try {
-      await updateSalesOrder({ cancelled: true }, order)
+      await updateSalesOrder({ cancelled: true }, order.id)
+
+      const cartItems = await getUserProductsInSalesOrder(order.id, user.id)
+      await Promise.all(cartItems.map(async (cartItem) => {
+        const product = await getProduct(cartItem.product)
+        await updateProduct(
+          { id: product.id, 
+            currentStockQuantity: product.currentStockQuantity + cartItem.quantity,
+            visible: true
+          }, cartItem.product)
+      }))
+
       const orders = await getUserSalesOrder(user.id)
         setOrders(orders)
     } catch (e) {
@@ -102,15 +114,17 @@ export default function CompaniesClientOrders() {
                       <Modal
                         isOpen={modalState[order.id] || false}
                         onClose={() => setModalState({})}
-                        onConfirm={() => handleCancelOrder(order.id)}
+                        onConfirm={() => handleCancelOrder(order)}
                         title="Confirmação de Remoção"
                         message={`Tem certeza que deseja cancelar este pedido?`}
+                        option1="Sim"
+                        option2="Não"
                       />
                     </>
                     : order.cancelled === true ?
                     <div className="text-sm text-red-600">Cancelado</div>
                     :
-                    <div className="text-sm text-green-600">Enviado</div>
+                    <div className="text-sm text-green-600">Preparando para Envio</div>
                   }
                   </td>
                 </tr>

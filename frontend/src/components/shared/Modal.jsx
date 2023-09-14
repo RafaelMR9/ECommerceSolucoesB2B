@@ -9,11 +9,11 @@ export default function Modal (props) {
         <p className="font-semibold text-lg text-gray-200">{props.message}</p>
         {props.leading && <p className="font-semibold mt-4 text-md text-red-400">{props.leading}</p>}
         <div className="mt-5 flex justify-between">
-          <button className="bg-red-600 hover:bg-red-700 text-white text-lg py-2 px-4 rounded" onClick={props.onConfirm}>
-            Remover
+          <button className={`${props.confirm ? 'bg-blue-600 hover:bg-blue-700' : 'bg-red-600 hover:bg-red-700'} text-white text-lg py-2 px-4 rounded`} onClick={props.onConfirm}>
+            {props.option1}
           </button>
           <button className="bg-gray-300 hover:bg-gray-400 text-gray-900 text-lg py-2 px-4 rounded" onClick={props.onClose}>
-            Cancelar
+            {props.option2}
           </button>
         </div>
       </div>

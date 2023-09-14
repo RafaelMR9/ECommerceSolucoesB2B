@@ -74,6 +74,8 @@ export default function Product() {
                     onConfirm={() => handleRemoveProduct(productId)}
                     title="Confirmação de Remoção"
                     message={`Tem certeza que deseja remover o produto '${product.name}'?`}
+                    option1="Remover"
+                    option2="Cancelar"
                   />
                 </>
                 }
