@@ -16,6 +16,7 @@ export default function Purchase() {
   const { productId } = router.query
   const [product, setProduct] = useState({})
   const [quantity, setQuantity] = useState(0)
+  const [errorMessage, setErrorMessage] = useState("")
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -30,8 +31,21 @@ export default function Purchase() {
     fetchProduct()
   }, [])
 
+  const handleChange = (e) => {
+    setQuantity(e.target.value)
+    setErrorMessage("")
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    if (errorMessage)
+      return
+
+    if (product.currentStockQuantity - quantity < 0) {
+      setErrorMessage(`Estoque do produto insufienciente para compra. Quantidade restando do produto: ${product.currentStockQuantity}.`)
+      return
+    }
 
     try {
       const promotion = await getProductPromotion(productId)
@@ -77,8 +91,9 @@ export default function Purchase() {
               name="quantity"
               value={quantity}
               min={1}
-              onChange={e => setQuantity(e.target.value)}
+              onChange={handleChange}
             />
+            {errorMessage && <p className="mt-2 text-red-600">{errorMessage}</p>}
           </div>
           <button type="submit" className="mb-6 px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600">
             Adicionar ao Carrinho

@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, serializers
 from rest_framework.response import Response
 from .models import Category, Product
 from .validators import CustomValidators

@@ -10,7 +10,7 @@ class Category(models.Model):
   
 class Product(models.Model):
   name = models.CharField(max_length=255, unique=True, error_messages={'unique': 'Já existe um Produto com este Nome.'})
-  currentStockQuantity = models.IntegerField(default=0, blank=True)
+  currentStockQuantity = models.IntegerField(default=0)
   costPrice = models.FloatField()
   salePrice = models.FloatField()
   description = models.TextField()

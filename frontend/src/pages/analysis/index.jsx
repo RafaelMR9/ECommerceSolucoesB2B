@@ -35,16 +35,16 @@ export default function CreditAnalysis() {
         await registerTicket({
           sender: user.id,
           recipient: company.id,
-          subject: "Resultado da Análise de Crédito para compras faturadas",
-          content: "Após ser feita a análise de créditos não está permitida sua realização de compras faturadas.",
+          subject: `${company.cnpj}: Resultado da Análise de Crédito para compras faturadas`,
+          content: `${company.cnpj}: Após ser feita a análise de créditos não está permitida sua realização de compras faturadas.`,
           answer: null
         })
       else
         await registerTicket({
           sender: user.id,
           recipient: company.id,
-          subject: "Resultado da Análise de Crédito para compras faturadas",
-          content: "Após a análise de créditos está permitida sua realização de compras faturadas.",
+          subject: `${company.cnpj}: Resultado da Análise de Crédito para compras faturadas`,
+          content: `${company.cnpj}: Após ser feita a análise de créditos está permitida sua realização de compras faturadas.`,
           answer: null
         })
 

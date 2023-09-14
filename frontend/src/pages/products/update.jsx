@@ -14,10 +14,10 @@ export default function UpdateProduct() {
     name: "",
     image: ""
   })
-  const [successMessage, setSuccessMessage] = useState("")
   const [categories, setCategories] = useState([])
   const [formData, setFormData] = useState({
     name: "",
+    currentStockQuantity: "",
     costPrice: "",
     salePrice: "",
     description: "",
@@ -54,7 +54,7 @@ export default function UpdateProduct() {
       ...prevFormData,
       [name]: value,
     }))
-
+    console.log(formData.category)
     setFormErrors((prevErrors) => {
       const errors = { ...prevErrors }
       if (name === 'name')
@@ -84,22 +84,34 @@ export default function UpdateProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
-    setSuccessMessage("")
+    if (formData.category === "") {
+      setFormErrors((prevFormData) => ({
+        ...prevFormData,
+        category: "Este campo não pode ser nulo.",
+      }))
+      return
+    }
+
     if (Object.values(formErrors).some(value => value !== ""))
       return
 
     try {
-      await updateProduct(formData, productId)
+      if (typeof formData.image !== "string")
+        await updateProduct(formData, productId)
+      else {
+        await updateProduct({
+          name: formData.name,
+          currentStockQuantity: formData.currentStockQuantity,
+          costPrice: formData.costPrice,
+          salePrice: formData.salePrice,
+          description: formData.description,
+          packaging: formData.packaging,
+          category: formData.category,
+          visible: true,
+        }, productId)
+      }
 
-      setSuccessMessage("Produto atualizado com sucesso.")
-      setFormData((prevStateData) => ({
-        ...prevStateData,
-        name: "",
-        costPrice: "",
-        salePrice: "",
-        description: "",
-        packaging: "",
-      }))
+      router.push(`/products/${productId}`)
     } catch (e) {
       const errorObj = JSON.parse(e.message)
       setFormErrors(errorObj)
@@ -202,7 +214,7 @@ export default function UpdateProduct() {
                 value={formData.category}
                 onChange={handleChange}
               >
-                <option value="">
+                <option value={""}>
                   Escolha uma categoria
                 </option>
                 {categories.map((category) => (
@@ -223,11 +235,9 @@ export default function UpdateProduct() {
                 onChange={handleImageUpload}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-white"
                 defaultValue={formData.image}
-                required
               />
               {formErrors.image && <p className="mt-2 text-red-600">{formErrors.image}</p>}
             </div>
-            {successMessage && <p className="mb-4 text-green-600">{successMessage}</p>}
             <button
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
