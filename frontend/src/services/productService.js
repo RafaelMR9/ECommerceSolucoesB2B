@@ -145,16 +145,25 @@ export const registerProduct = async (formData) => {
 export const updateProduct = async (formData, id) => {
   const form = new FormData()
 
-  form.append('name', formData.name)
-  form.append('currentStockQuantity', 0)
-  form.append('visible', true)
-  form.append('costPrice', formData.costPrice)
-  form.append('salePrice', formData.salePrice)
-  form.append('description', formData.description)
-  form.append('packaging', formData.packaging)
-  form.append('category', formData.category)
-  form.append('image', formData.image)
-
+  if ('name' in formData)
+    form.append('name', formData.name)
+  if ('currentStockQuantity' in formData)
+    form.append('currentStockQuantity', formData.currentStockQuantity)
+  if ('visible' in formData)
+    form.append('visible', formData.visible)
+  if ('costPrice' in formData)
+    form.append('costPrice', formData.costPrice)
+  if ('salePrice' in formData)
+    form.append('salePrice', formData.salePrice)
+  if ('description' in formData)
+    form.append('description', formData.description)
+  if ('packaging' in formData)
+    form.append('packaging', formData.packaging)
+  if ('category' in formData)
+    form.append('category', formData.category)
+  if ('image' in formData)
+    form.append('image', formData.image)
+  
   const options = {
     method: 'put',
     body: form
@@ -163,6 +172,7 @@ export const updateProduct = async (formData, id) => {
   const response = await fetch(`${apiProductsUrl}/${id}/update/`, options)
   if (!response.ok) {
     const data = await response.json()
+    console.log(data)
     const modifiedData =  Object.keys(data).reduce((acc, key) => {
       acc[key] = data[key].join('\n')
       return acc

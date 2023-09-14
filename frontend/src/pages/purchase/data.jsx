@@ -6,6 +6,7 @@ import { AuthContext } from "@/contexts/authContext"
 import { updateSalesOrder, getUserUnfinishedSalesOrder, getUserProductsInSalesOrder } from "@/services/orderService"
 import { registerTicket } from "@/services/supportService"
 import { getAdministrator } from "@/services/userService"
+import { getProduct, updateProduct } from "@/services/productService"
 import { useRouter } from "next/router"
 
 export default function PurchaseData() {
@@ -71,11 +72,20 @@ export default function PurchaseData() {
         user: user.id
       }, salesOrder)
 
+      await Promise.all(cartItems.map(async (cartItem) => {
+        const product = await getProduct(cartItem.product)
+        await updateProduct(
+          { id: product.id, 
+            currentStockQuantity: product.currentStockQuantity - cartItem.quantity,
+            visible: true
+          }, cartItem.product)
+      }))
+
       await registerTicket({
         sender: admin.id,
         recipient: user.id,
-        subject: "Compra Realizada com Sucesso",
-        content: "Sua compra foi efetuada com sucesso.",
+        subject: `${user.cnpj}: Compra Realizada com Sucesso`,
+        content: `${user.cnpj}: Sua compra foi efetuada com sucesso.`,
         answer: null
       })
 

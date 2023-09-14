@@ -15,6 +15,7 @@ export default function RegisterProduct() {
   const [categories, setCategories] = useState([])
   const [formData, setFormData] = useState({
     name: "",
+    currentStockQuantity: 0,
     costPrice: "",
     salePrice: "",
     description: "",
