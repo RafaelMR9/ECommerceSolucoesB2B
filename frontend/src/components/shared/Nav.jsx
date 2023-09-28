@@ -65,16 +65,24 @@ export default function Nav() {
           <Link href="/categories" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
             Categorias
           </Link>
-          <Link href={user.is_superuser ? '/orders' : '/orders/companies'} className="text-gray-300 hover:text-white px-6 rounded-md text-sm font-medium">
+          <Link href='/orders' className="text-gray-300 hover:text-white px-6 rounded-md text-sm font-medium">
             Pedidos
           </Link>
-          <Link href="/" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
-            Histórico de Vendas
-          </Link>
           { user.is_superuser &&
+          <>
+            <Link href="/suppliers" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
+              Fornecedores
+            </Link>
+            <Link href="/" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
+              Histórico de Vendas
+            </Link>
             <Link href="/analysis" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
               Análise de Créditos
             </Link>
+            <Link href="/payments" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
+              Pagamentos
+            </Link>
+          </>
           }
           <Link href="/support" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
             Suporte

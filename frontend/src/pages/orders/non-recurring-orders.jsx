@@ -17,7 +17,7 @@ export default function ClientCompaniesNonRecurringOrders() {
     const fetchUserOrders = async () => {
       try {
         const orders = await getUserSalesOrder(user.id)
-        setOrders(orders)
+        setOrders(orders.filter(order => order.deliveryFrequency === null))
       } catch (e) {
         alert(e.message)
       }
@@ -41,7 +41,7 @@ export default function ClientCompaniesNonRecurringOrders() {
       }))
 
       const orders = await getUserSalesOrder(user.id)
-        setOrders(orders)
+        setOrders(orders.filter(order => order.deliveryFrequency === null))
     } catch (e) {
       alert(e)
     }

@@ -3,22 +3,21 @@ import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import Modal from "@/components/shared/Modal"
 import { useState, useEffect } from "react"
-import { getSalesOrders, updateSalesOrder, getUserProductsInSalesOrder } from "@/services/orderService"
+import { getSalesOrders, updateSalesOrder } from "@/services/orderService"
 import { getUsers } from "@/services/userService"
-import { updateProduct, getProduct } from "@/services/productService"
 
-export default function AdminNonRecurringOrders() {
+export default function AdminNonRecurringPayments() {
   
   const [orders, setOrders] = useState([])
   const [companies, setCompanies] = useState([])
-  const [prepareModalState, setPrepareModalState] = useState({})
-  const [cancelModalState, setCancelModalState] = useState({})
+  const [paidModalState, setPaidModalState] = useState({})
+  const [unpaidModalState, setUnpaidModalState] = useState({})
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
         const orders = await getSalesOrders()
-        setOrders(orders.filter(order => order.deliveryFrequency === null))
+        setOrders(orders.filter(order => order.deliveryFrequency === null && order.cancelled === null))
       } catch (e) {
         alert(e.message)
       }
@@ -37,26 +36,15 @@ export default function AdminNonRecurringOrders() {
     fetchCompanies()
   }, [])
 
-  const handlePrepareOrder = async (order, value, modalState) => {
+  const handlePaidOrder = async (order, value, modalState) => {
     try {
-      if (value === true) {
-        await updateSalesOrder({ cancelled: value }, order.id)
-        
-        const cartItems = await getUserProductsInSalesOrder(order.id, order.user)
-        await Promise.all(cartItems.map(async (cartItem) => {
-          const product = await getProduct(cartItem.product)
-          await updateProduct(
-            { id: product.id, 
-              currentStockQuantity: product.currentStockQuantity + cartItem.quantity,
-              visible: true
-            }, cartItem.product)
-        }))
-      }
-      else if (value === null)
-        await updateSalesOrder({ cancelled: value }, order.id)
+      if (value === true) 
+        await updateSalesOrder({ paid: value, cancelled: order.cancelled }, order.id)
+      else if (value === false)
+        await updateSalesOrder({ paid: value, cancelled: order.cancelled }, order.id)
         
       const orders = await getSalesOrders()
-      setOrders(orders.filter(order => order.deliveryFrequency === null))
+      setOrders(orders.filter(order => order.deliveryFrequency === null && order.cancelled === null))
     } catch (e) {
       alert(e)
     }
@@ -66,7 +54,7 @@ export default function AdminNonRecurringOrders() {
   return (
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Pedidos Não Recorrentes dos Clientes</h1>
+        <h1 className="text-4xl font-bold text-slate-800 mb-8">Pagamentos Não Recorrentes dos Clientes</h1>
         <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -99,13 +87,19 @@ export default function AdminNonRecurringOrders() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  Faturado
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Data de Entrega
                 </th>
                 <th scope="col" className="relative px-6 py-3">
-                  <span className="sr-only">Enviar</span>
+                  <span className="sr-only">Pago</span>
                 </th>
                 <th scope="col" className="relative px-6 py-3">
-                  <span className="sr-only">Não Enviar</span>
+                  <span className="sr-only">Não Pago</span>
                 </th>
               </tr>
             </thead>
@@ -137,54 +131,59 @@ export default function AdminNonRecurringOrders() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-800">
+                      {order.faturedPayment ? "Sim" : "Não"}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-800">
                       {order.deliveryDate ? new Date(order.deliveryDate).toLocaleDateString('pt-BR') : '-'}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  { order.cancelled === false ?
+                  { order.paid === null ?
                     <>
                       <button 
-                        onClick={() => setPrepareModalState({ [order.id]: true })} 
+                        onClick={() => setPaidModalState({ [order.id]: true })} 
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Enviar
+                        Pago
                       </button>
                       <Modal
-                        isOpen={prepareModalState[order.id] || false}
-                        onClose={() => setPrepareModalState({})}
-                        onConfirm={() => handlePrepareOrder(order, null, setPrepareModalState)}
+                        isOpen={paidModalState[order.id] || false}
+                        onClose={() => setPaidModalState({})}
+                        onConfirm={() => handlePaidOrder(order, true, setPaidModalState)}
                         confirm
-                        title="Confirmação de Preparo"
-                        message={`Tem certeza que deseja preparar este pedido para envio?`}
+                        title="Confirmação de Pagamento"
+                        message={`Tem certeza que deseja marcar este pedido como pago?`}
                         option1="Sim"
                         option2="Não"
                       />
                     </>
-                    : order.cancelled === true ?
+                    : order.paid === false ?
                     <div className="text-sm text-gray-800">-</div>
                     :
-                    <div className="text-sm text-green-600">Preparando para Envio</div>
+                    <div className="text-sm text-green-600">Pago</div>
                   }
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  { order.cancelled === false ?
+                  { order.paid === null ?
                     <>
                       <button 
-                        onClick={() => setCancelModalState({ [order.id]: true })} 
+                        onClick={() => setUnpaidModalState({ [order.id]: true })} 
                         className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                        Cancelar Pedido
+                        Não Pago
                       </button>
                       <Modal
-                        isOpen={cancelModalState[order.id] || false}
-                        onClose={() => setCancelModalState({})}
-                        onConfirm={() => handlePrepareOrder(order, true, setCancelModalState)}
-                        title="Confirmação de Remoção"
-                        message={`Tem certeza que deseja cancelar este pedido?`}
+                        isOpen={unpaidModalState[order.id] || false}
+                        onClose={() => setUnpaidModalState({})}
+                        onConfirm={() => handlePaidOrder(order, false, setUnpaidModalState)}
+                        title="Confirmação de Pagamento"
+                        message={`Tem certeza que deseja marcar este pedido como não pago?`}
                         option1="Sim"
                         option2="Não"
                       />
                     </>
-                    : order.cancelled === true ?
-                    <div className="text-sm text-red-600">Cancelado</div>
+                    : order.paid === false ?
+                    <div className="text-sm text-red-600">Não Pago</div>
                     :
                     <div className="text-sm text-gray-800">-</div>
                   }
@@ -198,7 +197,7 @@ export default function AdminNonRecurringOrders() {
         <hr className="mt-6 border border-gray-400" />
         <div className="mt-8 text-center">
           <p className="text-gray-700">
-            Não quer Analisar os Pedidos Não Recorrentes dos Clientes? <Link href="/orders" className="text-blue-600">Voltar para a Página de Pedidos</Link>.
+            Não quer Analisar os Pagamentos Recorrentes dos Clientes? <Link href="/payments" className="text-blue-600">Voltar para a Página de Pagamentos</Link>.
           </p>
         </div>
       </BaseLayout>

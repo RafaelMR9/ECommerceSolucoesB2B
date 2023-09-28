@@ -60,6 +60,7 @@ export default function CreditAnalysis() {
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
         <h1 className="text-4xl font-bold text-slate-800 mb-8">Análise de Créditos</h1>
+        { companies.length !== 0 ? 
         <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -112,6 +113,9 @@ export default function CreditAnalysis() {
             </tbody>
           </table>
         </div>
+        :
+        <p className="text-red-600 font-semibold text-lg">Não há Empresas-Cliente para serem analisadas no momento.</p>
+        }
       </BaseLayout>
     </ProtectedRoute>
   )

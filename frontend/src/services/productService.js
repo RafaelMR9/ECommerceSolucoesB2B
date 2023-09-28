@@ -21,7 +21,7 @@ export const getCategory = async (id) => {
 }
 
 export const filterCategories = async (formData) => {
-  const response = await fetch(`${apiProductsUrl}/categories/filter?categoryId=${formData}`)
+  const response = await fetch(`${apiProductsUrl}/categories/filter?fetchCategories=${formData}`)
   if (response.ok) {
     const data = await response.json()
     return data
