@@ -3,7 +3,7 @@ import BaseLayout from "@/components/shared/BaseLayout"
 import Link from "next/link"
 import { AuthContext } from "@/contexts/authContext"
 import { getUserProductsInSalesOrder, removeItemSaleOrder, getUserUnfinishedSalesOrder } from "@/services/orderService"
-import { getProducts } from "@/services/productService"
+import { getProduct, getProducts, updateProduct } from "@/services/productService"
 import { useState, useEffect, useContext } from 'react'
 import { getPromotions } from "@/services/marketingService"
 
@@ -51,10 +51,18 @@ export default function Cart() {
     fetchPromotions()
   }, [])
 
-  const handleRemoveItem = async (id) => {
-    await removeItemSaleOrder(id)
+  const handleRemoveItem = async (cartItem, productId) => {
+    const product = await getProduct(productId)
+    
+    await updateProduct(
+      { id: productId, 
+        currentStockQuantity: product.currentStockQuantity + cartItem.quantity,
+        visible: true
+      }, productId)
+    await removeItemSaleOrder(cartItem.id)
     const saleOrder = await getUserUnfinishedSalesOrder(user.id)
     const cartItems = await getUserProductsInSalesOrder(saleOrder, user.id)
+
     setCartItems(cartItems)
   }
 
@@ -125,7 +133,7 @@ export default function Cart() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-red-600 hover:text-red-700" onClick={() => handleRemoveItem(cartItem.id)}>
+                        <button className="text-red-600 hover:text-red-700" onClick={() => handleRemoveItem(cartItem, product.id)}>
                           Remover
                         </button>
                       </td>

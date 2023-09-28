@@ -21,7 +21,8 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.EmailField(unique=True, error_messages={'unique': 'Já existe um Usuário com este Email.'})
-    username = models.CharField(max_length=255, unique=True, error_messages={'unique': 'Já existe um Usuário com este Nome.'})
+    username = models.CharField(max_length=255, unique=True, error_messages={'unique': 'Já existe um Usuário com este Username.'})
+    name = models.CharField(default=None, max_length=255, null=True, blank=True, unique=True, error_messages={'unique': 'Já existe um Usuário com este Nome.'})
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     cpf = models.CharField(default=None, max_length=15, null=True, blank=True, unique=True, error_messages={'unique': 'Já existe um Usuário com este CPF.'})

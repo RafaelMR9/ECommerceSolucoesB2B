@@ -2,7 +2,7 @@ import Link from "next/link"
 import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import { useState, useEffect, useContext } from "react"
-import { getProduct } from "@/services/productService"
+import { getProduct, updateProduct } from "@/services/productService"
 import { useRouter } from "next/router"
 import { getUserUnfinishedSalesOrder, registerItemSalesOrder, registerSalesOrder } from "@/services/orderService"
 import { getProductPromotion } from "@/services/marketingService"
@@ -42,28 +42,36 @@ export default function Purchase() {
     if (errorMessage)
       return
 
-    if (product.currentStockQuantity < 0) {
-      setErrorMessage(`Estoque do produto acabou.`)
+    if (product.currentStockQuantity <= 0) {
+      setErrorMessage(`Não há estoque do produto suficiente.`)
       return
     }
     else if (product.currentStockQuantity - quantity < 0) {
-      setErrorMessage(`Estoque do produto insufienciente para compra. Quantidade restando do produto: ${product.currentStockQuantity}.`)
+      setErrorMessage(`Quantidade máxima para compra do produto: ${product.currentStockQuantity}.`)
       return
     }
 
     try {
       const promotion = await getProductPromotion(productId)
+      const product = await getProduct(productId)
       let saleOrder = await getUserUnfinishedSalesOrder(user.id)
+
       if (saleOrder == false) {
         saleOrder = await registerSalesOrder({
           cancelled: false,
           faturedPayment: false,
           finished: false,
           totalSaleValue: 0,
-          deliveryFrequency: 0,
+          deliveryFrequency: null,
           user: user.id
         })
       }
+
+      await updateProduct(
+        { id: product.id, 
+          currentStockQuantity: product.currentStockQuantity - quantity,
+          visible: true
+        }, productId)
 
       await registerItemSalesOrder({
         salePrice: checkNullObject(promotion) ? product.salePrice * quantity : promotion.salePrice * quantity,

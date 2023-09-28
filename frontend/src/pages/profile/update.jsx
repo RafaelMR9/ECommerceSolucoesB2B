@@ -16,14 +16,17 @@ export default function UpdateProfile() {
     email: user.email,
     cpf: user.is_superuser ? user.cpf : null,
     cnpj: user.is_superuser ? null : user.cnpj,
-    address: user.is_superuser ? null : user.address
+    address: user.is_superuser ? null : user.address,
+    username: user.username,
+    name: user.is_superuser ? null : user.name
   })
 
   const [formErrors, setFormErrors] = useState({
     email: "",
     cpf: "",
     cnpj: "",
-    address: ""
+    address: "",
+    name: ""
   })
 
   const handleChange = (e) => {
@@ -43,6 +46,8 @@ export default function UpdateProfile() {
         errors.cpf = ""
       if (name === 'address')
         errors.address = ''
+      if (name === 'name')
+        errors.name = ''
       return errors
     })
   }
@@ -64,13 +69,14 @@ export default function UpdateProfile() {
     }
 
     try {
-      const data = await updateUser(formData, user.id, user.username)
+      const data = await updateUser(formData, user.id, formData.username)
       setUser({
         ...user,
         cpf: data.cpf,
         cnpj: data.cnpj,
         email: data.email,
-        address: data.address
+        address: data.address,
+        name: data.name
       })
       router.push('/profile')
     } catch (e) {
@@ -103,6 +109,22 @@ export default function UpdateProfile() {
             </div>
             :
             <>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2" htmlFor="name">
+                  Nome
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="name"
+                  type="text"
+                  placeholder="Digite o Nome"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.name && <p className="mt-2 text-red-600">{formErrors.name}</p>}
+              </div>
               <div className="mb-4">
                 <label className="block text-gray-700 font-bold mb-2" htmlFor="cnpj">
                   CNPJ

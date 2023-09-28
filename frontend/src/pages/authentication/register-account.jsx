@@ -16,6 +16,7 @@ export default function RegisterAccount() {
     email: "",
     authorizeFature: false,
     address: "",
+    name: ""
   })
 
   const [formErrors, setFormErrors] = useState({
@@ -24,7 +25,8 @@ export default function RegisterAccount() {
     cnpj: "",
     password: "",
     confirmPassword: "",
-    address: ""
+    address: "",
+    name: ""
   })
 
   const handleChange = (e) => {
@@ -49,6 +51,8 @@ export default function RegisterAccount() {
         errors.username = ''
       if (name === 'address')
         errors.address = ''
+      if (name === 'name')
+        errors.name = ''
       return errors
     })
   }
@@ -135,6 +139,21 @@ export default function RegisterAccount() {
                   onChange={handleChange}
                 />
                 {formErrors.confirmPassword && <p className="mt-2 text-red-600">{formErrors.confirmPassword}</p>}
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2" htmlFor="name">
+                  Nome
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  required
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+                {formErrors.name && <p className="mt-2 text-red-600">{formErrors.name}</p>}
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 font-bold mb-2" htmlFor="cnpj">

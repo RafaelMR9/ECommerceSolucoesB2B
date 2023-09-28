@@ -6,7 +6,6 @@ import { AuthContext } from "@/contexts/authContext"
 import { updateSalesOrder, getUserUnfinishedSalesOrder, getUserProductsInSalesOrder } from "@/services/orderService"
 import { registerTicket } from "@/services/supportService"
 import { getAdministrator } from "@/services/userService"
-import { getProduct, updateProduct } from "@/services/productService"
 import { useRouter } from "next/router"
 
 export default function PurchaseData() {
@@ -15,8 +14,8 @@ export default function PurchaseData() {
   const { user } = useContext(AuthContext)
   const [futureDelivery, setFutureDelivery] = useState("false")
   const [formData, setFormData] = useState({
-    deliveryDate: null,
-    deliveryFrequency: 0,
+    deliveryDate: "",
+    deliveryFrequency: "",
     faturedPayment: false
   })
   const [formErrors, setFormErrors] = useState({
@@ -62,30 +61,22 @@ export default function PurchaseData() {
       const totalSaleValue = cartItems.reduce((acc, item) => acc + item.salePrice, 0)
 
       await updateSalesOrder({
+        id: salesOrder.id,
         orderDate: new Date(),
-        deliveryDate: formData.deliveryDate,
+        deliveryDate: formData.deliveryDate === "" ? null : formData.deliveryDate,
         cancelled: false,
         finished: true,
         faturedPayment: formData.faturedPayment,
         totalSaleValue: totalSaleValue,
-        deliveryFrequency: formData.deliveryFrequency,
+        deliveryFrequency: formData.deliveryFrequency === "" ? null : formData.deliveryFrequency,
         user: user.id
       }, salesOrder)
-
-      await Promise.all(cartItems.map(async (cartItem) => {
-        const product = await getProduct(cartItem.product)
-        await updateProduct(
-          { id: product.id, 
-            currentStockQuantity: product.currentStockQuantity - cartItem.quantity,
-            visible: true
-          }, cartItem.product)
-      }))
 
       await registerTicket({
         sender: admin.id,
         recipient: user.id,
-        subject: `${user.cnpj}: Compra Realizada com Sucesso`,
-        content: `${user.cnpj}: Sua compra foi efetuada com sucesso.`,
+        subject: `${user.name}: Compra Realizada com Sucesso.`,
+        content: `${user.name}: Sua compra foi efetuada com sucesso. Número do Pedido: ${salesOrder.id}.`,
         answer: null
       })
 
@@ -156,7 +147,7 @@ export default function PurchaseData() {
               </div>
               <div className="mb-4">
                 <label htmlFor="deliveryFrequency" className="block text-base font-medium text-gray-700 mb-2">
-                  Periodicidade da Recorrência
+                  Periodicidade da Recorrência em Dias
                 </label>
                 <input
                   type="number"
@@ -164,13 +155,13 @@ export default function PurchaseData() {
                   name="deliveryFrequency"
                   className="mb-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   value={formData.deliveryFrequency}
-                  min={0}
+                  min={10}
                   onChange={handleChange}
                 />
                 {formErrors.deliveryFrequency && <p className="mt-2 text-red-600">{formErrors.deliveryFrequency}</p>}
                 <div className="text-gray-600 mt-2">
                   <p>
-                    Se você não deseja que esse pedido seja entregue periodicamente preencha-o com valor 0.
+                    Se você não deseja que esse pedido seja entregue periodicamente deixe este campo em branco.
                   </p>
                   <p>
                     Se você deseja que esse pedido seja entregue periodicamente preencha-o com valor de no mínimo 10.
