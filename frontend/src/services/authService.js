@@ -15,6 +15,7 @@ export const registerUser = async (formData) => {
       cnpj: formData.cnpj,
       cpf: null,
       address: formData.address, 
+      name: formData.name,
       authorizeFature: formData.authorizeFature ? false : null,
       canPurchase: true
     })

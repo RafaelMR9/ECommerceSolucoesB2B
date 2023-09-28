@@ -71,7 +71,7 @@ export default function AnswerTicket() {
         <div className="bg-white shadow overflow-hidden rounded-lg">
           <div className="px-4 py-5">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
-              Problemas para acessar a conta
+              {ticket.subject}
             </h3>
             <p className="mt-1 max-w-2xl text-md text-gray-500">
               {new Date(ticket.dateHour).toLocaleString()}

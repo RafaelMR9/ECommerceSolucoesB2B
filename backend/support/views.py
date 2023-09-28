@@ -20,7 +20,7 @@ class TicketCreateView(generics.CreateAPIView):
         subject = serializer.validated_data.get('subject')
         answer = serializer.validated_data.get('answer')
         
-        if answer == None:
+        if not answer:
             CustomValidators.validate_subject(subject)
 
         serializer.save()

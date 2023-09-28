@@ -7,10 +7,11 @@ class SalesOrder(models.Model):
   orderDate = models.DateTimeField(auto_now_add=True)
   deliveryDate = models.DateField(null=True)
   cancelled = models.BooleanField(default=False, null=True)
+  paid = models.BooleanField(default=False)
   faturedPayment = models.BooleanField(default=False)
   finished = models.BooleanField(default=False)
   totalSaleValue = models.FloatField()
-  deliveryFrequency = models.IntegerField(null=True)
+  deliveryFrequency = models.IntegerField(null=True, blank=True)
   user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
   def __str__(self):

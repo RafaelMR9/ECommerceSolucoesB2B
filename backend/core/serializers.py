@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         for key, value in validated_data.items():
             if value is not None or key in ['authorizeFature']:
-                if key in ['cpf', 'email', 'cnpj', 'address'] and getattr(instance, key) == value:
+                if key in ['cpf', 'email', 'cnpj', 'address', 'name'] and getattr(instance, key) == value:
                     continue
                 setattr(instance, key, value)
                 if key == 'cpf':
@@ -38,5 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
                     CustomValidators.validate_password(value)
                 elif key == 'address':
                     CustomValidators.validate_unique_address(value)
+                elif key == 'name':
+                    CustomValidators.validate_unique_name(value)
         instance.save()
         return instance

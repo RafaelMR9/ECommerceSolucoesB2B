@@ -2,15 +2,13 @@ import Link from "next/link"
 import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import Modal from "@/components/shared/Modal"
-import { useState, useEffect, useContext } from "react"
-import { AuthContext } from "@/contexts/authContext"
+import { useState, useEffect } from "react"
 import { getSalesOrders, updateSalesOrder, getUserProductsInSalesOrder } from "@/services/orderService"
 import { getUsers } from "@/services/userService"
 import { updateProduct, getProduct } from "@/services/productService"
 
-export default function CompaniesOrders() {
+export default function AdminNonRecurringOrders() {
   
-  const { user } = useContext(AuthContext)
   const [orders, setOrders] = useState([])
   const [companies, setCompanies] = useState([])
   const [prepareModalState, setPrepareModalState] = useState({})
@@ -68,7 +66,7 @@ export default function CompaniesOrders() {
   return (
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Pedidos dos Clientes</h1>
+        <h1 className="text-4xl font-bold text-slate-800 mb-8">Pedidos Não Recorrentes dos Clientes</h1>
         <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -83,13 +81,19 @@ export default function CompaniesOrders() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  Nome
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Realização do Pedido
                 </th>
                 <th
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Frequência da Entrega
+                  Valor do Pedido
                 </th>
                 <th
                   scope="col"
@@ -118,12 +122,17 @@ export default function CompaniesOrders() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-800">
+                      {company.name}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-800">
                       {new Date(order.orderDate).toLocaleString('pt-BR')}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-800">
-                      {order.deliveryFrequency === 0 ? '-' : `${order.deliveryFrequency} Dias`}
+                      R$ {order.totalSaleValue}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -153,7 +162,7 @@ export default function CompaniesOrders() {
                     : order.cancelled === true ?
                     <div className="text-sm text-gray-800">-</div>
                     :
-                    <div className="text-sm text-green-600">Preparado</div>
+                    <div className="text-sm text-green-600">Preparando para Envio</div>
                   }
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -189,7 +198,7 @@ export default function CompaniesOrders() {
         <hr className="mt-6 border border-gray-400" />
         <div className="mt-8 text-center">
           <p className="text-gray-700">
-            Não quer Analisar os Pedidos dos Clientes? <Link href="/orders" className="text-blue-600">Voltar para a Página de Pedidos</Link>.
+            Não quer Analisar os Pedidos Não Recorrentes dos Clientes? <Link href="/orders" className="text-blue-600">Voltar para a Página de Pedidos</Link>.
           </p>
         </div>
       </BaseLayout>

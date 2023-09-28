@@ -11,11 +11,9 @@ class SalesOrderCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         deliveryDate = serializer.validated_data.get('deliveryDate')
-        deliveryFrequency = serializer.validated_data.get('deliveryFrequency')
 
         if deliveryDate is not None:
             CustomValidators.validate_delivery_date_before_today(deliveryDate)
-        CustomValidators.validate_delivery_frequency(deliveryFrequency)
 
         serializer.save()
 
@@ -37,12 +35,9 @@ class SalesOrderUpdateView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
 
         deliveryDate = serializer.validated_data.get('deliveryDate')
-        deliveryFrequency = serializer.validated_data.get('deliveryFrequency')
 
         if deliveryDate is not None:
             CustomValidators.validate_delivery_date_before_today(deliveryDate)
-        if deliveryFrequency is not None:
-            CustomValidators.validate_delivery_frequency(deliveryFrequency)
 
         self.perform_update(serializer)
 

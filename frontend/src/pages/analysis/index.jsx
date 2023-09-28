@@ -35,16 +35,16 @@ export default function CreditAnalysis() {
         await registerTicket({
           sender: user.id,
           recipient: company.id,
-          subject: `${company.cnpj}: Resultado da Análise de Crédito para compras faturadas`,
-          content: `${company.cnpj}: Após ser feita a análise de créditos não está permitida sua realização de compras faturadas.`,
+          subject: `${company.name}: Resultado da Análise de Crédito para compras faturadas`,
+          content: `${company.name}: Após ser feita a análise de créditos está permitida sua realização de compras faturadas.`,
           answer: null
         })
       else
         await registerTicket({
           sender: user.id,
           recipient: company.id,
-          subject: `${company.cnpj}: Resultado da Análise de Crédito para compras faturadas`,
-          content: `${company.cnpj}: Após ser feita a análise de créditos está permitida sua realização de compras faturadas.`,
+          subject: `${company.name}: Resultado da Análise de Crédito para compras faturadas`,
+          content: `${company.name}: Após ser feita a análise de créditos não está permitida sua realização de compras faturadas.`,
           answer: null
         })
 
@@ -70,6 +70,12 @@ export default function CreditAnalysis() {
                 >
                   CNPJ
                 </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Nome
+                </th>
                 <th scope="col" className="relative px-6 py-3">
                   <span className="sr-only">Permitir</span>
                 </th>
@@ -84,6 +90,11 @@ export default function CreditAnalysis() {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
                       {company.cnpj}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-medium text-gray-900">
+                      {company.name}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

@@ -46,7 +46,12 @@ class CustomValidators:
     @staticmethod
     def validate_unique_username(value):
         if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError({'username': ['Já existe um Usuário com este Nome.']})
+            raise serializers.ValidationError({'username': ['Já existe um Usuário com este Username.']})
+    
+    @staticmethod
+    def validate_unique_name(value):
+        if User.objects.filter(name=value).exists():
+            raise serializers.ValidationError({'name': ['Já existe um Usuário com este Nome.']})
 
     @staticmethod
     def validate_unique_cpf(value):

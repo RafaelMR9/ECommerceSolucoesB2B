@@ -46,7 +46,7 @@ export default function SendTicket() {
     try {
       const adminId = await getAdministrator()
       await registerTicket({
-        subject: `${user.cnpj}: ${formData.subject}`,
+        subject: `${user.name}: ${formData.subject}`,
         content: formData.content,
         sender: user.id,
         recipient: adminId.id,
