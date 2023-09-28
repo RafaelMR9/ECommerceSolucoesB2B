@@ -7,7 +7,7 @@ class SalesOrder(models.Model):
   orderDate = models.DateTimeField(auto_now_add=True)
   deliveryDate = models.DateField(null=True)
   cancelled = models.BooleanField(default=False, null=True)
-  paid = models.BooleanField(default=False)
+  paid = models.BooleanField(null=True, default=None)
   faturedPayment = models.BooleanField(default=False)
   finished = models.BooleanField(default=False)
   totalSaleValue = models.FloatField()

@@ -1,4 +1,4 @@
-from rest_framework import generics, serializers
+from rest_framework import generics
 from rest_framework.response import Response
 from .models import Category, Product
 from .validators import CustomValidators
@@ -12,7 +12,7 @@ class CategoryFilterView(generics.ListAPIView):
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        search_query = self.request.query_params.get('categoryId', '')
+        search_query = self.request.query_params.get('fetchCategories', '')
         return Category.objects.all().filter(name__iregex=search_query)
 
 class CategoryCreateView(generics.CreateAPIView):

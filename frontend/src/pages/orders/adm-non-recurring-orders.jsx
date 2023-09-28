@@ -18,7 +18,7 @@ export default function AdminNonRecurringOrders() {
     const fetchOrders = async () => {
       try {
         const orders = await getSalesOrders()
-        setOrders(orders)
+        setOrders(orders.filter(order => order.deliveryFrequency === null))
       } catch (e) {
         alert(e.message)
       }
@@ -56,7 +56,7 @@ export default function AdminNonRecurringOrders() {
         await updateSalesOrder({ cancelled: value }, order.id)
         
       const orders = await getSalesOrders()
-      setOrders(orders)
+      setOrders(orders.filter(order => order.deliveryFrequency === null))
     } catch (e) {
       alert(e)
     }

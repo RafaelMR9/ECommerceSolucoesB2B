@@ -65,6 +65,7 @@ export default function PurchaseData() {
         orderDate: new Date(),
         deliveryDate: formData.deliveryDate === "" ? null : formData.deliveryDate,
         cancelled: false,
+        paid: null,
         finished: true,
         faturedPayment: formData.faturedPayment,
         totalSaleValue: totalSaleValue,
@@ -76,7 +77,7 @@ export default function PurchaseData() {
         sender: admin.id,
         recipient: user.id,
         subject: `${user.name}: Compra Realizada com Sucesso.`,
-        content: `${user.name}: Sua compra foi efetuada com sucesso. Número do Pedido: ${salesOrder.id}.`,
+        content: `${user.name}: Sua compra foi efetuada com sucesso. Número do Pedido: ${salesOrder}.`,
         answer: null
       })
 

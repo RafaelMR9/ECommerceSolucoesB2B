@@ -105,7 +105,8 @@ export default function Products() {
         {message && <p className="text-red-600 font-semibold text-lg mb-2">{message}</p>}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {products.map((product) => {
-            const promotion = promotions.find((promotion) => promotion.product === product.id && new Date(promotion.endDate) >= new Date())
+            const now = new Date()
+            const promotion = promotions.find((promotion) => promotion.product === product.id && new Date(promotion.endDate) >= now && new Date(promotion.startDate) <= now)
             return (
               <div key={product.id} className="bg-white rounded-lg shadow-lg px-4 py-6">
                 <img

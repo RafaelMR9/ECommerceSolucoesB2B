@@ -55,7 +55,6 @@ export default function UpdateProduct() {
       ...prevFormData,
       [name]: value,
     }))
-    console.log(formData.category)
     setFormErrors((prevErrors) => {
       const errors = { ...prevErrors }
       if (name === 'name')

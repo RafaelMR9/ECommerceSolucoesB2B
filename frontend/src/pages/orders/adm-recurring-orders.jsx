@@ -18,7 +18,7 @@ export default function AdminRecurringOrders() {
     const fetchOrders = async () => {
       try {
         const orders = await getSalesOrders()
-        setOrders(orders)
+        setOrders(orders.filter(order => order.deliveryFrequency !== null))
       } catch (e) {
         alert(e.message)
       }
@@ -56,7 +56,7 @@ export default function AdminRecurringOrders() {
         await updateSalesOrder({ cancelled: value }, order.id)
         
       const orders = await getSalesOrders()
-      setOrders(orders)
+      setOrders(orders.filter(order => order.deliveryFrequency !== null))
     } catch (e) {
       alert(e)
     }
@@ -105,7 +105,13 @@ export default function AdminRecurringOrders() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                  Data de Entrega
+                  Próxima Data de Entrega
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Última Data de Entrega
                 </th>
                 <th scope="col" className="relative px-6 py-3">
                   <span className="sr-only">Enviar</span>
@@ -143,12 +149,17 @@ export default function AdminRecurringOrders() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-800">
-                      {order.deliveryFrequency === null ? '-' : `${order.deliveryFrequency} Dias`}
+                      {order.deliveryFrequency} Dias
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-800">
-                      {order.deliveryDate ? new Date(order.deliveryDate).toLocaleDateString('pt-BR') : '-'}
+                      {new Date(order.deliveryDate).toLocaleDateString('pt-BR')}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-800">
+                      {new Date(order.deliveryDate).toLocaleDateString('pt-BR')}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
