@@ -62,3 +62,61 @@ export const logoutUser = (authContext) => {
   authContext.setUser(null)
   localStorage.removeItem('authTokens')
 }
+
+export const resetPassword = async (formData, id) => {
+  const options = {
+    method: 'put',
+    headers: new Headers({ 
+      'Content-Type': 'application/json' }),
+    body: JSON.stringify({
+      ...formData
+    })
+  }
+  const response = await fetch(`${apiUsersUrl}/passwordReset/${id}/update/`, options)
+
+  if (!response.ok) {
+    const data = await response.json()
+    const modifiedData =  Object.keys(data).reduce((acc, key) => {
+      acc[key] = data[key].join('\n')
+      return acc
+    }, {})
+    throw new Error(JSON.stringify(modifiedData))
+  }
+}
+
+export const sendResetPasswordEmail = async (email) => {
+  const options = {
+    method: 'post',
+    headers: new Headers({ 
+      'Content-Type': 'application/json' }),
+    body: JSON.stringify({
+      email
+    })
+  }
+  const response = await fetch(`${apiUsersUrl}/passwordReset/sendResetEmail/`, options)
+
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error('Erro ao enviar E-Mail de redefinição de senha.')
+  }
+}
+
+export const checkPasswordTokenExistence = async (token) => {
+  const response = await fetch(`${apiUsersUrl}/passwordReset/checkExistence/?token=${token}`)
+
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  } else {
+    throw new Error('Erro ao verificar a existência do token.')
+  }
+}
+
+export const removePasswordToken = async (id) => {
+  const options = {
+    method: 'delete'
+  }
+  await fetch(`${apiUsersUrl}/passwordReset/${id}/delete/`, options)
+}

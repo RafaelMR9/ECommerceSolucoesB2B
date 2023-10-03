@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .validators import CustomValidators
-from .models import User
+from .models import User, PasswordResetToken
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,3 +42,8 @@ class UserSerializer(serializers.ModelSerializer):
                     CustomValidators.validate_unique_name(value)
         instance.save()
         return instance
+    
+class PasswordResetTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PasswordResetToken
+        fields = '__all__'
