@@ -25,10 +25,27 @@ export default function Product() {
         const product = await getProduct(productId)
         const category = await getCategory(product.category)
         const promotion = await getProductPromotion(productId)
-        setProduct(product)
+        
+        setProduct({
+          ...product,
+          salePrice: product.salePrice.toFixed(2)
+        })
         setCategory(category)
-        setPromotion(promotion)
+
+        if (checkNullObject(promotion)) {
+          setPromotion({
+            ...promotion,
+            salePrice: promotion.salePrice
+          })
+        }
+        else {
+          setPromotion({
+            ...promotion,
+            salePrice: promotion.salePrice.toFixed(2)
+          })
+        }
       } catch (e) {
+        console.log(e)
         router.push('/products')
       }
     }

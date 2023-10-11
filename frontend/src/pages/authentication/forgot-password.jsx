@@ -16,7 +16,7 @@ export default function ForgotPassword() {
 
     let error = ''
     if (email && !validateEmail(email))
-      error = 'Email inválido.'
+      error = 'E-Mail inválido.'
 
     if (error) {
       setErrorMessage(error)

@@ -80,3 +80,7 @@ class ProductUpdateView(generics.UpdateAPIView):
 class ProductDestroyView(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    def perform_destroy(self, instance):
+        instance.visible = False
+        instance.save()

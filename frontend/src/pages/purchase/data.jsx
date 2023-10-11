@@ -77,7 +77,7 @@ export default function PurchaseData() {
         sender: admin.id,
         recipient: user.id,
         subject: `${user.name}: Compra Realizada com Sucesso.`,
-        content: `${user.name}: Sua compra foi efetuada com sucesso. Número do Pedido: ${salesOrder}.`,
+        content: `Sua compra foi efetuada com sucesso. Número do Pedido: ${salesOrder}.`,
         answer: null
       })
 

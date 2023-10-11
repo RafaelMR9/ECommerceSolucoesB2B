@@ -88,6 +88,7 @@ export default function RegisterProduct() {
         salePrice: "",
         description: "",
         packaging: "",
+        image: null
       }))
     } catch (e) {
       const errorObj = JSON.parse(e.message)
@@ -130,7 +131,8 @@ export default function RegisterProduct() {
                 onChange={handleChange}
                 type="number"
                 placeholder="Preço de Custo do Produto"
-                min={1}
+                min={0.01}
+                step={0.01}
                 required
               />
             </div>
@@ -146,7 +148,8 @@ export default function RegisterProduct() {
                 onChange={handleChange}
                 type="number"
                 placeholder="Preço de Venda do Produto"
-                min={0}
+                min={0.01}
+                step={0.01}
                 required
               />
             </div>

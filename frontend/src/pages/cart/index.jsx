@@ -108,8 +108,9 @@ export default function Cart() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {cartItems.map((cartItem) => {
+                  const now = new Date()
                   const product = products.find(p => p.id === cartItem.product)
-                  const promotion = promotions.find(p => p.product === cartItem.product && new Date(p.endDate) >= new Date())
+                  const promotion = promotions.find(p => p.product === cartItem.product && new Date(p.endDate) >= now && new Date(p.startDate) <= now)
                   return (
                     <tr key={cartItem.id}>
                       <td className="px-6 py-4 whitespace-nowrap">

@@ -74,7 +74,7 @@ export default function Nav() {
               Fornecedores
             </Link>
             <Link href="/" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
-              Histórico de Vendas
+              Ressuprimento de Produtos
             </Link>
             <Link href="/analysis" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
               Análise de Créditos
