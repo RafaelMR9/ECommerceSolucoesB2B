@@ -62,7 +62,7 @@ export default function RegisterAccount() {
     
     const errors = { ...formErrors }
     if (formData.email && !validateEmail(formData.email))
-      errors.email = 'Email inválido.'
+      errors.email = 'E-Mail inválido.'
     if (formData.cnpj && !validateCnpj(formData.cnpj))
       errors.cnpj = 'CNPJ inválido.'
     if (formData.password && !validatePassword(formData.password))

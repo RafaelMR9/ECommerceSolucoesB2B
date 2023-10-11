@@ -5,8 +5,8 @@ from core.models import User
 class Ticket(models.Model):
   answer = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
   originalTicket = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='responses')
-  sender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='sender')
-  recipient = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='recipient')
+  sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
+  recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='recipient')
   subject = models.CharField(max_length=255, null=True)
   content = models.TextField(max_length=300)
   dateHour = models.DateTimeField(auto_now_add=True)

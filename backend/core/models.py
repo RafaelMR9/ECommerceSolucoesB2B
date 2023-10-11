@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
         
 
 class User(AbstractBaseUser):
-    email = models.EmailField(unique=True, error_messages={'unique': 'Já existe um Usuário com este Email.'})
+    email = models.EmailField(unique=True, error_messages={'unique': 'Já existe um Usuário com este E-Mail.'})
     username = models.CharField(max_length=255, unique=True, error_messages={'unique': 'Já existe um Usuário com este Username.'})
     name = models.CharField(default=None, max_length=255, null=True, blank=True, unique=True, error_messages={'unique': 'Já existe um Usuário com este Nome.'})
     is_staff = models.BooleanField(default=False)
@@ -29,7 +29,7 @@ class User(AbstractBaseUser):
     cnpj = models.CharField(default=None, max_length=18, null=True, blank=True, unique=True, error_messages={'unique': 'Já existe um Usuário com este CNPJ.'})
     address = models.CharField(default=None, max_length=255, null=True, blank=True, unique=True, error_messages={'unique': 'Já existe um Usuário com este Endereço.'})
     authorizeFature = models.BooleanField(default=None, null=True, blank=True)
-    canPurchase = models.BooleanField(default=None, null=True, blank=True)
+    canPurchase = models.BooleanField(default=True, blank=True)
 
     objects = UserManager()
 

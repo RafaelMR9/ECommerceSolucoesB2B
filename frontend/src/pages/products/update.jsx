@@ -155,7 +155,8 @@ export default function UpdateProduct() {
                 onChange={handleChange}
                 type="number"
                 placeholder="Preço de Custo do Produto"
-                min={1}
+                min={0.01}
+                step={0.01}
                 required
               />
             </div>
@@ -171,7 +172,8 @@ export default function UpdateProduct() {
                 onChange={handleChange}
                 type="number"
                 placeholder="Preço de Venda do Produto"
-                min={0}
+                min={0.01}
+                step={0.01}
                 required
               />
             </div>
@@ -240,7 +242,7 @@ export default function UpdateProduct() {
               />
               {formErrors.image && <p className="mt-2 text-red-600">{formErrors.image}</p>}
             </div>
-            { successMessage && <p className="my-2 text-green-600">{successMessage}</p>}
+            { successMessage && <p className="mb-4 text-green-600">{successMessage}</p>}
             <button
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"

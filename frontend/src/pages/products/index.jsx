@@ -114,17 +114,18 @@ export default function Products() {
                   alt="Produto"
                   className="object-contain h-56 w-full rounded-lg mb-4"
                 />
+                <hr className="border-2 border-slate-200 mb-2"/>
                 <h2 className="text-xl font-bold mb-2">{product.name}</h2>
-                <p className="text-gray-600 text-lg font-semibold mb-4">
+                <p className="text-gray-600 text-lg font-semibold mb-2">
                   Categoria: <Link href={`/products?categoryId=${product.category}`} className="text-blue-800 hover:underline">{findCategoryName(product.category)}</Link>
                 </p>
                 {promotion ? (
                   <p className="mb-4">
-                    <span className="text-gray-800 font-bold text-xl line-through">R$ {product.salePrice}</span>
-                    <span className="text-green-800 font-bold text-xl "> R$ {promotion.salePrice}</span>
+                    <span className="text-gray-800 font-bold text-xl line-through">R$ {product.salePrice.toFixed(2)}</span>
+                    <span className="text-green-800 font-bold text-xl "> R$ {promotion.salePrice.toFixed(2)}</span>
                   </p>
                 ) : (
-                  <p className="text-gray-800 font-bold text-xl mb-4">R$ {product.salePrice}</p>
+                  <p className="text-gray-800 font-bold text-xl mb-4">R$ {product.salePrice.toFixed(2)}</p>
                 )}
                 <Link href={`/products/${product.id}`} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
                   Mais Informações

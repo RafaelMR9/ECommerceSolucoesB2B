@@ -30,10 +30,14 @@ export default function RegisterPromotion() {
 
     setFormErrors((prevErrors) => {
       const errors = { ...prevErrors }
-      if (name === 'startDate')
+      if (name === 'startDate') {
         errors.startDate = ''
-      if (name === 'endDate')
         errors.endDate = ''
+      }
+      if (name === 'endDate') {
+        errors.startDate = ''
+        errors.endDate = ''
+      }
       if (name === 'salePrice')
         errors.salePrice = ''
       return errors
@@ -81,6 +85,7 @@ export default function RegisterPromotion() {
               name="startDate"
               value={formData.startDate}
               id="startDate" 
+              required
             />
             {formErrors.startDate && <p className="mt-2 text-red-600">{formErrors.startDate}</p>}
           </div>
@@ -93,6 +98,7 @@ export default function RegisterPromotion() {
               onChange={handleChange}
               name="endDate" 
               value={formData.endDate}
+              required
             />
             {formErrors.endDate && <p className="mt-2 text-red-600">{formErrors.endDate}</p>}
           </div>
@@ -104,9 +110,10 @@ export default function RegisterPromotion() {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
               onChange={handleChange}
               name="salePrice" 
-              step="0.01" 
-              min={0}
+              min={0.01}
+              step={0.01}
               value={formData.salePrice}
+              required
             />
             {formErrors.salePrice && <p className="mt-2 text-red-600">{formErrors.salePrice}</p>}
           </div>
