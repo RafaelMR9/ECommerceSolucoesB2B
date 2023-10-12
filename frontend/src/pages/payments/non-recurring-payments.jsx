@@ -54,7 +54,7 @@ export default function AdminNonRecurringPayments() {
   return (
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Pagamentos Não Recorrentes dos Clientes</h1>
+        <h1 className="text-4xl font-bold text-slate-800 mb-8">Pagamentos dos Clientes</h1>
         <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -197,7 +197,7 @@ export default function AdminNonRecurringPayments() {
         <hr className="mt-6 border border-gray-400" />
         <div className="mt-8 text-center">
           <p className="text-gray-700">
-            Não quer Analisar os Pagamentos Recorrentes dos Clientes? <Link href="/payments" className="text-blue-600">Voltar para a Página de Pagamentos</Link>.
+            Não quer Analisar os Pagamentos dos Clientes? <Link href="/payments" className="text-blue-600">Voltar para a Página Principal</Link>.
           </p>
         </div>
       </BaseLayout>

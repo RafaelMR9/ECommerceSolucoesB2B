@@ -36,7 +36,7 @@ export default function CreditAnalysis() {
           sender: user.id,
           recipient: company.id,
           subject: `${company.name}: Resultado da Análise de Crédito para compras faturadas`,
-          content: `${company.name}: Após ser feita a análise de créditos está permitida sua realização de compras faturadas.`,
+          content: `Após ser feita a análise de créditos está permitida sua realização de compras faturadas.`,
           answer: null
         })
       else
@@ -44,7 +44,7 @@ export default function CreditAnalysis() {
           sender: user.id,
           recipient: company.id,
           subject: `${company.name}: Resultado da Análise de Crédito para compras faturadas`,
-          content: `${company.name}: Após ser feita a análise de créditos não está permitida sua realização de compras faturadas.`,
+          content: `Após ser feita a análise de créditos não está permitida sua realização de compras faturadas.`,
           answer: null
         })
 

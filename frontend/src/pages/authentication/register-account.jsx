@@ -39,13 +39,13 @@ export default function RegisterAccount() {
 
     setFormErrors((prevErrors) => {
       const errors = { ...prevErrors }
-      if (name === 'email' && validateEmail(value))
+      if (name === 'email')
         errors.email = ''
-      if (name === 'cnpj' && validateCnpj(value))
+      if (name === 'cnpj')
         errors.cnpj = ''
-      if (name === 'password' && validatePassword(value))
+      if (name === 'password')
         errors.password = ''
-      if (name === 'confirmPassword' && validateConfirmPassword(formData.password, value))
+      if (name === 'confirmPassword')
         errors.confirmPassword = ''
       if (name === 'username')
         errors.username = ''

@@ -38,11 +38,11 @@ export default function UpdateProfile() {
 
     setFormErrors((prevErrors) => {
       const errors = { ...prevErrors }
-      if (name === "email" && validateEmail(value))
+      if (name === "email")
         errors.email = "" 
-      if (name === "cnpj" && validateCnpj(value))
+      if (name === "cnpj")
         errors.cnpj = ""
-      if (name === "cpf" && validateCpf(value))
+      if (name === "cpf")
         errors.cpf = ""
       if (name === 'address')
         errors.address = ''
