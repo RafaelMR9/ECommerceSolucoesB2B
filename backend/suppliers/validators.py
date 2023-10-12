@@ -22,7 +22,7 @@ class CustomValidators:
     @staticmethod
     def validate_unique_email(value):
         if Supplier.objects.filter(email=value).exists():
-            raise serializers.ValidationError({'email': ['Já existe um Fornecedor com este Email.']})
+            raise serializers.ValidationError({'email': ['Já existe um Fornecedor com este E-Mail.']})
     
     @staticmethod
     def validate_unique_name(value):

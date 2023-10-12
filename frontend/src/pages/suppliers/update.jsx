@@ -27,7 +27,6 @@ export default function UpdateSupplier() {
     const fetchSupplier = async () => {
       try {
         const supplier = await getSupplier(supplierId)
-        console.log(supplier)
         setFormData(supplier)
       } catch (e) {
         alert(e.message)
@@ -45,9 +44,9 @@ export default function UpdateSupplier() {
     }))
     setFormErrors((prevErrors) => {
       const errors = { ...prevErrors }
-      if (name === "email" && validateEmail(value))
+      if (name === "email")
         errors.email = "" 
-      if (name === "cnpj" && validateCnpj(value))
+      if (name === "cnpj")
         errors.cnpj = ""
       if (name === 'name')
         errors.name = ''
@@ -61,7 +60,7 @@ export default function UpdateSupplier() {
     setSuccessMessage("")
     const errors = { ...formErrors }
     if (formData.email && !validateEmail(formData.email))
-      errors.email = 'Email inválido.'
+      errors.email = 'E-Mail inválido.'
     if (formData.cnpj && !validateCnpj(formData.cnpj))
       errors.cnpj = 'CNPJ inválido.'
       

@@ -33,6 +33,8 @@ export default function RegisterCategory() {
       ...prevFormData,
       [name]: value,
     }))
+    
+    setFormErrors("")
   }
 
   const handleSubmit = async (e) => {

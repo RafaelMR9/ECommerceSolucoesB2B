@@ -144,7 +144,7 @@ export default function AdminRecurringOrders() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-800">
-                      R$ {order.totalSaleValue}
+                      R$ {(order.totalSaleValue).toFixed(2)}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

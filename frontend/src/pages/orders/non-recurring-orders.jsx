@@ -51,7 +51,7 @@ export default function ClientCompaniesNonRecurringOrders() {
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Meus Pedidos Não Recorrentes</h1>
+        <h1 className="text-4xl font-bold text-slate-800 mb-8">Meus Pedidos</h1>
         <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -98,7 +98,7 @@ export default function ClientCompaniesNonRecurringOrders() {
                     <div className="text-sm text-gray-800">{new Date(order.orderDate).toLocaleString('pt-BR')}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-800">R$ {order.totalSaleValue}</div>
+                    <div className="text-sm text-gray-800">R$ {(order.totalSaleValue).toFixed(2)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-800">{order.deliveryDate ? new Date(order.deliveryDate).toLocaleDateString('pt-BR') : '-'}</div>
@@ -135,7 +135,7 @@ export default function ClientCompaniesNonRecurringOrders() {
         <hr className="mt-6 border border-gray-400" />
         <div className="mt-8 text-center">
           <p className="text-gray-700">
-            Não quer Cancelar seus Pedidos Não Recorrentes? <Link href="/orders" className="text-blue-600">Voltar para a Página de Pedidos</Link>.
+            Não quer Cancelar seus Pedidos? <Link href="/orders" className="text-blue-600">Voltar para a Página de Principal</Link>.
           </p>
         </div>
       </BaseLayout>
