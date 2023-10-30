@@ -57,9 +57,9 @@ export default function RecoverPassword() {
 
     setFormErrors((prevErrors) => {
       const errors = { ...prevErrors }
-      if (name === 'password' && validatePassword(value))
+      if (name === 'password')
         errors.password = ''
-      if (name === 'confirmPassword' && validateConfirmPassword(formData.password, value))
+      if (name === 'confirmPassword')
         errors.confirmPassword = ''
       return errors
     })

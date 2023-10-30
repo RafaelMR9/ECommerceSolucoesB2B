@@ -8,6 +8,7 @@ import { getProduct, getCategory, removeProduct } from "@/services/productServic
 import { getProductPromotion } from "@/services/marketingService"
 import { useRouter } from "next/router"
 import { checkNullObject } from "@/utils/utils"
+import { getSupplier } from "@/services/supplierService"
 
 export default function Product() {
 
@@ -17,6 +18,7 @@ export default function Product() {
   const [product, setProduct] = useState({})
   const [promotion, setPromotion] = useState({})
   const [category, setCategory] = useState({})
+  const [supplier, setSupplier] = useState({})
   const [modalState, setModalState] = useState(false)
 
   useEffect(() => {
@@ -24,6 +26,7 @@ export default function Product() {
       try {
         const product = await getProduct(productId)
         const category = await getCategory(product.category)
+        const supplier = await getSupplier(product.supplier)
         const promotion = await getProductPromotion(productId)
         
         setProduct({
@@ -31,6 +34,7 @@ export default function Product() {
           salePrice: product.salePrice.toFixed(2)
         })
         setCategory(category)
+        setSupplier(supplier)
 
         if (checkNullObject(promotion)) {
           setPromotion({
@@ -120,6 +124,10 @@ export default function Product() {
               <div className="flex items-center mb-6">
                 <p className="text-xl text-gray-700 font-bold mr-3">Categoria:</p>
                 <Link href={`/products?categorytId=${product.category}`} className="text-xl text-blue-600">{category.name}</Link>
+              </div>
+              <div className="flex items-center mb-6">
+                <p className="text-xl text-gray-700 font-bold mr-3">Fornecedor:</p>
+                <p className="text-xl text-gray-700">{supplier.name}</p>
               </div>
             </div>
             <div className="flex flex-wrap justify-between items-center mt-autos">

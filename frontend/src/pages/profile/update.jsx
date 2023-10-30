@@ -157,23 +157,23 @@ export default function UpdateProfile() {
                 />
                 {formErrors.address && <p className="mt-2 text-red-600">{formErrors.address}</p>}
               </div>
+              <div className="mb-6">
+                <label className="block text-gray-700 font-bold mb-2" htmlFor="email">
+                  E-Mail
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="email"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+                {formErrors.email && <p className="mt-2 text-red-600">{formErrors.email}</p>}
+              </div>
             </>
           }
-          <div className="mb-6">
-            <label className="block text-gray-700 font-bold mb-2" htmlFor="email">
-              E-Mail
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="email"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            {formErrors.email && <p className="mt-2 text-red-600">{formErrors.email}</p>}
-          </div>
           <button
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"

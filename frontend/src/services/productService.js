@@ -124,6 +124,7 @@ export const registerProduct = async (formData) => {
   form.append('description', formData.description)
   form.append('packaging', formData.packaging)
   form.append('category', formData.category)
+  form.append('supplier', formData.supplier)
   form.append('image', formData.image)
 
   const options = {
@@ -161,6 +162,8 @@ export const updateProduct = async (formData, id) => {
     form.append('packaging', formData.packaging)
   if ('category' in formData)
     form.append('category', formData.category)
+  if ('supplier' in formData)
+    form.append('supplier', formData.supplier)
   if ('image' in formData)
     form.append('image', formData.image)
   
