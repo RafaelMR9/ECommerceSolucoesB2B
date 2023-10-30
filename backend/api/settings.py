@@ -171,6 +171,6 @@ load_dotenv()
 
 EMAIL_HOST = 'smtp.outlook.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'web-vendas-tcc@outlook.com'
+EMAIL_HOST_USER = os.getenv('EMAIL_ADDRESS')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 EMAIL_USE_TLS = True

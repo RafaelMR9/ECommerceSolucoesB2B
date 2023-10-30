@@ -4,15 +4,18 @@ import ProtectedRoute from '@/components/routes/ProtectedRoute'
 import { getProduct, getCategories, updateProduct } from "@/services/productService"
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
+import { getSuppliers } from "@/services/supplierService"
 
 export default function UpdateProduct() {
   
   const router = useRouter()
   const { productId } = router.query
   const [categories, setCategories] = useState([])
+  const [suppliers, setSuppliers] = useState([])
   const [successMessage, setSuccessMessage] = useState("")
   const [formErrors, setFormErrors] = useState({
     category: "",
+    supplier: "",
     name: "",
     image: ""
   })
@@ -24,6 +27,7 @@ export default function UpdateProduct() {
     description: "",
     packaging: "",
     category: "",
+    supplier: "",
     image: null,
   })
 
@@ -44,7 +48,16 @@ export default function UpdateProduct() {
         alert(e.message)
       }
     }
-
+    const fetchSuppliers = async () => {
+      try {
+        const suppliers = await getSuppliers()
+        setSuppliers(suppliers)
+      } catch (e) {
+        alert(e.message)
+      }
+    }
+    
+    fetchSuppliers()
     fetchCategories()
     fetchProduct()
   }, [])
@@ -61,6 +74,8 @@ export default function UpdateProduct() {
         errors.name = ''
       if (name === 'category')
         errors.category = ''
+      if (name === 'supplier')
+        errors.supplier = ''
       return errors
     })
   }
@@ -93,6 +108,13 @@ export default function UpdateProduct() {
       }))
       return
     }
+    if (formData.supplier === "") {
+      setFormErrors((prevFormData) => ({
+        ...prevFormData,
+        supplier: "Este campo não pode ser nulo.",
+      }))
+      return
+    }
 
     if (Object.values(formErrors).some(value => value !== ""))
       return
@@ -109,6 +131,7 @@ export default function UpdateProduct() {
           description: formData.description,
           packaging: formData.packaging,
           category: formData.category,
+          supplier: formData.supplier,
           visible: true,
         }, productId)
       }
@@ -228,6 +251,28 @@ export default function UpdateProduct() {
                 ))}
               </select>
               {formErrors.category && <p className="mt-2 text-red-600">{formErrors.category}</p>}
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 font-bold mb-2" htmlFor="supplier">
+                Fornecedor
+              </label>
+              <select
+                id="supplier"
+                name="supplier"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                value={formData.supplier}
+                onChange={handleChange}
+              >
+                <option value={""}>
+                  Escolha um Fornecedor
+                </option>
+                {suppliers.map((supplier) => (
+                  <option key={supplier.id} value={supplier.id}>
+                    {supplier.name}
+                  </option>
+                ))}
+              </select>
+              {formErrors.supplier && <p className="mt-2 text-red-600">{formErrors.supplier}</p>}
             </div>
             <div className="mb-4">
               <label htmlFor="imageUpload" className="block text-gray-700 font-bold mb-2">

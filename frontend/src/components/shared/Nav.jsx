@@ -77,7 +77,7 @@ export default function Nav() {
               Ressuprimento de Produtos
             </Link>
             <Link href="/analysis" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
-              Análise de Créditos
+                Registro de Análise de Crédito
             </Link>
             <Link href="/payments" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
               Pagamentos
