@@ -40,3 +40,10 @@ class SupplierFilterView(generics.ListAPIView):
 class SupplierDestroyView(generics.DestroyAPIView):
     queryset = Supplier.objects.all()
     serializer_class = SupplierSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        supplier = self.get_object()
+
+        CustomValidators.validate_supplier_deletion(supplier)
+
+        return super().destroy(request, *args, **kwargs)
