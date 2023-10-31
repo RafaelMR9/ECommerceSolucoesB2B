@@ -5,6 +5,7 @@ import { useState, useEffect, useContext } from "react"
 import { AuthContext } from "@/contexts/authContext"
 import { useRouter } from "next/router"
 import { getTicket, getTicketResponses, registerTicket } from "@/services/supportService"
+import { getAdministrator } from "@/services/userService"
 
 export default function AnswerTicket() {
 
@@ -12,6 +13,7 @@ export default function AnswerTicket() {
   const { user } = useContext(AuthContext)
   const { ticketId } = router.query
   const [ticket, setTicket] = useState({})
+  const [administrador, setAdministrador] = useState({})
   const [responses, setResponses] = useState([])
   const [newResponse, setNewResponse] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
@@ -21,12 +23,14 @@ export default function AnswerTicket() {
       try {
         const ticket = await getTicket(ticketId)
         const responses = await getTicketResponses(ticketId)
+        const administrator = await getAdministrator()
         responses.unshift(ticket)
 
         setResponses(responses)
         setTicket(ticket)
+        setAdministrador(administrator)
       } catch (e) {
-        alert(e.message)
+        router.push("/support")
       }
     }
     
@@ -79,14 +83,15 @@ export default function AnswerTicket() {
           </div>
           <div className="border-t border-gray-200 px-4 py-5">
             <dl className="sm:divide-y sm:divide-gray-200">
-            {responses.map((response, idx) => (
+            {responses.map((response, idx) => { 
+              return (
               <div
                 key={response.id}
                 className={`px-4 py-5 sm:grid sm:grid-cols-3 ${idx % 2 === 0 ? "bg-gray-100" : ""
                   }`}
               >
                 <dt className="text-md font-medium text-gray-700">
-                  {response.sender === user.id ? "Você" : ticket.sender === user.id ? "Administrador" : "Empresa-Cliente"}
+                  {response.sender === user.id ? "Você" : administrador.id === response.sender ? "Administrador" : "Organização Compradora"}
                 </dt>
                 <p className="text-sm text-gray-600">
                   {new Date(response.dateHour).toLocaleString()}
@@ -95,7 +100,7 @@ export default function AnswerTicket() {
                   {response.content}
                 </dd>
               </div>
-            ))}
+            )})}
             </dl>
           </div>
         </div>

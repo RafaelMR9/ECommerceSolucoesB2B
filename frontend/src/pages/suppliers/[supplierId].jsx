@@ -5,6 +5,7 @@ import Modal from "@/components/shared/Modal"
 import { useState, useEffect } from "react"
 import { getSupplier, removeSupplier } from "@/services/supplierService"
 import { useRouter } from "next/router"
+import { getProducts } from "@/services/productService"
 
 export default function Supplier() {
 
@@ -18,6 +19,7 @@ export default function Supplier() {
   const router = useRouter()
   const { supplierId } = router.query
   const [supplier, setSupplier] = useState({})
+  const [products, setProducts] = useState([])
   const [modalState, setModalState] = useState(false)
 
   useEffect(() => {
@@ -27,11 +29,20 @@ export default function Supplier() {
         setSupplier(supplier)
       } catch (e) {
         router.push('/suppliers')
+      }
+    }
+
+    const fetchProducts = async () => {
+      try {
+        const products = await getProducts()
+        setProducts(products)
+      } catch (e) {
         alert(e.message)
       }
     }
 
     fetchSupplier()
+    fetchProducts()
   }, [])
 
   const handleRemoveSupplier = async (supplier) => {
@@ -88,7 +99,9 @@ export default function Supplier() {
           </div>
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Produtos Relacionados</h2>
-            {relatedProducts.map((product) => (
+            {products
+              .filter((product) => product.supplier === supplier.id)
+              .map((product) => (
               <div key={product.id} className="mb-6 flex justify-between items-center text-lg">
                 <div>
                   <p className="text-gray-600 font-semibold">Nome do Produto:</p>
@@ -96,7 +109,7 @@ export default function Supplier() {
                 </div>
                 <div>
                   <p className="text-gray-600 font-semibold">Preço de Venda:</p>
-                  <p className="text-gray-800">R$ {product.salePrice}</p>
+                  <p className="text-gray-800">R$ {(product.salePrice).toFixed(2)}</p>
                 </div>
                 <div>
                   <p className="text-gray-600 font-semibold">Quantidade em Estoque:</p>

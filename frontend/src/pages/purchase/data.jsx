@@ -65,6 +65,8 @@ export default function PurchaseData() {
         orderDate: new Date(),
         deliveryDate: formData.deliveryDate === "" ? null : formData.deliveryDate,
         cancelled: false,
+        sending: false,
+        recieved: false,
         paid: null,
         finished: true,
         faturedPayment: formData.faturedPayment,

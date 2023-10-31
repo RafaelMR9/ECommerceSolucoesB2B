@@ -39,9 +39,9 @@ export default function AdminRecurringPayments() {
   const handlePaidOrder = async (order, value, modalState) => {
     try {
       if (value === true) 
-        await updateSalesOrder({ paid: value, cancelled: order.cancelled }, order.id)
+        await updateSalesOrder({ paid: value, cancelled: order.cancelled, sending: order.sending, recieved: order.recieved }, order.id)
       else if (value === false)
-        await updateSalesOrder({ paid: value, cancelled: order.cancelled }, order.id)
+        await updateSalesOrder({ paid: value, cancelled: order.cancelled, sending: order.sending, recieved: order.recieved }, order.id)
         
       const orders = await getSalesOrders()
       setOrders(orders.filter(order => order.deliveryFrequency !== null && order.cancelled === null))
@@ -54,7 +54,7 @@ export default function AdminRecurringPayments() {
   return (
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Pagamentos Recorrentes dos Clientes</h1>
+        <h1 className="text-4xl font-bold text-slate-800 mb-8">Pagamentos Recorrentes das Organizações Compradoras</h1>
         <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -219,7 +219,7 @@ export default function AdminRecurringPayments() {
         <hr className="mt-6 border border-gray-400" />
         <div className="mt-8 text-center">
           <p className="text-gray-700">
-            Não quer Analisar os Pagamentos Recorrentes dos Clientes? <Link href="/payments" className="text-blue-600">Voltar para a Página de Pagamentos</Link>.
+            Não quer Analisar os Pagamentos das Organizações Compradoras? <Link href="/payments" className="text-blue-600">Voltar para a Página de Pagamentos</Link>.
           </p>
         </div>
       </BaseLayout>

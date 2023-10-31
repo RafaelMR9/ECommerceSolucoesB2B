@@ -8,7 +8,7 @@ class TicketListView(generics.ListAPIView):
     serializer_class = TicketSerializer
 
     def get_queryset(self):
-        queryset = Ticket.objects.filter(answer=None).order_by('dateHour')
+        queryset = Ticket.objects.filter(answer=None).order_by('-dateHour')
 
         return queryset
     
@@ -30,7 +30,7 @@ class TicketFilterView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.query_params.get('user')
-        queryset = Ticket.objects.filter(Q(sender=user) | Q(recipient=user), answer__isnull=True)
+        queryset = Ticket.objects.filter(Q(sender=user) | Q(recipient=user), answer__isnull=True).order_by('-dateHour')
         return queryset
     
 class TicketRetrieveView(generics.RetrieveAPIView):

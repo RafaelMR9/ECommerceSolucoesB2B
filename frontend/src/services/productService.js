@@ -117,7 +117,7 @@ export const registerProduct = async (formData) => {
   const form = new FormData()
 
   form.append('name', formData.name)
-  form.append('currentStockQuantity', 0)
+  form.append('currentStockQuantity', formData.currentStockQuantity)
   form.append('visible', true)
   form.append('costPrice', formData.costPrice)
   form.append('salePrice', formData.salePrice)

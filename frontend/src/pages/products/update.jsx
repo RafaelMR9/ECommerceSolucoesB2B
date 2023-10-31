@@ -167,6 +167,22 @@ export default function UpdateProduct() {
               {formErrors.name && <p className="mt-2 text-red-600">{formErrors.name}</p>}
             </div>
             <div className="mb-4">
+              <label className="block text-gray-700 font-bold mb-2" htmlFor="currentStockQuantity">
+                Quantidade em Estoque
+              </label>
+              <input
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="currentStockQuantity"
+                name="currentStockQuantity"
+                value={formData.currentStockQuantity}
+                onChange={handleChange}
+                type="number"
+                placeholder="Quantidade Atual em Estoque do Produto"
+                min={0}
+                required
+              />
+            </div>
+            <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2" htmlFor="costPrice">
                 Preço de Custo
               </label>
