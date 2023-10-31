@@ -74,5 +74,10 @@ export const removeSupplier = async (id) => {
   const options = {
     method: 'delete'
   }
-  await fetch(`${apiSuppliersUrl}/${id}/delete/`, options)
+  const response = await fetch(`${apiSuppliersUrl}/${id}/delete/`, options);
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(JSON.stringify(data))
+  }
 }

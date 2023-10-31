@@ -20,7 +20,13 @@ export default function Supplier() {
   const { supplierId } = router.query
   const [supplier, setSupplier] = useState({})
   const [products, setProducts] = useState([])
-  const [modalState, setModalState] = useState(false)
+  const [modalRemovalState, setModalRemovalState] = useState(false)
+  const [modalErrorState, setModalErrorState] = useState(false)
+  const [errorMessage, setErrorMessage] = useState({
+    title: "",
+    leading: ""
+  })
+
 
   useEffect(() => {
     const fetchSupplier = async () => {
@@ -50,9 +56,14 @@ export default function Supplier() {
       await removeSupplier(supplier)
       router.push('/suppliers')
     } catch (e) {
-      alert(e)
+      const objError = JSON.parse(e.message)
+      setErrorMessage({ 
+        title: objError.title,
+        leading: objError.leading
+      })
+      setModalRemovalState({})
+      setModalErrorState({ [supplierId]: true })
     }
-    setModalState({})
   }
 
   return (
@@ -61,18 +72,28 @@ export default function Supplier() {
         <div className="flex flex-wrap justify-between items-center mb-2">
           <h1 className="text-4xl font-bold text-slate-800 ">{supplier.name}</h1>
             <button
-              onClick={() => setModalState({ [supplierId]: true })}
+              onClick={() => setModalRemovalState({ [supplierId]: true })}
               className="ml-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded">
               Remover Fornecedor
             </button>
             <Modal
-              isOpen={modalState[supplierId] || false}
-              onClose={() => setModalState({})}
+              isOpen={modalRemovalState[supplierId] || false}
+              onClose={() => setModalRemovalState({})}
               onConfirm={() => handleRemoveSupplier(supplierId)}
               title="Confirmação de Remoção"
               message={`Tem certeza que deseja remover o fornecedor '${supplier.name}'?`}
               option1="Remover"
               option2="Cancelar"
+            />
+            <Modal
+              isOpen={modalErrorState[supplierId] || false}
+              onClose={() => setModalErrorState({})}
+              onConfirm={() => {setErrorMessage({title: "", leading: ""}); setModalErrorState({})}}
+              title="Remoção Inválida"
+              message={errorMessage.title}
+              leading={errorMessage.leading}
+              option1="Continuar"
+              confirm
             />
         </div>
         <hr className="border-gray-400 mb-6" />

@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from rest_framework import serializers
+from products.models import Product
 from .models import Supplier
 import re
 
@@ -33,3 +34,14 @@ class CustomValidators:
     def validate_unique_cnpj(value):
         if Supplier.objects.filter(cnpj=value).exists():
             raise serializers.ValidationError({'cnpj': ['Já existe um Fornecedor com este CNPJ.']})
+    
+    @staticmethod
+    def validate_unique_cnpj(value):
+        if Supplier.objects.filter(cnpj=value).exists():
+            raise serializers.ValidationError({'cnpj': ['Já existe um Fornecedor com este CNPJ.']})
+        
+    @staticmethod
+    def validate_supplier_deletion(supplier):
+        if Product.objects.filter(supplier=supplier).exists():
+            raise serializers.ValidationError({'title':"Não é possível excluir este fornecedor, pois existem produtos associados a ele.", "leading":"Associe os produtos a outro fornecedor antes de prosseguir com a remoção."})
+        
