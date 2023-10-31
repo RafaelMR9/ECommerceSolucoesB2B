@@ -114,7 +114,7 @@ export default function CreditAnalysis() {
           </table>
         </div>
         :
-        <p className="text-red-600 font-semibold text-lg">Não há Empresas-Cliente para serem analisadas no momento.</p>
+        <p className="text-red-600 font-semibold text-lg">Não há Organizações Compradoras para serem analisadas no momento.</p>
         }
       </BaseLayout>
     </ProtectedRoute>

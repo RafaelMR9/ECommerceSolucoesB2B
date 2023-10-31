@@ -49,7 +49,6 @@ export default function Product() {
           })
         }
       } catch (e) {
-        console.log(e)
         router.push('/products')
       }
     }
@@ -125,10 +124,14 @@ export default function Product() {
                 <p className="text-xl text-gray-700 font-bold mr-3">Categoria:</p>
                 <Link href={`/products?categorytId=${product.category}`} className="text-xl text-blue-600">{category.name}</Link>
               </div>
+              {user.is_superuser &&
               <div className="flex items-center mb-6">
                 <p className="text-xl text-gray-700 font-bold mr-3">Fornecedor:</p>
-                <p className="text-xl text-gray-700">{supplier.name}</p>
-              </div>
+                <Link href={`/suppliers/${supplier.id}`} className="text-xl text-blue-600">
+                  {supplier.name}
+                </Link>
+              </div> 
+              }
             </div>
             <div className="flex flex-wrap justify-between items-center mt-autos">
               {!user.is_superuser && 

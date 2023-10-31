@@ -12,6 +12,8 @@ export default function AdminNonRecurringOrders() {
   const [orders, setOrders] = useState([])
   const [companies, setCompanies] = useState([])
   const [prepareModalState, setPrepareModalState] = useState({})
+  const [sendModalState, setSendModalState] = useState({})
+  const [recievedModalState, setRecievedModalState] = useState({})
   const [cancelModalState, setCancelModalState] = useState({})
 
   useEffect(() => {
@@ -40,7 +42,7 @@ export default function AdminNonRecurringOrders() {
   const handlePrepareOrder = async (order, value, modalState) => {
     try {
       if (value === true) {
-        await updateSalesOrder({ cancelled: value }, order.id)
+        await updateSalesOrder({ cancelled: value, sending: order.sending, recieved: order.recieved }, order.id)
         
         const cartItems = await getUserProductsInSalesOrder(order.id, order.user)
         await Promise.all(cartItems.map(async (cartItem) => {
@@ -53,8 +55,30 @@ export default function AdminNonRecurringOrders() {
         }))
       }
       else if (value === null)
-        await updateSalesOrder({ cancelled: value }, order.id)
+        await updateSalesOrder({ cancelled: value, sending: order.sending, recieved: order.recieved }, order.id)
         
+      const orders = await getSalesOrders()
+      setOrders(orders.filter(order => order.deliveryFrequency === null))
+    } catch (e) {
+      alert(e)
+    }
+    modalState({})
+  }
+
+  const handleSendOrder = async (order, value, modalState) => {
+    try {
+      await updateSalesOrder({ cancelled: order.cancelled, sending: value, recieved: order.recieved }, order.id)
+      const orders = await getSalesOrders()
+      setOrders(orders.filter(order => order.deliveryFrequency === null))
+    } catch (e) {
+      alert(e)
+    }
+    modalState({})
+  }
+
+  const handleRecievedOrder = async (order, value, modalState) => {
+    try {
+      await updateSalesOrder({ cancelled: order.cancelled, sending: order.sending, recieved: value }, order.id)
       const orders = await getSalesOrders()
       setOrders(orders.filter(order => order.deliveryFrequency === null))
     } catch (e) {
@@ -66,7 +90,7 @@ export default function AdminNonRecurringOrders() {
   return (
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Pedidos dos Clientes</h1>
+        <h1 className="text-4xl font-bold text-slate-800 mb-8">Pedidos Não Recorrentes das Organizações Compradoras</h1>
         <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -141,28 +165,67 @@ export default function AdminNonRecurringOrders() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  { order.cancelled === false ?
+                  {order.cancelled === false ?
+                  <>
+                    <button
+                      onClick={() => setPrepareModalState({ [order.id]: true })}
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Preparar para Envio
+                    </button>
+                    <Modal
+                      isOpen={prepareModalState[order.id] || false}
+                      onClose={() => setPrepareModalState({})}
+                      onConfirm={() => handlePrepareOrder(order, null, setPrepareModalState)}
+                      confirm
+                      title="Confirmação de Preparo"
+                      message={`Tem certeza que deseja preparar este pedido para envio?`}
+                      option1="Sim"
+                      option2="Não"
+                    />
+                  </>
+                  : order.cancelled === null && !order.sending ? 
                     <>
-                      <button 
-                        onClick={() => setPrepareModalState({ [order.id]: true })} 
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Enviar
+                      <button
+                        onClick={() => setSendModalState({ [order.id]: true })}
+                        className="bg-blue-600 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      >
+                        Marcar como Enviado
                       </button>
                       <Modal
-                        isOpen={prepareModalState[order.id] || false}
-                        onClose={() => setPrepareModalState({})}
-                        onConfirm={() => handlePrepareOrder(order, null, setPrepareModalState)}
+                        isOpen={sendModalState[order.id] || false}
+                        onClose={() => setSendModalState({})}
+                        onConfirm={() => handleSendOrder(order, true, setSendModalState)}
                         confirm
-                        title="Confirmação de Preparo"
-                        message={`Tem certeza que deseja preparar este pedido para envio?`}
+                        title="Confirmação de Envio"
+                        message={`Tem certeza que deseja marcar este pedido como sendo enviado?`}
                         option1="Sim"
                         option2="Não"
                       />
                     </>
-                    : order.cancelled === true ?
+                  : order.sending && !order.recieved ? 
+                  <>
+                    <button
+                      onClick={() => setRecievedModalState({ [order.id]: true })}
+                      className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      Marcar como Recebido
+                    </button>
+                    <Modal
+                      isOpen={recievedModalState[order.id] || false}
+                      onClose={() => setRecievedModalState({})}
+                      onConfirm={() => handleRecievedOrder(order, true, setRecievedModalState)}
+                      confirm
+                      title="Confirmação de Recebimento"
+                      message={`Tem certeza que deseja marcar este pedido como recebido?`}
+                      option1="Sim"
+                      option2="Não"
+                    />
+                  </>
+                  : order.cancelled === true ? 
                     <div className="text-sm text-gray-800">-</div>
-                    :
-                    <div className="text-sm text-green-600">Preparando para Envio</div>
+                  :
+                    <div className="text-sm text-green-600">Pedido Finalizado</div>
                   }
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -177,7 +240,7 @@ export default function AdminNonRecurringOrders() {
                         isOpen={cancelModalState[order.id] || false}
                         onClose={() => setCancelModalState({})}
                         onConfirm={() => handlePrepareOrder(order, true, setCancelModalState)}
-                        title="Confirmação de Remoção"
+                        title="Confirmação de Cancelamento"
                         message={`Tem certeza que deseja cancelar este pedido?`}
                         option1="Sim"
                         option2="Não"
@@ -198,7 +261,7 @@ export default function AdminNonRecurringOrders() {
         <hr className="mt-6 border border-gray-400" />
         <div className="mt-8 text-center">
           <p className="text-gray-700">
-            Não quer Analisar os Pedidos dos Clientes? <Link href="/orders" className="text-blue-600">Voltar para a Página de Pedidos</Link>.
+            Não quer Analisar os Pedidos das Organizações Compradoras? <Link href="/orders" className="text-blue-600">Voltar para a Página de Pedidos</Link>.
           </p>
         </div>
       </BaseLayout>

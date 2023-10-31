@@ -28,7 +28,7 @@ export default function ClientCompaniesNonRecurringOrders() {
 
   const handleCancelOrder = async (order) => {
     try {
-      await updateSalesOrder({ cancelled: true }, order.id)
+      await updateSalesOrder({ cancelled: true, sending: order.sending, recieved: order.recieved }, order.id)
 
       const cartItems = await getUserProductsInSalesOrder(order.id, user.id)
       await Promise.all(cartItems.map(async (cartItem) => {
@@ -51,7 +51,7 @@ export default function ClientCompaniesNonRecurringOrders() {
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Meus Pedidos</h1>
+        <h1 className="text-4xl font-bold text-slate-800 mb-8">Meus Pedidos Não Recorrentes</h1>
         <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -115,16 +115,20 @@ export default function ClientCompaniesNonRecurringOrders() {
                         isOpen={modalState[order.id] || false}
                         onClose={() => setModalState({})}
                         onConfirm={() => handleCancelOrder(order)}
-                        title="Confirmação de Remoção"
+                        title="Confirmação de Cancelamento"
                         message={`Tem certeza que deseja cancelar este pedido?`}
                         option1="Sim"
                         option2="Não"
                       />
                     </>
-                    : order.cancelled === true ?
-                    <div className="text-sm text-red-600">Cancelado</div>
+                    : order.cancelled === null && !order.sending ? 
+                      <div className="text-sm text-green-600">Preparando para Envio</div>
+                    : order.sending && !order.recieved ? 
+                      <div className="text-sm text-green-600">Enviando</div>
+                    : order.cancelled === true ? 
+                      <div className="text-sm text-red-600">Cancelado</div>
                     :
-                    <div className="text-sm text-green-600">Preparando para Envio</div>
+                      <div className="text-sm text-green-600">Recebido</div>
                   }
                   </td>
                 </tr>
@@ -135,7 +139,7 @@ export default function ClientCompaniesNonRecurringOrders() {
         <hr className="mt-6 border border-gray-400" />
         <div className="mt-8 text-center">
           <p className="text-gray-700">
-            Não quer Cancelar seus Pedidos? <Link href="/orders" className="text-blue-600">Voltar para a Página de Principal</Link>.
+            Não quer ver seus Pedidos? <Link href="/orders" className="text-blue-600">Voltar para a Página de Pedidos</Link>.
           </p>
         </div>
       </BaseLayout>

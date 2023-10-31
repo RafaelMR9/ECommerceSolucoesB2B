@@ -11,7 +11,7 @@ export default function Home() {
         <Nav />
         <div className="container mx-auto px-8 py-8">
           <h1 className="text-4xl font-bold text-slate-800 text-center mb-8">
-            Os Melhores Produtos a Venda para Todos os Tipos de Empresas
+            Os Melhores Produtos a Venda para Todos os Tipos de Organizações
           </h1>
           <section className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">

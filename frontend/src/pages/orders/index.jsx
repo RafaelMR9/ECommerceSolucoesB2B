@@ -39,7 +39,7 @@ export default function Orders() {
         <hr className="mt-6 border border-gray-400" />
         <div className="mt-8 text-center">
           <p className="text-gray-700">
-            Não quer Ver seus Pedidos? <Link href="/" className="text-blue-600">Voltar para a Página Principal</Link>.
+            Não quer Ver os Pedidos? <Link href="/" className="text-blue-600">Voltar para a Página Principal</Link>.
           </p>
         </div>
       </BaseLayout>
