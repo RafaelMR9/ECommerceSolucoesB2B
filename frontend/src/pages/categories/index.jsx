@@ -11,8 +11,13 @@ export default function Categories() {
   const { user } = useContext(AuthContext)
   const [categories, setCategories] = useState([])
   const [formData, setFormData] = useState("")
-  const [modalState, setModalState] = useState(false)
   const [message, setMessage] = useState("")
+  const [modalRemovalState, setModalRemovalState] = useState(false)
+  const [modalErrorState, setModalErrorState] = useState(false)
+  const [errorMessage, setErrorMessage] = useState({
+    title: "",
+    leading: ""
+  })
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -39,9 +44,15 @@ export default function Categories() {
       }
       setCategories(buildCategoryTree(categories))
     } catch (e) {
-      alert(e)
+      const objError = JSON.parse(e.message)
+      setErrorMessage({ 
+        title: objError.title,
+        leading: objError.leading
+      })
+      setModalRemovalState({})
+      setModalErrorState({ [category]: true })
     }
-    setModalState({})
+    setModalRemovalState({})
   }
 
   const handleResetSearch = async () => {
@@ -99,19 +110,29 @@ export default function Categories() {
             <div className="flex ml-auto">
               <Link href={`/categories/update?categoryId=${category.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
               <button
-                onClick={() => setModalState({ [category.id]: true })}
+                onClick={() => setModalRemovalState({ [category.id]: true })}
                 className="ml-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded">
                 Remover
               </button>
               <Modal
-                isOpen={modalState[category.id] || false}
-                onClose={() => setModalState({})}
+                isOpen={modalRemovalState[category.id] || false}
+                onClose={() => setModalRemovalState({})}
                 onConfirm={() => handleRemoveCategory(category.id)}
                 title="Confirmação de Remoção"
                 message={`Tem certeza que deseja remover a categoria '${category.name}'?`}
                 leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
                 option1="Remover"
                 option2="Cancelar"
+              />
+              <Modal
+                isOpen={modalErrorState[category.id] || false}
+                onClose={() => setModalErrorState({})}
+                onConfirm={() => {setErrorMessage({title: "", leading: ""}); setModalErrorState({})}}
+                title="Remoção Inválida"
+                message={errorMessage.title}
+                leading={errorMessage.leading}
+                option1="Continuar"
+                confirm
               />
             </div>
           }
@@ -132,19 +153,29 @@ export default function Categories() {
                 <div className="flex ml-auto">
                   <Link href={`/categories/update?categoryId=${subcategory.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
                   <button
-                    onClick={() => setModalState({ [subcategory.id]: true })}
+                    onClick={() => setModalRemovalState({ [subcategory.id]: true })}
                     className="ml-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded">
                     Remover
                   </button>
                   <Modal
-                    isOpen={modalState[subcategory.id] || false}
-                    onClose={() => setModalState({})}
+                    isOpen={modalRemovalState[subcategory.id] || false}
+                    onClose={() => setModalRemovalState({})}
                     onConfirm={() => handleRemoveCategory(subcategory.id)}
                     title="Confirmação de Remoção"
                     message={`Tem certeza que deseja remover a categoria '${subcategory.name}'?`}
                     leading={`Atenção: Remover uma categoria também remove suas subcategorias.`}
                     option1="Remover"
                     option2="Cancelar"
+                  />
+                  <Modal
+                    isOpen={modalErrorState[subcategory.id] || false}
+                    onClose={() => setModalErrorState({})}
+                    onConfirm={() => {setErrorMessage({title: "", leading: ""}); setModalErrorState({})}}
+                    title="Remoção Inválida"
+                    message={errorMessage.title}
+                    leading={errorMessage.leading}
+                    option1="Continuar"
+                    confirm
                   />
                 </div>
               }

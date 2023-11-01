@@ -73,7 +73,7 @@ export default function Nav() {
             <Link href="/suppliers" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
               Fornecedores
             </Link>
-            <Link href="/" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
+            <Link href="/restock" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">
               Ressuprimento de Produtos
             </Link>
             <Link href="/analysis" className="text-gray-300 hover:text-white px-3 rounded-md text-sm font-medium">

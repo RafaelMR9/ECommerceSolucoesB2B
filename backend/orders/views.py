@@ -21,7 +21,7 @@ class SalesOrderListView(generics.ListAPIView):
     serializer_class = SalesOrderSerializer
 
     def get_queryset(self):
-        queryset = SalesOrder.objects.filter(finished=True)
+        queryset = SalesOrder.objects.filter(finished=True).order_by('-orderDate')
 
         return queryset
 
@@ -48,7 +48,7 @@ class UserSalesOrderListView(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.query_params.get('user')
-        queryset = SalesOrder.objects.filter(user=user, finished=True)
+        queryset = SalesOrder.objects.filter(user=user, finished=True).order_by('-orderDate')
 
         return queryset
 
