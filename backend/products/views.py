@@ -45,6 +45,12 @@ class CategoryDestroyView(generics.DestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+    def destroy(self, request, *args, **kwargs):
+        category = self.get_object()
+        
+        CustomValidators.validate_category_deletion(category)
+        return super().destroy(request, *args, **kwargs)
+
 class ProductListView(generics.ListAPIView):
     serializer_class = ProductSerializer
 

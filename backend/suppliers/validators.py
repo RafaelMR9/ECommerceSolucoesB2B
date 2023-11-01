@@ -43,5 +43,5 @@ class CustomValidators:
     @staticmethod
     def validate_supplier_deletion(supplier):
         if Product.objects.filter(supplier=supplier).exists():
-            raise serializers.ValidationError({'title':"Não é possível excluir este fornecedor, pois existem produtos associados a ele.", "leading":"Associe os produtos a outro fornecedor antes de prosseguir com a remoção."})
+            raise serializers.ValidationError({'title':"Não é possível excluir este fornecedor, pois existem produtos associados a ele.", "leading":"Associe os produtos a outros fornecedores antes de prosseguir com a remoção."})
         

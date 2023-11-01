@@ -4,7 +4,8 @@ import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import Modal from "@/components/shared/Modal"
 import { useState, useEffect } from "react"
 import { getSalesOrders, updateSalesOrder } from "@/services/orderService"
-import { getUsers } from "@/services/userService"
+import { getUsers, getAdministrator, getUser, updateUser } from "@/services/userService"
+import { registerTicket } from "@/services/supportService"
 
 export default function AdminNonRecurringPayments() {
   
@@ -41,7 +42,21 @@ export default function AdminNonRecurringPayments() {
       if (value === true) 
         await updateSalesOrder({ paid: value, cancelled: order.cancelled, sending: order.sending, recieved: order.recieved }, order.id)
       else if (value === false) {
+        const administrator = await getAdministrator()
+        const user = await getUser(order.user)
+
         await updateSalesOrder({ paid: value, cancelled: order.cancelled, sending: order.sending, recieved: order.recieved }, order.id)
+        await registerTicket({
+          sender: administrator.id,
+          recipient: user.id,
+          subject: `${user.name}: Atraso no Pagamento.`,
+          content: `Devido ao atraso no pagamento do pedido não recorrente de número ${order.id}, você estará impossibilitado de realizar futuras compras até efetuar os pagamentos pendentes.`,
+          answer: null
+        })
+        await updateUser({
+          ...user,
+          canPurchase: false
+        }, user.id, user.username)
       }
         
       const orders = await getSalesOrders()
@@ -127,7 +142,7 @@ export default function AdminNonRecurringPayments() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-800">
-                      R$ {order.totalSaleValue}
+                      R$ {(order.totalSaleValue).toFixed(2)}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

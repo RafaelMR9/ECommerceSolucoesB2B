@@ -8,14 +8,7 @@ import { useRouter } from "next/router"
 import { getProducts } from "@/services/productService"
 
 export default function Supplier() {
-
-  const relatedProducts = [
-    { id: 1, name: "Produto A", description: "Descrição do Produto A", salePrice: 25, currentStockQuantity: 10 },
-    { id: 2, name: "Produto B", description: "Descrição do Produto B", salePrice: 19, currentStockQuantity: 25 },
-    { id: 3, name: "Produto C", description: "Descrição do Produto C", salePrice: 29, currentStockQuantity: 11 },
-    { id: 4, name: "Produto D", description: "Descrição do Produto D", salePrice: 14, currentStockQuantity: 36 },
-  ]
-
+  
   const router = useRouter()
   const { supplierId } = router.query
   const [supplier, setSupplier] = useState({})
