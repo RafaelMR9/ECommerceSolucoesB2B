@@ -22,4 +22,4 @@ class Product(models.Model):
   supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
 
   def __str__(self):
-      return self.name
+    return self.name

@@ -115,9 +115,15 @@ export default function Purchase() {
         </form>
         <hr className="border border-gray-400" />
         <div className="mt-8 text-center">
-          <p className="text-gray-700">
-            Não quer Adiquirir o Produto? <Link href={`/products/${productId}`} className="text-blue-600">Voltar para a Página do Produto</Link>.
-          </p>
+          { user.is_superuser ?
+            <p className="text-gray-700">
+              Não quer Reestocar o Produto? <Link href='/restock' className="text-blue-600">Voltar para a Página de Reestoque</Link>.
+            </p>
+            :
+            <p className="text-gray-700">
+              Não quer Adiquirir o Produto? <Link href={`/products/${productId}`} className="text-blue-600">Voltar para a Página do Produto</Link>.
+            </p>
+          }
         </div>
       </BaseLayout>
     </ProtectedRoute>
