@@ -4,7 +4,9 @@ import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import { useState, useEffect, useContext } from "react"
 import { getProduct, updateProduct } from "@/services/productService"
 import { useRouter } from "next/router"
-import { getUserUnfinishedSalesOrder, registerItemSalesOrder, registerSalesOrder } from "@/services/orderService"
+import { getUserUnfinishedSalesOrder, registerItemSalesOrder, registerSalesOrder,
+         getUserUnfinishedSupplierOrder, registerItemSupplierOrder, registerSupplierOrder
+       } from "@/services/orderService"
 import { getProductPromotion } from "@/services/marketingService"
 import { checkNullObject } from "@/utils/utils"
 import { AuthContext } from "@/contexts/authContext"
@@ -25,9 +27,13 @@ export default function Purchase() {
         setProduct(product)
       } catch (e) {
         alert(e.message)
+        router.push('/')
       }
     }
 
+    if (user.canPurchase === false)
+      router.push('/')
+    
     fetchProduct()
   }, [])
 
@@ -36,7 +42,7 @@ export default function Purchase() {
     setErrorMessage("")
   }
 
-  const handleSubmit = async (e) => {
+  const handlePurchasingOrganizationSubmit = async (e) => {
     e.preventDefault()
 
     if (errorMessage)
@@ -54,34 +60,55 @@ export default function Purchase() {
     try {
       const promotion = await getProductPromotion(productId)
       const product = await getProduct(productId)
-      let saleOrder = await getUserUnfinishedSalesOrder(user.id)
-
-      if (saleOrder == false) {
-        saleOrder = await registerSalesOrder({
-          cancelled: false,
-          sending: false,
-          recieved: false,
-          faturedPayment: false,
-          finished: false,
-          totalSaleValue: 0,
-          deliveryFrequency: null,
-          user: user.id
-        })
-      }
-
+      let salesOrder = await getUserUnfinishedSalesOrder(user.id)
+      
+      if (salesOrder == false)
+        salesOrder = await registerSalesOrder({ user: user.id })
+      else
+        salesOrder = salesOrder.id
+      
       await updateProduct(
         { id: product.id, 
           currentStockQuantity: product.currentStockQuantity - quantity,
           visible: true
         }, productId)
-
+      
       await registerItemSalesOrder({
         salePrice: checkNullObject(promotion) ? product.salePrice * quantity : promotion.salePrice * quantity,
         quantity: quantity,
         product: productId,
-        salesOrder: saleOrder
+        salesOrder: salesOrder
       })
 
+      router.push(`/cart`)
+    } catch (e) {
+      alert(e.message)
+    }
+    return
+  }
+
+  const handleAdministratorSubmit = async (e) => {
+    e.preventDefault()
+
+    if (errorMessage)
+      return
+
+    try {
+      const product = await getProduct(productId)
+      let supplierOrder = await getUserUnfinishedSupplierOrder(user.id)
+      
+      if (supplierOrder == false)
+        supplierOrder = await registerSupplierOrder({ user: user.id, supplier: product.supplier })
+      else
+        supplierOrder = supplierOrder.id
+      
+      await registerItemSupplierOrder({
+        costPrice: product.costPrice * quantity,
+        quantity: quantity,
+        product: productId,
+        supplierOrder: supplierOrder
+      })
+      
       router.push(`/cart`)
     } catch (e) {
       alert(e.message)
@@ -95,7 +122,7 @@ export default function Purchase() {
         <h1 className="text-4xl font-bold text-slate-800 mb-8">
           Comprar - {product.name}
         </h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={user.is_superuser ? handleAdministratorSubmit : handlePurchasingOrganizationSubmit}>
           <div className="mb-6">
             <label htmlFor="quantity" className="block text-base font-medium text-gray-700 mb-2">Quantidade</label>
             <input 

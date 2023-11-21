@@ -2,7 +2,7 @@ import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import BaseLayout from "@/components/shared/BaseLayout"
 import Link from "next/link"
 import { AuthContext } from "@/contexts/authContext"
-import { getUserProductsInSalesOrder, removeItemSaleOrder, getUserUnfinishedSalesOrder } from "@/services/orderService"
+import { getUserProductsInSalesOrder, removeItemSaleOrder, getUserUnfinishedSalesOrder, getUserProductsInSupplierOrder, removeItemSupplierOrder, getUserUnfinishedSupplierOrder, removeSupplierOrder } from "@/services/orderService"
 import { getProduct, getProducts, updateProduct } from "@/services/productService"
 import { useState, useEffect, useContext } from 'react'
 import { getPromotions } from "@/services/marketingService"
@@ -17,12 +17,23 @@ export default function Cart() {
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const saleOrder = await getUserUnfinishedSalesOrder(user.id)
-        if (saleOrder == false)
-          return
-
-        const cartItems = await getUserProductsInSalesOrder(saleOrder, user.id)
-        setCartItems(cartItems)
+        if (user.is_superuser) {
+          const supplierOrder = await getUserUnfinishedSupplierOrder(user.id)
+          if (supplierOrder == false)
+            return
+  
+          const cartItems = await getUserProductsInSupplierOrder(supplierOrder.id, user.id)
+          setCartItems(cartItems)
+        }
+        else {
+          const salesOrder = await getUserUnfinishedSalesOrder(user.id)
+          if (salesOrder == false)
+            return
+  
+          const cartItems = await getUserProductsInSalesOrder(salesOrder.id, user.id)
+          setCartItems(cartItems)
+        }
+        
       } catch (e) {
         alert(e.message)
       }
@@ -51,7 +62,7 @@ export default function Cart() {
     fetchPromotions()
   }, [])
 
-  const handleRemoveItem = async (cartItem, productId) => {
+  const handlePurchasingOrganizationRemoveItem = async (cartItem, productId) => {
     const product = await getProduct(productId)
     
     await updateProduct(
@@ -60,13 +71,24 @@ export default function Cart() {
         visible: true
       }, productId)
     await removeItemSaleOrder(cartItem.id)
-    const saleOrder = await getUserUnfinishedSalesOrder(user.id)
-    const cartItems = await getUserProductsInSalesOrder(saleOrder, user.id)
+    const salesOrder = await getUserUnfinishedSalesOrder(user.id)
+    const cartItems = await getUserProductsInSalesOrder(salesOrder.id, user.id)
 
     setCartItems(cartItems)
   }
 
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.salePrice, 0)
+  const handleAdministratorRemoveItem = async (cartItem) => {
+    await removeItemSupplierOrder(cartItem.id)
+    const supplierOrder = await getUserUnfinishedSupplierOrder(user.id)
+    const cartItems = await getUserProductsInSupplierOrder(supplierOrder.id, user.id)
+
+    if (cartItems.length === 0)
+      await removeSupplierOrder(supplierOrder.id)
+
+    setCartItems(cartItems)
+  }
+
+  const totalPrice = user.is_superuser ? cartItems.reduce((acc, item) => acc + item.costPrice, 0) : cartItems.reduce((acc, item) => acc + item.salePrice, 0)
 
   return (
     <ProtectedRoute isProtected>
@@ -120,7 +142,7 @@ export default function Cart() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-800">
-                          R$ {promotion ? promotion.salePrice : product.salePrice}
+                          R$ {user.is_superuser ? (product.costPrice).toFixed(2) : promotion ? (promotion.salePrice).toFixed(2) : (product.salePrice).toFixed(2)}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -130,11 +152,11 @@ export default function Cart() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-800">
-                          R$ {(cartItem.salePrice).toFixed(2)}
+                          R$ {user.is_superuser ? (cartItem.costPrice).toFixed(2) : (cartItem.salePrice).toFixed(2)}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button className="text-red-600 hover:text-red-700" onClick={() => handleRemoveItem(cartItem, product.id)}>
+                        <button className="text-red-600 hover:text-red-700" onClick={() => user.is_superuser? handleAdministratorRemoveItem(cartItem) : handlePurchasingOrganizationRemoveItem(cartItem, product.id)}>
                           Remover
                         </button>
                       </td>

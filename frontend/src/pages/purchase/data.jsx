@@ -3,7 +3,7 @@ import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import { useState, useContext } from 'react'
 import { AuthContext } from "@/contexts/authContext"
-import { updateSalesOrder, getUserUnfinishedSalesOrder, getUserProductsInSalesOrder } from "@/services/orderService"
+import { updateSalesOrder, getUserUnfinishedSalesOrder, getUserProductsInSalesOrder, updateSupplierOrder, getUserUnfinishedSupplierOrder, getUserProductsInSupplierOrder } from "@/services/orderService"
 import { registerTicket } from "@/services/supportService"
 import { getAdministrator } from "@/services/userService"
 import { useRouter } from "next/router"
@@ -42,7 +42,7 @@ export default function PurchaseData() {
     })
   }
 
-  const handleSubmit = async (e) => {
+  const handlePurchasingOrganizationSubmit = async (e) => {
     e.preventDefault()
     
     if (Object.values(formErrors).some(value => value !== ""))
@@ -56,8 +56,12 @@ export default function PurchaseData() {
         alert("Você deve adicionar pelo menos 1 produto ao carrinho para realizar uma compra.")
         return
       }
+      if (user.canPurchase === false) {
+        alert("Você não pode realizar compras até efetuar os pagamentos que estão pendentes.")
+        return
+      }
 
-      const cartItems = await getUserProductsInSalesOrder(salesOrder, user.id)
+      const cartItems = await getUserProductsInSalesOrder(salesOrder.id, user.id)
       const totalSaleValue = cartItems.reduce((acc, item) => acc + item.salePrice, 0)
 
       await updateSalesOrder({
@@ -72,14 +76,13 @@ export default function PurchaseData() {
         faturedPayment: formData.faturedPayment,
         totalSaleValue: totalSaleValue,
         deliveryFrequency: formData.deliveryFrequency === "" ? null : formData.deliveryFrequency,
-        user: user.id
-      }, salesOrder)
+      }, salesOrder.id)
 
       await registerTicket({
         sender: admin.id,
         recipient: user.id,
         subject: `${user.name}: Compra Realizada com Sucesso.`,
-        content: `Sua compra foi efetuada com sucesso. Número do Pedido: ${salesOrder}.`,
+        content: `Sua compra foi efetuada com sucesso. Número do Pedido: ${salesOrder.id}.`,
         answer: null
       })
 
@@ -91,11 +94,48 @@ export default function PurchaseData() {
     return
   }
 
+  const handleAdministratorSubmit = async (e) => {
+    e.preventDefault()
+    
+    if (Object.values(formErrors).some(value => value !== ""))
+      return
+  
+    try {
+      const supplierOrder = await getUserUnfinishedSupplierOrder(user.id)
+
+      if (supplierOrder == false) {
+        alert("Você deve adicionar pelo menos 1 produto ao carrinho para realizar uma compra.")
+        return
+      }
+
+      const cartItems = await getUserProductsInSupplierOrder(supplierOrder.id, user.id)
+      const totalCostValue = cartItems.reduce((acc, item) => acc + item.costPrice, 0)
+
+      await updateSupplierOrder({
+        id: supplierOrder.id,
+        orderDate: new Date(),
+        deliveryDate: formData.deliveryDate === "" ? null : formData.deliveryDate,
+        cancelled: false,
+        recieved: null,
+        finished: true,
+        faturedPayment: formData.faturedPayment,
+        totalCostValue: totalCostValue,
+        deliveryFrequency: formData.deliveryFrequency === "" ? null : formData.deliveryFrequency,
+      }, supplierOrder.id)
+
+      router.push('/orders')
+    } catch (e) {
+      const errorObj = JSON.parse(e.message)
+      setFormErrors(errorObj)
+    }
+    return
+  }
+
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
         <h1 className="text-4xl font-bold text-slate-800 mb-8">Dados de Pagamento</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={user.is_superuser ? handleAdministratorSubmit : handlePurchasingOrganizationSubmit}>
           <div className="mb-4">
             <label htmlFor="futureDeliveryYes" className="block text-base font-medium text-gray-700 mb-2">
               Entrega Futura

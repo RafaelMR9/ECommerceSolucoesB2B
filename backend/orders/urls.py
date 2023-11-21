@@ -5,12 +5,13 @@ from .views import (
 
   SupplierOrderCreateView, CheckOpenSupplierOrderView, ItemSupplierOrderCreateView, ProductsInSupplierOrderListView, 
   SupplierOrderListView, UserSupplierOrderListView, ItemSupplierOrderDestroyView, SupplierOrderUpdateView, 
+  SupplierOrderDestroyView,
 
-  SalesInvoiceCreateView, SalesInvoiceListView, SalesInvoiceUpdateView, SalesInvoiceDestroyView,
-  ItemSalesInvoiceCreateView, ItemSalesInvoiceListView, ItemSalesInvoiceUpdateView, ItemSalesInvoiceDestroyView,
+  SalesInvoiceCreateView, SalesInvoiceListView, SalesInvoiceUpdateView,
+  ItemSalesInvoiceCreateView, ItemSalesInvoiceListView, ItemSalesInvoiceUpdateView,
 
-  SupplierInvoiceCreateView, SupplierInvoiceListView, SupplierInvoiceUpdateView, SupplierInvoiceDestroyView,
-  ItemSupplierInvoiceCreateView, ItemSupplierInvoiceListView, ItemSupplierInvoiceUpdateView, ItemSupplierInvoiceDestroyView
+  SupplierInvoiceCreateView, SupplierInvoiceListView, SupplierInvoiceUpdateView,
+  ItemSupplierInvoiceCreateView, ItemSupplierInvoiceListView, ItemSupplierInvoiceUpdateView
 )
 
 app_name = 'orders'
@@ -29,12 +30,10 @@ urlpatterns = [
     path('salesInvoice/', SalesInvoiceListView.as_view()),
     path('salesInvoice/register/', SalesInvoiceCreateView.as_view()),
     path('salesInvoice/<int:pk>/update/', SalesInvoiceUpdateView.as_view()),
-    path('salesInvoice/<int:pk>/delete/', SalesInvoiceDestroyView.as_view()),
 
     path('itemSalesInvoice/', ItemSalesInvoiceListView.as_view()),
     path('itemSalesInvoice/register/', ItemSalesInvoiceCreateView.as_view()),
     path('itemSalesInvoice/<int:pk>/update/', ItemSalesInvoiceUpdateView.as_view()),
-    path('itemSalesInvoice/<int:pk>/delete/', ItemSalesInvoiceDestroyView.as_view()),
 
 
     path('supplierOrder/', SupplierOrderListView.as_view()),
@@ -42,6 +41,7 @@ urlpatterns = [
     path('supplierOrder/<int:pk>/update/', SupplierOrderUpdateView.as_view()),
     path('supplierOrder/user/', UserSupplierOrderListView.as_view()),
     path('supplierOrder/getUnfinished/', CheckOpenSupplierOrderView.as_view()),
+    path('supplierOrder/<int:pk>/delete/', SupplierOrderDestroyView.as_view()),
 
     path('itemSupplierOrder/<int:pk>/', ProductsInSupplierOrderListView.as_view()),
     path('itemSupplierOrder/register/', ItemSupplierOrderCreateView.as_view()),
@@ -50,10 +50,8 @@ urlpatterns = [
     path('supplierInvoice/', SupplierInvoiceListView.as_view()),
     path('supplierInvoice/register/', SupplierInvoiceCreateView.as_view()),
     path('supplierInvoice/<int:pk>/update/', SupplierInvoiceUpdateView.as_view()),
-    path('supplierInvoice/<int:pk>/delete/', SupplierInvoiceDestroyView.as_view()),
     
     path('itemSupplierInvoice/', ItemSupplierInvoiceListView.as_view()),
     path('itemSupplierInvoice/register/', ItemSupplierInvoiceCreateView.as_view()),
     path('itemSupplierInvoice/<int:pk>/update/', ItemSupplierInvoiceUpdateView.as_view()),
-    path('itemSupplierInvoice/<int:pk>/delete/', ItemSupplierInvoiceDestroyView.as_view()),
 ]

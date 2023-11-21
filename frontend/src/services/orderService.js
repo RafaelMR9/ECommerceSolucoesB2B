@@ -7,15 +7,15 @@ export const registerSalesOrder = async (formData) => {
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
       orderDate: formData.orderDate,
-      deliveryDate: formData.deliveryDate,
+      deliveryDate: null,
       cancelled: false,
       sending: false,
       recieved: false,
       paid: null,
-      faturedPayment: formData.faturedPayment,
+      faturedPayment: false,
       finished: false,
-      totalSaleValue: formData.totalSaleValue,
-      deliveryFrequency: formData.deliveryFrequency,
+      totalSaleValue: 0,
+      deliveryFrequency: null,
       user: formData.user
     })
   }
@@ -35,17 +35,7 @@ export const updateSalesOrder = async (formData, id) => {
     headers: new Headers({ 
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
-      orderDate: formData.orderDate,
-      deliveryDate: formData.deliveryDate,
-      cancelled: formData.cancelled,
-      sending: formData.sending,
-      recieved: formData.recieved,
-      paid: formData.paid,
-      faturedPayment: formData.faturedPayment,
-      finished: formData.finished,
-      totalSaleValue: formData.totalSaleValue,
-      deliveryFrequency: formData.deliveryFrequency,
-      user: formData.user
+      ...formData
     })
   }
   const response = await fetch(`${apiOrdersUrl}/salesOrder/${id}/update/`, options)
@@ -84,7 +74,7 @@ export const getUserUnfinishedSalesOrder = async (id) => {
   if (response.ok) {
     const data = await response.json()
     if (data.length !== 0)
-      return data[0].id
+      return data[0]
     else
       return data
   }
@@ -117,6 +107,8 @@ export const registerItemSalesOrder = async (formData) => {
   }
   const response = await fetch(`${apiOrdersUrl}/itemSalesOrder/register/`, options)
   if (!response.ok) {
+    const data = await response.json()
+    console.log(JSON.stringify(data))
     throw new Error("Erro ao criar item do pedido.")
   }
 }
@@ -138,13 +130,13 @@ export const registerSupplierOrder = async (formData) => {
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
       orderDate: formData.orderDate,
-      deliveryDate: formData.deliveryDate,
+      deliveryDate: null,
       cancelled: false,
-      recieved: false,
-      faturedPayment: formData.faturedPayment,
+      recieved: null,
+      faturedPayment: false,
       finished: false,
-      totalCostValue: formData.totalSaleValue,
-      deliveryFrequency: formData.deliveryFrequency,
+      totalCostValue: 0,
+      deliveryFrequency: null,
       supplier: formData.supplier,
       user: formData.user
     })
@@ -165,16 +157,7 @@ export const updateSupplierOrder = async (formData, id) => {
     headers: new Headers({ 
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
-      orderDate: formData.orderDate,
-      deliveryDate: formData.deliveryDate,
-      cancelled: formData.cancelled,
-      recieved: formData.recieved,
-      faturedPayment: formData.faturedPayment,
-      finished: formData.finished,
-      totalCostValue: formData.totalSaleValue,
-      deliveryFrequency: formData.deliveryFrequency,
-      supplier: formData.supplier,
-      user: formData.user
+      ...formData
     })
   }
   const response = await fetch(`${apiOrdersUrl}/supplierOrder/${id}/update/`, options)
@@ -198,7 +181,7 @@ export const getSupplierOrders = async () => {
     throw new Error("Erro ao obter pedidos.")
 }
 
-export const getUserSupplierOrder = async (id) => {
+export const getUserSupplierOrders = async (id) => {
   const response = await fetch(`${apiOrdersUrl}/supplierOrder/user/?user=${id}`)
   if (response.ok) {
     const data = await response.json()
@@ -213,7 +196,7 @@ export const getUserUnfinishedSupplierOrder = async (id) => {
   if (response.ok) {
     const data = await response.json()
     if (data.length !== 0)
-      return data[0].id
+      return data[0]
     else
       return data
   }
@@ -221,8 +204,8 @@ export const getUserUnfinishedSupplierOrder = async (id) => {
     throw new Error("Erro ao obter pedido não finalizado.")
 }
 
-export const getUserProductsInSupplierOrder = async (saleOrderId, userId) => {
-  const response = await fetch(`${apiOrdersUrl}/itemSupplierOrder/${saleOrderId}/?user=${userId}`)
+export const getUserProductsInSupplierOrder = async (supplierOrderId, userId) => {
+  const response = await fetch(`${apiOrdersUrl}/itemSupplierOrder/${supplierOrderId}/?user=${userId}`)
   if (response.ok) {
     const data = await response.json()
     return data
@@ -232,16 +215,23 @@ export const getUserProductsInSupplierOrder = async (saleOrderId, userId) => {
   }
 }
 
+export const removeSupplierOrder = async (id) => {
+  const options = {
+    method: 'delete'
+  }
+  await fetch(`${apiOrdersUrl}/supplierOrder/${id}/delete/`, options)
+}
+
 export const registerItemSupplierOrder = async (formData) => {
   const options = {
     method: 'post',
     headers: new Headers({ 
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
-      salePrice: formData.salePrice,
+      costPrice: formData.costPrice,
       quantity: formData.quantity,
       product: formData.product,
-      salesOrder: formData.salesOrder
+      supplierOrder: formData.supplierOrder
     })
   }
   const response = await fetch(`${apiOrdersUrl}/itemSupplierOrder/register/`, options)

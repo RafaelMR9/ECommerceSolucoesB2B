@@ -99,6 +99,12 @@ export default function AdminRecurringOrders() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  Pedidos
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   CNPJ
                 </th>
                 <th
@@ -153,6 +159,11 @@ export default function AdminRecurringOrders() {
                 <tr key={order.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
+                      {order.id}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-800">
                       {company.cnpj}
                     </div>
                   </td>
@@ -178,7 +189,11 @@ export default function AdminRecurringOrders() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-800">
-                      {new Date(order.deliveryDate).toLocaleDateString('pt-BR')}
+                      {(() => {
+                        const deliveryDate = new Date(order.deliveryDate);
+                        deliveryDate.setDate(deliveryDate.getDate() + order.deliveryFrequency);
+                        return deliveryDate.toLocaleDateString('pt-BR');
+                      })()}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

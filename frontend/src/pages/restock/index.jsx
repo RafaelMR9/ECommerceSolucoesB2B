@@ -1,16 +1,18 @@
 import Link from "next/link"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import BaseLayout from "@/components/shared/BaseLayout"
-import { useState, useEffect } from 'react'
-import { useRouter } from "next/router"
+import { useState, useEffect, useContext } from 'react'
 import { getProducts } from "@/services/productService"
 import { getSuppliers } from "@/services/supplierService"
+import { getUserUnfinishedSupplierOrder, getUserSupplierOrder } from "@/services/orderService"
+import { AuthContext } from "@/contexts/authContext"
 
 export default function RegisterPromotion() {
-
-  const router = useRouter()
+  
+  const { user } = useContext(AuthContext)
   const [products, setProducts] = useState([])
   const [suppliers, setSuppliers] = useState([])
+  const [order, setOrder] = useState({})
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -33,8 +35,22 @@ export default function RegisterPromotion() {
       }
     }
     
+    const fetchOrder = async () => {
+      try {
+        const order = await getUserUnfinishedSupplierOrder(user.id)
+
+        if (Array.isArray(order)) 
+          return
+
+        setOrder(order)
+      } catch (e) {
+        alert(e.message)
+      }
+    }
+
     fetchProducts()
     fetchSuppliers()
+    fetchOrder()
   }, [])
   
   return (
@@ -66,24 +82,32 @@ export default function RegisterPromotion() {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {products
                       .filter(product => product.supplier === supplier.id)
-                      .map(product => (
-                        <tr key={product.id}>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {product.name}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            {product.currentStockQuantity}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            R$ {product.costPrice.toFixed(2)}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <Link href={`/purchase?productId=${product.id}`} className="bg-blue-600 hover:bg-blue-700 px-6 py-2 text-white font-bold rounded focus:outline-none focus:shadow-outline">
-                              Comprar
-                            </Link>
-                          </td>
-                        </tr>
-                      ))}
+                      .map(product => {
+                        const isSameSupplier = order.supplier === product.supplier
+
+                        return (
+                          <tr key={product.id}>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              {product.name}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              {product.currentStockQuantity}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              R$ {product.costPrice.toFixed(2)}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              {isSameSupplier || Object.keys(order).length === 0 ? 
+                                <Link href={`/purchase?productId=${product.id}`} className="bg-blue-600 hover:bg-blue-700 px-6 py-2 text-white font-bold rounded focus:outline-none focus:shadow-outline">
+                                  Comprar
+                                </Link>
+                                :
+                                <span className="text-gray-800">-</span>
+                              }
+                            </td>
+                          </tr>
+                        )
+                    })}
                   </tbody>
                 </table>
               </div>

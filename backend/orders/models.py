@@ -40,7 +40,7 @@ class SalesInvoice(models.Model):
 class ItemSalesInvoice(models.Model):
   quantity = models.IntegerField()
   salePrice = models.FloatField()
-  supplierInvoice = models.ForeignKey(SalesInvoice, on_delete=models.CASCADE)
+  salesInvoice = models.ForeignKey(SalesInvoice, on_delete=models.CASCADE)
 
   def __str__(self):
     return f"Item Nota Fiscal: {self.id}"
@@ -57,8 +57,7 @@ class SalesShipment(models.Model):
 class SupplierOrder(models.Model):
   orderDate = models.DateTimeField(auto_now_add=True)
   deliveryDate = models.DateField(null=True)
-  cancelled = models.BooleanField(default=False, null=True)
-  recieved = models.BooleanField(default=False)
+  recieved = models.BooleanField(default=None, null=True)
   faturedPayment = models.BooleanField(default=False)
   finished = models.BooleanField(default=False)
   totalCostValue = models.FloatField()
@@ -73,7 +72,7 @@ class ItemSupplierOrder(models.Model):
   costPrice = models.FloatField()
   quantity = models.IntegerField()
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
-  salesOrder = models.ForeignKey(SupplierOrder, on_delete=models.CASCADE)
+  supplierOrder = models.ForeignKey(SupplierOrder, on_delete=models.CASCADE)
 
   def __str__(self):
     return f"Item Pedido: {self.id}"
