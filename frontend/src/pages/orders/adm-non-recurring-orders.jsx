@@ -99,6 +99,12 @@ export default function AdminNonRecurringOrders() {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  Pedidos
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   CNPJ
                 </th>
                 <th
@@ -141,6 +147,11 @@ export default function AdminNonRecurringOrders() {
                 <tr key={order.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
+                      {order.id}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-800">
                       {company.cnpj}
                     </div>
                   </td>

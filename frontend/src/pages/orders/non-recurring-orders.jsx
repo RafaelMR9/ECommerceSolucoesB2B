@@ -92,16 +92,24 @@ export default function ClientCompaniesNonRecurringOrders() {
               {orders.map((order) => (
                 <tr key={order.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{order.id}</div>
+                    <div className="text-sm font-medium text-gray-900">
+                      {order.id}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-800">{new Date(order.orderDate).toLocaleString('pt-BR')}</div>
+                    <div className="text-sm text-gray-800">
+                      {new Date(order.orderDate).toLocaleString('pt-BR')}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-800">R$ {(order.totalSaleValue).toFixed(2)}</div>
+                    <div className="text-sm text-gray-800">
+                      R$ {(order.totalSaleValue).toFixed(2)}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-800">{order.deliveryDate ? new Date(order.deliveryDate).toLocaleDateString('pt-BR') : '-'}</div>
+                    <div className="text-sm text-gray-800">
+                      {order.deliveryDate ? new Date(order.deliveryDate).toLocaleDateString('pt-BR') : '-'}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   { order.cancelled === false ?

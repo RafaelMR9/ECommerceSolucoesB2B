@@ -134,10 +134,13 @@ export default function Product() {
               }
             </div>
             <div className="flex flex-wrap justify-between items-center mt-autos">
-              {!user.is_superuser && 
-                <Link href={`/purchase?productId=${productId}`} className="bg-blue-600 hover:bg-blue-700 text-white text-3xl font-bold py-6 px-16 rounded focus:outline-none focus:shadow-outline">
-                  Comprar
-                </Link>
+              {!user.is_superuser && (
+                user.canPurchase
+                  ? <Link href={`/purchase?productId=${productId}`} className="bg-blue-600 hover:bg-blue-700 text-white text-3xl font-bold py-6 px-16 rounded focus:outline-none focus:shadow-outline">
+                      Comprar
+                    </Link>
+                  : <span className="text-lg font-semibold text-red-600">Você não pode realizar compras até efetuar os pagamentos que estão pendentes.</span>
+                )
               }
               {user.is_superuser &&
               <>

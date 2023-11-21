@@ -112,7 +112,7 @@ export default function Carrier() {
           </Link>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Produtos Relacionados</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Pedidos Ativos</h2>
             {products
               .filter((product) => product.carrier === carrier.id)
               .map((product) => (

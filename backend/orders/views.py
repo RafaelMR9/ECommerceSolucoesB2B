@@ -145,11 +145,15 @@ class ProductsInSupplierOrderListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.query_params.get('user')
         queryset = ItemSupplierOrder.objects.filter(
-            salesOrder__user=user,
-            salesOrder__id=self.kwargs['pk'],
+            supplierOrder__user=user,
+            supplierOrder__id=self.kwargs['pk'],
         )
 
         return queryset
+
+class SupplierOrderDestroyView(generics.DestroyAPIView):
+    queryset = SupplierOrder.objects.all()
+    serializer_class = SupplierOrderSerializer
 
 class ItemSupplierOrderCreateView(generics.CreateAPIView):
     queryset = ItemSupplierOrder.objects.all()
@@ -173,10 +177,6 @@ class SalesInvoiceUpdateView(generics.UpdateAPIView):
     queryset = SalesInvoice.objects.all()
     serializer_class = SalesInvoiceSerializer
 
-class SalesInvoiceDestroyView(generics.DestroyAPIView):
-    queryset = SalesInvoice.objects.all()
-    serializer_class = SalesInvoiceSerializer
-
 class ItemSalesInvoiceCreateView(generics.CreateAPIView):
     queryset = ItemSalesInvoice.objects.all()
     serializer_class = ItemSalesInvoiceSerializer
@@ -186,10 +186,6 @@ class ItemSalesInvoiceListView(generics.ListAPIView):
     serializer_class = ItemSalesInvoiceSerializer
 
 class ItemSalesInvoiceUpdateView(generics.UpdateAPIView):
-    queryset = ItemSalesInvoice.objects.all()
-    serializer_class = ItemSalesInvoiceSerializer
-
-class ItemSalesInvoiceDestroyView(generics.DestroyAPIView):
     queryset = ItemSalesInvoice.objects.all()
     serializer_class = ItemSalesInvoiceSerializer
 
@@ -207,10 +203,6 @@ class SupplierInvoiceUpdateView(generics.UpdateAPIView):
     queryset = SupplierInvoice.objects.all()
     serializer_class = SupplierInvoiceSerializer
 
-class SupplierInvoiceDestroyView(generics.DestroyAPIView):
-    queryset = SupplierInvoice.objects.all()
-    serializer_class = SupplierInvoiceSerializer
-
 class ItemSupplierInvoiceCreateView(generics.CreateAPIView):
     queryset = ItemSupplierInvoice.objects.all()
     serializer_class = ItemSupplierInvoiceSerializer
@@ -220,9 +212,5 @@ class ItemSupplierInvoiceListView(generics.ListAPIView):
     serializer_class = ItemSupplierInvoiceSerializer
 
 class ItemSupplierInvoiceUpdateView(generics.UpdateAPIView):
-    queryset = ItemSupplierInvoice.objects.all()
-    serializer_class = ItemSupplierInvoiceSerializer
-
-class ItemSupplierInvoiceDestroyView(generics.DestroyAPIView):
     queryset = ItemSupplierInvoice.objects.all()
     serializer_class = ItemSupplierInvoiceSerializer
