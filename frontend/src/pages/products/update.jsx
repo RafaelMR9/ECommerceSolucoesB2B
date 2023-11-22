@@ -12,7 +12,6 @@ export default function UpdateProduct() {
   const { productId } = router.query
   const [categories, setCategories] = useState([])
   const [suppliers, setSuppliers] = useState([])
-  const [successMessage, setSuccessMessage] = useState("")
   const [formErrors, setFormErrors] = useState({
     category: "",
     supplier: "",
@@ -99,8 +98,6 @@ export default function UpdateProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    setSuccessMessage("")
-
     if (formData.category === "") {
       setFormErrors((prevFormData) => ({
         ...prevFormData,
@@ -136,7 +133,7 @@ export default function UpdateProduct() {
         }, productId)
       }
 
-      setSuccessMessage("Produto atualizado com sucesso.")
+      router.push(`/products/${productId}`)
     } catch (e) {
       const errorObj = JSON.parse(e.message)
       setFormErrors(errorObj)
@@ -303,7 +300,6 @@ export default function UpdateProduct() {
               />
               {formErrors.image && <p className="mt-2 text-red-600">{formErrors.image}</p>}
             </div>
-            { successMessage && <p className="mb-4 text-green-600">{successMessage}</p>}
             <button
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"

@@ -10,7 +10,6 @@ export default function UpdateCategory() {
   const router = useRouter()
   const { categoryId } = router.query
   const [formErrors, setFormErrors] = useState("")
-  const [successMessage, setSuccessMessage] = useState("")
   const [category, setCategory] = useState({})
   const [categories, setCategories] = useState([])
   const [formData, setFormData] = useState({
@@ -57,10 +56,9 @@ export default function UpdateCategory() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setFormErrors("")
-    setSuccessMessage("")
     try {
       await updateCategory(formData, categoryId)
-      setSuccessMessage("Categoria atualizada com sucesso.")
+      router.push('/categories')
     } catch (e) {
       setFormErrors(e.message)
     }
@@ -109,7 +107,6 @@ export default function UpdateCategory() {
             <p className="mb-4 font-semibold">Não é possível mudar a subcategoria de uma categoria que está no topo da hierarquia.</p>
           }
           { formErrors && <p className="mb-4 text-red-600">{formErrors}</p>}
-          { successMessage && <p className="mb-4 text-green-600">{successMessage}</p>}
           <button
             type="submit"
             className="inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600"

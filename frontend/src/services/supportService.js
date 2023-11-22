@@ -6,11 +6,7 @@ export const registerTicket = async (formData) => {
     headers: new Headers({ 
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
-      subject: formData.subject,
-      content: formData.content,
-      answer: formData.answer,
-      sender: formData.sender,
-      recipient: formData.recipient
+      ...formData
     })
   }
   const response = await fetch(`${apiSupportUrl}/register/`, options)

@@ -1,7 +1,7 @@
 from rest_framework import generics
-from .models import Carrier
+from .models import Carrier, SalesShipment
 from .validators import CustomValidators
-from .serializers import CarrierSerializer
+from .serializers import CarrierSerializer, SalesShipmentSerializer
 
 class CarrierCreateView(generics.CreateAPIView):
     queryset = Carrier.objects.all()
@@ -47,3 +47,15 @@ class CarrierDestroyView(generics.DestroyAPIView):
         CustomValidators.validate_carrier_deletion(carrier)
 
         return super().destroy(request, *args, **kwargs)
+    
+
+class SalesShipmentCreateView(generics.CreateAPIView):
+    queryset = SalesShipment.objects.all()
+    serializer_class = SalesShipmentSerializer
+
+class SalesShipmentFilterView(generics.ListAPIView):
+    serializer_class = SalesShipmentSerializer
+
+    def get_queryset(self):
+        search_query = self.request.query_params.get('fetchCarrier', '')
+        return SalesShipment.objects.all().filter(carrier_id=search_query)

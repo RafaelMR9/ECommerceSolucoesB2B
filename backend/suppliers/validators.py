@@ -3,6 +3,7 @@ from django.core.validators import validate_email
 from rest_framework import serializers
 from products.models import Product
 from .models import Supplier
+from orders.models import SupplierOrder
 import re
 
 class CustomValidators:
@@ -42,6 +43,11 @@ class CustomValidators:
         
     @staticmethod
     def validate_supplier_deletion(supplier):
+        supplierOrders = SupplierOrder.objects.filter(supplier=supplier)
+        pendingOrders = supplierOrders.filter(recieved=None)
+
+        if pendingOrders.exists():
+            raise serializers.ValidationError({'title':"Não é possível excluir este fornecedor, pois existem pedidos de ressuprimentos associados a ele.", "leading":"Espere a conclusão dos pedidos antes de prosseguir com a remoção."})
         if Product.objects.filter(supplier=supplier).exists():
             raise serializers.ValidationError({'title':"Não é possível excluir este fornecedor, pois existem produtos associados a ele.", "leading":"Associe os produtos a outros fornecedores antes de prosseguir com a remoção."})
         

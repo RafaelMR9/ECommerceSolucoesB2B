@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { getSalesOrders, updateSalesOrder, getUserProductsInSalesOrder } from "@/services/orderService"
 import { getUsers } from "@/services/userService"
 import { updateProduct, getProduct } from "@/services/productService"
+import { registerSalesShipment, getCarriers } from "@/services/carrierService"
 
 export default function AdminNonRecurringOrders() {
   
@@ -67,7 +68,12 @@ export default function AdminNonRecurringOrders() {
 
   const handleSendOrder = async (order, value, modalState) => {
     try {
+      const carriers = await getCarriers()
+      const randomIndex = Math.floor(Math.random() * carriers.length)
+
       await updateSalesOrder({ cancelled: order.cancelled, sending: value, recieved: order.recieved }, order.id)
+      await registerSalesShipment({ dateHour: new Date(), salesOrder: order.id, carrier: carriers[randomIndex].id})
+
       const orders = await getSalesOrders()
       setOrders(orders.filter(order => order.deliveryFrequency === null))
     } catch (e) {
