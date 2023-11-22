@@ -7,11 +7,9 @@ from .views import (
   SupplierOrderListView, UserSupplierOrderListView, ItemSupplierOrderDestroyView, SupplierOrderUpdateView, 
   SupplierOrderDestroyView,
 
-  SalesInvoiceCreateView, SalesInvoiceListView, SalesInvoiceUpdateView,
-  ItemSalesInvoiceCreateView, ItemSalesInvoiceListView, ItemSalesInvoiceUpdateView,
+  SalesInvoiceCreateView, SalesInvoiceUpdateView, ItemSalesInvoiceCreateView,
 
-  SupplierInvoiceCreateView, SupplierInvoiceListView, SupplierInvoiceUpdateView,
-  ItemSupplierInvoiceCreateView, ItemSupplierInvoiceListView, ItemSupplierInvoiceUpdateView
+  SupplierInvoiceCreateView, SupplierInvoiceUpdateView, ItemSupplierInvoiceCreateView
 )
 
 app_name = 'orders'
@@ -27,13 +25,10 @@ urlpatterns = [
     path('itemSalesOrder/register/', ItemSalesOrderCreateView.as_view()),
     path('itemSalesOrder/<int:pk>/delete/', ItemSalesOrderDestroyView.as_view()),
 
-    path('salesInvoice/', SalesInvoiceListView.as_view()),
     path('salesInvoice/register/', SalesInvoiceCreateView.as_view()),
     path('salesInvoice/<int:pk>/update/', SalesInvoiceUpdateView.as_view()),
 
-    path('itemSalesInvoice/', ItemSalesInvoiceListView.as_view()),
     path('itemSalesInvoice/register/', ItemSalesInvoiceCreateView.as_view()),
-    path('itemSalesInvoice/<int:pk>/update/', ItemSalesInvoiceUpdateView.as_view()),
 
 
     path('supplierOrder/', SupplierOrderListView.as_view()),
@@ -47,11 +42,8 @@ urlpatterns = [
     path('itemSupplierOrder/register/', ItemSupplierOrderCreateView.as_view()),
     path('itemSupplierOrder/<int:pk>/delete/', ItemSupplierOrderDestroyView.as_view()),
 
-    path('supplierInvoice/', SupplierInvoiceListView.as_view()),
     path('supplierInvoice/register/', SupplierInvoiceCreateView.as_view()),
     path('supplierInvoice/<int:pk>/update/', SupplierInvoiceUpdateView.as_view()),
     
-    path('itemSupplierInvoice/', ItemSupplierInvoiceListView.as_view()),
     path('itemSupplierInvoice/register/', ItemSupplierInvoiceCreateView.as_view()),
-    path('itemSupplierInvoice/<int:pk>/update/', ItemSupplierInvoiceUpdateView.as_view()),
 ]

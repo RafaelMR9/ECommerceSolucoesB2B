@@ -169,23 +169,11 @@ class SalesInvoiceCreateView(generics.CreateAPIView):
     queryset = SalesInvoice.objects.all()
     serializer_class = SalesInvoiceSerializer
 
-class SalesInvoiceListView(generics.ListAPIView):
-    queryset = SalesInvoice.objects.all()
-    serializer_class = SalesInvoiceSerializer
-
 class SalesInvoiceUpdateView(generics.UpdateAPIView):
     queryset = SalesInvoice.objects.all()
     serializer_class = SalesInvoiceSerializer
 
 class ItemSalesInvoiceCreateView(generics.CreateAPIView):
-    queryset = ItemSalesInvoice.objects.all()
-    serializer_class = ItemSalesInvoiceSerializer
-
-class ItemSalesInvoiceListView(generics.ListAPIView):
-    queryset = ItemSalesInvoice.objects.all()
-    serializer_class = ItemSalesInvoiceSerializer
-
-class ItemSalesInvoiceUpdateView(generics.UpdateAPIView):
     queryset = ItemSalesInvoice.objects.all()
     serializer_class = ItemSalesInvoiceSerializer
 
@@ -195,22 +183,10 @@ class SupplierInvoiceCreateView(generics.CreateAPIView):
     queryset = SupplierInvoice.objects.all()
     serializer_class = SupplierInvoiceSerializer
 
-class SupplierInvoiceListView(generics.ListAPIView):
-    queryset = SupplierInvoice.objects.all()
-    serializer_class = SupplierInvoiceSerializer
-
 class SupplierInvoiceUpdateView(generics.UpdateAPIView):
     queryset = SupplierInvoice.objects.all()
     serializer_class = SupplierInvoiceSerializer
 
 class ItemSupplierInvoiceCreateView(generics.CreateAPIView):
-    queryset = ItemSupplierInvoice.objects.all()
-    serializer_class = ItemSupplierInvoiceSerializer
-
-class ItemSupplierInvoiceListView(generics.ListAPIView):
-    queryset = ItemSupplierInvoice.objects.all()
-    serializer_class = ItemSupplierInvoiceSerializer
-
-class ItemSupplierInvoiceUpdateView(generics.UpdateAPIView):
     queryset = ItemSupplierInvoice.objects.all()
     serializer_class = ItemSupplierInvoiceSerializer
