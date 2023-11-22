@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   if (isLoading)
     return (
       <div className="min-h-screen bg-blue-50 flex items-center justify-center">
-        <div className={`animate-spin ease-linear rounded-full h-40 w-40 pt-14 border-8 border-l-gray-400 border-r-gray-400 border-b-gray-400 border-t-indigo-900`}/>
+        <div className={`animate-spin ease-linear rounded-full h-32 w-32 pt-14 border-8 border-l-gray-400 border-r-gray-400 border-b-gray-400 border-t-indigo-900`}/>
       </div>
     )
     

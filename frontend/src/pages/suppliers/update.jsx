@@ -11,7 +11,6 @@ export default function UpdateSupplier() {
   const router = useRouter()
   const { supplierId } = router.query
 
-  const [successMessage, setSuccessMessage] = useState("")
   const [formData, setFormData] = useState({
     email: "",
     cnpj: "",
@@ -57,7 +56,6 @@ export default function UpdateSupplier() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    setSuccessMessage("")
     const errors = { ...formErrors }
     if (formData.email && !validateEmail(formData.email))
       errors.email = 'E-Mail inválido.'
@@ -70,8 +68,8 @@ export default function UpdateSupplier() {
     }
 
     try {
-      const data = await updateSupplier(formData, supplierId)
-      setSuccessMessage("Fornecedor atualizado com sucesso.")
+      await updateSupplier(formData, supplierId)
+      router.push(`/suppliers/${supplierId}`)
     } catch (e) {
       const errorObj = JSON.parse(e.message)
       setFormErrors(errorObj)
@@ -130,7 +128,6 @@ export default function UpdateSupplier() {
             />
             {formErrors.cnpj && <p className="mt-2 text-red-600">{formErrors.cnpj}</p>}
           </div>
-          {successMessage && <p className="mb-4 text-green-600">{successMessage}</p>}
           <button
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"

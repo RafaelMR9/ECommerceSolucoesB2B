@@ -16,10 +16,7 @@ export const registerPromotion = async (formData) => {
     headers: new Headers({ 
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
-      startDate: formData.startDate,
-      endDate: formData.endDate,
-      salePrice: formData.salePrice,
-      product: formData.product
+      ...formData
     })
   }
   const response = await fetch(`${apiMarketingUrl}/register/`, options)

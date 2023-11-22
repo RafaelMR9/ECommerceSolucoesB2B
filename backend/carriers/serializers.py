@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .validators import CustomValidators
-from .models import Carrier
+from .models import Carrier, SalesShipment
 
 class CarrierSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,3 +24,8 @@ class CarrierSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+    
+class SalesShipmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SalesShipment
+        fields = '__all__'

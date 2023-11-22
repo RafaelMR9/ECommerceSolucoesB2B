@@ -107,6 +107,7 @@ export default function Products() {
           {products.map((product) => {
             const now = new Date()
             const promotion = promotions.find((promotion) => promotion.product === product.id && new Date(promotion.endDate) >= now && new Date(promotion.startDate) <= now)
+            
             return (
               <div key={product.id} className="bg-white rounded-lg shadow-lg px-4 py-6">
                 <img

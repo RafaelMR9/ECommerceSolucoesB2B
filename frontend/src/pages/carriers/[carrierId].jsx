@@ -3,16 +3,18 @@ import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import Link from "next/link"
 import Modal from "@/components/shared/Modal"
 import { useState, useEffect } from "react"
-import { getCarrier, removeCarrier } from "@/services/carrierService"
+import { getCarrier, removeCarrier,  } from "@/services/carrierService"
 import { useRouter } from "next/router"
-import { getProducts } from "@/services/productService"
+import { getSalesOrders } from "@/services/orderService"
+import { getCarrierSalesShipment } from "@/services/carrierService"
 
 export default function Carrier() {
   
   const router = useRouter()
   const { carrierId } = router.query
   const [carrier, setCarrier] = useState({})
-  const [products, setProducts] = useState([])
+  const [orders, setOrders] = useState([])
+  const [salesShipment, setSalesShipment] = useState([])
   const [modalRemovalState, setModalRemovalState] = useState(false)
   const [modalErrorState, setModalErrorState] = useState(false)
   const [errorMessage, setErrorMessage] = useState({
@@ -31,17 +33,27 @@ export default function Carrier() {
       }
     }
 
-    const fetchProducts = async () => {
+    const fetchSalesShipment = async () => {
       try {
-        const products = await getProducts()
-        setProducts(products)
+        const salesShipment = await getCarrierSalesShipment(carrierId)
+        setSalesShipment(salesShipment)
+      } catch (e) {
+        alert(e.message)
+      }
+    }
+
+    const fetchOrders = async () => {
+      try {
+        const orders = await getSalesOrders()
+        setOrders(orders)
       } catch (e) {
         alert(e.message)
       }
     }
 
     fetchCarrier()
-    fetchProducts()
+    fetchSalesShipment()
+    fetchOrders()
   }, [])
 
   const handleRemoveCarrier = async (carrier) => {
@@ -113,24 +125,29 @@ export default function Carrier() {
           </div>
           <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Pedidos Ativos</h2>
-            {products
-              .filter((product) => product.carrier === carrier.id)
-              .map((product) => (
-              <div key={product.id} className="mb-6 flex justify-between items-center text-lg">
-                <div>
-                  <p className="text-gray-600 font-semibold">Nome do Produto:</p>
-                  <p className="text-gray-800">{product.name}</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 font-semibold">Preço de Venda:</p>
-                  <p className="text-gray-800">R$ {(product.salePrice).toFixed(2)}</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 font-semibold">Quantidade em Estoque:</p>
-                  <p className="text-gray-800">{product.currentStockQuantity}</p>
-                </div>
-              </div>
-            ))}
+            {salesShipment
+              .map((salesShipment) => {
+                const order = orders.find((order) => order.id === salesShipment.salesOrder && order.sending === true && order.recieved === false)
+                
+                if (order) {
+                  return (
+                    <div key={salesShipment.id} className="mb-6 flex justify-between items-center text-lg">
+                      <div>
+                        <p className="text-gray-600 font-semibold">Pedido:</p>
+                        <p className="text-gray-800">{salesShipment.salesOrder}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-600 font-semibold">Valor do Pedido:</p>
+                        <p className="text-gray-800">R$ {(order.totalSaleValue).toFixed(2)}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-600 font-semibold">Data de Embarque:</p>
+                        <p className="text-gray-800">{new Date(salesShipment.dateHour).toLocaleDateString('pt-BR')}</p>
+                      </div>
+                    </div>
+                  )
+                }
+            })}
           </div>
         </div>
       </BaseLayout>

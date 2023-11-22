@@ -99,10 +99,7 @@ export const registerItemSalesOrder = async (formData) => {
     headers: new Headers({ 
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
-      salePrice: formData.salePrice,
-      quantity: formData.quantity,
-      product: formData.product,
-      salesOrder: formData.salesOrder
+      ...formData
     })
   }
   const response = await fetch(`${apiOrdersUrl}/itemSalesOrder/register/`, options)
@@ -228,10 +225,7 @@ export const registerItemSupplierOrder = async (formData) => {
     headers: new Headers({ 
       'Content-Type': 'application/json' }),
     body: JSON.stringify({ 
-      costPrice: formData.costPrice,
-      quantity: formData.quantity,
-      product: formData.product,
-      supplierOrder: formData.supplierOrder
+      ...formData
     })
   }
   const response = await fetch(`${apiOrdersUrl}/itemSupplierOrder/register/`, options)

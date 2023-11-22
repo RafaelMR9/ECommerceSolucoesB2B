@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { getSupplier, removeSupplier } from "@/services/supplierService"
 import { useRouter } from "next/router"
 import { getProducts } from "@/services/productService"
+import { getPromotions } from "@/services/marketingService"
 
 export default function Supplier() {
   
@@ -13,6 +14,7 @@ export default function Supplier() {
   const { supplierId } = router.query
   const [supplier, setSupplier] = useState({})
   const [products, setProducts] = useState([])
+  const [promotions, setPromotions] = useState([])
   const [modalRemovalState, setModalRemovalState] = useState(false)
   const [modalErrorState, setModalErrorState] = useState(false)
   const [errorMessage, setErrorMessage] = useState({
@@ -40,8 +42,18 @@ export default function Supplier() {
       }
     }
 
+    const fetchPromotions = async () => {
+      try {
+        const promotions = await getPromotions()
+        setPromotions(promotions)
+      } catch (e) {
+        alert(e.message)
+      }
+    }
+
     fetchSupplier()
     fetchProducts()
+    fetchPromotions()
   }, [])
 
   const handleRemoveSupplier = async (supplier) => {
@@ -115,22 +127,28 @@ export default function Supplier() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">Produtos Relacionados</h2>
             {products
               .filter((product) => product.supplier === supplier.id)
-              .map((product) => (
-              <div key={product.id} className="mb-6 flex justify-between items-center text-lg">
-                <div>
-                  <p className="text-gray-600 font-semibold">Nome do Produto:</p>
-                  <p className="text-gray-800">{product.name}</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 font-semibold">Preço de Venda:</p>
-                  <p className="text-gray-800">R$ {(product.salePrice).toFixed(2)}</p>
-                </div>
-                <div>
-                  <p className="text-gray-600 font-semibold">Quantidade em Estoque:</p>
-                  <p className="text-gray-800">{product.currentStockQuantity}</p>
-                </div>
-              </div>
-            ))}
+              .map((product) => {
+                const now = new Date()
+                const promotion = promotions.find((promotion) => promotion.product === product.id && new Date(promotion.endDate) >= now && new Date(promotion.startDate) <= now)
+
+                return  (
+                  <div key={product.id} className="mb-6 flex justify-between items-center text-lg">
+                    <div>
+                      <p className="text-gray-600 font-semibold">Nome do Produto:</p>
+                      <p className="text-gray-800">{product.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 font-semibold">Preço de Venda:</p>
+                      <p className="text-gray-800">R$ {promotion ? (promotion.salePrice).toFixed(2) : (product.salePrice).toFixed(2)}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-600 font-semibold">Quantidade em Estoque:</p>
+                      <p className="text-gray-800">{product.currentStockQuantity}</p>
+                    </div>
+                  </div>
+                )
+              }
+            )}
           </div>
         </div>
       </BaseLayout>

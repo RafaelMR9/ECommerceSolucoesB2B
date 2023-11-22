@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from rest_framework import serializers
-from products.models import Product
-from .models import Carrier
+from orders.models import SalesOrder
+from .models import Carrier, SalesShipment
 import re
 
 class CustomValidators:
@@ -42,6 +42,9 @@ class CustomValidators:
         
     @staticmethod
     def validate_carrier_deletion(carrier):
-        if not carrier:
+        salesShipments = SalesShipment.objects.filter(carrier=carrier)
+        salesOrders = SalesOrder.objects.filter(id__in=salesShipments.values('salesOrder'))
+        pendingOrders = salesOrders.filter(recieved=False) 
+
+        if pendingOrders.exists():
             raise serializers.ValidationError({'title':"Não é possível excluir esta transportadora, pois existem pedidos de entrega ativos associados a ela.", "leading":"Espere a conclusão dos pedidos antes de prosseguir com a remoção."})
-        

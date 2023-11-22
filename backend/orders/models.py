@@ -2,7 +2,6 @@ from django.db import models
 from products.models import Product
 from core.models import User
 from suppliers.models import Supplier
-from carriers.models import Carrier
 
 # Create your models here.
 class SalesOrder(models.Model):
@@ -44,14 +43,6 @@ class ItemSalesInvoice(models.Model):
 
   def __str__(self):
     return f"Item Nota Fiscal: {self.id}"
-  
-class SalesShipment(models.Model):
-  dateHour = models.DateTimeField()
-  salesOrder = models.ForeignKey(SalesOrder, on_delete=models.CASCADE)
-  carrier = models.ForeignKey(Carrier, on_delete=models.CASCADE)
-
-  def __str__(self):
-    return f"Embarque do Pedido: {self.salesOrder}"
 
 
 class SupplierOrder(models.Model):

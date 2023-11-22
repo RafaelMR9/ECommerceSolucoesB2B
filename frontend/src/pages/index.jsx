@@ -2,9 +2,88 @@ import Link from 'next/link'
 import Nav from '@/components/shared/Nav'
 import Footer from '@/components/shared/Footer'
 import ProtectedRoute from '@/components/routes/ProtectedRoute'
+import { useEffect, useState } from 'react'
+import { getCategories, getProducts } from '@/services/productService'
+import { getPromotions } from '@/services/marketingService'
 
 export default function Home() {
 
+  const [products, setProducts] = useState([])
+  const [categories, setCategories] = useState([])
+  const [promotions, setPromotions] = useState([])
+  const [activePromotionsProducts, setActivePromotionsProducts] = useState([]);
+  const [messages, setMessages] = useState({
+    products: "",
+    categories: ""
+  })
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const products = await getProducts()
+        if (products.length === 0) {
+          setMessages({
+            ...messages,
+            products: "Ainda não existem produtos cadastrados."
+          })
+        }
+
+        setProducts(products)
+      } catch (e) {
+        alert(e.message)
+      }
+    }
+    
+    const fetchCategories = async () => {
+      try {
+        const categories = await getCategories()
+        if (categories.length === 0) {
+          setMessages({
+            ...messages,
+            categories: "Ainda não existem categorias cadastradas."
+          })
+        }
+
+        setCategories(categories)
+      } catch (e) {
+        alert(e.message)
+      }
+    }
+
+    const fetchPromotions = async () => {
+      try {
+        const promotions = await getPromotions()
+        setPromotions(promotions)
+      } catch (e) {
+        alert(e.message)
+      }
+    }
+    
+    fetchProducts()
+    fetchCategories()
+    fetchPromotions()
+  }, [])
+
+  useEffect(() => {
+    const now = new Date()
+    const activePromotions = promotions.filter(promotion =>
+      new Date(promotion.endDate) >= now && 
+      new Date(promotion.startDate) <= now
+    )
+
+    const productsWithPromotion = products.map(product => {
+      const promotion = activePromotions.find(promo => promo.product === product.id)
+      return { ...product, promotion }
+    })
+
+    setActivePromotionsProducts(productsWithPromotion)
+  }, [promotions, products])
+
+  const findCategoryName = (categoryId) => {
+    const category = categories.find(category => category.id === categoryId)
+    return category ? category.name : ''
+  }
+  
   return (
     <ProtectedRoute isProtected>
       <main className="bg-blue-50 min-h-screen">
@@ -13,151 +92,79 @@ export default function Home() {
           <h1 className="text-4xl font-bold text-slate-800 text-center mb-8">
             Os Melhores Produtos a Venda para Todos os Tipos de Organizações
           </h1>
-          <section className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
-              <h2 className="text-xl font-bold mb-2">Categoria 1</h2>
-              <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
-            </Link>
-            <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
-              <h2 className="text-xl font-bold mb-2">Categoria 2</h2>
-              <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
-            </Link>
-            <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
-              <h2 className="text-xl font-bold mb-2">Categoria 3</h2>
-              <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
-            </Link>
-            <Link href="/categoria1" className="bg-white rounded-full shadow-lg px-4 py-6 flex flex-col items-center justify-center border-4 border-white hover:bg-gray-100">
-              <h2 className="text-xl font-bold mb-2">Categoria 4</h2>
-              <p className="text-gray-700"><span className="font-semibold text-gray-600">Subcategoria:</span> Categoria X</p>
-            </Link>
-          </section>
+          <h1 className="text-4xl font-bold text-slate-800 mb-4">Categorias</h1>
+          {categories.length !== 0 ?
+            <section className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              {categories
+                .slice(0, 4)
+                .map((category) => (
+                  <Link href={`/products?categoryId=${category.id}`} className="bg-white rounded-full shadow-lg px-4 py-6 block border-4 border-white hover:bg-gray-100">
+                    <h2 className="text-xl text-center font-bold">{category.name}</h2>
+                  </Link>
+              ))}
+            </section>
+            :
+            <p>{messages.categories}</p>
+          }
           <h1 className="text-4xl font-bold text-slate-800 mb-4">
             Produtos em Destaque
           </h1>
-          <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg shadow-lg p-4">
-              <img
-                src="https://dummyimage.com/600x400/000/fff"
-                alt="Imagem do produto"
-                className="w-full rounded-lg mb-4"
-              />
-              <h2 className="text-xl font-bold mb-2">Produto 1</h2>
-              <p className="text-gray-600 mb-4">
-                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
-              </p>
-              <p className="text-gray-800 font-bold text-xl mb-4">
-                R$ 99,99
-              </p>
-              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Mais Informações
-              </Link>
-            </div>
-            <div className="bg-white rounded-lg shadow-lg p-4">
-              <img
-                src="https://dummyimage.com/600x400/000/fff"
-                alt="Imagem do produto"
-                className="w-full rounded-lg mb-4"
-              />
-              <h2 className="text-xl font-bold mb-2">Produto 1</h2>
-              <p className="text-gray-600 mb-4">
-                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
-              </p>
-              <p className="text-gray-800 font-bold text-xl mb-4">
-                R$ 99,99
-              </p>
-              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Mais Informações
-              </Link>
-            </div>
-            <div className="bg-white rounded-lg shadow-lg p-4">
-              <img
-                src="https://dummyimage.com/600x400/000/fff"
-                alt="Imagem do produto"
-                className="w-full rounded-lg mb-4"
-              />
-              <h2 className="text-xl font-bold mb-2">Produto 1</h2>
-              <p className="text-gray-600 mb-4">
-                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
-              </p>
-              <p className="text-gray-800 font-bold text-xl mb-4">
-                R$ 99,99
-              </p>
-              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Mais Informações
-              </Link>
-            </div>
-          </section>
-          <h1 className="text-4xl font-bold text-slate-800 mt-8 mb-4">
-            Algumas de Nossas Promoções
-          </h1>
-          <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg shadow-lg p-4">
-              <img
-                src="https://dummyimage.com/600x400/000/fff"
-                alt="Imagem do produto"
-                className="w-full rounded-lg mb-4"
-              />
-              <h2 className="text-xl font-bold mb-2">Produto 1</h2>
-              <p className="text-gray-600 mb-2">
-                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
-              </p>
-              <div className="flex mb-4">
-                <p className="text-green-600 font-bold text-xl">
-                  R$ 99,99
-                </p>
-                <p className="text-gray-500 font-bold text-xl ml-2 line-through">
-                  R$ 129,99
-                </p>
-              </div>
-              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Mais Informações
-              </Link>
-            </div>
-            <div className="bg-white rounded-lg shadow-lg p-4">
-              <img
-                src="https://dummyimage.com/600x400/000/fff"
-                alt="Imagem do produto"
-                className="w-full rounded-lg mb-4"
-              />
-              <h2 className="text-xl font-bold mb-2">Produto 1</h2>
-              <p className="text-gray-600 mb-2">
-                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
-              </p>
-              <div className="flex mb-4">
-                <p className="text-green-600 font-bold text-xl">
-                  R$ 99,99
-                </p>
-                <p className="text-gray-500 font-bold text-xl ml-2 line-through">
-                  R$ 129,99
-                </p>
-              </div>
-              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Mais Informações
-              </Link>
-            </div>
-            <div className="bg-white rounded-lg shadow-lg p-4">
-              <img
-                src="https://dummyimage.com/600x400/000/fff"
-                alt="Imagem do produto"
-                className="w-full rounded-lg mb-4"
-              />
-              <h2 className="text-xl font-bold mb-2">Produto 1</h2>
-              <p className="text-gray-600 mb-2">
-                Categoria: <Link href="#" className="text-slate-800 hover:underline">Categoria do Produto</Link>
-              </p>
-              <div className="flex mb-4">
-                <p className="text-green-600 font-bold text-xl">
-                  R$ 99,99
-                </p>
-                <p className="text-gray-500 font-bold text-xl ml-2 line-through">
-                  R$ 129,99
-                </p>
-              </div>
-              <Link href="#" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Mais Informações
-              </Link>
-            </div>
-          </section>
+          {products.length !== 0 ?
+            <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              {activePromotionsProducts.filter(product => !product.promotion).slice(0, 3).map((product) => (
+                <div key={product.id} className="bg-white rounded-lg shadow-lg px-4 py-6">
+                  <img
+                    src={product.image}
+                    alt="Produto"
+                    className="object-contain h-56 w-full rounded-lg mb-4"
+                  />
+                  <hr className="border-2 border-slate-200 mb-2"/>
+                  <h2 className="text-xl font-bold mb-2">{product.name}</h2>
+                  <p className="text-gray-600 text-lg font-semibold mb-2">
+                    Categoria: <Link href={`/products?categoryId=${product.category}`} className="text-blue-800 hover:underline">{findCategoryName(product.category)}</Link>
+                  </p>
+                  <p className="mb-4">
+                    <span className="text-gray-800 font-bold text-xl">R$ {product.salePrice.toFixed(2)}</span>
+                  </p>
+                  <Link href={`/products/${product.id}`} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Mais Informações
+                  </Link>
+                </div>
+              ))}
+            </section>
+            :
+            <p>{messages.products}</p>
+          }
+          {activePromotionsProducts.some(product => product.promotion) &&
+            <>
+              <h1 className="text-4xl font-bold text-slate-800 mb-4">
+                Algumas de Nossas Promoções
+              </h1>
+              <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                {activePromotionsProducts.filter(product => product.promotion).slice(0, 3).map((product) => (
+                  <div key={product.id} className="bg-white rounded-lg shadow-lg px-4 py-6">
+                    <img
+                      src={product.image}
+                      alt="Produto"
+                      className="object-contain h-56 w-full rounded-lg mb-4"
+                    />
+                    <hr className="border-2 border-slate-200 mb-2"/>
+                    <h2 className="text-xl font-bold mb-2">{product.name}</h2>
+                    <p className="text-gray-600 text-lg font-semibold mb-2">
+                      Categoria: <Link href={`/products?categoryId=${product.category}`} className="text-blue-800 hover:underline">{findCategoryName(product.category)}</Link>
+                    </p>
+                    <p className="mb-4">
+                      <span className="text-gray-800 font-bold text-xl line-through">R$ {product.salePrice.toFixed(2)}</span>
+                      <span className="text-green-800 font-bold text-xl "> R$ {product.promotion.salePrice.toFixed(2)}</span>
+                    </p>
+                    <Link href={`/products/${product.id}`} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                      Mais Informações
+                    </Link>
+                  </div>
+                ))}
+              </section>
+            </>
+          }
         </div>
         <div className="bg-blue-600 h-64">
           <h1 className="text-4xl font-bold text-white text-center mb-4 pt-9">

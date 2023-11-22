@@ -81,3 +81,34 @@ export const removeCarrier = async (id) => {
     throw new Error(JSON.stringify(data))
   }
 }
+
+
+export const getCarrierSalesShipment = async (carrierId) => {
+  const response = await fetch(`${apiCarriersUrl}/salesShipment/filter?fetchCarrier=${carrierId}`)
+  if (response.ok) {
+    const data = await response.json()
+    return data
+  }
+  else
+    throw new Error("Erro ao obter informações de embarque.")
+}
+
+export const registerSalesShipment = async (formData) => {
+  const options = {
+    method: 'post',
+    headers: new Headers({ 
+      'Content-Type': 'application/json' }),
+    body: JSON.stringify({ 
+      ...formData
+    })
+  }
+  const response = await fetch(`${apiCarriersUrl}/salesShipment/register/`, options)
+  if (!response.ok) {
+    const data = await response.json()
+    const modifiedData =  Object.keys(data).reduce((acc, key) => {
+      acc[key] = data[key].join('\n')
+      return acc
+    }, {})
+    throw new Error(JSON.stringify(modifiedData))
+  }
+}
