@@ -104,8 +104,6 @@ export const registerItemSalesOrder = async (formData) => {
   }
   const response = await fetch(`${apiOrdersUrl}/itemSalesOrder/register/`, options)
   if (!response.ok) {
-    const data = await response.json()
-    console.log(JSON.stringify(data))
     throw new Error("Erro ao criar item do pedido.")
   }
 }
@@ -117,7 +115,60 @@ export const removeItemSaleOrder = async (id) => {
   await fetch(`${apiOrdersUrl}/itemSalesOrder/${id}/delete/`, options)
 }
 
+export const registerSalesInvoice = async () => {
+  const options = {
+    method: 'post',
+    headers: new Headers({ 
+      'Content-Type': 'application/json' }),
+    body: JSON.stringify({ 
+      salePrice: 0,
+      number: 0
+    })
+  }
+  const response = await fetch(`${apiOrdersUrl}/salesInvoice/register/`, options)
+  if (!response.ok) {
+    throw new Error("Erro ao criar nota fiscal.")
+  }
+  else {
+    const data = await response.json()
+    return data
+  }
+}
 
+export const updateSalesInvoice = async (formData, id) => {
+  const options = {
+    method: 'put',
+    headers: new Headers({ 
+      'Content-Type': 'application/json' }),
+    body: JSON.stringify({ 
+      ...formData
+    })
+  }
+  const response = await fetch(`${apiOrdersUrl}/salesInvoice/${id}/update/`, options)
+  if (!response.ok) {
+    const data = await response.json()
+    const modifiedData =  Object.keys(data).reduce((acc, key) => {
+      acc[key] = data[key].join('\n')
+      return acc
+    }, {})
+    throw new Error(JSON.stringify(modifiedData))
+  }
+}
+
+export const registerItemSalesInvoice = async (formData) => {
+  const options = {
+    method: 'post',
+    headers: new Headers({ 
+      'Content-Type': 'application/json' }),
+    body: JSON.stringify({ 
+      ...formData
+    })
+  }
+  const response = await fetch(`${apiOrdersUrl}/itemSalesInvoice/register/`, options)
+  if (!response.ok) {
+    throw new Error("Erro ao criar item da nota fiscal.")
+  }
+}
 
 
 export const registerSupplierOrder = async (formData) => {
@@ -239,4 +290,59 @@ export const removeItemSupplierOrder = async (id) => {
     method: 'delete'
   }
   await fetch(`${apiOrdersUrl}/itemSupplierOrder/${id}/delete/`, options)
+}
+
+export const registerSupplierInvoice = async () => {
+  const options = {
+    method: 'post',
+    headers: new Headers({ 
+      'Content-Type': 'application/json' }),
+    body: JSON.stringify({ 
+      costPrice: 0,
+      number: 0
+    })
+  }
+  const response = await fetch(`${apiOrdersUrl}/supplierInvoice/register/`, options)
+  if (!response.ok) {
+    throw new Error("Erro ao criar nota fiscal.")
+  } 
+  else {
+    const data = await response.json()
+    return data
+  }
+}
+
+export const updateSupplierInvoice = async (formData, id) => {
+  const options = {
+    method: 'put',
+    headers: new Headers({ 
+      'Content-Type': 'application/json' }),
+    body: JSON.stringify({ 
+      ...formData
+    })
+  }
+  const response = await fetch(`${apiOrdersUrl}/supplierInvoice/${id}/update/`, options)
+  if (!response.ok) {
+    const data = await response.json()
+    const modifiedData =  Object.keys(data).reduce((acc, key) => {
+      acc[key] = data[key].join('\n')
+      return acc
+    }, {})
+    throw new Error(JSON.stringify(modifiedData))
+  }
+}
+
+export const registerItemSupplierInvoice = async (formData) => {
+  const options = {
+    method: 'post',
+    headers: new Headers({ 
+      'Content-Type': 'application/json' }),
+    body: JSON.stringify({ 
+      ...formData
+    })
+  }
+  const response = await fetch(`${apiOrdersUrl}/itemSupplierInvoice/register/`, options)
+  if (!response.ok) {
+    throw new Error("Erro ao criar item da nota fiscal.")
+  }
 }

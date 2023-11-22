@@ -180,7 +180,6 @@ export const updateProduct = async (formData, id) => {
   const response = await fetch(`${apiProductsUrl}/${id}/update/`, options)
   if (!response.ok) {
     const data = await response.json()
-    console.log(data)
     const modifiedData =  Object.keys(data).reduce((acc, key) => {
       acc[key] = data[key].join('\n')
       return acc

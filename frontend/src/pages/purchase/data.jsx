@@ -3,7 +3,9 @@ import BaseLayout from "@/components/shared/BaseLayout"
 import ProtectedRoute from "@/components/routes/ProtectedRoute"
 import { useState, useContext } from 'react'
 import { AuthContext } from "@/contexts/authContext"
-import { updateSalesOrder, getUserUnfinishedSalesOrder, getUserProductsInSalesOrder, updateSupplierOrder, getUserUnfinishedSupplierOrder, getUserProductsInSupplierOrder } from "@/services/orderService"
+import { updateSalesOrder, getUserUnfinishedSalesOrder, getUserProductsInSalesOrder, updateSupplierOrder, 
+  getUserUnfinishedSupplierOrder, getUserProductsInSupplierOrder, registerSalesInvoice, registerItemSalesInvoice, 
+  registerSupplierInvoice, registerItemSupplierInvoice, updateSalesInvoice, updateSupplierInvoice } from "@/services/orderService"
 import { registerTicket } from "@/services/supportService"
 import { getAdministrator } from "@/services/userService"
 import { useRouter } from "next/router"
@@ -60,9 +62,15 @@ export default function PurchaseData() {
         alert("Você não pode realizar compras até efetuar os pagamentos que estão pendentes.")
         return
       }
-
+      
+      const salesInvoice = await registerSalesInvoice()
       const cartItems = await getUserProductsInSalesOrder(salesOrder.id, user.id)
       const totalSaleValue = cartItems.reduce((acc, item) => acc + item.salePrice, 0)
+
+      for (const item of cartItems)
+        await registerItemSalesInvoice({ quantity: item.quantity, salePrice: item.salePrice, salesInvoice: salesInvoice.id})
+
+      await updateSalesInvoice({ salePrice: totalSaleValue, number: salesInvoice.id }, salesInvoice.id)
 
       await updateSalesOrder({
         id: salesOrder.id,
@@ -108,8 +116,14 @@ export default function PurchaseData() {
         return
       }
 
+      const supplierInvoice = await registerSupplierInvoice()
       const cartItems = await getUserProductsInSupplierOrder(supplierOrder.id, user.id)
       const totalCostValue = cartItems.reduce((acc, item) => acc + item.costPrice, 0)
+
+      for (const item of cartItems)
+        await registerItemSupplierInvoice({ quantity: item.quantity, costPrice: item.costPrice, supplierInvoice: supplierInvoice.id})
+
+      await updateSupplierInvoice({ costPrice: totalCostValue, number: supplierInvoice.id }, supplierInvoice.id)
 
       await updateSupplierOrder({
         id: supplierOrder.id,
