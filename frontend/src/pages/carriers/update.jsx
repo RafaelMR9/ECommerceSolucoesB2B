@@ -79,7 +79,7 @@ export default function UpdateCarrier() {
   return (
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Atualizar Fornecedor</h1>
+        <h1 className="text-4xl font-bold text-slate-800 mb-8">Atualizar Transportadora</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 font-bold mb-2" htmlFor="name">
