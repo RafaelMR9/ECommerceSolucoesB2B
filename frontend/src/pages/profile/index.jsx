@@ -80,7 +80,7 @@ export default function Profile() {
             </Link>
             <button 
               onClick={handleLogout}
-              className="hover:bg-white border-2 border-red-600 text-red-600 font-bold py-4 px-16 rounded focus:outline-none focus:shadow-outline">
+              className="hover:bg-red-600 hover:text-white border-2 border-red-600 text-red-600 transition duration-200 font-bold py-4 px-16 rounded focus:outline-none focus:shadow-outline">
               Sair
             </button>
         </div>

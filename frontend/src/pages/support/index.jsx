@@ -34,7 +34,7 @@ export default function Support() {
         <div className="flex justify-between mb-8">
           <h1 className="text-4xl font-bold text-slate-800">Meus Tickets</h1>
           { !user.is_superuser &&
-            <Link href="/support/send-ticket" className="hover:bg-white border-2 border-blue-600 text-blue-600 flex items-center font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
+            <Link href="/support/send-ticket" className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 flex items-center font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
               Enviar Ticket
             </Link>
           }

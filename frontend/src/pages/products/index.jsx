@@ -96,7 +96,7 @@ export default function Products() {
               Resetar Busca
             </button>
             {user.is_superuser &&
-              <Link href="/products/register" className="hover:bg-white border-2 border-blue-600 text-blue-600 flex items-center font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
+              <Link href="/products/register" className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 flex items-center font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
                 Cadastrar Produto
               </Link>
             }
