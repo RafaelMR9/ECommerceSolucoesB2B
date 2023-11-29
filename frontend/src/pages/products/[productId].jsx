@@ -144,10 +144,10 @@ export default function Product() {
               }
               {user.is_superuser &&
               <>
-                <Link href={`/products/update?productId=${productId}`} className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-7 px-8 rounded focus:outline-none focus:shadow-outline">
+                <Link href={`/products/update?productId=${productId}`} className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline">
                   Atualizar Produto
                 </Link>
-                <Link href={`/products/register-promotion?productId=${productId}`} className="hover:bg-white border-2 border-blue-600 text-blue-600 font-bold py-7 px-8 rounded focus:outline-none focus:shadow-outline">
+                <Link href={`/products/register-promotion?productId=${productId}`} className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline">
                   Cadastrar Promoção
                 </Link>
               </>
