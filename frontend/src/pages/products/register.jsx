@@ -250,7 +250,7 @@ export default function RegisterProduct() {
                 onChange={handleChange}
               >
                 <option value="">
-                  Escolha um forneceddor
+                  Escolha um fornecedor
                 </option>
                 {suppliers.map((supplier) => (
                   <option key={supplier.id} value={supplier.id}>
