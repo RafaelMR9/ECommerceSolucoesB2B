@@ -89,10 +89,10 @@ export default function Home() {
       <main className="bg-blue-50 min-h-screen">
         <Nav />
         <div className="container mx-auto px-8 py-8">
-          <h1 className="text-4xl font-bold text-slate-800 text-center mb-8">
+          <h1 className="text-4xl font-bold text-slate-800 text-center mb-12">
             Os Melhores Produtos a Venda para Todos os Tipos de Organizações
           </h1>
-          <h1 className="text-4xl font-bold text-slate-800 mb-4">Categorias</h1>
+          <h1 className="text-4xl font-bold text-slate-800 mb-4">Categorias em Destaque</h1>
           {categories.length !== 0 ?
             <section className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               {categories
