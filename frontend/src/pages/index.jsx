@@ -98,7 +98,7 @@ export default function Home() {
               {categories
                 .slice(0, 4)
                 .map((category) => (
-                  <Link href={`/products?categoryId=${category.id}`} className="bg-white rounded-full shadow-lg px-4 py-6 block border-4 border-white hover:bg-gray-100">
+                  <Link key={category.id} href={`/products?categoryId=${category.id}`} className="bg-white rounded-full shadow-lg px-4 py-6 block border-4 border-white hover:bg-gray-100">
                     <h2 className="text-xl text-center font-bold">{category.name}</h2>
                   </Link>
               ))}
