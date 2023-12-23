@@ -11,7 +11,7 @@ Aplicação web responsiva de E-Commerce B2B (Business-to-Business), ideal para 
 
 ### Backend
 - **Django**: Um framework de alto nível para Python. No projeto, foi utilizado para estruturar a lógica do servidor, gerenciar o banco de dados, e fornecer uma base sólida e segura para o backend.
-- **Django Rest Framework**: Uma ferramente poderosa e flexível para construir APIs web. Complementando o Django, foi utilizada para criar interfaces API RESTful, facilitando a serialização de dados e a comunicação entre o frontend e o backend.
+- **Django Rest Framework**: Uma ferramenta poderosa e flexível para construir APIs web. Complementando o Django, foi utilizada para criar interfaces API RESTful, facilitando a serialização de dados e a comunicação entre o frontend e o backend.
 
 ### Banco de Dados
 - **SQLite**: Um banco de dados SQL embutido que é leve e independente, ideal para desenvolvimento e testes. No projeto, foi usado para armazenar dados de forma local.
