@@ -119,7 +119,7 @@ export default function Purchase() {
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">
+        <h1 className="text-4xl font-bold text-slate-800 text-center md:text-start mb-8">
           Comprar - {product.name}
         </h1>
         <form onSubmit={user.is_superuser ? handleAdministratorSubmit : handlePurchasingOrganizationSubmit}>
@@ -136,7 +136,7 @@ export default function Purchase() {
             />
             {errorMessage && <p className="mt-2 text-red-600">{errorMessage}</p>}
           </div>
-          <button type="submit" className="mb-6 px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600">
+          <button type="submit" className="mb-6 w-full md:w-auto px-6 py-3 rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
             Adicionar ao Carrinho
           </button>
         </form>

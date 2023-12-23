@@ -74,7 +74,7 @@ export default function RegisterPromotion() {
   return (
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Registrar Promoção</h1>
+        <h1 className="text-4xl font-bold text-slate-800 text-center md:text-start mb-8">Registrar Promoção</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="startDate" className="block text-base font-medium text-gray-700 mb-2">Data Inicial</label>
@@ -118,7 +118,7 @@ export default function RegisterPromotion() {
             {formErrors.salePrice && <p className="mt-2 text-red-600">{formErrors.salePrice}</p>}
           </div>
           {successMessage && <p className="mb-4 text-green-600">{successMessage}</p>}
-          <button type="submit" className="inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600">
+          <button type="submit" className="w-full md:w-auto px-6 py-3 rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
             Cadastrar
           </button>
         </form>

@@ -93,9 +93,9 @@ export default function Cart() {
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Carrinho de Compra</h1>
+        <h1 className="text-3xl font-bold text-gray-900 text-center lg:text-start mb-8">Carrinho de Compra</h1>
         <div className="bg-white shadow overflow-hidden rounded-lg">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>

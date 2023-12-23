@@ -75,10 +75,10 @@ export default function Supplier() {
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
         <div className="flex flex-wrap justify-between items-center mb-2">
-          <h1 className="text-4xl font-bold text-slate-800 ">{supplier.name}</h1>
+          <h1 className="text-4xl font-bold text-slate-800 mb-2">{supplier.name}</h1>
             <button
               onClick={() => setModalRemovalState({ [supplierId]: true })}
-              className="ml-2 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded">
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded">
               Remover Fornecedor
             </button>
             <Modal
@@ -119,7 +119,7 @@ export default function Supplier() {
                 <p className="text-gray-800">{supplier.email}</p>
               </div>
           </div>
-          <Link href={`/suppliers/update?supplierId=${supplierId}`} className="w-96 text-center bg-blue-600 hover:bg-blue-700 text-white text-xl font-bold py-4 px-16 rounded focus:outline-none focus:shadow-outline">
+          <Link href={`/suppliers/update?supplierId=${supplierId}`} className="w-full md:w-auto text-center bg-blue-600 hover:bg-blue-700 text-white text-xl font-bold py-4 px-16 rounded">
             Atualizar Fornecedor
           </Link>
           </div>

@@ -92,13 +92,17 @@ export default function Home() {
           <h1 className="text-4xl font-bold text-slate-800 text-center mb-12">
             Os Melhores Produtos a Venda para Todos os Tipos de Organizações
           </h1>
-          <h1 className="text-4xl font-bold text-slate-800 mb-4">Categorias em Destaque</h1>
+          <h1 className="text-4xl font-bold text-slate-800 mb-4 text-center md:text-start">Categorias em Destaque</h1>
           {categories.length !== 0 ?
             <section className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
               {categories
                 .slice(0, 4)
                 .map((category) => (
-                  <Link key={category.id} href={`/products?categoryId=${category.id}`} className="bg-white rounded-full shadow-lg px-4 py-6 block border-4 border-white hover:bg-gray-100">
+                  <Link 
+                    key={category.id} 
+                    href={`/products?categoryId=${category.id}`} 
+                    className="bg-white rounded-full shadow-lg px-4 py-6 block border-4 border-white hover:bg-gray-100 flex justify-center items-center"
+                  >
                     <h2 className="text-xl text-center font-bold">{category.name}</h2>
                   </Link>
               ))}
@@ -106,7 +110,7 @@ export default function Home() {
             :
             <p>{messages.categories}</p>
           }
-          <h1 className="text-4xl font-bold text-slate-800 mb-4">
+          <h1 className="text-4xl font-bold text-slate-800 mb-4 text-center md:text-start">
             Produtos em Destaque
           </h1>
           {products.length !== 0 ?
@@ -137,7 +141,7 @@ export default function Home() {
           }
           {activePromotionsProducts.some(product => product.promotion) &&
             <>
-              <h1 className="text-4xl font-bold text-slate-800 mb-4">
+              <h1 className="text-4xl font-bold text-slate-800 mb-4 text-center md:text-start">
                 Algumas de Nossas Promoções
               </h1>
               <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
@@ -166,8 +170,8 @@ export default function Home() {
             </>
           }
         </div>
-        <div className="bg-blue-600 h-64">
-          <h1 className="text-4xl font-bold text-white text-center mb-4 pt-9">
+        <div className="bg-blue-600 h-64 flex flex-col px-4 md:px-0 justify-center items-center">
+          <h1 className="text-4xl font-bold text-white text-center mb-4">
             Ficou com Alguma Dúvida?
           </h1>
           <h2 className="text-2xl font-bold text-white text-center mb-6">

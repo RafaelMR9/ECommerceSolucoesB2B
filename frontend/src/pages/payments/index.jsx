@@ -6,8 +6,8 @@ export default function Orders() {
   return (
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Pagamentos</h1>
-        <div className="grid grid-cols-2 gap-64 text-center text-2xl">
+        <h1 className="text-4xl font-bold text-slate-800 text-center lg:text-start mb-8">Pagamentos</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-40 text-center text-2xl">
           <Link href="/payments/recurring-payments" className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-6 rounded">
             Recorrentes
           </Link>

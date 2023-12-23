@@ -51,8 +51,8 @@ export default function ClientCompaniesNonRecurringOrders() {
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Meus Pedidos Não Recorrentes</h1>
-        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+        <h1 className="text-4xl font-bold text-slate-800 text-center lg:text-start mb-8">Meus Pedidos Não Recorrentes</h1>
+        <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>

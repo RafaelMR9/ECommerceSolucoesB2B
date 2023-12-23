@@ -18,12 +18,12 @@ export default function Profile() {
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
-        <h1 className="text-3xl font-bold text-slate-800 mb-8">
+        <h1 className="text-4xl font-bold text-slate-800 text-center lg:text-start mb-8">
           Meu Perfil
         </h1>
         <div className={`grid ${ authContext.user && authContext.user.is_superuser ? 'lg:grid-cols-2' : 'lg:grid-cols-4' } gap-8`}>
           { authContext.user && authContext.user.is_superuser ?
-            <div className="max-w-sm rounded overflow-hidden shadow-lg">
+            <div className="rounded overflow-hidden shadow-lg">
               <div className="h-24 bg-blue-600"/>
               <div className="flex flex-col justify-center items-center px-6 py-4">
                 <div className="text-lg font-bold text-slate-800 mb-2">CPF</div>
@@ -34,7 +34,7 @@ export default function Profile() {
             </div>
             :
             <>
-              <div className="max-w-sm rounded overflow-hidden shadow-lg">
+              <div className="rounded overflow-hidden shadow-lg">
                 <div className="h-24 bg-blue-600"/>
                 <div className="flex flex-col justify-center items-center px-6 py-4">
                   <div className="text-lg font-bold text-slate-800 mb-2">Nome</div>
@@ -43,7 +43,7 @@ export default function Profile() {
                   </p>
                 </div>
               </div>
-              <div className="max-w-sm rounded overflow-hidden shadow-lg">
+              <div className="rounded overflow-hidden shadow-lg">
                 <div className="h-24 bg-blue-600"/>
                 <div className="flex flex-col justify-center items-center px-6 py-4">
                   <div className="text-lg font-bold text-slate-800 mb-2">CNPJ</div>
@@ -52,7 +52,7 @@ export default function Profile() {
                   </p>
                 </div>
               </div>
-              <div className="max-w-sm rounded overflow-hidden shadow-lg">
+              <div className="rounded overflow-hidden shadow-lg">
                 <div className="h-24 bg-blue-600"/>
                 <div className="flex flex-col justify-center items-center px-6 py-4">
                   <div className="text-lg font-bold text-slate-800 mb-2">Endereço</div>
@@ -63,7 +63,7 @@ export default function Profile() {
               </div>
             </>
           }
-          <div className="max-w-sm rounded overflow-hidden shadow-lg">
+          <div className="rounded overflow-hidden shadow-lg">
             <div className="h-24 bg-blue-600"/>
             <div className="flex flex-col justify-center items-center px-6 py-4">
               <div className="text-lg font-bold text-slate-800 mb-2">E-Mail</div>

@@ -71,7 +71,7 @@ export default function AnswerTicket() {
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Suporte - Conversa</h1>
+        <h1 className="text-4xl font-bold text-slate-800 text-center lg:text-start mb-8">Suporte - Conversa</h1>
         <div className="bg-white shadow overflow-hidden rounded-lg">
           <div className="px-4 py-5">
             <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -122,7 +122,7 @@ export default function AnswerTicket() {
           </div>
           {errorMessage && <p className="mb-2 text-red-600">{errorMessage}</p>}
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline"
+            className="w-full lg:w-auto px-6 py-3 rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
             type="submit"
           >
             Enviar

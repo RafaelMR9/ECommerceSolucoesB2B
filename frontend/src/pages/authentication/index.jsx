@@ -39,7 +39,7 @@ export default function Login() {
   return (
     <ProtectedRoute isAuthPage>
       <div className="bg-gray-100 min-h-screen">
-        <div className="mx-auto max-w-lg py-20">
+        <div className="mx-auto max-w-lg py-20 px-5 sm:px-0">
           <div className="bg-white shadow-md rounded px-8 py-10">
             <h1 className="text-3xl text-gray-900 font-bold text-center mb-8">Fazer Login</h1>
             <form onSubmit={handleSubmit}>

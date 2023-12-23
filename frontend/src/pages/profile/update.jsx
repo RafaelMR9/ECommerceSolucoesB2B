@@ -88,7 +88,7 @@ export default function UpdateProfile() {
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Atualizar Perfil</h1>
+        <h1 className="text-4xl font-bold text-slate-800 text-center lg:text-start mb-8">Atualizar Perfil</h1>
         <form onSubmit={handleSubmit}>
           { user.is_superuser ? 
             <div className="mb-4">
@@ -175,7 +175,7 @@ export default function UpdateProfile() {
             </>
           }
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full lg:w-auto px-6 py-3 rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
             type="submit"
           >
             Atualizar
