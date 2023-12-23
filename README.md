@@ -10,7 +10,7 @@ Aplicação web responsiva de E-Commerce B2B (Business-to-Business), ideal para 
 - **Tailwind CSS**: Um framework de CSS para design utilitário. Foi empregado para estilizar os componentes da interface do usuário, com um layout responsivo e personalizável.
 
 ### Backend
-- **Django**: Um framework de alto nível para Python. No projeto, foi utilizado para estruturar a lógica do servidor, gerenciar o banco de dados, e fornecer uma base sólida e segura para o back-end.
+- **Django**: Um framework de alto nível para Python. No projeto, foi utilizado para estruturar a lógica do servidor, gerenciar o banco de dados, e fornecer uma base sólida e segura para o backend.
 - **Django Rest Framework**: Uma ferramente poderosa e flexível para construir APIs web. Complementando o Django, foi utilizada para criar interfaces API RESTful, facilitando a serialização de dados e a comunicação entre o frontend e o backend.
 
 ### Banco de Dados
