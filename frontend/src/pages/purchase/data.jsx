@@ -148,7 +148,7 @@ export default function PurchaseData() {
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Dados de Pagamento</h1>
+        <h1 className="text-4xl font-bold text-slate-800 text-center lg:text-start mb-8">Dados de Pagamento</h1>
         <form onSubmit={user.is_superuser ? handleAdministratorSubmit : handlePurchasingOrganizationSubmit}>
           <div className="mb-4">
             <label htmlFor="futureDeliveryYes" className="block text-base font-medium text-gray-700 mb-2">
@@ -256,7 +256,7 @@ export default function PurchaseData() {
             </p>
           }
           <button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full lg:w-auto px-6 py-3 rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
             type="submit"
           >
             Finalizar Compra

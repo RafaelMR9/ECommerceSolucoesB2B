@@ -56,7 +56,7 @@ export default function RegisterPromotion() {
   return (
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-6">Ressuprimento de Produtos</h1>
+        <h1 className="text-4xl font-bold text-slate-800 text-center lg:text-start mb-8">Ressuprimento de Produtos</h1>
         {Array.from(new Set(products.map(product => product.supplier))).map(supplierId => {
           const supplier = suppliers.find(s => s.id === supplierId)
           if (supplier) {

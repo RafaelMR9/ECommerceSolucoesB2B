@@ -61,28 +61,28 @@ export default function Suppliers() {
   return (
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-4xl font-bold text-slate-800">Fornecedores</h1>
-          <div className="flex-shrink-0 flex-grow">
-            <form className="flex pl-20" onSubmit={handleSubmit}>
-              <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                type="text"
-                placeholder="Buscar Fornecedor"
-                value={formData}
-                onChange={(e) => setFormData(e.target.value)}
-              />
-              <button className="ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md" type="submit">
-                Pesquisar
-              </button>
+      <div className="flex flex-col lg:flex-row flex-wrap items-center justify-between mb-6">
+        <h1 className="text-4xl font-bold text-slate-800 mb-4">Fornecedores</h1>
+        <div className="flex flex-col lg:flex-row flex-wrap justify-center lg:justify-start gap-2 lg:gap-4 w-full lg:w-auto">
+          <form className="flex w-full lg:w-auto" onSubmit={handleSubmit}>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="text"
+              placeholder="Buscar Fornecedor"
+              value={formData}
+              onChange={(e) => setFormData(e.target.value)}
+            />
+            <button className="ml-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md" type="submit">
+              Pesquisar
+            </button>
             </form>
-          </div>
-          <button className="mx-8 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md" onClick={handleResetSearch}>
-              Resetar Busca
-          </button>
-          <Link href="/suppliers/register" className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 flex items-center font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
-            Cadastrar Fornecedor
-          </Link>
+            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md" onClick={handleResetSearch}>
+                Resetar Busca
+            </button>
+            <Link href="/suppliers/register" className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 flex items-center justify-center font-bold py-2 px-4 md:px-8 rounded focus:outline-none focus:shadow-outline">
+              Cadastrar Fornecedor
+            </Link>
+        </div>
         </div>
         {message && <p className="text-red-600 font-semibold text-lg mb-2">{message}</p>}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

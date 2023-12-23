@@ -144,9 +144,9 @@ export default function UpdateProduct() {
   return (
     <ProtectedRoute isProtected isAdminOnly>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Atualizar Produto</h1>
-        <div className="grid grid-cols-2 gap-8">
-        <form className="max-w-lg" onSubmit={handleSubmit}>
+        <h1 className="text-4xl font-bold text-slate-800 text-center md:text-start mb-8">Atualizar Produto</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-gray-700 font-bold mb-2" htmlFor="name">
                 Nome
@@ -301,7 +301,7 @@ export default function UpdateProduct() {
               {formErrors.image && <p className="mt-2 text-red-600">{formErrors.image}</p>}
             </div>
             <button
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="w-full md:w-auto px-6 py-3 rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
               type="submit"
             >
               Atualizar

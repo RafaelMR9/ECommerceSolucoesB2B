@@ -31,7 +31,7 @@ export default function Categories() {
         alert(e.message)
       }
     }
-    
+
     fetchCategories()
   }, [])
 
@@ -45,7 +45,7 @@ export default function Categories() {
       setCategories(buildCategoryTree(categories))
     } catch (e) {
       const objError = JSON.parse(e.message)
-      setErrorMessage({ 
+      setErrorMessage({
         title: objError.title,
         leading: objError.leading
       })
@@ -106,7 +106,7 @@ export default function Categories() {
       <div key={category.id}>
         <div className="flex items-center">
           <Link className="text-xl font-bold hover:text-blue-700 mb-2" href={`/products?categoryId=${category.id}`}>{category.name}</Link>
-          { user.is_superuser && 
+          {user.is_superuser &&
             <div className="flex ml-auto">
               <Link href={`/categories/update?categoryId=${category.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
               <button
@@ -127,7 +127,7 @@ export default function Categories() {
               <Modal
                 isOpen={modalErrorState[category.id] || false}
                 onClose={() => setModalErrorState({})}
-                onConfirm={() => {setErrorMessage({title: "", leading: ""}); setModalErrorState({})}}
+                onConfirm={() => { setErrorMessage({ title: "", leading: "" }); setModalErrorState({}) }}
                 title="Remoção Inválida"
                 message={errorMessage.title}
                 leading={errorMessage.leading}
@@ -149,7 +149,7 @@ export default function Categories() {
           <li key={subcategory.id} className="mb-4 mt-2">
             <div className="flex items-center">
               <Link className="font-semibold hover:text-blue-700" href={`/products?categoryId=${subcategory.id}`}>{subcategory.name}</Link>
-              { user.is_superuser && 
+              {user.is_superuser &&
                 <div className="flex ml-auto">
                   <Link href={`/categories/update?categoryId=${subcategory.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
                   <button
@@ -170,7 +170,7 @@ export default function Categories() {
                   <Modal
                     isOpen={modalErrorState[subcategory.id] || false}
                     onClose={() => setModalErrorState({})}
-                    onConfirm={() => {setErrorMessage({title: "", leading: ""}); setModalErrorState({})}}
+                    onConfirm={() => { setErrorMessage({ title: "", leading: "" }); setModalErrorState({}) }}
                     title="Remoção Inválida"
                     message={errorMessage.title}
                     leading={errorMessage.leading}
@@ -190,10 +190,10 @@ export default function Categories() {
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-4xl font-bold text-slate-800">Categorias</h1>
-          <div className="flex-shrink-0 flex-grow">
-            <form className="flex pl-20" onSubmit={handleSubmit}>
+        <div className="flex flex-col lg:flex-row flex-wrap items-center justify-between mb-6">
+          <h1 className="text-4xl font-bold text-slate-800 mb-4">Categorias</h1>
+          <div className="flex flex-col lg:flex-row flex-wrap justify-center lg:justify-start gap-2 lg:gap-4 w-full lg:w-auto">
+            <form className="flex w-full lg:w-auto" onSubmit={handleSubmit}>
               <input
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
@@ -205,18 +205,18 @@ export default function Categories() {
                 Pesquisar
               </button>
             </form>
-          </div>
-          <button className="mx-8 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md" onClick={handleResetSearch}>
+            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md" onClick={handleResetSearch}>
               Resetar Busca
-          </button>
-          {user.is_superuser &&
-            <Link href="/categories/register" className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 flex items-center font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline">
-              Cadastrar Categoria
-            </Link>
-          }
+            </button>
+            {user.is_superuser &&
+              <Link href="/categories/register" className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 flex items-center justify-center font-bold py-2 px-4 md:px-8 rounded focus:outline-none focus:shadow-outline">
+                Cadastrar Categoria
+              </Link>
+            }
+          </div>
         </div>
         {message && <p className="text-red-600 font-semibold text-lg mb-2">{message}</p>}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {categories.map((category) => {
             return (
               <ul key={category.id}>

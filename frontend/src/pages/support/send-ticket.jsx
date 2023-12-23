@@ -63,7 +63,7 @@ export default function SendTicket() {
   return (
     <ProtectedRoute isProtected>
       <BaseLayout>
-        <h1 className="text-4xl font-bold text-slate-800 mb-8">Abrir Ticket</h1>
+        <h1 className="text-4xl font-bold text-slate-800 text-center lg:text-start mb-8">Abrir Ticket</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="subject" className="block text-base font-medium text-gray-700 mb-2">Assunto</label>
@@ -91,7 +91,7 @@ export default function SendTicket() {
             ></textarea>
             {formErrors.content && <p className="mt-2 text-red-600">{formErrors.content}</p>}
           </div>
-          <button type="submit" className="inline-flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600">
+          <button type="submit" className="w-full md:w-auto px-6 py-3 rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
             Enviar
           </button>
         </form>
