@@ -22,6 +22,9 @@ Para rodar a aplicação localmente:
 - Instale as dependências do frontend (No diretório 'frontend': `npm install`).
 - Instale as dependências do backend (No diretório 'backend': `pip install pipenv`, seguido de `pipenv install` e por último `pipenv shell`).
 - Inicie o frontend e o backend (`npm run dev` para o 'frontend' e `python manage.py runserver` para o 'backend').
+
+## Link para Testar a Aplicação
+[Projeto E-commerce B2B](https://ecommercesolucoesb2b.vercel.app)
 <br>
 
 ![image](https://github.com/RafaelMR9/ECommerceSolucoesB2B/assets/24281310/cac534dc-d119-42ba-9a5a-631158c6251c)
