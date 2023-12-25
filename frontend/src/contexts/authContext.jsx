@@ -16,13 +16,18 @@ export const AuthProvider = ({ children }) => {
       const fetchUserData = async () => {
         try {
           const data = await getUser(jwtObj.user_id)
+
           setUser(data)
           setIsLoading(false)
+          setAuthTokens(JSON.parse(storedUser))
         } catch (e) {
-          alert(e)
+          setAuthTokens(null)
+          setUser(null)
+          localStorage.removeItem('authTokens')
+          setIsLoading(false)
         }
       }
-      setAuthTokens(JSON.parse(storedUser))
+
       fetchUserData()
     }
     else
