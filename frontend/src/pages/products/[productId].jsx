@@ -93,7 +93,7 @@ export default function Product() {
               <div>
                 <div className="flex flex-wrap justify-between items-center mb-2">
                   <h1 className="text-4xl font-bold text-slate-800 ">{product.name}</h1>
-                  {user.is_superuser &&
+                  {(user && user.is_superuser) &&
                   <>
                     <button
                       onClick={() => setModalState({ [productId]: true })}
@@ -136,7 +136,7 @@ export default function Product() {
                   <p className="text-xl text-gray-700 font-bold mr-3">Categoria:</p>
                   <Link href={`/products?categorytId=${product.category}`} className="text-xl text-blue-600">{category.name}</Link>
                 </div>
-                {user.is_superuser &&
+                {(user && user.is_superuser) &&
                 <div className="flex items-center mb-6">
                   <p className="text-xl text-gray-700 font-bold mr-3">Fornecedor:</p>
                   <Link href={`/suppliers/${supplier.id}`} className="text-xl text-blue-600">
@@ -146,7 +146,7 @@ export default function Product() {
                 }
               </div>
               <div className="flex flex-wrap justify-between items-center mt-autos">
-                {!user.is_superuser && (
+                {(user && !user.is_superuser) && (
                   user.canPurchase
                     ? <Link href={`/purchase?productId=${productId}`} className="bg-blue-600 hover:bg-blue-700 text-white text-3xl font-bold py-6 px-16 rounded focus:outline-none focus:shadow-outline">
                         Comprar
@@ -154,7 +154,7 @@ export default function Product() {
                     : <span className="text-lg font-semibold text-red-600">Você não pode realizar compras até efetuar os pagamentos que estão pendentes.</span>
                   )
                 }
-                {user.is_superuser &&
+                {(user && user.is_superuser) &&
                 <>
                   <Link href={`/products/update?productId=${productId}`} className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline">
                     Atualizar Produto

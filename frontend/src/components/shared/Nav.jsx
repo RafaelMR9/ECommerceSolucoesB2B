@@ -80,7 +80,7 @@ export default function Nav() {
           <Link href='/orders' className="text-gray-300 hover:text-white text-sm font-medium">
             Pedidos
           </Link>
-          {user.is_superuser &&
+          {(user && user.is_superuser) &&
             <>
               <Link href="/suppliers" className="text-gray-300 hover:text-white text-sm font-medium">
                 Fornecedores
