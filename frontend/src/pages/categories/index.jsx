@@ -106,7 +106,7 @@ export default function Categories() {
       <div key={category.id}>
         <div className="flex items-center">
           <Link className="text-xl font-bold hover:text-blue-700 mb-2" href={`/products?categoryId=${category.id}`}>{category.name}</Link>
-          {user.is_superuser &&
+          {(user && user.is_superuser) &&
             <div className="flex ml-auto">
               <Link href={`/categories/update?categoryId=${category.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
               <button
@@ -149,7 +149,7 @@ export default function Categories() {
           <li key={subcategory.id} className="mb-4 mt-2">
             <div className="flex items-center">
               <Link className="font-semibold hover:text-blue-700" href={`/products?categoryId=${subcategory.id}`}>{subcategory.name}</Link>
-              {user.is_superuser &&
+              {(user && user.is_superuser) &&
                 <div className="flex ml-auto">
                   <Link href={`/categories/update?categoryId=${subcategory.id}`} className="ml-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded">Atualizar</Link>
                   <button
@@ -208,7 +208,7 @@ export default function Categories() {
             <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md" onClick={handleResetSearch}>
               Resetar Busca
             </button>
-            {user.is_superuser &&
+            {(user && user.is_superuser) &&
               <Link href="/categories/register" className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 flex items-center justify-center font-bold py-2 px-4 md:px-8 rounded focus:outline-none focus:shadow-outline">
                 Cadastrar Categoria
               </Link>
