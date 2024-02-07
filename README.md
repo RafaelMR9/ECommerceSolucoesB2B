@@ -1,7 +1,7 @@
 # E-Commerce Soluções B2B
 
 ## Descrição
-Aplicação web responsiva de E-Commerce B2B (Business-to-Business), ideal para organizações que precisam adquirir produtos em grandes quantidades. Destinada a hospitais, escolas, hotéis, restaurantes e outras organizações, a plataforma facilita a compra em volume a preços competitivos. Diferente de um marketplace comum, aqui uma única organização atacadista centraliza as vendas, otimizando a gestão de estoque e pedidos e integrando sistemas de faturamento.
+Aplicação Web Full Stack Responsiva de E-Commerce B2B (Business-to-Business), ideal para organizações que precisam adquirir produtos em grandes quantidades. Destinada a hospitais, escolas, hotéis, restaurantes e outras organizações, a plataforma facilita a compra em volume a preços competitivos. Diferente de um marketplace comum, aqui uma única organização atacadista centraliza as vendas, otimizando a gestão de estoque e pedidos e integrando sistemas de faturamento.
 
 ## Tecnologias Utilizadas
 
