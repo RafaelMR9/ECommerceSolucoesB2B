@@ -1,174 +1,150 @@
-import Link from "next/link"
-import BaseLayout from "@/components/shared/BaseLayout"
-import ProtectedRoute from "@/components/routes/ProtectedRoute"
-import Modal from "@/components/shared/Modal"
-import { AuthContext } from "@/contexts/authContext"
-import { useState, useEffect, useContext } from "react"
-import { getProduct, getCategory, removeProduct } from "@/services/productService"
-import { getProductPromotion } from "@/services/marketingService"
-import { useRouter } from "next/router"
-import { checkNullObject } from "@/utils/utils"
-import { getSupplier } from "@/services/supplierService"
+import Link from 'next/link'
+import Image from 'next/image'
+import Head from 'next/head'
+import { useContext, useState } from 'react'
+import { useRouter } from 'next/router'
+import BaseLayout from '@/components/shared/BaseLayout'
+import Button from '@/components/ui/Button'
+import Alert from '@/components/ui/Alert'
+import Modal from '@/components/shared/Modal'
+import { AuthContext } from '@/contexts/authContext'
+import { removeProduct } from '@/services/productService'
+import { money, activePromotion, errorFields } from '@/lib/format'
+import { withSession } from '@/lib/server/page'
 
-export default function Product() {
-
-  const router = useRouter()
-  const { user } = useContext(AuthContext)
-  const { productId } = router.query
-  const [product, setProduct] = useState({})
-  const [promotion, setPromotion] = useState({})
-  const [category, setCategory] = useState({})
-  const [supplier, setSupplier] = useState({})
-  const [modalState, setModalState] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setIsLoading(true)
-
-        const product = await getProduct(productId)
-        const category = await getCategory(product.category)
-        const supplier = await getSupplier(product.supplier)
-        const promotion = await getProductPromotion(productId)
-        
-        setProduct({
-          ...product,
-          salePrice: product.salePrice.toFixed(2)
-        })
-        setCategory(category)
-        setSupplier(supplier)
-
-        if (checkNullObject(promotion)) {
-          setPromotion({
-            ...promotion,
-            salePrice: promotion.salePrice
-          })
-        }
-        else {
-          setPromotion({
-            ...promotion,
-            salePrice: promotion.salePrice.toFixed(2)
-          })
-        }
-
-        setIsLoading(false)
-
-      } catch (e) {
-        setIsLoading(false)
-        router.push('/products')
-      }
-    }
-
-    fetchProduct()
-  }, [])
-
-  const handleRemoveProduct = async (product) => {
+export default function Product({ product, category, supplier, promotion }) {
+  const { user } = useContext(AuthContext),
+    router = useRouter()
+  const [confirm, setConfirm] = useState(false),
+    [error, setError] = useState('')
+  async function remove() {
     try {
-      await removeProduct(product)
-      router.push('/products')
+      await removeProduct(product.id)
+      await router.push('/products')
     } catch (e) {
-      alert(e)
+      setError(Object.values(errorFields(e)).join(' '))
+    } finally {
+      setConfirm(false)
     }
-    setModalState({})
   }
-
   return (
-    <ProtectedRoute isProtected>
-      <BaseLayout>
-        { isLoading ?
-          <div className="flex items-center justify-center mt-32">
-            <div className={`animate-spin ease-linear rounded-full h-32 w-32 pt-14 border-8 border-l-gray-400 border-r-gray-400 border-b-gray-400 border-t-indigo-900`}/>
+    <BaseLayout>
+      <Head>
+        <title>{`${product.name} · B2B Soluções`}</title>
+      </Head>
+      <Link className="back-link" href="/products">
+        ← Voltar ao catálogo
+      </Link>
+      <Alert>{error}</Alert>
+      <div className="product-detail">
+        <div className="product-detail-image">
+          <Image
+            src={product.image || '/images/product-placeholder.svg'}
+            alt={product.name}
+            fill
+            priority
+            sizes="(max-width:760px) 100vw, 50vw"
+            unoptimized
+          />
+        </div>
+        <div className="product-detail-copy">
+          <p className="eyebrow">{category.name}</p>
+          <h1>{product.name}</h1>
+          <div className="product-detail-price">
+            {promotion && (
+              <span className="product-card-old-price">{money(product.salePrice)}</span>
+            )}
+            {money(promotion?.salePrice ?? product.salePrice)} <small>por embalagem</small>
           </div>
-          :
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <p className="product-description">{product.description}</p>
+          <dl className="detail-list">
             <div>
-              <img 
-                className="object-contain h-128 w-full" 
-                src={product.image} 
-                alt="Produto" 
-              />
+              <dt>Unidades por embalagem</dt>
+              <dd>{product.packaging}</dd>
             </div>
-            <div className="flex flex-col justify-between">
-              <div>
-                <div className="flex flex-wrap justify-between items-center mb-2">
-                  <h1 className="text-4xl font-bold text-slate-800 ">{product.name}</h1>
-                  {(user && user.is_superuser) &&
-                  <>
-                    <button
-                      onClick={() => setModalState({ [productId]: true })}
-                      className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-8 rounded mt-2">
-                      Remover Produto
-                    </button>
-                    <Modal
-                      isOpen={modalState[productId] || false}
-                      onClose={() => setModalState({})}
-                      onConfirm={() => handleRemoveProduct(productId)}
-                      title="Confirmação de Remoção"
-                      message={`Tem certeza que deseja remover o produto '${product.name}'?`}
-                      option1="Remover"
-                      option2="Cancelar"
-                    />
-                  </>
-                  }
+            <div>
+              <dt>Categoria</dt>
+              <dd>
+                <Link href={`/products?categoryId=${product.category}`}>{category.name}</Link>
+              </dd>
+            </div>
+            {user.is_superuser && (
+              <>
+                <div>
+                  <dt>Estoque atual</dt>
+                  <dd>{product.currentStockQuantity}</dd>
                 </div>
-                <hr className="border-gray-400 mb-6" />
-                <div className="flex items-baseline mb-6">
-                  {
-                    checkNullObject(promotion) ?
-                      <p className="text-3xl text-green-600 font-bold mr-2">R$ {product.salePrice}</p>
-                      :
-                      <p className="text-3xl text-red-600 font-bold mr-2">
-                        <span className="line-through">R$ {product.salePrice}</span>
-                        <span className="text-green-600 font-bold"> R$ {promotion.salePrice}</span>
-                      </p>
-                  }
-                  <p className="text-lg text-gray-500">por embalagem</p>
+                <div>
+                  <dt>Fornecedor</dt>
+                  <dd>
+                    <Link href={`/suppliers/${supplier.id}`}>{supplier.name}</Link>
+                  </dd>
                 </div>
-                <p className="text-xl text-gray-700 mb-6">
-                  {product.description}
-                </p>
-                <div className="flex items-center mb-6">
-                  <p className="text-xl text-gray-700 font-bold mr-3">Unidades por Embalagem:</p>
-                  <p className="text-xl text-gray-700">{product.packaging}</p>
-                </div>
-                <div className="flex items-center mb-6">
-                  <p className="text-xl text-gray-700 font-bold mr-3">Categoria:</p>
-                  <Link href={`/products?categorytId=${product.category}`} className="text-xl text-blue-600">{category.name}</Link>
-                </div>
-                {(user && user.is_superuser) &&
-                <div className="flex items-center mb-6">
-                  <p className="text-xl text-gray-700 font-bold mr-3">Fornecedor:</p>
-                  <Link href={`/suppliers/${supplier.id}`} className="text-xl text-blue-600">
-                    {supplier.name}
-                  </Link>
-                </div> 
-                }
-              </div>
-              <div className="flex flex-wrap justify-between items-center mt-autos">
-                {(user && !user.is_superuser) && (
-                  user.canPurchase
-                    ? <Link href={`/purchase?productId=${productId}`} className="bg-blue-600 hover:bg-blue-700 text-white text-3xl font-bold py-6 px-16 rounded focus:outline-none focus:shadow-outline">
-                        Comprar
-                      </Link>
-                    : <span className="text-lg font-semibold text-red-600">Você não pode realizar compras até efetuar os pagamentos que estão pendentes.</span>
-                  )
-                }
-                {(user && user.is_superuser) &&
-                <>
-                  <Link href={`/products/update?productId=${productId}`} className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline">
-                    Atualizar Produto
-                  </Link>
-                  <Link href={`/products/register-promotion?productId=${productId}`} className="hover:bg-blue-600 hover:text-white border-2 border-blue-600 text-blue-600 transition duration-200 font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline">
-                    Cadastrar Promoção
-                  </Link>
-                </>
-                }
+              </>
+            )}
+          </dl>
+          {!user.is_superuser && (
+            <div className="detail-actions">
+              {user.canPurchase ? (
+                <Button
+                  href={`/purchase?productId=${product.id}`}
+                  disabled={product.currentStockQuantity <= 0}
+                >
+                  {product.currentStockQuantity > 0 ? 'Comprar produto' : 'Sem estoque'}
+                </Button>
+              ) : (
+                <Alert variant="info">
+                  Regularize os pagamentos pendentes para realizar novas compras.
+                </Alert>
+              )}
+            </div>
+          )}
+          {user.is_superuser && (
+            <div className="detail-admin">
+              <p className="eyebrow">Gerenciar produto</p>
+              <div className="detail-actions">
+                <Button href={`/products/update?productId=${product.id}`} variant="secondary">
+                  Editar produto
+                </Button>
+                <Button
+                  href={`/products/register-promotion?productId=${product.id}`}
+                  variant="secondary"
+                >
+                  Cadastrar promoção
+                </Button>
+                <Button variant="danger" onClick={() => setConfirm(true)}>
+                  Remover produto
+                </Button>
               </div>
             </div>
-          </div>
-        }
-      </BaseLayout>
-    </ProtectedRoute>
+          )}
+        </div>
+      </div>
+      <Modal
+        isOpen={confirm}
+        title="Remover produto"
+        message={`Deseja remover “${product.name}” do catálogo?`}
+        option1="Remover"
+        option2="Cancelar"
+        onClose={() => setConfirm(false)}
+        onConfirm={remove}
+      />
+    </BaseLayout>
   )
 }
+export const getServerSideProps = withSession(async ({ api, params, user }) => {
+  if (!/^\d+$/.test(params.productId)) return { notFound: true }
+  const product = await api(`products/${params.productId}/detail/`)
+  if (!product.visible && !user.is_superuser) return { notFound: true }
+  const [category, promotions, supplier] = await Promise.all([
+    api(`products/categories/${product.category}/detail/`),
+    api('marketing/'),
+    user.is_superuser ? api(`suppliers/${product.supplier}/detail/`) : Promise.resolve(null),
+  ])
+  return {
+    product,
+    category,
+    supplier,
+    promotion: activePromotion(product, promotions, Date.now()) || null,
+  }
+})

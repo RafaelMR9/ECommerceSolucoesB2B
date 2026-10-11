@@ -1,242 +1,118 @@
-import Link from 'next/link'
 import { useState } from 'react'
-import { validateCnpj, validateEmail, validatePassword, validateConfirmPassword } from '@/utils/utils'
-import { registerUser } from '@/services/authService'
 import { useRouter } from 'next/router'
-import ProtectedRoute from '@/components/routes/ProtectedRoute'
-
+import AuthLayout from '@/components/shared/AuthLayout'
+import Field from '@/components/ui/Field'
+import Button from '@/components/ui/Button'
+import Alert from '@/components/ui/Alert'
+import { registerUser } from '@/services/authService'
+import { validateEmail, validateCnpj, validatePassword } from '@/utils/utils'
+import { errorFields } from '@/lib/format'
+import { withSession } from '@/lib/server/page'
+const fields = [
+  ['name', 'Nome da organização', 'text'],
+  ['cnpj', 'CNPJ', 'text'],
+  ['email', 'E-mail', 'email'],
+  ['address', 'Endereço', 'text'],
+  ['username', 'Usuário', 'text'],
+  ['password', 'Senha', 'password'],
+  ['confirmPassword', 'Confirmar senha', 'password'],
+]
 export default function RegisterAccount() {
-  const router = useRouter()
-
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    confirmPassword: "",
-    cnpj: "",
-    email: "",
-    authorizeFature: false,
-    address: "",
-    name: ""
-  })
-
-  const [formErrors, setFormErrors] = useState({
-    username: "",
-    email: "",
-    cnpj: "",
-    password: "",
-    confirmPassword: "",
-    address: "",
-    name: ""
-  })
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    const newValue = type === "checkbox" ? checked : value
-    setFormData((prevStateData) => ({
-      ...prevStateData,
-      [name]: newValue,
-    }))
-
-    setFormErrors((prevErrors) => {
-      const errors = { ...prevErrors }
-      if (name === 'email')
-        errors.email = ''
-      if (name === 'cnpj')
-        errors.cnpj = ''
-      if (name === 'password')
-        errors.password = ''
-      if (name === 'confirmPassword')
-        errors.confirmPassword = ''
-      if (name === 'username')
-        errors.username = ''
-      if (name === 'address')
-        errors.address = ''
-      if (name === 'name')
-        errors.name = ''
-      return errors
-    })
+  const router = useRouter(),
+    [values, setValues] = useState({
+      name: '',
+      cnpj: '',
+      email: '',
+      address: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+      authorizeFature: false,
+    }),
+    [errors, setErrors] = useState({}),
+    [busy, setBusy] = useState(false)
+  function change(e) {
+    const { name, value, checked, type } = e.target
+    setValues((p) => ({ ...p, [name]: type === 'checkbox' ? checked : value }))
+    setErrors((p) => ({ ...p, [name]: '' }))
   }
-
-  const handleSubmit = async (e) => {
+  async function submit(e) {
     e.preventDefault()
-    
-    const errors = { ...formErrors }
-    if (formData.email && !validateEmail(formData.email))
-      errors.email = 'E-Mail inválido.'
-    if (formData.cnpj && !validateCnpj(formData.cnpj))
-      errors.cnpj = 'CNPJ inválido.'
-    if (formData.password && !validatePassword(formData.password))
-      errors.password = 'Senha deve possuir pelo menos 8 caracteres e possuir letras.'
-    if (formData.confirmPassword && !validateConfirmPassword(formData.password, formData.confirmPassword))
-      errors.confirmPassword = 'Senhas não coincidem.'
-
-    if (Object.values(errors).some(value => value !== "")) {
-      setFormErrors(errors)
+    if (busy) return
+    const validation = {}
+    if (!validateEmail(values.email)) validation.email = 'Informe um e-mail válido.'
+    if (!validateCnpj(values.cnpj)) validation.cnpj = 'Use o formato 00.000.000/0000-00.'
+    if (!validatePassword(values.password))
+      validation.password = 'Use pelo menos 8 caracteres, incluindo letras.'
+    if (values.password !== values.confirmPassword)
+      validation.confirmPassword = 'As senhas não coincidem.'
+    if (Object.keys(validation).length) {
+      setErrors(validation)
       return
     }
-
+    setBusy(true)
+    setErrors({})
     try {
-      await registerUser(formData)
-      router.push('/authentication')
-    } catch (e) {
-      const errorObj = JSON.parse(e.message)
-      setFormErrors(errorObj)
+      await registerUser(values)
+      await router.push('/authentication')
+    } catch (error) {
+      setErrors(errorFields(error))
+    } finally {
+      setBusy(false)
     }
   }
-
   return (
-    <ProtectedRoute isAuthPage>
-      <div className="bg-gray-100 min-h-screen">
-        <div className="mx-auto max-w-lg py-20 px-5 sm:px-0">
-          <div className="bg-white shadow-md rounded px-8 py-10">
-            <h1 className="text-3xl text-gray-900 font-bold text-center mb-8">Registrar Conta</h1>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="username">
-                  Usuário
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required
-                  id="username"
-                  name="username"
-                  type="text"
-                  value={formData.username}
-                  onChange={handleChange}
-                />
-                {formErrors.username && <p className="mt-2 text-red-600">{formErrors.username}</p>}
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="password">
-                  Senha
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                <ul className="mt-2 pl-5 list-disc text-sm text-gray-600">
-                  <li>Senha deve possuir no mínimo 8 caracteres.</li>
-                  <li>Senha não deve ser inteiramente numérica.</li>
-                </ul>
-                {formErrors.password && <p className="mt-2 text-red-600">{formErrors.password}</p>}
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="confirmPassword">
-                  Confirmar Senha
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-                {formErrors.confirmPassword && <p className="mt-2 text-red-600">{formErrors.confirmPassword}</p>}
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="name">
-                  Nome
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required
-                  id="name"
-                  name="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-                {formErrors.name && <p className="mt-2 text-red-600">{formErrors.name}</p>}
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="cnpj">
-                  CNPJ
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required
-                  id="cnpj"
-                  name="cnpj"
-                  type="text"
-                  placeholder="XX.XXX.XXX/XXX-XX"
-                  value={formData.cnpj}
-                  onChange={handleChange}
-                />
-                {formErrors.cnpj && <p className="mt-2 text-red-600">{formErrors.cnpj}</p>}
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="email">
-                  E-Mail
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                {formErrors.email && <p className="mt-2 text-red-600">{formErrors.email}</p>}
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">
-                  Pedido de Autorização de Compra Faturada
-                </label>
-                <input
-                  className="mr-2 leading-tight"
-                  id="authorizeFature"
-                  name="authorizeFature"
-                  type="checkbox"
-                  onChange={handleChange}
-                  checked={formData.authorizeFature}
-                />
-                <label className="text-sm" htmlFor="authorizeFature">
-                  Quero poder realizar compras faturadas
-                </label>
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="address">
-                  Endereço
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  required
-                  id="address"
-                  name="address"
-                  type="text"
-                  value={formData.address}
-                  onChange={handleChange}
-                />
-                {formErrors.address && <p className="mt-2 text-red-600">{formErrors.address}</p>}
-              </div>
-              <button
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-8 rounded focus:outline-none focus:shadow-outline"
-                type="submit"
-              >
-                Cadastrar
-              </button>
-            </form>
-          </div>
-          <div className="flex justify-between items-center mt-6 text-gray-600">
-            <hr className="border-gray-600 w-2/6" />
-            <div>Já Possui uma Conta?</div>
-            <hr className="border-gray-600 w-2/6" />
-          </div>
-          <div className="flex justify-center items-center mt-6">
-            <Link href="/authentication" className="bg-blue-600 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded w-full block mx-auto">
-              Clique Aqui para Entrar
-            </Link>
-          </div>
+    <AuthLayout
+      title="Sua organização começa aqui"
+      description="Crie uma conta para realizar compras e acompanhar seus pedidos."
+    >
+      <form onSubmit={submit}>
+        <Alert>{errors.detail || errors.non_field_errors}</Alert>
+        {fields.map(([name, label, type]) => (
+          <Field
+            key={name}
+            name={name}
+            label={label}
+            type={type}
+            value={values[name]}
+            onChange={change}
+            error={errors[name]}
+            autoComplete={
+              type === 'password'
+                ? 'new-password'
+                : name === 'email'
+                  ? 'email'
+                  : name === 'username'
+                    ? 'username'
+                    : 'off'
+            }
+            placeholder={name === 'cnpj' ? '00.000.000/0000-00' : undefined}
+            required
+          />
+        ))}
+        <div className="check-field">
+          <input
+            type="checkbox"
+            name="authorizeFature"
+            id="authorizeFature"
+            checked={values.authorizeFature}
+            onChange={change}
+          />
+          <label htmlFor="authorizeFature">
+            Solicitar análise de crédito para compras faturadas
+          </label>
         </div>
-      </div>
-    </ProtectedRoute>
+        <Button type="submit" className="w-full" disabled={busy}>
+          {busy ? 'Criando conta…' : 'Criar minha conta'}
+        </Button>
+        <div className="auth-links">
+          <span>Já tem uma conta?</span>
+          <Button href="/authentication" variant="ghost">
+            Entrar
+          </Button>
+        </div>
+      </form>
+    </AuthLayout>
   )
 }
+export const getServerSideProps = withSession(undefined, { authPage: true })

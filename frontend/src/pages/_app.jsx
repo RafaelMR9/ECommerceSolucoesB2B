@@ -1,20 +1,42 @@
 import '@/styles/globals.css'
 import Head from 'next/head'
-import { AuthProvider } from '../contexts/authContext';
+import localFont from 'next/font/local'
+import { AuthProvider } from '@/contexts/authContext'
+import BaseLayout from '@/components/shared/BaseLayout'
+import EmptyState from '@/components/ui/EmptyState'
+import Button from '@/components/ui/Button'
 
+const manrope = localFont({
+  src: '../assets/fonts/manrope-latin.ttf',
+  variable: '--font-manrope',
+  weight: '200 800',
+  display: 'swap',
+})
 export default function App({ Component, pageProps }) {
   return (
-    <>
+    <div className={manrope.variable}>
       <Head>
         <title>B2B Soluções</title>
-        <meta name="description" content="Aplicação Web de Vendas" />
+        <meta
+          name="description"
+          content="Produtos, pedidos e atendimento para a rotina da sua empresa."
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta httpEquiv="Content-Language" content="pt-br" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AuthProvider>
-        <Component {...pageProps} />
+      <AuthProvider initialUser={pageProps.initialUser}>
+        {pageProps.serverError ? (
+          <BaseLayout>
+            <EmptyState
+              title="A plataforma está indisponível"
+              description={pageProps.serverError}
+              action={<Button onClick={() => window.location.reload()}>Tentar novamente</Button>}
+            />
+          </BaseLayout>
+        ) : (
+          <Component {...pageProps} />
+        )}
       </AuthProvider>
-    </>
+    </div>
   )
 }

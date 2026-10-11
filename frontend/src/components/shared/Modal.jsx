@@ -1,24 +1,97 @@
-export default function Modal (props) {
-  if (!props.isOpen)
-    return null
+import { useEffect, useId, useRef, useState } from 'react'
+import Button from '@/components/ui/Button'
+import Alert from '@/components/ui/Alert'
 
+export default function Modal({
+  isOpen,
+  title,
+  message,
+  leading,
+  confirm,
+  option1,
+  option2,
+  onConfirm,
+  onClose,
+  children,
+}) {
+  const dialog = useRef(null)
+  const titleId = useId()
+  const [busy, setBusy] = useState(false)
+  const handlers = useRef({ busy, onClose })
+  useEffect(() => {
+    handlers.current = { busy, onClose }
+  }, [busy, onClose])
+  useEffect(() => {
+    if (!isOpen) return
+    const previousFocus = document.activeElement
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    dialog.current?.querySelector('button')?.focus()
+    function handleKey(event) {
+      if (event.key === 'Escape' && !handlers.current.busy) handlers.current.onClose?.()
+      if (event.key === 'Tab') {
+        const buttons = dialog.current?.querySelectorAll(
+          'button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href]'
+        )
+        if (!buttons?.length) {
+          event.preventDefault()
+          return
+        }
+        const first = buttons[0],
+          last = buttons[buttons.length - 1]
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault()
+          last.focus()
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault()
+          first.focus()
+        }
+      }
+    }
+    document.addEventListener('keydown', handleKey)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      document.removeEventListener('keydown', handleKey)
+      previousFocus?.focus()
+    }
+  }, [isOpen])
+  if (!isOpen) return null
+  async function confirmAction() {
+    setBusy(true)
+    try {
+      await onConfirm()
+    } finally {
+      setBusy(false)
+    }
+  }
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-gray-800 rounded-lg px-6 py-6 w-100">
-        <h2 className="text-xl font-bold mb-4 text-white">{props.title}</h2>
-        <p className="font-semibold text-lg text-gray-200">{props.message}</p>
-        {props.leading && <p className="font-semibold mt-4 text-md text-red-400">{props.leading}</p>}
-        <div className="mt-5 flex justify-between">
-          <button className={`${props.confirm ? 'bg-blue-600 hover:bg-blue-700' : 'bg-red-600 hover:bg-red-700'} text-white text-lg py-2 px-4 rounded`} onClick={props.onConfirm}>
-            {props.option1}
-          </button>
-          {props.option2 && 
-            <button className="bg-gray-300 hover:bg-gray-400 text-gray-900 text-lg py-2 px-4 rounded" onClick={props.onClose}>
-              {props.option2}
-            </button>
-          }
+    <div className="modal-overlay">
+      <section
+        ref={dialog}
+        className="modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+      >
+        <h2 id={titleId}>{title}</h2>
+        <p>{message}</p>
+        {leading && (
+          <div className="mt-4">
+            <Alert variant="info">{leading}</Alert>
+          </div>
+        )}
+        {children && <div className="mt-5">{children}</div>}
+        <div className="modal-actions">
+          {option2 && (
+            <Button variant="secondary" disabled={busy} onClick={onClose}>
+              {option2}
+            </Button>
+          )}
+          <Button variant={confirm ? 'primary' : 'danger'} disabled={busy} onClick={confirmAction}>
+            {busy ? 'Aguarde…' : option1}
+          </Button>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

@@ -108,6 +108,16 @@ class ProductUploadContractTests(TestCase):
             self.assertEqual(deleted.status_code, 204)
             self.assertFalse(Product.objects.get(pk=product_id).visible)
 
+    def test_multipart_put_preserves_unsupplied_fields(self):
+        with tempfile.TemporaryDirectory() as directory, override_settings(MEDIA_ROOT=directory):
+            client = APIClient()
+            created = client.post('/api/products/register/', self.data(), format='multipart').data
+            response = client.put(f'/api/products/{created["id"]}/update/', {'description': 'Updated'}, format='multipart')
+            self.assertEqual(response.status_code, 200)
+            for field in ['visible', 'currentStockQuantity', 'packaging', 'image', 'salePrice', 'costPrice']:
+                self.assertEqual(response.data[field], created[field], field)
+            self.assertEqual(response.data['description'], 'Updated')
+
     @override_settings(CLOUDINARY_CLOUD_NAME='test-cloud', STORAGES={
         'default': {'BACKEND': 'api.media.CloudinaryMediaStorage'},
         'staticfiles': {'BACKEND': 'django.contrib.staticfiles.storage.StaticFilesStorage'},

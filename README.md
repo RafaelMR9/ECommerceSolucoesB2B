@@ -27,7 +27,7 @@ O [estado atual da produção](docs/PRESERVACAO_PRODUCAO.md) também foi preserv
 | Django | `DJANGO_ENV=development` | `DJANGO_ENV=production` |
 | Banco | SQLite existente ou PostgreSQL opcional | PostgreSQL via `DATABASE_URL` |
 | Imagens novas | `MEDIA_STORAGE=local` em `backend/media` | `MEDIA_STORAGE=cloudinary` |
-| URL da API no frontend | `NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/api/` | `NEXT_PUBLIC_API_URL=https://HOST/api/` |
+| URL da API no servidor Next.js | `API_URL=http://127.0.0.1:8000/api/` | `API_URL=https://HOST/api/` |
 | Recuperação de senha | E-mail no console por padrão | SMTP e `FRONTEND_URL` configurados |
 
 O backend entrega URLs completas das imagens em ambos os ambientes. Referências Cloudinary antigas também são aceitas; para exibi-las localmente, configure o nome público da conta em `CLOUDINARY_CLOUD_NAME`. As chaves privadas de upload só são necessárias quando se usa o armazenamento Cloudinary.
@@ -68,19 +68,19 @@ Para habilitar a apresentação de portfólio no login, defina `NEXT_PUBLIC_DEMO
 ```powershell
 backend/.venv/Scripts/python.exe backend/manage.py check
 backend/.venv/Scripts/python.exe backend/manage.py makemigrations --check --dry-run
-backend/.venv/Scripts/python.exe backend/manage.py test api
+backend/.venv/Scripts/python.exe backend/manage.py test api orders
 # Disponível nesta máquina, com as cópias preservadas dos bancos:
 backend/.venv/Scripts/python.exe scripts/verify_preservation.py
 backend/.venv/Scripts/python.exe scripts/check_private_files.py
 ```
 
-Para compilar o frontend, defina `NEXT_PUBLIC_API_URL` em `.env.local` ou no ambiente do build e execute `npm run build` em `frontend`.
+Para compilar o frontend, defina `API_URL` em `.env.local` ou no ambiente do build e execute `npm run build` em `frontend`. `NEXT_PUBLIC_API_URL` continua aceito para compatibilidade. A [documentação da interface](docs/INTERFACE.md) descreve a identidade visual, os componentes, SSR e as correções de fluxo.
 
 `.env`, bancos, dumps, backups, uploads locais e bytecode ficam fora do Git. O verificador de arquivos privados examina o índice Git, incluindo o conteúdo realmente preparado para commit; rode novamente depois de preparar todas as alterações. A chave antiga e arquivos privados já existentes no histórico não são removidos retroativamente: rotacione qualquer chave real previamente publicada. Guarde os snapshots e bundles em armazenamento privado.
 
 ## Hospedagem e migração
 
-`backend/.env.production.example` contém somente exemplos, sem credenciais reais. Use o painel do provedor para os valores privados. `DJANGO_ALLOWED_HOSTS` recebe nomes de host sem `https://`; CORS e CSRF recebem origens completas. O frontend precisa ser recompilado quando sua URL da API mudar.
+`backend/.env.production.example` contém somente exemplos, sem credenciais reais. Use o painel do provedor para os valores privados. `DJANGO_ALLOWED_HOSTS` recebe nomes de host sem `https://`; CORS e CSRF recebem origens completas. O Next.js utiliza SSR e API routes: configure a URL no ambiente do servidor e use um runtime Next.js. Publique frontend e backend desta revisão juntos; o carrinho e os pedidos utilizam novos endpoints.
 
 O `Procfile` mantém a opção Gunicorn e `backend/vercel.json` prepara a descoberta Django pela Vercel. Antes de usar o runtime atual da Vercel, atualize e valide a base Python/Django conforme [MIGRACAO.md](docs/MIGRACAO.md): o baseline antigo não foi homologado para o Python 3.12+ da plataforma. Nenhum serviço deve ser encerrado até validar um backup novo da produção, dados reconciliados, imagens e os fluxos publicados no novo ambiente.
 

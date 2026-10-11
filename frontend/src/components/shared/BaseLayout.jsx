@@ -1,15 +1,12 @@
 import Nav from './Nav'
 import Footer from './Footer'
-
-export default function BaseLayout(props) {
+export default function BaseLayout({ children, fullWidth = false }) {
   return (
-    <div className="flex flex-col bg-blue-50 min-h-screen">
+    <div className="site-layout">
       <Nav />
-      <div className="flex-grow">
-        <main className="container mx-auto px-8 py-8">
-          {props.children}
-        </main>
-      </div>
+      <main id="main-content" className={`page-content ${fullWidth ? 'page-content-full' : ''}`}>
+        {children}
+      </main>
       <Footer />
     </div>
   )
