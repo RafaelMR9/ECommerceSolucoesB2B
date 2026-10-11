@@ -40,7 +40,7 @@ export default function Login() {
   }
   return (
     <AuthLayout
-      title="Bom ter você por aqui"
+      title="Bom Ter Você por Aqui"
       description="Entre na sua conta para acompanhar pedidos, encontrar produtos e cuidar da rotina da sua empresa."
     >
       <form onSubmit={submit}>
@@ -64,19 +64,19 @@ export default function Login() {
         />
         <div className="auth-links">
           <span>Seu acesso à plataforma</span>
-          <Link href="/authentication/forgot-password">Esqueci minha senha</Link>
+          <Link href="/authentication/forgot-password">Esqueci Minha Senha</Link>
         </div>
         <Button type="submit" className="w-full" disabled={busy}>
-          {busy ? 'Entrando…' : 'Entrar na conta'}
+          {busy ? 'Entrando…' : 'Entrar na Conta'}
         </Button>
       </form>
       <div className="auth-divider">Sua empresa ainda não tem uma conta?</div>
       <Button href="/authentication/register-account" variant="secondary" className="w-full">
-        Criar conta da organização
+        Criar Conta da Organização
       </Button>
       {process.env.NEXT_PUBLIC_DEMO_MODE === 'true' && (
         <aside className="demo-panel">
-          <h2>Conheça a demonstração</h2>
+          <h2>Conheça a Demonstração</h2>
           <p>
             Uma conta administrativa está disponível para explorar as ferramentas de gestão. Para
             conhecer a experiência de compra, cadastre uma organização.

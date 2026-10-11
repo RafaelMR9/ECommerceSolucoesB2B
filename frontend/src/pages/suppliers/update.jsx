@@ -5,7 +5,7 @@ import { withSession } from '@/lib/server/page'
 export default function Partner(props) {
   return (
     <BaseLayout>
-      <PageHeader title="Editar fornecedor" back={{ href: '/suppliers', label: 'Fornecedores' }} />
+      <PageHeader title="Editar Fornecedor" back={{ href: '/suppliers', label: 'Fornecedores' }} />
       <PartnerForm kind="suppliers" {...props} />
     </BaseLayout>
   )

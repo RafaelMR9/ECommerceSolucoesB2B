@@ -5,7 +5,7 @@ import { withSession } from '@/lib/server/page'
 export default function RegisterCategory(props) {
   return (
     <BaseLayout>
-      <PageHeader title="Cadastrar categoria" back={{ href: '/categories', label: 'Categorias' }} />
+      <PageHeader title="Cadastrar Categoria" back={{ href: '/categories', label: 'Categorias' }} />
       <CategoryForm {...props} />
     </BaseLayout>
   )

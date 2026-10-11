@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Boxes } from 'lucide-react'
 export default function Brand({ compact = false }) {
   return (
-    <Link className="brand" href="/" aria-label="B2B Soluções — início">
+    <Link className="brand" href="/" aria-label="B2B Soluções — Início">
       {!compact && (
         <span className="brand-mark">
           <Boxes size={21} aria-hidden="true" />

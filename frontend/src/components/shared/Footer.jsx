@@ -9,15 +9,15 @@ export default function Footer() {
           <p>Uma plataforma para organizar as compras e a rotina da sua empresa.</p>
         </div>
         <div>
-          <h2>Sua organização</h2>
-          <Link href="/products">Catálogo de produtos</Link>
-          <Link href="/orders">Meus pedidos</Link>
+          <h2>Sua Organização</h2>
+          <Link href="/products">Catálogo de Produtos</Link>
+          <Link href="/orders">Meus Pedidos</Link>
           <Link href="/cart">Carrinho</Link>
         </div>
         <div>
           <h2>Atendimento</h2>
-          <Link href="/support">Suporte por tickets</Link>
-          <Link href="/profile">Minha conta</Link>
+          <Link href="/support">Suporte por Tickets</Link>
+          <Link href="/profile">Minha Conta</Link>
         </div>
       </div>
       <div className="footer-bottom">

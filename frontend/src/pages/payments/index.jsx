@@ -15,13 +15,13 @@ export default function Payments() {
         <FeatureLink
           href="/payments/recurring-payments"
           icon={Repeat2}
-          title="Pagamentos recorrentes"
+          title="Pagamentos Recorrentes"
           description="Controle os pagamentos das compras programadas."
         />
         <FeatureLink
           href="/payments/non-recurring-payments"
           icon={Receipt}
-          title="Pagamentos avulsos"
+          title="Pagamentos Avulsos"
           description="Confira os pagamentos dos pedidos pontuais."
         />
       </div>

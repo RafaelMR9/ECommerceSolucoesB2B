@@ -1,43 +1,54 @@
 @layer components {
   .button {
-    @apply inline-flex items-center justify-center gap-2 text-sm font-semibold transition-colors;
-    min-height: 42px;
+    @apply inline-flex items-center justify-center gap-2 font-semibold transition-colors;
+    min-height: 44px;
+    font-size: var(--text-ui);
+    background: var(--button-background);
+    color: var(--button-color);
     padding: 10px 17px;
     border-radius: 8px;
-    border: 1px solid transparent;
+    border: 1px solid var(--button-border, transparent);
     text-decoration: none;
     white-space: normal;
   }
-  .button-primary {
-    background: var(--accent);
-    color: white;
+  .button > svg {
+    flex-shrink: 0;
   }
-  .button-primary:hover {
-    background: var(--accent-hover);
+  .button:hover:not(:disabled):not([aria-disabled='true']),
+  .button:active:not(:disabled):not([aria-disabled='true']) {
+    background: var(--button-hover-background);
+    color: var(--button-color);
+    border-color: var(--button-hover-border, var(--button-border, transparent));
+  }
+  .button-primary {
+    --button-background: var(--accent);
+    --button-color: white;
+    --button-hover-background: var(--accent-hover);
   }
   .button-secondary {
-    background: var(--surface);
-    color: var(--ink);
-    border-color: var(--border);
-  }
-  .button-secondary:hover {
-    background: var(--accent-soft);
-    border-color: #d7c7ef;
+    --button-background: var(--surface);
+    --button-color: var(--ink);
+    --button-border: var(--border);
+    --button-hover-background: var(--accent-soft);
+    --button-hover-border: #d7c7ef;
   }
   .button-danger {
-    background: var(--danger-soft);
-    color: var(--danger);
-    border-color: #f1cbd3;
-  }
-  .button-danger:hover {
-    background: #ffe3e9;
+    --button-background: var(--danger-soft);
+    --button-color: var(--danger);
+    --button-border: #f1cbd3;
+    --button-hover-background: #ffe3e9;
   }
   .button-ghost {
-    background: transparent;
-    color: var(--accent);
+    --button-background: transparent;
+    --button-color: var(--accent);
+    --button-hover-background: var(--accent-soft);
   }
-  .button-ghost:hover {
-    background: var(--accent-soft);
+  .button-inverse {
+    --button-background: #24172ccc;
+    --button-color: #f3eafd;
+    --button-border: #71588a;
+    --button-hover-background: #3a2550;
+    --button-hover-border: #c9a6ff;
   }
   .button:disabled {
     opacity: 0.55;
@@ -45,16 +56,32 @@
   }
   .button-small {
     padding: 7px 11px;
-    min-height: 36px;
-    font-size: 12px;
+    min-height: 44px;
+    font-size: var(--text-small);
   }
   .page-header {
+    position: relative;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 24px;
     margin-bottom: 28px;
     flex-wrap: wrap;
+  }
+  .page-header > div {
+    min-width: 0;
+  }
+  .page-header:after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 64px;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--accent);
   }
   .page-header h1 {
     font-size: clamp(25px, 3vw, 34px);
@@ -65,7 +92,7 @@
   }
   .page-description {
     color: var(--muted);
-    font-size: 14px;
+    font-size: var(--text-body);
     margin-top: 10px;
     max-width: 650px;
   }
@@ -77,17 +104,17 @@
   }
   .eyebrow {
     color: var(--accent);
-    font-size: 10px;
+    font-size: var(--text-caption);
     font-weight: 800;
-    letter-spacing: 1.8px;
-    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    text-transform: none;
     margin-bottom: 10px;
   }
   .back-link {
     display: inline-flex;
     gap: 6px;
     align-items: center;
-    font-size: 12px;
+    font-size: var(--text-small);
     color: var(--muted);
     margin-bottom: 17px;
   }
@@ -131,7 +158,7 @@
   .field label {
     display: block;
     color: var(--ink);
-    font-size: 13px;
+    font-size: var(--text-ui);
     font-weight: 600;
     margin-bottom: 8px;
   }
@@ -147,12 +174,12 @@
     border: 1px solid #dbd4e5;
     border-radius: 8px;
     padding: 11px 13px;
-    font-size: 14px;
+    font-size: var(--text-body);
     line-height: 1.4;
     transition: border-color 0.15s;
   }
   .field-control::placeholder {
-    color: #9b91a7;
+    color: var(--muted);
   }
   .field-control:hover {
     border-color: #b8a7ce;
@@ -170,7 +197,7 @@
     color: #857b91;
   }
   .field-control[type='file'] {
-    font-size: 12px;
+    font-size: var(--text-small);
   }
   .field-control[type='file']::file-selector-button {
     padding: 5px 9px;
@@ -191,12 +218,12 @@
     padding: 0;
   }
   .field-hint {
-    font-size: 12px;
+    font-size: var(--text-small);
     color: var(--muted);
     margin-top: 7px;
   }
   .field-error {
-    font-size: 12px;
+    font-size: var(--text-small);
     color: var(--danger);
     margin-top: 7px;
     white-space: pre-line;
@@ -214,7 +241,7 @@
     margin-top: 3px;
   }
   .check-field label {
-    font-size: 13px;
+    font-size: var(--text-ui);
     color: var(--ink);
   }
   .alert {
@@ -226,7 +253,7 @@
     color: var(--danger);
     padding: 14px 16px;
     border-radius: 9px;
-    font-size: 13px;
+    font-size: var(--text-ui);
     margin-bottom: 20px;
     white-space: pre-line;
   }
@@ -252,7 +279,7 @@
     text-align: center;
     padding: 52px 22px;
     background: var(--surface);
-    border: 1px dashed #dcd1e8;
+    border: 1px solid #d4bee8;
     border-radius: var(--radius);
     gap: 12px;
   }
@@ -268,7 +295,7 @@
     letter-spacing: -0.4px;
   }
   .empty-state p {
-    font-size: 13px;
+    font-size: var(--text-ui);
     color: var(--muted);
     max-width: 420px;
   }
@@ -286,31 +313,34 @@
   .data-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: var(--text-ui);
     text-align: left;
   }
   .data-table thead {
-    background: #f5f1fa;
+    background: #3c2456;
   }
   .data-table th {
-    font-size: 11px;
+    font-size: var(--text-small);
     font-weight: 700;
-    color: #71617f;
+    color: #fff;
     white-space: nowrap;
     padding: 16px 19px;
     text-transform: none;
     letter-spacing: 0;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid #62447e;
   }
   .data-table td {
     padding: 18px 19px;
     border-bottom: 1px solid #efebf3;
     vertical-align: middle;
     color: var(--ink);
-    font-size: 12px;
+    font-size: var(--text-small);
   }
   .data-table tbody tr:last-child td {
     border-bottom: 0;
+  }
+  .data-table tbody tr:nth-child(even) {
+    background: #faf7fd;
   }
   .data-table tbody tr:hover {
     background: #fcfaff;
@@ -331,7 +361,7 @@
     display: inline-flex;
     align-items: center;
     padding: 5px 9px;
-    font-size: 11px;
+    font-size: var(--text-caption);
     font-weight: 600;
     line-height: 1.2;
     border-radius: 99px;
@@ -377,7 +407,7 @@
     margin-bottom: 12px;
   }
   .modal-dialog p {
-    font-size: 14px;
+    font-size: var(--text-body);
     color: var(--muted);
     line-height: 1.7;
   }
@@ -390,12 +420,14 @@
   }
   .search-form {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     align-items: center;
     min-width: 0;
   }
   .search-form input {
     min-width: 0;
+    flex: 1 1 180px;
   }
   .section-title {
     font-size: 23px;
@@ -411,7 +443,7 @@
     flex-wrap: wrap;
   }
   .section-heading p {
-    font-size: 12px;
+    font-size: var(--text-small);
     color: var(--muted);
     margin-top: 4px;
   }
@@ -421,8 +453,10 @@
     gap: 18px;
   }
   .option-card {
+    min-width: 0;
     background: white;
     border: 1px solid var(--border);
+    border-top: 3px solid #af8fce;
     border-radius: var(--radius);
     padding: 24px;
     display: flex;
@@ -431,12 +465,16 @@
     transition: border-color 0.15s;
   }
   .option-card:hover {
-    border-color: #b899ea;
-    background: #fdfbff;
+    border-color: var(--accent);
+    background: #f8f1ff;
   }
   .option-card > svg {
     color: var(--accent);
     flex-shrink: 0;
+  }
+  .option-card > div {
+    min-width: 0;
+    flex: 1;
   }
   .option-card h2 {
     font-weight: 700;
@@ -444,7 +482,8 @@
     letter-spacing: -0.5px;
   }
   .option-card p {
-    font-size: 13px;
+    overflow-wrap: anywhere;
+    font-size: var(--text-ui);
     color: var(--muted);
     margin-top: 7px;
   }
@@ -455,7 +494,7 @@
   @media (max-width: 640px) {
     .form-grid,
     .option-grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
     .form-panel,
     .panel {

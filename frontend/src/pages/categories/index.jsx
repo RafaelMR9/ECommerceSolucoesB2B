@@ -9,6 +9,7 @@ import CategoryTree from '@/components/categories/CategoryTree'
 import { AuthContext } from '@/contexts/authContext'
 import { getCategories, removeCategory } from '@/services/productService'
 import { errorFields } from '@/lib/format'
+import { categorySearchText } from '@/lib/categories'
 import { withSession } from '@/lib/server/page'
 export default function Categories({ categories: initialCategories, search }) {
   const { user } = useContext(AuthContext),
@@ -26,35 +27,39 @@ export default function Categories({ categories: initialCategories, search }) {
     }
   }
   const matches = categories.filter(
-    (c) => !search || c.name.toLocaleLowerCase('pt-BR').includes(search.toLocaleLowerCase('pt-BR'))
+    (c) => !search || categorySearchText(c.name).includes(categorySearchText(search))
   )
   return (
     <BaseLayout>
       <PageHeader
         title="Categorias"
+        eyebrow="Explore por Assunto"
         description="Explore os produtos por categoria e encontre o que sua organização precisa."
         actions={
-          user.is_superuser && <Button href="/categories/register">Cadastrar categoria</Button>
+          user.is_superuser && <Button href="/categories/register">Cadastrar Categoria</Button>
         }
       />
-      <form action="/categories" className="search-form mb-6">
-        <input
-          className="field-control max-w-md"
-          name="search"
-          type="search"
-          defaultValue={search}
-          aria-label="Buscar categorias"
-          placeholder="Buscar categoria"
-        />
-        <Button type="submit" variant="secondary">
-          Pesquisar
-        </Button>
-        {search && (
-          <Button href="/categories" variant="ghost">
-            Limpar
+      <div className="category-toolbar">
+        <form action="/categories" className="search-form">
+          <input
+            className="field-control max-w-md"
+            name="search"
+            type="search"
+            defaultValue={search}
+            aria-label="Buscar Categorias"
+            placeholder="Buscar Categoria"
+          />
+          <Button type="submit" variant="secondary">
+            Pesquisar
           </Button>
-        )}
-      </form>
+          {search && (
+            <Button href="/categories" variant="ghost">
+              Limpar
+            </Button>
+          )}
+        </form>
+        <p>{categories.length} Categorias · Abra os Grupos para Explorar</p>
+      </div>
       <Alert>{error}</Alert>
       {matches.length ? (
         <CategoryTree
@@ -64,11 +69,11 @@ export default function Categories({ categories: initialCategories, search }) {
           onRemove={setSelected}
         />
       ) : (
-        <EmptyState title="Nenhuma categoria encontrada" />
+        <EmptyState title="Nenhuma Categoria Encontrada" />
       )}
       <Modal
         isOpen={Boolean(selected)}
-        title="Remover categoria"
+        title="Remover Categoria"
         message={`Deseja remover “${selected?.name}”?`}
         leading="As subcategorias também serão removidas. Categorias com produtos relacionados não podem ser removidas."
         option1="Remover"

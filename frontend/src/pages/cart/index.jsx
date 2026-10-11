@@ -33,11 +33,11 @@ export default function Cart({ items, products }) {
   return (
     <BaseLayout>
       <PageHeader
-        title={user.is_superuser ? 'Carrinho de reposição' : 'Meu carrinho'}
+        title={user.is_superuser ? 'Carrinho de Reposição' : 'Meu Carrinho'}
         description="Revise os produtos e as quantidades antes de finalizar."
         actions={
           <Button href={user.is_superuser ? '/restock' : '/products'} variant="secondary">
-            Continuar comprando
+            Continuar Comprando
           </Button>
         }
       />
@@ -46,12 +46,12 @@ export default function Cart({ items, products }) {
         <DataTable
           empty={!items.length}
           emptyMessage="Seu carrinho está vazio"
-          label="Produtos do carrinho"
+          label="Produtos do Carrinho"
         >
           <thead>
             <tr>
               <th>Produto</th>
-              <th>Preço por embalagem</th>
+              <th>Preço por Embalagem</th>
               <th>Quantidade</th>
               <th>Total</th>
               <th>Ação</th>
@@ -82,7 +82,7 @@ export default function Cart({ items, products }) {
           </tbody>
         </DataTable>
         <aside className="panel checkout-summary">
-          <h2>Resumo do pedido</h2>
+          <h2>Resumo do Pedido</h2>
           <p className="text-sm text-gray-500">
             {items.length} {items.length === 1 ? 'item' : 'itens'} no carrinho
           </p>
@@ -91,9 +91,9 @@ export default function Cart({ items, products }) {
             <strong>{money(total)}</strong>
           </div>
           {items.length ? (
-            <Button href="/purchase/data">Continuar para entrega</Button>
+            <Button href="/purchase/data">Continuar para Entrega</Button>
           ) : (
-            <p className="text-xs text-gray-500">Escolha um produto para começar seu pedido.</p>
+            <p className="text-sm text-gray-500">Escolha um produto para começar seu pedido.</p>
           )}
         </aside>
       </div>

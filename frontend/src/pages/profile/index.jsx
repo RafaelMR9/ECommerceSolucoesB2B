@@ -37,7 +37,7 @@ export default function Profile() {
   return (
     <BaseLayout>
       <PageHeader
-        title="Minha conta"
+        title="Minha Conta"
         description="Seus dados e as informações da sua organização."
       />
       <Alert>{error}</Alert>
@@ -84,9 +84,9 @@ export default function Profile() {
           )}
         </dl>
         <div className="profile-actions">
-          <Button href="/profile/update">Editar cadastro</Button>
+          <Button href="/profile/update">Editar Cadastro</Button>
           <Button variant="danger" onClick={logout} disabled={busy}>
-            {busy ? 'Saindo…' : 'Sair da conta'}
+            {busy ? 'Saindo…' : 'Sair da Conta'}
           </Button>
         </div>
       </section>

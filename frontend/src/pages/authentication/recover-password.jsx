@@ -37,7 +37,7 @@ export default function RecoverPassword({ token, resetUserId, valid }) {
   }
   return (
     <AuthLayout
-      title="Crie sua nova senha"
+      title="Crie Sua Nova Senha"
       description="Escolha uma senha segura para voltar a acessar sua conta."
     >
       {valid ? (
@@ -63,14 +63,14 @@ export default function RecoverPassword({ token, resetUserId, valid }) {
             />
           ))}
           <Button type="submit" className="w-full" disabled={busy}>
-            {busy ? 'Atualizando…' : 'Salvar nova senha'}
+            {busy ? 'Atualizando…' : 'Salvar Nova Senha'}
           </Button>
         </form>
       ) : (
         <>
           <Alert>Este link é inválido ou expirou. Solicite um novo e-mail de recuperação.</Alert>
           <Button href="/authentication/forgot-password" className="w-full">
-            Solicitar novo link
+            Solicitar Novo Link
           </Button>
         </>
       )}

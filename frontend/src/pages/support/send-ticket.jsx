@@ -1,3 +1,6 @@
+import { MessagesSquare } from 'lucide-react'
+import FormLayout from '@/components/ui/FormLayout'
+import FormSection from '@/components/ui/FormSection'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import BaseLayout from '@/components/shared/BaseLayout'
@@ -41,39 +44,56 @@ export default function SendTicket({ administrator }) {
   return (
     <BaseLayout>
       <PageHeader
-        title="Abrir solicitação"
+        title="Abrir Solicitação"
         description="Conte o que você precisa. A conversa ficará registrada no seu suporte."
-        back={{ href: '/support', label: 'Meu suporte' }}
+        back={{ href: '/support', label: 'Meu Suporte' }}
       />
-      <form className="form-panel" onSubmit={submit}>
-        <Alert>{errors.detail}</Alert>
-        <Field
-          name="subject"
-          label="Assunto"
-          value={values.subject}
-          onChange={change}
-          error={errors.subject}
-          required
-        />
-        <Field
-          name="content"
-          label="Sua mensagem"
-          as="textarea"
-          rows={6}
-          value={values.content}
-          onChange={change}
-          error={errors.content}
-          required
-        />
-        <div className="form-actions">
-          <Button type="submit" disabled={busy}>
-            {busy ? 'Enviando…' : 'Enviar solicitação'}
-          </Button>
-          <Button href="/support" variant="secondary">
-            Cancelar
-          </Button>
-        </div>
-      </form>
+      <FormLayout
+        icon={MessagesSquare}
+        title="Atendimento Organizado"
+        description="Registre sua dúvida e acompanhe a conversa pelo suporte."
+        points={[
+          { title: 'Assunto', text: 'Resuma o motivo da solicitação.' },
+          { title: 'Mensagem', text: 'Inclua os detalhes necessários para o atendimento.' },
+          { title: 'Histórico', text: 'As respostas ficam reunidas na conversa do ticket.' },
+        ]}
+      >
+        <form className="form-panel" onSubmit={submit}>
+          <FormSection
+            icon={MessagesSquare}
+            title="Sua Solicitação"
+            description="Explique o que você precisa."
+          >
+            <Alert>{errors.detail}</Alert>
+            <Field
+              name="subject"
+              label="Assunto"
+              value={values.subject}
+              onChange={change}
+              error={errors.subject}
+              required
+            />
+            <Field
+              name="content"
+              label="Sua Mensagem"
+              as="textarea"
+              rows={6}
+              value={values.content}
+              onChange={change}
+              error={errors.content}
+              required
+            />
+          </FormSection>
+          <div className="form-actions">
+            <Button type="submit" disabled={busy}>
+              {busy ? 'Enviando…' : 'Enviar Solicitação'}
+            </Button>
+            <Button href="/support" variant="secondary">
+              Cancelar
+            </Button>
+          </div>
+        </form>
+      </FormLayout>
     </BaseLayout>
   )
 }

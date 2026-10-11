@@ -7,7 +7,7 @@ export default function Orders(props) {
   return (
     <BaseLayout>
       <PageHeader
-        title="Pagamentos avulsos das organizações"
+        title="Pagamentos Avulsos das Organizações"
         description="Acompanhe o andamento e os detalhes dos pedidos."
         back={{ href: '/payments', label: 'Pagamentos' }}
       />

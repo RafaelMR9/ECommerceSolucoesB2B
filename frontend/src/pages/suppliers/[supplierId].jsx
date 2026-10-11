@@ -7,17 +7,17 @@ export default function Supplier({ partner, products, promotions, now }) {
   return (
     <BaseLayout>
       <PartnerDetails kind="suppliers" partner={partner}>
-        <h2 className="section-title mb-5">Produtos relacionados</h2>
+        <h2 className="section-title mb-5">Produtos Relacionados</h2>
         <DataTable
           empty={!products.length}
           emptyMessage="Nenhum produto deste fornecedor"
-          label="Produtos do fornecedor"
+          label="Produtos do Fornecedor"
         >
           <thead>
             <tr>
               <th>Produto</th>
-              <th>Preço de venda</th>
-              <th>Em estoque</th>
+              <th>Preço de Venda</th>
+              <th>Em Estoque</th>
             </tr>
           </thead>
           <tbody>

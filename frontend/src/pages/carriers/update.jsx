@@ -6,7 +6,7 @@ export default function Partner(props) {
   return (
     <BaseLayout>
       <PageHeader
-        title="Editar transportadora"
+        title="Editar Transportadora"
         back={{ href: '/carriers', label: 'Transportadoras' }}
       />
       <PartnerForm kind="carriers" {...props} />

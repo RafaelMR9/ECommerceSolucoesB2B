@@ -13,10 +13,10 @@ export default function Support({ tickets }) {
   return (
     <BaseLayout>
       <PageHeader
-        title={user.is_superuser ? 'Atendimento' : 'Meu suporte'}
+        title={user.is_superuser ? 'Atendimento' : 'Meu Suporte'}
         description="Converse com a equipe e acompanhe o histórico das solicitações."
         actions={
-          !user.is_superuser && <Button href="/support/send-ticket">Abrir solicitação</Button>
+          !user.is_superuser && <Button href="/support/send-ticket">Abrir Solicitação</Button>
         }
       />
       {tickets.length ? (
@@ -37,7 +37,7 @@ export default function Support({ tickets }) {
         </div>
       ) : (
         <EmptyState
-          title="Nenhuma solicitação por aqui"
+          title="Nenhuma Solicitação por Aqui"
           description="O histórico das conversas ficará disponível nesta página."
           icon={MessageSquare}
         />

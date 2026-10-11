@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import Button from '@/components/ui/Button'
-import { money } from '@/lib/format'
+import { money, titleCase } from '@/lib/format'
 
 export default function ProductCard({ product, category, promotion }) {
   return (
@@ -15,7 +15,7 @@ export default function ProductCard({ product, category, promotion }) {
           unoptimized
         />
       </Link>
-      <p className="product-card-category">{category?.name || 'Produto'}</p>
+      <p className="product-card-category">{titleCase(category?.name || 'Produto')}</p>
       <h3>
         <Link href={`/products/${product.id}`}>{product.name}</Link>
       </h3>
@@ -26,9 +26,7 @@ export default function ProductCard({ product, category, promotion }) {
       <p className="product-card-pack">
         Embalagem: {product.packaging} {Number(product.packaging) === 1 ? 'unidade' : 'unidades'}
       </p>
-      <Button href={`/products/${product.id}`} variant="secondary">
-        Ver produto
-      </Button>
+      <Button href={`/products/${product.id}`}>Ver Produto</Button>
     </article>
   )
 }

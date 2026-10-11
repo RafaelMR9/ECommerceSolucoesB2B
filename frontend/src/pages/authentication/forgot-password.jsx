@@ -29,7 +29,7 @@ export default function ForgotPassword() {
   }
   return (
     <AuthLayout
-      title="Vamos recuperar seu acesso"
+      title="Vamos Recuperar Seu Acesso"
       description="Informe o e-mail da sua conta para receber as instruções de redefinição."
     >
       <form onSubmit={submit}>
@@ -38,19 +38,19 @@ export default function ForgotPassword() {
         <Field
           name="email"
           type="email"
-          label="E-mail da conta"
+          label="E-mail da Conta"
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
         <Button type="submit" className="w-full" disabled={busy}>
-          {busy ? 'Enviando…' : 'Enviar instruções'}
+          {busy ? 'Enviando…' : 'Enviar Instruções'}
         </Button>
       </form>
       <div className="auth-links">
         <Button href="/authentication" variant="ghost">
-          Voltar para entrar
+          Voltar para Entrar
         </Button>
       </div>
     </AuthLayout>

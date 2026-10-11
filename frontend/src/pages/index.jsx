@@ -22,11 +22,11 @@ export default function Home({ products, categories, promotions, now }) {
       <div className="home-main site-width">
         <div className="section-heading">
           <div>
-            <h2 className="section-title">O que sua empresa precisa?</h2>
+            <h2 className="section-title">O Que Sua Empresa Precisa?</h2>
             <p>Encontre seu próximo essencial</p>
           </div>
           <Link className="button button-ghost" href="/categories">
-            Ver categorias
+            Ver Categorias
             <ArrowUpRight size={15} aria-hidden="true" />
           </Link>
         </div>
@@ -37,15 +37,15 @@ export default function Home({ products, categories, promotions, now }) {
             ))}
           </section>
         ) : (
-          <EmptyState title="Nenhuma categoria cadastrada" />
+          <EmptyState title="Nenhuma Categoria Cadastrada" />
         )}
         <div className="section-heading">
           <div>
-            <h2 className="section-title">Catálogo de produtos</h2>
+            <h2 className="section-title">Catálogo de Produtos</h2>
             <p>Essenciais para sua organização</p>
           </div>
           <Link className="button button-ghost" href="/products">
-            Todos os produtos
+            Todos os Produtos
             <ArrowUpRight size={15} aria-hidden="true" />
           </Link>
         </div>
@@ -61,7 +61,7 @@ export default function Home({ products, categories, promotions, now }) {
             ))}
           </section>
         ) : (
-          <EmptyState title="Nenhum produto cadastrado" />
+          <EmptyState title="Nenhum Produto Cadastrado" />
         )}
         <RecurringBanner />
       </div>

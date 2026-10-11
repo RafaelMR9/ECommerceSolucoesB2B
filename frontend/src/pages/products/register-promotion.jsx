@@ -1,3 +1,6 @@
+import { Tag } from 'lucide-react'
+import FormLayout from '@/components/ui/FormLayout'
+import FormSection from '@/components/ui/FormSection'
 import { useState } from 'react'
 import BaseLayout from '@/components/shared/BaseLayout'
 import PageHeader from '@/components/ui/PageHeader'
@@ -40,50 +43,67 @@ export default function RegisterPromotion({ product }) {
   return (
     <BaseLayout>
       <PageHeader
-        title="Cadastrar promoção"
+        title="Cadastrar Promoção"
         description={`${product.name} · Preço atual: ${money(product.salePrice)}`}
         back={{ href: `/products/${product.id}`, label: product.name }}
       />
-      <form className="form-panel" onSubmit={submit}>
-        <Alert>{errors.detail || errors.non_field_errors}</Alert>
-        <Alert variant="success">{success}</Alert>
-        <div className="form-grid">
-          {[
-            ['startDate', 'Início da promoção'],
-            ['endDate', 'Fim da promoção'],
-          ].map(([name, label]) => (
+      <FormLayout
+        icon={Tag}
+        title="Uma Oferta Bem Definida"
+        description="Configure o preço promocional deste produto durante o período escolhido."
+        points={[
+          { title: 'Período', text: 'Informe o início e o término da promoção.' },
+          { title: 'Preço', text: 'Escolha o valor promocional por embalagem.' },
+          { title: 'Catálogo', text: 'O desconto aparece durante o período de vigência.' },
+        ]}
+      >
+        <form className="form-panel" onSubmit={submit}>
+          <FormSection
+            icon={Tag}
+            title="Condições da Promoção"
+            description="Defina o período e o preço por embalagem."
+          >
+            <Alert>{errors.detail || errors.non_field_errors}</Alert>
+            <Alert variant="success">{success}</Alert>
+            <div className="form-grid">
+              {[
+                ['startDate', 'Início da promoção'],
+                ['endDate', 'Fim da promoção'],
+              ].map(([name, label]) => (
+                <Field
+                  key={name}
+                  name={name}
+                  label={label}
+                  type="datetime-local"
+                  value={values[name]}
+                  onChange={change}
+                  error={errors[name]}
+                  required
+                />
+              ))}
+            </div>
             <Field
-              key={name}
-              name={name}
-              label={label}
-              type="datetime-local"
-              value={values[name]}
+              name="salePrice"
+              label="Preço Promocional (R$)"
+              type="number"
+              min={0.01}
+              step={0.01}
+              value={values.salePrice}
               onChange={change}
-              error={errors[name]}
+              error={errors.salePrice}
               required
             />
-          ))}
-        </div>
-        <Field
-          name="salePrice"
-          label="Preço promocional (R$)"
-          type="number"
-          min={0.01}
-          step={0.01}
-          value={values.salePrice}
-          onChange={change}
-          error={errors.salePrice}
-          required
-        />
-        <div className="form-actions">
-          <Button type="submit" disabled={busy}>
-            {busy ? 'Salvando…' : 'Cadastrar promoção'}
-          </Button>
-          <Button href={`/products/${product.id}`} variant="secondary">
-            Cancelar
-          </Button>
-        </div>
-      </form>
+          </FormSection>
+          <div className="form-actions">
+            <Button type="submit" disabled={busy}>
+              {busy ? 'Salvando…' : 'Cadastrar Promoção'}
+            </Button>
+            <Button href={`/products/${product.id}`} variant="secondary">
+              Cancelar
+            </Button>
+          </div>
+        </form>
+      </FormLayout>
     </BaseLayout>
   )
 }

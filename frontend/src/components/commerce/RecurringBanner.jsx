@@ -5,15 +5,15 @@ export default function RecurringBanner() {
   return (
     <section className="recurring-banner">
       <div className="recurring-banner-copy">
-        <p className="eyebrow">Planeje o próximo pedido</p>
+        <p className="eyebrow">Planeje o Próximo Pedido</p>
         <h2>
-          Sua rotina se repete.
+          Sua Rotina Se Repete.
           <br />
-          Suas compras podem acompanhar.
+          Suas Compras Podem Acompanhar.
         </h2>
         <p>Organize pedidos recorrentes e mantenha os essenciais da sua empresa no planejamento.</p>
         <Button href="/orders">
-          Acessar meus pedidos
+          Acessar Meus Pedidos
           <ArrowRight size={16} aria-hidden="true" />
         </Button>
       </div>

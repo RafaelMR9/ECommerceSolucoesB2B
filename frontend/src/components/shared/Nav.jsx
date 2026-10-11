@@ -9,7 +9,7 @@ const adminLinks = [
   ['/suppliers', 'Fornecedores'],
   ['/carriers', 'Transportadoras'],
   ['/restock', 'Ressuprimento'],
-  ['/analysis', 'Análise de crédito'],
+  ['/analysis', 'Análise de Crédito'],
   ['/payments', 'Pagamentos'],
 ]
 export default function Nav() {
@@ -45,43 +45,43 @@ export default function Nav() {
   return (
     <>
       <a href="#main-content" className="skip-link">
-        Pular para o conteúdo
+        Pular para o Conteúdo
       </a>
       <div className="site-top">
         <div className="site-top-inner site-width">
           <span>
             <Building2 size={12} aria-hidden="true" />
-            Soluções para a rotina da sua empresa
+            Soluções para a Rotina da Sua Empresa
           </span>
-          <span>Compras, pedidos e suporte em um só lugar</span>
-          <span>Projeto de portfólio</span>
+          <span>Compras, Pedidos e Suporte em um Só Lugar</span>
+          <span>Projeto de Portfólio</span>
         </div>
       </div>
       <header className="site-header">
         <div className="site-header-main site-width">
           <Brand />
           <form className="header-search" onSubmit={search} role="search">
-            <Search size={17} aria-hidden="true" />
+            <Search size={20} aria-hidden="true" />
             <input
-              aria-label="Buscar produtos"
+              aria-label="Buscar Produtos"
               type="search"
-              placeholder="O que sua empresa precisa hoje?"
+              placeholder="O Que Sua Empresa Precisa Hoje?"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
-            <button type="submit" aria-label="Pesquisar produtos">
-              <Search size={18} aria-hidden="true" />
+            <button type="submit" aria-label="Pesquisar Produtos">
+              <Search size={22} aria-hidden="true" />
             </button>
           </form>
           <div className="header-actions">
             <Link
               className="header-account"
               href={user ? '/profile' : '/authentication'}
-              aria-label="Minha conta"
+              aria-label="Minha Conta"
             >
               <UserRound size={22} aria-hidden="true" />
               <span className="header-account-copy">
-                <small>{user?.name || user?.username || 'Bem-vindo'}</small>Minha conta
+                <small>{user?.name || user?.username || 'Bem-vindo'}</small>Minha Conta
               </span>
             </Link>
             <Link className="header-cart" href="/cart" aria-label="Carrinho">
@@ -92,7 +92,7 @@ export default function Nav() {
               className="mobile-menu-button"
               aria-expanded={menuOpen}
               aria-controls="site-navigation"
-              aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+              aria-label={menuOpen ? 'Fechar Menu' : 'Abrir Menu'}
               onClick={() => setMenuOpen(!menuOpen)}
             >
               {menuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -102,7 +102,7 @@ export default function Nav() {
         <nav
           id="site-navigation"
           className={`site-nav ${menuOpen ? 'is-open' : ''}`}
-          aria-label="Navegação principal"
+          aria-label="Navegação Principal"
         >
           <div className="site-nav-inner site-width">
             {navLink('/products', 'Catálogo', <LayoutGrid size={15} aria-hidden="true" />)}
@@ -111,7 +111,7 @@ export default function Nav() {
             {navLink('/orders', 'Pedidos')}
             {navLink('/support', 'Suporte')}
             {user?.is_superuser && (
-              <span className="nav-admin text-xs text-purple-300">Área administrativa</span>
+              <span className="nav-admin text-sm text-purple-300">Área Administrativa</span>
             )}
           </div>
         </nav>

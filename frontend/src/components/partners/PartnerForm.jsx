@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { Building2, Truck } from 'lucide-react'
+import FormLayout from '@/components/ui/FormLayout'
+import FormSection from '@/components/ui/FormSection'
 import { useRouter } from 'next/router'
 import Field from '@/components/ui/Field'
 import Button from '@/components/ui/Button'
@@ -51,43 +54,64 @@ export default function PartnerForm({ kind, partner }) {
     }
   }
   return (
-    <form className="form-panel" onSubmit={submit}>
-      <Alert>{errors.detail}</Alert>
-      <Alert variant="success">{success}</Alert>
-      <Field
-        name="name"
-        label="Nome"
-        value={values.name}
-        onChange={change}
-        error={errors.name}
-        required
-      />
-      <Field
-        name="cnpj"
-        label="CNPJ"
-        placeholder="00.000.000/0000-00"
-        value={values.cnpj}
-        onChange={change}
-        error={errors.cnpj}
-        required
-      />
-      <Field
-        name="email"
-        label="E-mail"
-        type="email"
-        value={values.email}
-        onChange={change}
-        error={errors.email}
-        required
-      />
-      <div className="form-actions">
-        <Button type="submit" disabled={busy}>
-          {busy ? 'Salvando…' : partner ? 'Salvar alterações' : 'Cadastrar'}
-        </Button>
-        <Button href={partner ? `/${kind}/${partner.id}` : `/${kind}`} variant="secondary">
-          Cancelar
-        </Button>
-      </div>
-    </form>
+    <FormLayout
+      icon={kind === 'suppliers' ? Building2 : Truck}
+      title={kind === 'suppliers' ? 'Sua Rede de Fornecedores' : 'Sua Rede de Entregas'}
+      description="Mantenha a identificação e o contato dos seus parceiros em um só lugar."
+      points={[
+        { title: 'Identificação', text: 'Use o nome e o CNPJ do parceiro.' },
+        { title: 'Contato', text: 'Informe o e-mail utilizado pela empresa.' },
+        { title: 'Organização', text: 'Consulte o parceiro e seus pedidos na plataforma.' },
+      ]}
+    >
+      <form className="form-panel" onSubmit={submit}>
+        <Alert>{errors.detail}</Alert>
+        <Alert variant="success">{success}</Alert>
+        <FormSection
+          icon={kind === 'suppliers' ? Building2 : Truck}
+          title={kind === 'suppliers' ? 'Dados do Fornecedor' : 'Dados da Transportadora'}
+          description="Preencha os campos obrigatórios indicados por *."
+        >
+          <div className="form-grid">
+            <div className="form-wide">
+              <Field
+                name="name"
+                label="Nome"
+                value={values.name}
+                onChange={change}
+                error={errors.name}
+                required
+              />
+            </div>
+            <Field
+              name="cnpj"
+              label="CNPJ"
+              placeholder="00.000.000/0000-00"
+              value={values.cnpj}
+              onChange={change}
+              error={errors.cnpj}
+              required
+            />
+            <Field
+              name="email"
+              label="E-mail"
+              type="email"
+              value={values.email}
+              onChange={change}
+              error={errors.email}
+              required
+            />
+          </div>
+        </FormSection>
+        <div className="form-actions">
+          <Button type="submit" disabled={busy}>
+            {busy ? 'Salvando…' : partner ? 'Salvar Alterações' : 'Cadastrar'}
+          </Button>
+          <Button href={partner ? `/${kind}/${partner.id}` : `/${kind}`} variant="secondary">
+            Cancelar
+          </Button>
+        </div>
+      </form>
+    </FormLayout>
   )
 }

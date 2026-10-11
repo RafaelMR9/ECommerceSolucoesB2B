@@ -45,7 +45,7 @@ export default function Conversation({ ticket, responses: initialResponses }) {
       <div className="conversation">
         <section
           className="overflow-hidden rounded-xl border border-gray-200"
-          aria-label="Histórico da conversa"
+          aria-label="Histórico da Conversa"
         >
           {[ticket, ...responses].map((response) => (
             <article
@@ -71,7 +71,7 @@ export default function Conversation({ ticket, responses: initialResponses }) {
           <Field
             as="textarea"
             name="response"
-            label="Sua resposta"
+            label="Sua Resposta"
             rows={4}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -79,7 +79,7 @@ export default function Conversation({ ticket, responses: initialResponses }) {
             required
           />
           <Button type="submit" disabled={busy}>
-            {busy ? 'Enviando…' : 'Enviar resposta'}
+            {busy ? 'Enviando…' : 'Enviar Resposta'}
           </Button>
         </form>
       </div>

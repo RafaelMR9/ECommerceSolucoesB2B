@@ -20,11 +20,11 @@ export default function AuthLayout({ title, description, children }) {
           />
           <Brand />
           <div className="auth-story-copy">
-            <p className="eyebrow">Seu negócio em movimento</p>
+            <p className="eyebrow">Seu Negócio em Movimento</p>
             <h2>
-              Equipe sua rotina.
+              Equipe Sua Rotina.
               <br />
-              Simplifique suas compras.
+              Simplifique Suas Compras.
             </h2>
             <p>Produtos, pedidos recorrentes e atendimento para a rotina da sua organização.</p>
           </div>

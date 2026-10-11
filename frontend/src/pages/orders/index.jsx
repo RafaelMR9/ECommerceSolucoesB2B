@@ -13,12 +13,12 @@ export default function Orders() {
         title="Pedidos"
         description="Acompanhe as compras da sua organização e planeje os próximos passos."
       />
-      {user.is_superuser && <h2 className="section-title mb-5">Organizações compradoras</h2>}
+      {user.is_superuser && <h2 className="section-title mb-5">Organizações Compradoras</h2>}
       <div className="option-grid">
         <FeatureLink
           href={user.is_superuser ? '/orders/adm-recurring-orders' : '/orders/recurring-orders'}
           icon={Repeat2}
-          title="Pedidos recorrentes"
+          title="Pedidos Recorrentes"
           description="Compras programadas para acompanhar sua rotina."
         />
         <FeatureLink
@@ -26,7 +26,7 @@ export default function Orders() {
             user.is_superuser ? '/orders/adm-non-recurring-orders' : '/orders/non-recurring-orders'
           }
           icon={Package}
-          title="Pedidos avulsos"
+          title="Pedidos Avulsos"
           description="Compras pontuais e o andamento de cada entrega."
         />
       </div>
@@ -37,13 +37,13 @@ export default function Orders() {
             <FeatureLink
               href="/orders/suppliers-recurring-orders"
               icon={Repeat2}
-              title="Reposição recorrente"
+              title="Reposição Recorrente"
               description="Acompanhe as entregas programadas dos fornecedores."
             />
             <FeatureLink
               href="/orders/suppliers-non-recurring-orders"
               icon={Truck}
-              title="Reposição avulsa"
+              title="Reposição Avulsa"
               description="Recebimentos pontuais para abastecer o catálogo."
             />
           </div>

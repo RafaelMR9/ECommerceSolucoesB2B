@@ -75,8 +75,8 @@ export default function OrdersTable({
             {recurring ? (
               <>
                 <th>Recorrência</th>
-                <th>Próxima entrega</th>
-                <th>Última entrega</th>
+                <th>Próxima Entrega</th>
+                <th>Última Entrega</th>
               </>
             ) : (
               <>
@@ -99,7 +99,7 @@ export default function OrdersTable({
                 {(admin || supplier) && (
                   <td>
                     <p>{company?.name || company?.username || 'Cadastro indisponível'}</p>
-                    {company?.cnpj && <p className="text-xs text-gray-500 mt-1">{company.cnpj}</p>}
+                    {company?.cnpj && <p className="text-sm text-gray-500 mt-1">{company.cnpj}</p>}
                   </td>
                 )}
                 <td>{date(order.orderDate, true)}</td>
