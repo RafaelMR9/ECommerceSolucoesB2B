@@ -1,7 +1,8 @@
-export const checkNullObject = (obj) => Object.values(obj).every(value => value === null)
+export const checkNullObject = (obj) =>
+  obj == null || Object.values(obj).every((value) => value === null)
 
 export const validateEmail = (email) => {
-  const re = /^[\w-\.]+@([\w-]+\.)+com(\.br)?$/
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return re.test(email)
 }
 

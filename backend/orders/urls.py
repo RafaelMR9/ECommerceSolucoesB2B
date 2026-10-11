@@ -1,4 +1,6 @@
 from django.urls import path
+from .checkout import AddCartItemView, RemoveCartItemView, CheckoutView
+from .actions import OrderActionView
 from .views import (
   SalesOrderCreateView, CheckOpenSalesOrderView, ItemSalesOrderCreateView, ProductsInSalesOrderListView, SalesOrderListView,
   UserSalesOrderListView, ItemSalesOrderDestroyView, SalesOrderUpdateView, 
@@ -15,6 +17,11 @@ from .views import (
 app_name = 'orders'
 
 urlpatterns = [
+    path('salesOrder/<int:pk>/action/', OrderActionView.as_view(), {'kind': 'sales'}),
+    path('supplierOrder/<int:pk>/action/', OrderActionView.as_view(), {'kind': 'supplier'}),
+    path('cart/add/', AddCartItemView.as_view()),
+    path('cart/items/<int:pk>/delete/', RemoveCartItemView.as_view()),
+    path('checkout/', CheckoutView.as_view()),
     path('salesOrder/', SalesOrderListView.as_view()),
     path('salesOrder/register/', SalesOrderCreateView.as_view()),
     path('salesOrder/<int:pk>/update/', SalesOrderUpdateView.as_view()),

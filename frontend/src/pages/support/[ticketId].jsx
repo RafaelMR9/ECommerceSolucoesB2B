@@ -1,155 +1,95 @@
-import Link from "next/link"
-import BaseLayout from "@/components/shared/BaseLayout"
-import ProtectedRoute from "@/components/routes/ProtectedRoute"
-import { useState, useEffect, useContext } from "react"
-import { AuthContext } from "@/contexts/authContext"
-import { useRouter } from "next/router"
-import { getTicket, getTicketResponses, registerTicket } from "@/services/supportService"
-import { getAdministrator } from "@/services/userService"
-
-export default function AnswerTicket() {
-
-  const router = useRouter()
-  const { user } = useContext(AuthContext)
-  const { ticketId } = router.query
-  const [ticket, setTicket] = useState({})
-  const [administrador, setAdministrador] = useState({})
-  const [responses, setResponses] = useState([])
-  const [newResponse, setNewResponse] = useState("")
-  const [errorMessage, setErrorMessage] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const fetchTicket = async () => {
-      try {
-        setIsLoading(true)
-
-        const ticket = await getTicket(ticketId)
-        const responses = await getTicketResponses(ticketId)
-        const administrator = await getAdministrator()
-        responses.unshift(ticket)
-
-        setResponses(responses)
-        setTicket(ticket)
-        setAdministrador(administrator)
-        setIsLoading(false)
-
-      } catch (e) {
-        setIsLoading(false)
-        router.push("/support")
-      }
-    }
-
-    fetchTicket()
-  }, [])
-
-  const handleChange = (e) => {
-    setNewResponse(e.target.value)
-    setErrorMessage("")
-  }
-
-  const handleSubmit = async (e) => {
+import { useContext, useState } from 'react'
+import BaseLayout from '@/components/shared/BaseLayout'
+import PageHeader from '@/components/ui/PageHeader'
+import Button from '@/components/ui/Button'
+import Field from '@/components/ui/Field'
+import Alert from '@/components/ui/Alert'
+import { AuthContext } from '@/contexts/authContext'
+import { registerTicket, getTicketResponses } from '@/services/supportService'
+import { date, errorFields } from '@/lib/format'
+import { withSession } from '@/lib/server/page'
+export default function Conversation({ ticket, responses: initialResponses }) {
+  const { user } = useContext(AuthContext),
+    [responses, setResponses] = useState(initialResponses),
+    [message, setMessage] = useState(''),
+    [error, setError] = useState(''),
+    [busy, setBusy] = useState(false)
+  async function submit(e) {
     e.preventDefault()
-
-    if (errorMessage)
-      return
-
+    if (busy) return
+    setBusy(true)
+    setError('')
     try {
       await registerTicket({
-        originalTicket: ticketId,
         sender: user.id,
-        recipient: ticket.sender,
+        recipient: ticket.sender === user.id ? ticket.recipient : ticket.sender,
         subject: null,
-        content: newResponse,
-        answer: ticketId
+        content: message,
+        answer: ticket.id,
       })
-
-      const responses = await getTicketResponses(ticketId)
-      responses.unshift(ticket)
-      setResponses(responses)
-      setNewResponse("")
+      setResponses(await getTicketResponses(ticket.id))
+      setMessage('')
     } catch (e) {
-      const errorObj = JSON.parse(e.message)
-      setErrorMessage(errorObj.content)
+      setError(Object.values(errorFields(e)).join(' '))
+    } finally {
+      setBusy(false)
     }
-    return
   }
   return (
-    <ProtectedRoute isProtected>
-      <BaseLayout>
-        {isLoading ?
-          <div className="flex items-center justify-center mt-32">
-            <div className={`animate-spin ease-linear rounded-full h-32 w-32 pt-14 border-8 border-l-gray-400 border-r-gray-400 border-b-gray-400 border-t-indigo-900`} />
-          </div>
-          :
-          <>
-            <h1 className="text-4xl font-bold text-slate-800 text-center lg:text-start mb-8">Suporte - Conversa</h1>
-            <div className="bg-white shadow overflow-hidden rounded-lg">
-              <div className="px-4 py-5">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">
-                  {ticket.subject}
-                </h3>
-                <p className="mt-1 max-w-2xl text-md text-gray-500">
-                  {new Date(ticket.dateHour).toLocaleString()}
-                </p>
-              </div>
-              <div className="border-t border-gray-200 px-4 py-5">
-                <dl className="sm:divide-y sm:divide-gray-200">
-                  {responses.map((response, idx) => {
-                    return (
-                      <div
-                        key={response.id}
-                        className={`px-4 py-5 sm:grid sm:grid-cols-3 ${idx % 2 === 0 ? "bg-gray-100" : ""
-                          }`}
-                      >
-                        <dt className="text-md font-medium text-gray-700">
-                          {response.sender === user.id ? "Você" : administrador.id === response.sender ? "Administrador" : "Organização Compradora"}
-                        </dt>
-                        <p className="text-sm text-gray-600">
-                          {new Date(response.dateHour).toLocaleString()}
-                        </p>
-                        <dd className="mt-1 text-sm text-gray-900">
-                          {response.content}
-                        </dd>
-                      </div>
-                    )
-                  })}
-                </dl>
-              </div>
-            </div>
-            <form onSubmit={handleSubmit} className="mt-4">
-              <div className="mb-2">
-                <label className="block text-gray-700 font-bold mb-2" htmlFor="newResponse">
-                  Resposta
-                </label>
-                <textarea
-                  rows={4}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="newResponse"
-                  name="newResponse"
-                  value={newResponse}
-                  onChange={handleChange}
-                  placeholder="Digite sua Resposta..."
-                  required
-                ></textarea>
-              </div>
-              {errorMessage && <p className="mb-2 text-red-600">{errorMessage}</p>}
-              <button
-                className="w-full lg:w-auto px-6 py-3 rounded-md shadow-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
-                type="submit"
-              >
-                Enviar
-              </button>
-            </form>
-            <hr className="mt-6 border border-gray-400" />
-            <div className="mt-8 text-center">
-              <p className="text-gray-700">
-                Não quer Responder ou Resolvemos sua Questão? <Link href="/support" className="text-blue-600">Voltar para a Página de Suporte</Link>.
-              </p>
-            </div>
-          </>
-        }
-      </BaseLayout>
-    </ProtectedRoute>
+    <BaseLayout>
+      <PageHeader
+        title={ticket.subject}
+        description={`Solicitação #${ticket.id} · Aberta em ${date(ticket.dateHour, true)}`}
+        back={{ href: '/support', label: 'Atendimento' }}
+      />
+      <div className="conversation">
+        <section
+          className="overflow-hidden rounded-xl border border-gray-200"
+          aria-label="Histórico da conversa"
+        >
+          {[ticket, ...responses].map((response) => (
+            <article
+              key={response.id}
+              className={`conversation-message ${response.sender === user.id ? 'is-mine' : ''}`}
+            >
+              <header className="conversation-meta">
+                <strong>
+                  {response.sender === user.id
+                    ? 'Você'
+                    : user.is_superuser
+                      ? 'Organização compradora'
+                      : 'Atendimento'}
+                </strong>
+                <time dateTime={response.dateHour}>{date(response.dateHour, true)}</time>
+              </header>
+              <p>{response.content}</p>
+            </article>
+          ))}
+        </section>
+        <form className="form-panel conversation-reply" onSubmit={submit}>
+          <Alert>{error}</Alert>
+          <Field
+            as="textarea"
+            name="response"
+            label="Sua resposta"
+            rows={4}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Digite sua mensagem…"
+            required
+          />
+          <Button type="submit" disabled={busy}>
+            {busy ? 'Enviando…' : 'Enviar resposta'}
+          </Button>
+        </form>
+      </div>
+    </BaseLayout>
   )
 }
+export const getServerSideProps = withSession(async ({ api, params, user }) => {
+  if (!/^\d+$/.test(params.ticketId)) return { notFound: true }
+  const ticket = await api(`support/${params.ticketId}/detail/`)
+  if (!user.is_superuser && ticket.sender !== user.id && ticket.recipient !== user.id)
+    return { notFound: true }
+  return { ticket, responses: await api(`support/${params.ticketId}/responses/`) }
+})

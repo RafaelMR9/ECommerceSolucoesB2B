@@ -83,6 +83,12 @@ class ProductUpdateView(generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    def update(self, request, *args, **kwargs):
+        # Existing clients send subsets via PUT; omitted fields must be preserved,
+        # especially BooleanField values in multipart requests.
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+
 class ProductDestroyView(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer

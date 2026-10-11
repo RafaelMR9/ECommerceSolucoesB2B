@@ -1,0 +1,227 @@
+import assert from 'node:assert/strict'
+
+const origin = process.env.UI_TEST_URL || 'http://127.0.0.1:3007'
+const api = process.env.UI_TEST_API_URL || 'http://127.0.0.1:8010/api/'
+for (const address of [origin, api])
+  assert.ok(
+    ['localhost', '127.0.0.1'].includes(new URL(address).hostname),
+    'Use an isolated local database for these checks.'
+  )
+const users = {}
+async function login(username) {
+  const response = await fetch(`${origin}/api/session`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password: 'test-password' }),
+  })
+  assert.equal(response.status, 200, 'Fixture login must succeed')
+  const data = await response.json()
+  assert.ok(data.user)
+  users[username] = data.user
+  assert.ok(
+    !data.access && !data.refresh && !data.user.password,
+    'Credentials must not be sent in the session response'
+  )
+  const cookies = response.headers.getSetCookie()
+  assert.ok(cookies.every((c) => c.includes('HttpOnly') && c.includes('SameSite=Lax')))
+  return cookies.map((c) => c.split(';')[0]).join('; ')
+}
+const [products, categories, suppliers, carriers, tickets] = await Promise.all(
+  ['products/', 'products/categories/', 'suppliers/', 'carriers/', 'support/'].map(async (path) =>
+    (await fetch(api + path)).json()
+  )
+)
+const product = products[0],
+  category = categories[0],
+  supplier = suppliers[0],
+  carrier = carriers[0],
+  ticket = tickets[0]
+const common = [
+  '/',
+  '/products',
+  '/products?fetchProduct=not-a-product',
+  '/categories',
+  '/orders',
+  '/orders/recurring-orders',
+  '/orders/non-recurring-orders',
+  '/profile',
+  '/profile/update',
+  '/support',
+  '/support/send-ticket',
+  '/cart',
+]
+const administrative = [
+  '/products/register',
+  '/categories/register',
+  '/suppliers',
+  '/suppliers/register',
+  '/carriers',
+  '/carriers/register',
+  '/restock',
+  '/analysis',
+  '/payments',
+  '/payments/recurring-payments',
+  '/payments/non-recurring-payments',
+  '/orders/adm-recurring-orders',
+  '/orders/adm-non-recurring-orders',
+  '/orders/suppliers-recurring-orders',
+  '/orders/suppliers-non-recurring-orders',
+]
+if (product) {
+  common.push(`/products/${product.id}`, `/purchase?productId=${product.id}`)
+  administrative.push(
+    `/products/update?productId=${product.id}`,
+    `/products/register-promotion?productId=${product.id}`
+  )
+}
+if (category) administrative.push(`/categories/update?categoryId=${category.id}`)
+if (supplier)
+  administrative.push(`/suppliers/${supplier.id}`, `/suppliers/update?supplierId=${supplier.id}`)
+if (carrier)
+  administrative.push(`/carriers/${carrier.id}`, `/carriers/update?carrierId=${carrier.id}`)
+if (ticket) administrative.push(`/support/${ticket.id}`)
+let checked = 0
+const sessions = {}
+for (const username of ['ui-review-admin', 'ui-review-buyer']) {
+  const cookie = await login(username),
+    admin = username.endsWith('admin')
+  sessions[admin ? 'admin' : 'buyer'] = cookie
+  for (const path of admin ? [...common, ...administrative] : common) {
+    const response = await fetch(origin + path, { headers: { Cookie: cookie } })
+    assert.equal(response.status, 200, `${username}: ${path}`)
+    const html = await response.text()
+    assert.ok(html.includes('B2B'), 'Page shell must render on the server')
+    assert.ok(!html.includes('A plataforma está indisponível'), path)
+    assert.ok(!html.includes('"password":'), `No password/hash in SSR data: ${path}`)
+    checked++
+  }
+  if (!admin)
+    for (const path of administrative) {
+      const response = await fetch(origin + path, {
+        headers: { Cookie: cookie },
+        redirect: 'manual',
+      })
+      assert.equal(
+        response.status,
+        path.startsWith('/support/')
+          ? ticket.sender === users[username].id || ticket.recipient === users[username].id
+            ? 200
+            : 404
+          : 307,
+        `Buyer permissions for ${path}`
+      )
+      checked++
+    }
+  const detail = await fetch(origin + `/products/${product.id}`, { headers: { Cookie: cookie } })
+  assert.ok(
+    (await detail.text()).includes(product.name),
+    'Product content must exist before JavaScript executes'
+  )
+}
+for (const path of [
+  '/authentication',
+  '/authentication/register-account',
+  '/authentication/forgot-password',
+  '/authentication/recover-password?token=invalid',
+]) {
+  const response = await fetch(origin + path)
+  assert.equal(response.status, 200, path)
+  checked++
+}
+const anonymous = await fetch(origin + '/profile', { redirect: 'manual' })
+assert.equal(anonymous.status, 307)
+const forged = await fetch(origin + '/profile', {
+  headers: { Cookie: 'b2b_access=invalid' },
+  redirect: 'manual',
+})
+assert.equal(forged.status, 307)
+const crossSite = await fetch(origin + '/api/session', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json', Origin: 'https://unrelated.example' },
+  body: '{}',
+})
+assert.equal(crossSite.status, 403)
+async function mutation(path, data, { admin = false, method = 'POST' } = {}) {
+  const multipart = data instanceof FormData
+  return fetch(`${origin}/api/backend/${path}`, {
+    method,
+    redirect: 'manual',
+    headers: {
+      Cookie: sessions[admin ? 'admin' : 'buyer'],
+      ...(multipart ? {} : { 'Content-Type': 'application/json' }),
+    },
+    ...(data === undefined ? {} : { body: multipart ? data : JSON.stringify(data) }),
+  })
+}
+const stocked = products.find((p) => p.currentStockQuantity > 0)
+assert.ok(stocked, 'The local fixture database needs a product in stock')
+const readProduct = async () => (await fetch(`${api}products/${stocked.id}/detail/`)).json()
+const original = await readProduct()
+assert.equal((await mutation('orders/cart/add/', { product: stocked.id, quantity: 0 })).status, 400)
+let added = await mutation('orders/cart/add/', { product: stocked.id, quantity: 1 })
+assert.equal(added.status, 201)
+const item = await added.json()
+assert.equal((await readProduct()).currentStockQuantity, original.currentStockQuantity - 1)
+for (const path of ['/cart', '/purchase/data']) {
+  const response = await fetch(origin + path, { headers: { Cookie: sessions.buyer } })
+  assert.equal(response.status, 200)
+  assert.ok(
+    (await response.text()).includes(stocked.name),
+    'Cart and checkout render their products on the server'
+  )
+}
+assert.equal(
+  (await mutation(`orders/cart/items/${item.id}/delete/`, undefined, { method: 'DELETE' })).status,
+  204
+)
+assert.equal((await readProduct()).currentStockQuantity, original.currentStockQuantity)
+added = await mutation('orders/cart/add/', { product: stocked.id, quantity: 1 })
+assert.equal(added.status, 201)
+const completed = await mutation('orders/checkout/', {
+  deliveryDate: null,
+  deliveryFrequency: null,
+  faturedPayment: false,
+})
+assert.equal(completed.status, 200)
+const { order } = await completed.json()
+assert.equal(
+  (await mutation(`orders/salesOrder/${order}/action/`, { action: 'prepare' })).status,
+  403
+)
+assert.equal(
+  (await mutation(`orders/salesOrder/${order}/action/`, { action: 'cancel' })).status,
+  200
+)
+assert.equal(
+  (await mutation(`orders/salesOrder/${order}/action/`, { action: 'cancel' })).status,
+  400
+)
+assert.equal((await readProduct()).currentStockQuantity, original.currentStockQuantity)
+const form = new FormData()
+form.set('description', original.description)
+const updated = await mutation(`products/${stocked.id}/update/`, form, {
+  admin: true,
+  method: 'PUT',
+})
+assert.equal(updated.status, 200)
+const updatedProduct = await updated.json()
+assert.equal(
+  updatedProduct.description,
+  original.description,
+  'Multipart boundaries must not enter the product description'
+)
+assert.equal(
+  updatedProduct.visible,
+  original.visible,
+  'An omitted multipart boolean must not hide the product'
+)
+assert.equal(updatedProduct.currentStockQuantity, original.currentStockQuantity)
+assert.equal(updatedProduct.packaging, original.packaging)
+assert.equal(
+  updatedProduct.image,
+  original.image,
+  'Editing without uploading a replacement preserves the product image'
+)
+console.log(
+  `Passed ${checked} page/permission checks, SSR content, HttpOnly cookies, invalid session, cross-site rejection, cart/checkout/cancellation and multipart image preservation.`
+)
