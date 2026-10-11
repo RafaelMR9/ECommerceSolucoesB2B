@@ -14,21 +14,47 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import timedelta
+from django.core.exceptions import ImproperlyConfigured
+import dj_database_url
+import cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Hosting variables take precedence over local files; paths do not depend on cwd.
+load_dotenv(BASE_DIR / '.env.local')
+load_dotenv(BASE_DIR / '.env')
+
+def env_bool(name, default=False):
+    return os.getenv(name, str(default)).lower() in ('true', '1', 'yes')
+
+def env_list(name, default=''):
+    return [value.strip() for value in os.getenv(name, default).split(',') if value.strip()]
+
+DJANGO_ENV = os.getenv('DJANGO_ENV', 'development')
+if DJANGO_ENV not in ('development', 'production'):
+    raise ImproperlyConfigured('DJANGO_ENV must be development or production.')
+IS_PRODUCTION = DJANGO_ENV == 'production'
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:3000').rstrip('/')
+if IS_PRODUCTION and not FRONTEND_URL.startswith('https://'):
+    raise ImproperlyConfigured('Production requires an HTTPS FRONTEND_URL.')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l#rqu&8)ualmjr@5lvf8%khoc(5g$8yxt1h8m0zzd5cti+6dlf'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY') or os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    raise ImproperlyConfigured('Set DJANGO_SECRET_KEY in backend/.env or the hosting environment.')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env_bool('DJANGO_DEBUG', not IS_PRODUCTION)
+if IS_PRODUCTION and DEBUG:
+    raise ImproperlyConfigured('DJANGO_DEBUG must be false in production.')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env_list('DJANGO_ALLOWED_HOSTS', '' if IS_PRODUCTION else 'localhost,127.0.0.1,[::1]')
+if IS_PRODUCTION and (not ALLOWED_HOSTS or '*' in ALLOWED_HOSTS):
+    raise ImproperlyConfigured('Set explicit DJANGO_ALLOWED_HOSTS (hostnames without https://).')
 
 
 # Application definition
@@ -50,12 +76,14 @@ INSTALLED_APPS = [
     'support',
     'orders',
     'suppliers',
-    'carriers'
+    'carriers',
+    'cloudinary'
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,9 +115,8 @@ WSGI_APPLICATION = 'api.wsgi.application'
 
 # CORS Settings
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ALLOWED_ORIGINS = env_list('CORS_ALLOWED_ORIGINS', FRONTEND_URL)
+CSRF_TRUSTED_ORIGINS = env_list('CSRF_TRUSTED_ORIGINS', FRONTEND_URL)
 
 
 # Rest Framework Settings
@@ -106,7 +133,7 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'AUTH_HEADER_TYPES': ('Bearer'),
+    'AUTH_HEADER_TYPES': ('Bearer',),
     'BLACKLIST_AFTER_ROTATION': True,
 }
 
@@ -119,12 +146,23 @@ AUTH_USER_MODEL = 'core.User'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+DATABASE_URL = os.getenv('DATABASE_URL', '')
+if DATABASE_URL:
+    DATABASES = {'default': dj_database_url.parse(
+        DATABASE_URL, conn_max_age=int(os.getenv('DB_CONN_MAX_AGE', '0')),
+        conn_health_checks=True, ssl_require=IS_PRODUCTION,
+    )}
+    DATABASES['default']['DISABLE_SERVER_SIDE_CURSORS'] = True
+    if IS_PRODUCTION and DATABASES['default']['ENGINE'] != 'django.db.backends.postgresql':
+        raise ImproperlyConfigured('Production requires PostgreSQL DATABASE_URL.')
+else:
+    if IS_PRODUCTION:
+        raise ImproperlyConfigured('Production requires DATABASE_URL; SQLite is local only.')
+    DATABASES = {'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+        'NAME': os.getenv('SQLITE_PATH', str(BASE_DIR / 'db.sqlite3')),
+    }}
+
 
 
 # Password validation
@@ -155,7 +193,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -167,11 +206,43 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-# E-Mail Configuration
-load_dotenv()
+# Image field and API contract stay identical in both environments.
+MEDIA_STORAGE = os.getenv('MEDIA_STORAGE', 'cloudinary' if IS_PRODUCTION else 'local')
+if MEDIA_STORAGE not in ('local', 'cloudinary'):
+    raise ImproperlyConfigured('MEDIA_STORAGE must be local or cloudinary.')
+if IS_PRODUCTION and MEDIA_STORAGE != 'cloudinary':
+    raise ImproperlyConfigured('Production requires Cloudinary for persistent uploads.')
+CLOUDINARY_CLOUD_NAME = os.getenv('CLOUDINARY_CLOUD_NAME', '')
+cloudinary.config(
+    cloud_name=CLOUDINARY_CLOUD_NAME,
+    api_key=os.getenv('CLOUDINARY_API_KEY', ''),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET', ''),
+    secure=True,
+)
+if MEDIA_STORAGE == 'cloudinary' and not all((
+    CLOUDINARY_CLOUD_NAME, os.getenv('CLOUDINARY_API_KEY'), os.getenv('CLOUDINARY_API_SECRET')
+)):
+    raise ImproperlyConfigured('Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET.')
+STORAGES = {
+    'default': {'BACKEND': 'api.media.CloudinaryMediaStorage' if MEDIA_STORAGE == 'cloudinary' else 'api.media.LocalMediaStorage'},
+    'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'},
+}
 
-EMAIL_HOST = 'smtp.outlook.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv('EMAIL_ADDRESS')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
-EMAIL_USE_TLS = True
+# Console email lets development exercise password recovery without SMTP credentials.
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.smtp.EmailBackend' if IS_PRODUCTION else 'django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.outlook.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', os.getenv('EMAIL_ADDRESS', ''))
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', os.getenv('EMAIL_PASSWORD', ''))
+EMAIL_USE_TLS = env_bool('EMAIL_USE_TLS', True)
+EMAIL_USE_SSL = env_bool('EMAIL_USE_SSL', False)
+EMAIL_TIMEOUT = int(os.getenv('EMAIL_TIMEOUT', '15'))
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER or 'demo@localhost')
+ADMIN_EMAIL = os.getenv('ADMIN_EMAIL', os.getenv('EMAIL_ADDRESS', 'admin@localhost'))
+
+# Enable proxy trust only on the hosting platform configured to terminate TLS.
+if IS_PRODUCTION:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = env_bool('DJANGO_SECURE_SSL_REDIRECT', True)
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
