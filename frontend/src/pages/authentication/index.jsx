@@ -95,6 +95,21 @@ export default function Login() {
               Cadastre Sua Conta
             </Link>
           </div>
+          {process.env.NEXT_PUBLIC_DEMO_MODE === 'true' && (
+            <>
+          <p className="text-center mt-4 text-sm text-gray-700">
+            Para fins de demonstração e avaliação completa deste projeto, uma conta de administrador (Organização Atacadista) está disponível. Isso proporciona uma visão completa do sistema, permitindo que os interessados no meu projeto possam visualizar todas as funcionalidades destinadas apenas ao administrador.
+          </p>
+          <p className="text-center mt-1 text-sm font-bold text-gray-700">Usuário: admin</p>
+          <p className="text-center mt-1 text-sm font-bold text-gray-700">Senha: {process.env.NEXT_PUBLIC_DEMO_PASSWORD}</p>
+          <p className="text-center mt-4 text-sm text-gray-700">
+            Para ter acesso as funcionalidades de um usuário comum (Organização Compradora) apenas se cadastre normalmente em Cadastre sua Conta.
+          </p>
+          <p className="text-center mt-1 text-sm text-gray-700 font-bold">
+            Este é um site de demonstração do projeto finalizado. Todas as alterações feitas aqui são temporárias e serão resetadas periodicamente. Clone o meu projeto do Github e o rode localmente para ter suas modificações persistidas.
+          </p>
+            </>
+          )}
         </div>
       </div>
     </ProtectedRoute>

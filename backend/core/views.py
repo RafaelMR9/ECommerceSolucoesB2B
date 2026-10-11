@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import uuid
 from django.core.mail import send_mail
+from django.conf import settings
 from .validators import CustomValidators
 from .serializers import UserSerializer, PasswordResetTokenSerializer
 from .models import User, PasswordResetToken
@@ -98,7 +99,7 @@ class SendResetEmailView(APIView):
 
           Clique no link abaixo para redefinir sua senha:
 
-          http://localhost:3000/authentication/recover-password?token={token}&isReady={token}&email={user.email}
+          {settings.FRONTEND_URL}/authentication/recover-password?token={token}&isReady={token}&email={user.email}
 
           Se você não solicitou essa mudança, ignore este e-mail.
           ''',

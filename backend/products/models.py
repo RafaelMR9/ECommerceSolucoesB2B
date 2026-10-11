@@ -15,7 +15,7 @@ class Product(models.Model):
   costPrice = models.FloatField()
   salePrice = models.FloatField()
   description = models.TextField()
-  image = models.ImageField()
+  image = models.ImageField(max_length=255)
   packaging = models.IntegerField(default=1)
   visible = models.BooleanField(default=True)
   category = models.ForeignKey(Category, on_delete=models.CASCADE)

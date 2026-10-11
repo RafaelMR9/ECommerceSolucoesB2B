@@ -28,4 +28,5 @@ urlpatterns = [
     path('api/suppliers/', include('suppliers.urls')),
     path('api/carriers/', include('carriers.urls')),
 ]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.DEBUG and settings.MEDIA_STORAGE == 'local':
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

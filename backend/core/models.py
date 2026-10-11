@@ -1,7 +1,6 @@
-import os
-from dotenv import load_dotenv
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.db import models
+from django.conf import settings
 
 class UserManager(BaseUserManager):
     def create_user(self, email, username, password, **extra_fields):
@@ -14,13 +13,12 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, username, password=None, cpf=None, **extra_fields):
-        load_dotenv()
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('authorizeFature', True)
         if not cpf:
             raise ValueError('Há Campos não Preenchidos.')
-        email = os.getenv('EMAIL_ADDRESS')
+        email = settings.ADMIN_EMAIL
         return self.create_user(email, username, password, cpf=cpf, **extra_fields)
         
 
