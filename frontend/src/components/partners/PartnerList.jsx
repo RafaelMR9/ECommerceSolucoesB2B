@@ -20,7 +20,7 @@ export default function PartnerList({ kind, partners, search }) {
         eyebrow="Administração"
         actions={
           <Button href={`/${kind}/register`}>
-            {suppliers ? 'Cadastrar fornecedor' : 'Cadastrar transportadora'}
+            {suppliers ? 'Cadastrar Fornecedor' : 'Cadastrar Transportadora'}
           </Button>
         }
       />
@@ -30,15 +30,15 @@ export default function PartnerList({ kind, partners, search }) {
           type="search"
           name="search"
           defaultValue={search}
-          aria-label={`Buscar ${title.toLowerCase()}`}
-          placeholder={`Buscar ${title.toLowerCase()}`}
+          aria-label={`Buscar ${title}`}
+          placeholder={`Buscar ${title}`}
         />
         <Button type="submit" variant="secondary">
           Pesquisar
         </Button>
         {search && (
           <Button href={`/${kind}`} variant="ghost">
-            Limpar busca
+            Limpar Busca
           </Button>
         )}
       </form>
@@ -58,7 +58,7 @@ export default function PartnerList({ kind, partners, search }) {
         </div>
       ) : (
         <EmptyState
-          title="Nenhum parceiro encontrado"
+          title="Nenhum Parceiro Encontrado"
           description="Tente outra busca ou cadastre um novo parceiro."
         />
       )}

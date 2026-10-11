@@ -5,7 +5,7 @@ import { withSession } from '@/lib/server/page'
 export default function UpdateCategory(props) {
   return (
     <BaseLayout>
-      <PageHeader title="Editar categoria" back={{ href: '/categories', label: 'Categorias' }} />
+      <PageHeader title="Editar Categoria" back={{ href: '/categories', label: 'Categorias' }} />
       <CategoryForm {...props} />
     </BaseLayout>
   )

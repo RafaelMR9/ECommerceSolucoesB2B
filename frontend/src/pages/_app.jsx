@@ -7,14 +7,14 @@ import EmptyState from '@/components/ui/EmptyState'
 import Button from '@/components/ui/Button'
 
 const manrope = localFont({
-  src: '../assets/fonts/manrope-latin.ttf',
+  src: '../assets/fonts/manrope-variable.ttf',
   variable: '--font-manrope',
   weight: '200 800',
   display: 'swap',
 })
 export default function App({ Component, pageProps }) {
   return (
-    <div className={manrope.variable}>
+    <div className={`${manrope.variable} ${manrope.className}`}>
       <Head>
         <title>B2B Soluções</title>
         <meta
@@ -28,9 +28,9 @@ export default function App({ Component, pageProps }) {
         {pageProps.serverError ? (
           <BaseLayout>
             <EmptyState
-              title="A plataforma está indisponível"
+              title="A Plataforma Está Indisponível"
               description={pageProps.serverError}
-              action={<Button onClick={() => window.location.reload()}>Tentar novamente</Button>}
+              action={<Button onClick={() => window.location.reload()}>Tentar Novamente</Button>}
             />
           </BaseLayout>
         ) : (

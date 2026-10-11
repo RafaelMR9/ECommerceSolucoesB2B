@@ -45,7 +45,7 @@ export default function CheckoutForm() {
   return (
     <form className="form-panel" onSubmit={submit}>
       <Alert>{errors.detail || errors.non_field_errors}</Alert>
-      <h2 className="section-title mb-5">Entrega e pagamento</h2>
+      <h2 className="section-title mb-5">Entrega e Pagamento</h2>
       <div className="check-field">
         <input
           id="futureDelivery"
@@ -59,7 +59,7 @@ export default function CheckoutForm() {
         <>
           <Field
             name="deliveryDate"
-            label="Primeira entrega"
+            label="Primeira Entrega"
             type="date"
             value={values.deliveryDate}
             onChange={change}
@@ -68,7 +68,7 @@ export default function CheckoutForm() {
           />
           <Field
             name="deliveryFrequency"
-            label="Repetir a cada quantos dias?"
+            label="Repetir a Cada Quantos Dias?"
             type="number"
             min={10}
             step={1}
@@ -90,7 +90,7 @@ export default function CheckoutForm() {
         />
         <label htmlFor="faturedPayment">
           Pagamento faturado
-          <small className="block text-xs text-gray-500 mt-1">
+          <small className="block text-sm text-gray-500 mt-1">
             {user.authorizeFature
               ? 'Pagamento em até 30 dias após a compra.'
               : 'Sua organização ainda não possui autorização para compras faturadas.'}
@@ -105,10 +105,10 @@ export default function CheckoutForm() {
       )}
       <div className="form-actions">
         <Button type="submit" disabled={busy}>
-          {busy ? 'Finalizando…' : 'Finalizar compra'}
+          {busy ? 'Finalizando…' : 'Finalizar Compra'}
         </Button>
         <Button href="/cart" variant="secondary">
-          Voltar ao carrinho
+          Voltar ao Carrinho
         </Button>
       </div>
     </form>

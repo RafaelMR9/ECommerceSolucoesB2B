@@ -39,7 +39,7 @@ export default function PartnerDetails({ kind, partner, children }) {
               href={`/${kind}/update?${kind === 'suppliers' ? 'supplierId' : 'carrierId'}=${partner.id}`}
               variant="secondary"
             >
-              Editar cadastro
+              Editar Cadastro
             </Button>
             <Button variant="danger" onClick={() => setConfirm(true)}>
               Remover {singular}
@@ -65,7 +65,7 @@ export default function PartnerDetails({ kind, partner, children }) {
       {children}
       <Modal
         isOpen={confirm}
-        title="Remover cadastro"
+        title="Remover Cadastro"
         message={`Deseja remover ${partner.name}?`}
         option1="Remover"
         option2="Cancelar"

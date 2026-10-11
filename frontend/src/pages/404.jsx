@@ -5,9 +5,9 @@ export default function NotFound() {
   return (
     <BaseLayout>
       <EmptyState
-        title="Esta página não foi encontrada"
+        title="Esta Página Não Foi Encontrada"
         description="O endereço pode ter mudado ou este conteúdo não está disponível."
-        action={<Button href="/">Voltar ao início</Button>}
+        action={<Button href="/">Voltar ao Início</Button>}
       />
     </BaseLayout>
   )

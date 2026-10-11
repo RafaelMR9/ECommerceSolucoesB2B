@@ -5,9 +5,9 @@ export default function ServerError() {
   return (
     <BaseLayout>
       <EmptyState
-        title="Não foi possível abrir esta página"
+        title="Não Foi Possível Abrir Esta Página"
         description="Tente novamente em instantes."
-        action={<Button href="/">Voltar ao início</Button>}
+        action={<Button href="/">Voltar ao Início</Button>}
       />
     </BaseLayout>
   )

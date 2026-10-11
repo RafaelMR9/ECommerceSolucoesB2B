@@ -8,11 +8,11 @@ export default function Carrier({ partner, shipments, orders }) {
   return (
     <BaseLayout>
       <PartnerDetails kind="carriers" partner={partner}>
-        <h2 className="section-title mb-5">Entregas relacionadas</h2>
+        <h2 className="section-title mb-5">Entregas Relacionadas</h2>
         <DataTable
           empty={!shipments.length}
           emptyMessage="Nenhuma entrega desta transportadora"
-          label="Entregas da transportadora"
+          label="Entregas da Transportadora"
         >
           <thead>
             <tr>

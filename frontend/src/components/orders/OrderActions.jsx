@@ -5,9 +5,9 @@ export default function OrderActions({ order, payments, supplier, admin, onActio
     return (
       <Button
         className="button-small"
-        onClick={() => onAction(order, 'paid', 'Regularizar pagamento')}
+        onClick={() => onAction(order, 'paid', 'Regularizar Pagamento')}
       >
-        Marcar como pago
+        Marcar como Pago
       </Button>
     )
   if (payments)
@@ -15,16 +15,16 @@ export default function OrderActions({ order, payments, supplier, admin, onActio
       <>
         <Button
           className="button-small"
-          onClick={() => onAction(order, 'paid', 'Registrar pagamento')}
+          onClick={() => onAction(order, 'paid', 'Registrar Pagamento')}
         >
-          Marcar como pago
+          Marcar como Pago
         </Button>
         <Button
           variant="danger"
           className="button-small"
-          onClick={() => onAction(order, 'unpaid', 'Registrar pendência')}
+          onClick={() => onAction(order, 'unpaid', 'Registrar Pendência')}
         >
-          Não pago
+          Não Pago
         </Button>
       </>
     ) : (
@@ -37,16 +37,16 @@ export default function OrderActions({ order, payments, supplier, admin, onActio
       <>
         <Button
           className="button-small"
-          onClick={() => onAction(order, 'receive', 'Confirmar recebimento')}
+          onClick={() => onAction(order, 'receive', 'Confirmar Recebimento')}
         >
           Recebido
         </Button>
         <Button
           variant="danger"
           className="button-small"
-          onClick={() => onAction(order, 'unreceived', 'Confirmar não recebimento')}
+          onClick={() => onAction(order, 'unreceived', 'Confirmar Não Recebimento')}
         >
-          Não recebido
+          Não Recebido
         </Button>
       </>
     ) : null
@@ -56,15 +56,15 @@ export default function OrderActions({ order, payments, supplier, admin, onActio
         {admin && (
           <Button
             className="button-small"
-            onClick={() => onAction(order, 'prepare', 'Preparar pedido')}
+            onClick={() => onAction(order, 'prepare', 'Preparar Pedido')}
           >
-            Preparar envio
+            Preparar Envio
           </Button>
         )}
         <Button
           variant="danger"
           className="button-small"
-          onClick={() => onAction(order, 'cancel', 'Cancelar pedido')}
+          onClick={() => onAction(order, 'cancel', 'Cancelar Pedido')}
         >
           Cancelar
         </Button>
@@ -72,17 +72,17 @@ export default function OrderActions({ order, payments, supplier, admin, onActio
     )
   if (admin && order.cancelled === null && !order.sending)
     return (
-      <Button className="button-small" onClick={() => onAction(order, 'send', 'Enviar pedido')}>
-        Marcar como enviado
+      <Button className="button-small" onClick={() => onAction(order, 'send', 'Enviar Pedido')}>
+        Marcar como Enviado
       </Button>
     )
   if (admin && order.sending && !order.recieved && order.cancelled !== true)
     return (
       <Button
         className="button-small"
-        onClick={() => onAction(order, 'receive', 'Confirmar recebimento')}
+        onClick={() => onAction(order, 'receive', 'Confirmar Recebimento')}
       >
-        Marcar como recebido
+        Marcar como Recebido
       </Button>
     )
   return null

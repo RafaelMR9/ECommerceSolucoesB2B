@@ -17,21 +17,21 @@ export default function Hero() {
         <div className="home-hero-copy">
           <p className="eyebrow">
             <Sparkles size={14} aria-hidden="true" />
-            Seu negócio em movimento
+            Seu Negócio em Movimento
           </p>
           <h1>
-            Equipe sua rotina.
+            Equipe Sua Rotina.
             <br />
-            <span>Simplifique suas compras.</span>
+            <span>Simplifique Suas Compras.</span>
           </h1>
           <p>Encontre os essenciais para sua empresa e acompanhe cada pedido do começo ao fim.</p>
           <div className="hero-buttons">
             <Button href="/products">
-              Explorar catálogo
+              Explorar Catálogo
               <ArrowRight size={16} aria-hidden="true" />
             </Button>
-            <Button href="/orders" variant="secondary">
-              Meus pedidos
+            <Button href="/orders" variant="inverse">
+              Meus Pedidos
             </Button>
           </div>
         </div>

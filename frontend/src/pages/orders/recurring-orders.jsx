@@ -7,7 +7,7 @@ export default function Orders(props) {
   return (
     <BaseLayout>
       <PageHeader
-        title="Pedidos recorrentes"
+        title="Pedidos Recorrentes"
         description="Acompanhe o andamento e os detalhes dos pedidos."
         back={{ href: '/orders', label: 'Pedidos' }}
       />

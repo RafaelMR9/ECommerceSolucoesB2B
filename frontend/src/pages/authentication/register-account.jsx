@@ -63,7 +63,7 @@ export default function RegisterAccount() {
   }
   return (
     <AuthLayout
-      title="Sua organização começa aqui"
+      title="Sua Organização Começa Aqui"
       description="Crie uma conta para realizar compras e acompanhar seus pedidos."
     >
       <form onSubmit={submit}>
@@ -103,7 +103,7 @@ export default function RegisterAccount() {
           </label>
         </div>
         <Button type="submit" className="w-full" disabled={busy}>
-          {busy ? 'Criando conta…' : 'Criar minha conta'}
+          {busy ? 'Criando Conta…' : 'Criar Minha Conta'}
         </Button>
         <div className="auth-links">
           <span>Já tem uma conta?</span>

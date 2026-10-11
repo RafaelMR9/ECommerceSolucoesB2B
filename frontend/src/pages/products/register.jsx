@@ -6,7 +6,7 @@ export default function RegisterProduct(props) {
   return (
     <BaseLayout>
       <PageHeader
-        title="Cadastrar produto"
+        title="Cadastrar Produto"
         description="Adicione um novo essencial ao catálogo."
         back={{ href: '/products', label: 'Catálogo' }}
       />

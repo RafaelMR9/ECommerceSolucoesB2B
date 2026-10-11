@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Keyboard, Headphones, NotebookPen, Package } from 'lucide-react'
+import { titleCase } from '@/lib/format'
 function categoryIcon(name) {
   if (/inform|comput|teclad/i.test(name)) return Keyboard
   if (/áudio|audio|fone/i.test(name)) return Headphones
@@ -14,8 +15,8 @@ export default function CategoryCard({ category }) {
         <Icon size={21} aria-hidden="true" />
       </span>
       <div>
-        <h3>{category.name}</h3>
-        <p>Explorar produtos</p>
+        <h3>{titleCase(category.name)}</h3>
+        <p>Explorar Produtos</p>
       </div>
     </Link>
   )

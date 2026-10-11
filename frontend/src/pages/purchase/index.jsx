@@ -34,7 +34,7 @@ export default function Purchase({ product, promotion }) {
   return (
     <BaseLayout>
       <PageHeader
-        title={user.is_superuser ? 'Comprar para reposição' : 'Adicionar ao carrinho'}
+        title={user.is_superuser ? 'Comprar para Reposição' : 'Adicionar ao Carrinho'}
         description={product.name}
         back={{
           href: user.is_superuser ? '/restock' : `/products/${product.id}`,
@@ -60,7 +60,7 @@ export default function Purchase({ product, promotion }) {
           </div>
           <Field
             name="quantity"
-            label="Quantidade de embalagens"
+            label="Quantidade de Embalagens"
             type="number"
             min={1}
             step={1}
@@ -75,11 +75,11 @@ export default function Purchase({ product, promotion }) {
             type="submit"
             disabled={busy || (!user.is_superuser && !product.currentStockQuantity)}
           >
-            {busy ? 'Adicionando…' : 'Adicionar ao carrinho'}
+            {busy ? 'Adicionando…' : 'Adicionar ao Carrinho'}
           </Button>
         </form>
         <aside className="panel checkout-summary">
-          <h2>Resumo do item</h2>
+          <h2>Resumo do Item</h2>
           <p className="text-sm text-gray-500">
             {quantity || 0} embalagens · {Number(quantity || 0) * product.packaging} unidades
           </p>
@@ -88,7 +88,7 @@ export default function Purchase({ product, promotion }) {
             <strong>{money(price * Number(quantity || 0))}</strong>
           </div>
           {!user.is_superuser && (
-            <p className="text-xs text-gray-500">
+            <p className="text-sm text-gray-500">
               Estoque disponível: {product.currentStockQuantity} embalagens.
             </p>
           )}

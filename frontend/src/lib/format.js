@@ -1,3 +1,16 @@
+const titleConnectors = new Set(
+  'a o as os e ou de do da dos das em no na nos nas para por pelo pela pelos pelas ao aos à às com sem sob sobre até entre ante após contra desde perante como um uma uns umas'.split(
+    ' '
+  )
+)
+export function titleCase(value) {
+  return String(value).replace(/[\p{L}\p{N}]+/gu, (word, offset) => {
+    const lower = word.toLocaleLowerCase('pt-BR')
+    return offset > 0 && titleConnectors.has(lower)
+      ? lower
+      : word.charAt(0).toLocaleUpperCase('pt-BR') + word.slice(1)
+  })
+}
 export const money = (value) =>
   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(value) || 0)
 export const date = (value, withTime = false) =>

@@ -1,12 +1,12 @@
-import Link from 'next/link'
 import { useContext } from 'react'
 import BaseLayout from '@/components/shared/BaseLayout'
 import Button from '@/components/ui/Button'
 import PageHeader from '@/components/ui/PageHeader'
 import EmptyState from '@/components/ui/EmptyState'
 import ProductCard from '@/components/commerce/ProductCard'
+import CatalogFilters from '@/components/categories/CatalogFilters'
 import { AuthContext } from '@/contexts/authContext'
-import { activePromotion } from '@/lib/format'
+import { activePromotion, titleCase } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 
 export default function Products({ products, categories, promotions, now, search, categoryId }) {
@@ -14,41 +14,27 @@ export default function Products({ products, categories, promotions, now, search
   return (
     <BaseLayout>
       <PageHeader
-        title="Catálogo de produtos"
+        title="Catálogo de Produtos"
         description="Encontre os essenciais que acompanham a rotina da sua empresa."
-        actions={user.is_superuser && <Button href="/products/register">Cadastrar produto</Button>}
+        actions={user.is_superuser && <Button href="/products/register">Cadastrar Produto</Button>}
       />
       <div className="catalog-layout">
-        <aside className="catalog-sidebar">
-          <h2>Categorias</h2>
-          <nav aria-label="Filtrar por categoria">
-            <Link href="/products" aria-current={!categoryId}>
-              Todos os produtos
-            </Link>
-            {categories.map((c) => (
-              <Link
-                href={`/products?categoryId=${c.id}`}
-                key={c.id}
-                aria-current={String(c.id) === categoryId}
-              >
-                {c.name}
-              </Link>
-            ))}
-          </nav>
-        </aside>
+        <CatalogFilters categories={categories} categoryId={categoryId} />
         <div>
           <div className="catalog-summary">
             <p>
               {search
                 ? `Resultados para “${search}”`
                 : categoryId
-                  ? categories.find((c) => String(c.id) === categoryId)?.name
-                  : 'Todos os produtos'}{' '}
+                  ? titleCase(
+                      categories.find((c) => String(c.id) === categoryId)?.name || 'Categoria'
+                    )
+                  : 'Todos os Produtos'}{' '}
               · {products.length} {products.length === 1 ? 'produto' : 'produtos'}
             </p>
             {(search || categoryId) && (
               <Button href="/products" variant="ghost">
-                Limpar filtros
+                Limpar Filtros
               </Button>
             )}
           </div>
@@ -65,13 +51,9 @@ export default function Products({ products, categories, promotions, now, search
             </section>
           ) : (
             <EmptyState
-              title="Nenhum produto encontrado"
+              title="Nenhum Produto Encontrado"
               description="Tente buscar por outro nome ou escolher outra categoria."
-              action={
-                <Button href="/products" variant="secondary">
-                  Ver todo o catálogo
-                </Button>
-              }
+              action={<Button href="/products">Ver Todo o Catálogo</Button>}
             />
           )}
         </div>

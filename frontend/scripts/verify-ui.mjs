@@ -91,7 +91,7 @@ for (const username of ['ui-review-admin', 'ui-review-buyer']) {
     assert.equal(response.status, 200, `${username}: ${path}`)
     const html = await response.text()
     assert.ok(html.includes('B2B'), 'Page shell must render on the server')
-    assert.ok(!html.includes('A plataforma está indisponível'), path)
+    assert.ok(!/A plataforma está indisponível/i.test(html), path)
     assert.ok(!html.includes('"password":'), `No password/hash in SSR data: ${path}`)
     checked++
   }

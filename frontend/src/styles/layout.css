@@ -24,9 +24,9 @@
     padding-right: 32px;
   }
   .site-top {
-    background: #100d16;
+    background: var(--nav);
     color: #b9aacb;
-    font-size: 10px;
+    font-size: var(--text-caption);
   }
   .site-top-inner {
     display: flex;
@@ -42,6 +42,7 @@
     gap: 7px;
   }
   .site-header {
+    --focus-ring: #c9a6ff;
     background: var(--nav);
     color: #fff;
   }
@@ -86,19 +87,35 @@
     color: #7b6c87;
     overflow: hidden;
   }
+  .header-search:focus-within {
+    outline: 3px solid #c9a6ff;
+    outline-offset: 3px;
+  }
+  .header-search > svg {
+    flex-shrink: 0;
+  }
   .header-search input {
+    flex: 1;
     padding: 12px 9px;
     border: 0;
     color: #2e2239;
     background: white;
-    font-size: 12px;
+    font-size: var(--text-body);
     min-width: 0;
-    width: 100%;
+    width: auto;
     outline-offset: -3px;
   }
+  .header-search input::placeholder {
+    color: var(--muted);
+    opacity: 1;
+  }
   .header-search button {
+    flex: 0 0 52px;
+    display: grid;
+    place-items: center;
+    min-height: 48px;
     background: var(--accent);
-    padding: 13px 17px;
+    padding: 0;
     color: white;
     border: 0;
   }
@@ -111,23 +128,43 @@
     gap: 23px;
   }
   .header-account {
+    min-height: 44px;
+    min-width: 44px;
+    justify-content: center;
     display: flex;
     gap: 9px;
     align-items: center;
-    font-size: 12px;
+    font-size: var(--text-small);
   }
   .header-account small {
     display: block;
     color: #b3a4c6;
-    font-size: 10px;
+    font-size: var(--text-caption);
+  }
+  .header-account-copy {
+    max-width: 160px;
+  }
+  .header-account-copy small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .header-account:hover,
+  .header-cart:hover {
+    color: #d8beff;
   }
   .header-cart {
+    min-height: 44px;
+    min-width: 44px;
+    justify-content: center;
     padding: 7px;
     display: flex;
     align-items: center;
     gap: 6px;
   }
   .mobile-menu-button {
+    min-height: 44px;
+    min-width: 44px;
     display: none;
     background: transparent;
     color: white;
@@ -147,8 +184,8 @@
     flex-wrap: wrap;
   }
   .site-nav a {
-    font-size: 12px;
-    color: #bdaccb;
+    font-size: var(--text-small);
+    color: #cfc2de;
     display: flex;
     gap: 6px;
     align-items: center;
@@ -162,32 +199,49 @@
     margin-left: auto;
   }
   .admin-nav {
-    background: #f0e9fa;
-    border-bottom: 1px solid #e0d3f0;
+    --focus-ring: #c9a6ff;
+    background: var(--nav);
+    border-top: 1px solid #34283f;
+    border-bottom: 1px solid #34283f;
   }
   .admin-nav-inner {
     display: flex;
-    gap: 23px;
+    gap: 8px;
     align-items: center;
     flex-wrap: wrap;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
   .admin-nav a {
-    font-size: 11px;
+    font-size: var(--text-caption);
     font-weight: 600;
-    color: #6e4b94;
+    color: #d5c7e5;
+    padding: 8px 12px;
+    border-radius: 7px;
   }
   .admin-nav a[aria-current='page'] {
-    color: var(--accent);
+    color: white;
+    background: #352046;
+  }
+  .admin-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .admin-nav a:hover {
+    color: white;
+    background: #2b1c39;
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
   .admin-nav-label {
-    font-size: 10px;
+    font-size: var(--text-caption);
     letter-spacing: 0.8px;
-    text-transform: uppercase;
-    color: #957aa9;
+    text-transform: none;
+    color: #c5a2ed;
   }
   .site-footer {
+    --focus-ring: #c9a6ff;
     margin-top: auto;
     background: var(--nav);
     color: #b5a5c6;
@@ -203,20 +257,20 @@
     font-size: 19px;
   }
   .footer-grid p {
-    font-size: 12px;
+    font-size: var(--text-small);
     line-height: 1.8;
     max-width: 270px;
     margin-top: 13px;
   }
   .footer-grid h2 {
-    font-size: 12px;
+    font-size: var(--text-small);
     color: #eee4f8;
     font-weight: 700;
     margin-bottom: 12px;
   }
   .footer-grid a:not(.brand) {
     display: block;
-    font-size: 11px;
+    font-size: var(--text-caption);
     margin: 9px 0;
   }
   .footer-grid a:hover {
@@ -232,7 +286,7 @@
     flex-wrap: wrap;
     padding-top: 16px;
     padding-bottom: 16px;
-    font-size: 10px;
+    font-size: var(--text-caption);
     color: #9683a5;
   }
   .skip-link {
@@ -255,6 +309,7 @@
     background: white;
   }
   .auth-story {
+    --focus-ring: #c9a6ff;
     background: #15101d;
     position: relative;
     color: white;
@@ -296,12 +351,12 @@
   }
   .auth-story-copy p {
     color: #c1b0d1;
-    font-size: 13px;
+    font-size: var(--text-ui);
     line-height: 1.8;
   }
   .auth-story-foot {
     margin-top: 50px;
-    font-size: 11px;
+    font-size: var(--text-caption);
     color: #a695b8;
   }
   .auth-content {
@@ -320,7 +375,7 @@
     font-weight: 800;
   }
   .auth-intro {
-    font-size: 13px;
+    font-size: var(--text-ui);
     color: var(--muted);
     margin: 10px 0 28px;
     line-height: 1.8;
@@ -331,7 +386,7 @@
     gap: 15px;
     align-items: center;
     flex-wrap: wrap;
-    font-size: 12px;
+    font-size: var(--text-small);
     margin: 18px 0;
   }
   .auth-links a {
@@ -341,7 +396,7 @@
     display: flex;
     align-items: center;
     gap: 13px;
-    font-size: 11px;
+    font-size: var(--text-caption);
     color: var(--muted);
     margin: 27px 0 20px;
   }
@@ -360,12 +415,12 @@
     margin-top: 25px;
   }
   .demo-panel h2 {
-    font-size: 12px;
+    font-size: var(--text-small);
     font-weight: 700;
     color: #6132a5;
   }
   .demo-panel p {
-    font-size: 11px;
+    font-size: var(--text-caption);
     color: #7b5c9b;
     margin-top: 7px;
     line-height: 1.8;
@@ -375,7 +430,7 @@
     gap: 18px;
     flex-wrap: wrap;
     margin-top: 9px;
-    font-size: 12px;
+    font-size: var(--text-small);
     color: #503275;
   }
   @media (max-width: 850px) {
@@ -426,10 +481,10 @@
     .site-header-main {
       padding-top: 18px;
       padding-bottom: 18px;
-      gap: 15px;
+      gap: 12px;
     }
     .header-actions {
-      gap: 13px;
+      gap: 8px;
     }
     .header-account-copy {
       display: none;
@@ -456,7 +511,14 @@
     }
     .admin-nav-inner {
       gap: 15px;
-      row-gap: 10px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: thin;
+      scroll-padding-inline: 20px;
+    }
+    .admin-nav-inner > * {
+      flex-shrink: 0;
     }
     .footer-grid {
       grid-template-columns: 1fr 1fr;
@@ -490,6 +552,26 @@
     }
     .auth-form h1 {
       font-size: 27px;
+    }
+  }
+  @media (max-width: 360px) {
+    .site-width {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    .site-header-main {
+      gap: 4px;
+    }
+    .header-actions {
+      gap: 4px;
+    }
+    .site-header .brand {
+      font-size: 16px;
+      gap: 4px;
+    }
+    .site-header .brand-mark {
+      width: 28px;
+      height: 28px;
     }
   }
 }

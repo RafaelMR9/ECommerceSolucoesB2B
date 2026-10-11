@@ -1,3 +1,6 @@
+import { UserRound } from 'lucide-react'
+import FormLayout from '@/components/ui/FormLayout'
+import FormSection from '@/components/ui/FormSection'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import BaseLayout from '@/components/shared/BaseLayout'
@@ -28,7 +31,7 @@ export default function UpdateProfile() {
         ['email', 'E-mail', 'email'],
       ]
     : [
-        ['name', 'Nome da organização', 'text'],
+        ['name', 'Nome da Organização', 'text'],
         ['cnpj', 'CNPJ', 'text'],
         ['address', 'Endereço', 'text'],
         ['email', 'E-mail', 'email'],
@@ -74,33 +77,50 @@ export default function UpdateProfile() {
   return (
     <BaseLayout>
       <PageHeader
-        title="Editar cadastro"
+        title="Editar Cadastro"
         description="Mantenha seus dados atualizados."
-        back={{ href: '/profile', label: 'Minha conta' }}
+        back={{ href: '/profile', label: 'Minha Conta' }}
       />
-      <form className="form-panel" onSubmit={submit}>
-        <Alert>{errors.detail}</Alert>
-        {fields.map(([name, label, type]) => (
-          <Field
-            key={name}
-            name={name}
-            label={label}
-            type={type}
-            value={values[name]}
-            onChange={change}
-            error={errors[name]}
-            required
-          />
-        ))}
-        <div className="form-actions">
-          <Button type="submit" disabled={busy}>
-            {busy ? 'Salvando…' : 'Salvar alterações'}
-          </Button>
-          <Button href="/profile" variant="secondary">
-            Cancelar
-          </Button>
-        </div>
-      </form>
+      <FormLayout
+        icon={UserRound}
+        title="Seus Dados em Dia"
+        description="Mantenha os dados da sua conta e da organização atualizados."
+        points={[
+          { title: 'Identificação', text: 'Revise os documentos solicitados no formulário.' },
+          { title: 'Contato', text: 'Use um e-mail que você possa acessar.' },
+          { title: 'Atualização', text: 'Salve as alterações para atualizar os dados da conta.' },
+        ]}
+      >
+        <form className="form-panel" onSubmit={submit}>
+          <FormSection
+            icon={UserRound}
+            title="Dados da Conta"
+            description="Contato e Identificação"
+          >
+            <Alert>{errors.detail}</Alert>
+            {fields.map(([name, label, type]) => (
+              <Field
+                key={name}
+                name={name}
+                label={label}
+                type={type}
+                value={values[name]}
+                onChange={change}
+                error={errors[name]}
+                required
+              />
+            ))}
+          </FormSection>
+          <div className="form-actions">
+            <Button type="submit" disabled={busy}>
+              {busy ? 'Salvando…' : 'Salvar Alterações'}
+            </Button>
+            <Button href="/profile" variant="secondary">
+              Cancelar
+            </Button>
+          </div>
+        </form>
+      </FormLayout>
     </BaseLayout>
   )
 }

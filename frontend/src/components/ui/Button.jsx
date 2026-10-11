@@ -4,6 +4,7 @@ const variants = {
   secondary: 'button-secondary',
   danger: 'button-danger',
   ghost: 'button-ghost',
+  inverse: 'button-inverse',
 }
 export default function Button({
   href,

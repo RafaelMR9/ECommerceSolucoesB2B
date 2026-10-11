@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { FolderTree } from 'lucide-react'
+import FormLayout from '@/components/ui/FormLayout'
+import FormSection from '@/components/ui/FormSection'
 import { useRouter } from 'next/router'
 import { registerCategory, updateCategory, getCategories } from '@/services/productService'
 import Field from '@/components/ui/Field'
@@ -53,33 +56,59 @@ export default function CategoryForm({ category, categories: initialCategories }
     }
   }
   return (
-    <form className="form-panel" onSubmit={submit}>
-      <Alert>{error}</Alert>
-      <Alert variant="success">{success}</Alert>
-      <Field name="name" label="Nome da categoria" value={values.name} onChange={change} required />
-      <Field
-        name="subCategory"
-        label="Categoria principal"
-        as="select"
-        value={values.subCategory}
-        onChange={change}
-        hint="Deixe em branco para criar uma categoria independente."
-      >
-        <option value="">Sem categoria principal</option>
-        {categories.filter(canBeParent).map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.name}
-          </option>
-        ))}
-      </Field>
-      <div className="form-actions">
-        <Button type="submit" disabled={busy}>
-          {busy ? 'Salvando…' : category ? 'Salvar alterações' : 'Cadastrar categoria'}
-        </Button>
-        <Button href="/categories" variant="secondary">
-          Cancelar
-        </Button>
-      </div>
-    </form>
+    <FormLayout
+      icon={FolderTree}
+      title="Um Catálogo Fácil de Explorar"
+      description="Organize os produtos em grupos que façam sentido para sua empresa."
+      points={[
+        { title: 'Nome Claro', text: 'Use um nome que ajude a encontrar os produtos.' },
+        {
+          title: 'Hierarquia',
+          text: 'Vincule a um grupo existente ou crie uma categoria principal.',
+        },
+        { title: 'Navegação', text: 'A categoria ficará disponível nos filtros do catálogo.' },
+      ]}
+    >
+      <form className="form-panel" onSubmit={submit}>
+        <Alert>{error}</Alert>
+        <Alert variant="success">{success}</Alert>
+        <FormSection
+          icon={FolderTree}
+          title="Organização da Categoria"
+          description="Defina o nome e a posição no catálogo."
+        >
+          <Field
+            name="name"
+            label="Nome da Categoria"
+            value={values.name}
+            onChange={change}
+            required
+          />
+          <Field
+            name="subCategory"
+            label="Categoria Principal"
+            as="select"
+            value={values.subCategory}
+            onChange={change}
+            hint="Deixe em branco para criar uma categoria independente."
+          >
+            <option value="">Sem Categoria Principal</option>
+            {categories.filter(canBeParent).map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </Field>
+        </FormSection>
+        <div className="form-actions">
+          <Button type="submit" disabled={busy}>
+            {busy ? 'Salvando…' : category ? 'Salvar Alterações' : 'Cadastrar Categoria'}
+          </Button>
+          <Button href="/categories" variant="secondary">
+            Cancelar
+          </Button>
+        </div>
+      </form>
+    </FormLayout>
   )
 }

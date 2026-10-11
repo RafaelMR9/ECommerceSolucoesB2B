@@ -15,7 +15,7 @@ export default function Restock({ products, suppliers, order }) {
         description="Organize a reposição de produtos por fornecedor."
         actions={
           <Button href="/cart" variant="secondary">
-            Ver carrinho de reposição
+            Ver Carrinho de Reposição
           </Button>
         }
       />
@@ -25,7 +25,7 @@ export default function Restock({ products, suppliers, order }) {
           fornecedor.
         </Alert>
       )}
-      {!products.length && <EmptyState title="Nenhum produto para repor" />}
+      {!products.length && <EmptyState title="Nenhum Produto para Repor" />}
       {suppliers
         .filter((s) => products.some((p) => p.supplier === s.id))
         .map((supplier) => (
@@ -36,7 +36,7 @@ export default function Restock({ products, suppliers, order }) {
                 <tr>
                   <th>Produto</th>
                   <th>Estoque</th>
-                  <th>Preço de custo</th>
+                  <th>Preço de Custo</th>
                   <th>Ação</th>
                 </tr>
               </thead>
@@ -54,10 +54,10 @@ export default function Restock({ products, suppliers, order }) {
                             href={`/purchase?productId=${product.id}`}
                             className="button-small"
                           >
-                            Comprar para reposição
+                            Comprar para Reposição
                           </Button>
                         ) : (
-                          <span className="text-xs text-gray-500">
+                          <span className="text-sm text-gray-500">
                             Outro fornecedor no carrinho
                           </span>
                         )}

@@ -6,7 +6,7 @@ export default function UpdateProduct(props) {
   return (
     <BaseLayout>
       <PageHeader
-        title="Editar produto"
+        title="Editar Produto"
         description="Atualize as informações e a imagem do produto."
         back={{ href: `/products/${props.product.id}`, label: props.product.name }}
       />

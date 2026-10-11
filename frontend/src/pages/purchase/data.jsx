@@ -12,14 +12,14 @@ export default function PurchaseData({ items, initialUser }) {
   return (
     <BaseLayout>
       <PageHeader
-        title="Finalizar pedido"
+        title="Finalizar Pedido"
         description="Confira a entrega e a forma de pagamento."
         back={{ href: '/cart', label: 'Carrinho' }}
       />
       <div className="checkout-layout">
         <CheckoutForm />
         <aside className="panel checkout-summary">
-          <h2>Resumo do pedido</h2>
+          <h2>Resumo do Pedido</h2>
           <p className="text-sm text-gray-500">
             {items.length} {items.length === 1 ? 'item' : 'itens'} no carrinho
           </p>
@@ -27,7 +27,7 @@ export default function PurchaseData({ items, initialUser }) {
             <span>Total</span>
             <strong>{money(total)}</strong>
           </div>
-          <p className="text-xs text-gray-500">
+          <p className="text-sm text-gray-500">
             Os valores serão conferidos pela plataforma ao finalizar.
           </p>
         </aside>

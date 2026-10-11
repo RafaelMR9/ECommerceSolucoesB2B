@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import { Boxes, ImagePlus, Package } from 'lucide-react'
+import FormLayout from '@/components/ui/FormLayout'
+import FormSection from '@/components/ui/FormSection'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import Field from '@/components/ui/Field'
@@ -69,49 +72,77 @@ export default function ProductForm({ product, categories, suppliers }) {
     />
   )
   return (
-    <form className="form-panel" onSubmit={submit}>
-      <Alert>{errors.detail || errors.non_field_errors}</Alert>
-      <Alert variant="success">{success}</Alert>
-      <div className="form-grid">
-        <div className="form-wide">{field('name', 'Nome do produto')}</div>
-        {field('currentStockQuantity', 'Quantidade em estoque', {
-          type: 'number',
-          min: 0,
-          step: 1,
-        })}
-        {field('packaging', 'Unidades por embalagem', { type: 'number', min: 1, step: 1 })}
-        {field('costPrice', 'Preço de custo (R$)', { type: 'number', min: 0.01, step: 0.01 })}
-        {field('salePrice', 'Preço de venda (R$)', { type: 'number', min: 0.01, step: 0.01 })}
-        {field('category', 'Categoria', {
-          as: 'select',
-          children: (
-            <>
-              <option value="">Selecione uma categoria</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </>
-          ),
-        })}
-        {field('supplier', 'Fornecedor', {
-          as: 'select',
-          children: (
-            <>
-              <option value="">Selecione um fornecedor</option>
-              {suppliers.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </>
-          ),
-        })}
-        <div className="form-wide">
+    <FormLayout
+      icon={Package}
+      title="Produtos com Informações Completas"
+      description="Uma apresentação clara facilita a escolha e a organização das compras."
+      points={[
+        { title: 'Identificação', text: 'Descreva o produto e escolha sua categoria.' },
+        {
+          title: 'Embalagens e Preços',
+          text: 'Informe as unidades por embalagem, estoque, custo e venda.',
+        },
+        { title: 'Apresentação', text: 'Associe o fornecedor e use uma imagem nítida do produto.' },
+      ]}
+    >
+      <form className="form-panel" onSubmit={submit}>
+        <Alert>{errors.detail || errors.non_field_errors}</Alert>
+        <Alert variant="success">{success}</Alert>
+        <FormSection
+          icon={Package}
+          title="Informações do Produto"
+          description="Nome, categoria e descrição para o catálogo."
+        >
+          {field('name', 'Nome do Produto')}
+          {field('category', 'Categoria', {
+            as: 'select',
+            children: (
+              <>
+                <option value="">Selecione uma Categoria</option>
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </>
+            ),
+          })}
           {field('description', 'Descrição', { as: 'textarea', rows: 4 })}
-        </div>
-        <div className="form-wide">
+        </FormSection>
+        <FormSection
+          icon={Boxes}
+          title="Estoque e Preços"
+          description="Os preços se referem a cada embalagem."
+        >
+          <div className="form-grid">
+            {field('currentStockQuantity', 'Quantidade em Estoque', {
+              type: 'number',
+              min: 0,
+              step: 1,
+            })}
+            {field('packaging', 'Unidades por Embalagem', { type: 'number', min: 1, step: 1 })}
+            {field('costPrice', 'Preço de Custo (R$)', { type: 'number', min: 0.01, step: 0.01 })}
+            {field('salePrice', 'Preço de Venda (R$)', { type: 'number', min: 0.01, step: 0.01 })}
+          </div>
+        </FormSection>
+        <FormSection
+          icon={ImagePlus}
+          title="Fornecedor e Imagem"
+          description="Identifique a origem e a apresentação do produto."
+        >
+          {field('supplier', 'Fornecedor', {
+            as: 'select',
+            children: (
+              <>
+                <option value="">Selecione um Fornecedor</option>
+                {suppliers.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </>
+            ),
+          })}
           {product?.image && (
             <div className="relative h-32 w-40 mb-4">
               <Image
@@ -126,7 +157,7 @@ export default function ProductForm({ product, categories, suppliers }) {
           <Field
             name="image"
             type="file"
-            label={product ? 'Substituir imagem' : 'Imagem do produto'}
+            label={product ? 'Substituir Imagem' : 'Imagem do Produto'}
             accept="image/png,image/jpeg,image/webp"
             required={!product}
             error={errors.image}
@@ -143,16 +174,16 @@ export default function ProductForm({ product, categories, suppliers }) {
               }
             }}
           />
+        </FormSection>
+        <div className="form-actions">
+          <Button type="submit" disabled={busy}>
+            {busy ? 'Salvando…' : product ? 'Salvar Alterações' : 'Cadastrar Produto'}
+          </Button>
+          <Button href={product ? `/products/${product.id}` : '/products'} variant="secondary">
+            Cancelar
+          </Button>
         </div>
-      </div>
-      <div className="form-actions">
-        <Button type="submit" disabled={busy}>
-          {busy ? 'Salvando…' : product ? 'Salvar alterações' : 'Cadastrar produto'}
-        </Button>
-        <Button href={product ? `/products/${product.id}` : '/products'} variant="secondary">
-          Cancelar
-        </Button>
-      </div>
-    </form>
+      </form>
+    </FormLayout>
   )
 }

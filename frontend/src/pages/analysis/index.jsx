@@ -41,14 +41,14 @@ export default function Analysis({ companies }) {
   return (
     <BaseLayout>
       <PageHeader
-        title="Análise de crédito"
+        title="Análise de Crédito"
         eyebrow="Administração"
         description="Avalie as solicitações de compras faturadas das organizações."
       />
       <DataTable
         empty={!companies.length}
         emptyMessage="Nenhuma solicitação aguardando análise"
-        label="Solicitações de crédito"
+        label="Solicitações de Crédito"
       >
         <thead>
           <tr>
@@ -81,7 +81,7 @@ export default function Analysis({ companies }) {
                       setError('')
                     }}
                   >
-                    Não autorizar
+                    Não Autorizar
                   </Button>
                 </div>
               </td>
@@ -91,7 +91,7 @@ export default function Analysis({ companies }) {
       </DataTable>
       <Modal
         isOpen={Boolean(selected)}
-        title="Confirmar análise"
+        title="Confirmar Análise"
         message={`${selected?.approved ? 'Autorizar' : 'Não autorizar'} compras faturadas para ${selected?.company.name}?`}
         confirm={selected?.approved}
         option1="Confirmar"
