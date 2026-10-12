@@ -1,127 +1,179 @@
-from rest_framework import generics
-from rest_framework.views import APIView
-from rest_framework.response import Response
 import uuid
 from datetime import timedelta
+from urllib.parse import urlencode
+
+from django.conf import settings
+from django.core.mail import send_mail
 from django.db import transaction
 from django.utils import timezone
-from rest_framework import serializers
-from rest_framework.permissions import IsAuthenticated
-from django.core.mail import send_mail
-from django.conf import settings
-from .validators import CustomValidators
-from .serializers import UserSerializer, PasswordResetTokenSerializer
-from .models import User, PasswordResetToken
+from rest_framework import generics, serializers
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-# Create your views here.
+from .models import PasswordResetToken, User
+from .permissions import IsAdministrator
+from .serializers import (
+    PasswordResetTokenSerializer,
+    ResetEmailInput,
+    ResetPasswordInput,
+    UserSerializer,
+)
+
+
+def valid_reset_tokens():
+    return PasswordResetToken.objects.filter(
+        created_at__gte=timezone.now() - timedelta(hours=1)
+    )
+
+
 class AdministratorIdView(APIView):
-  def get(self, request):
-    admin = User.objects.filter(is_superuser=True).order_by('pk').first()
-    return Response({'id': admin.id}) if admin else Response({'detail': 'Atendimento indisponível.'}, status=404)
-        
+    def get(self, request):
+        admin = User.objects.filter(is_superuser=True).order_by("pk").first()
+        if not admin:
+            return Response({"detail": "Atendimento indisponível."}, status=404)
+        return Response({"id": admin.pk})
+
+
 class UserListView(generics.ListAPIView):
-  queryset = User.objects.all()
-  serializer_class = UserSerializer
+    permission_classes = [IsAdministrator]
+    queryset = User.objects.order_by("pk")
+    serializer_class = UserSerializer
+
 
 class UserDestroyView(generics.DestroyAPIView):
-  queryset = User.objects.all()
-  serializer_class = UserSerializer
+    permission_classes = [IsAdministrator]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def perform_destroy(self, instance):
+        if (
+            instance.salesorder_set.exists()
+            or instance.supplierorder_set.exists()
+            or instance.sender.exists()
+            or instance.recipient.exists()
+        ):
+            raise serializers.ValidationError(
+                {
+                    "detail": "Esta conta possui um histórico de pedidos ou atendimento e não pode ser excluída."
+                }
+            )
+        instance.delete()
+
 
 class UserUpdateView(generics.UpdateAPIView):
-  queryset = User.objects.all()
-  serializer_class = UserSerializer
-  lookup_field = 'pk'
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        users = User.objects.all()
+        return (
+            users
+            if self.request.user.is_superuser
+            else users.filter(pk=self.request.user.pk)
+        )
+
+    def update(self, request, *args, **kwargs):
+        kwargs["partial"] = True
+        return super().update(request, *args, **kwargs)
+
 
 class UserRetrieveView(generics.RetrieveAPIView):
-  queryset = User.objects.all()
-  serializer_class = UserSerializer
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        users = User.objects.all()
+        return (
+            users
+            if self.request.user.is_superuser
+            else users.filter(pk=self.request.user.pk)
+        )
+
 
 class UserCreateView(generics.CreateAPIView):
-  queryset = User.objects.all()
-  serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+    serializer_class = UserSerializer
 
-  def perform_create(self, serializer):
-    CustomValidators.validate_equal_password(serializer.validated_data['password'], self.request.data.get('confirmPassword'))
-    serializer.save()
 
 class GetUserIdByEmail(APIView):
-    
-    def get(self, request, *args, **kwargs):
-        email = self.request.query_params.get('email')
-        
-        try:
-            user = User.objects.get(email=email)
-            return Response({'id': user.id})
-        except User.DoesNotExist:
-            return Response({"id": None})
+    permission_classes = [IsAdministrator]
 
-class ResetPasswordInput(serializers.Serializer):
-    token = serializers.UUIDField()
-    password = serializers.CharField()
-    confirmPassword = serializers.CharField()
+    def get(self, request):
+        user_id = (
+            User.objects.filter(email=request.query_params.get("email"))
+            .values_list("pk", flat=True)
+            .first()
+        )
+        return Response({"id": user_id})
 
-class UpdatePasswordView(generics.UpdateAPIView):
+
+class UpdatePasswordView(APIView):
+    permission_classes = [AllowAny]
+
     @transaction.atomic
-    def update(self, request, *args, **kwargs):
+    def put(self, request, pk):
         data = ResetPasswordInput(data=request.data)
         data.is_valid(raise_exception=True)
-        values = data.validated_data
-        reset = PasswordResetToken.objects.select_for_update().filter(token=values['token'], user_id=kwargs['pk'], created_at__gte=timezone.now()-timedelta(hours=1)).first()
+        reset = (
+            valid_reset_tokens()
+            .select_for_update()
+            .filter(token=data.validated_data["token"], user_id=pk)
+            .first()
+        )
         if not reset:
-            raise serializers.ValidationError({'detail': 'Este link de recuperação é inválido ou expirou.'})
-        CustomValidators.validate_equal_password(values['password'], values['confirmPassword'])
-        CustomValidators.validate_password(values['password'])
+            raise serializers.ValidationError(
+                {"detail": "Este link de recuperação é inválido ou expirou."}
+            )
         user = reset.user
-        user.set_password(values['password'])
-        user.save(update_fields=['password'])
+        user.set_password(data.validated_data["password"])
+        user.save(update_fields=["password"])
         PasswordResetToken.objects.filter(user=user).delete()
-        return Response({'status': 200})
+        return Response({"status": 200})
+
+    patch = put
+
 
 class PasswordResetTokenCheckView(APIView):
-    def get(self, request, *args, **kwargs):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
         try:
-            token = uuid.UUID(request.query_params.get('token', ''))
+            token = uuid.UUID(request.query_params.get("token", ""))
         except (ValueError, TypeError, AttributeError):
-            return Response({'status': False})
-        reset = PasswordResetToken.objects.filter(token=token, created_at__gte=timezone.now()-timedelta(hours=1)).first()
-        return Response({'status': True, 'id': reset.id, 'user_id': reset.user_id}) if reset else Response({'status': False})
+            return Response({"status": False})
+        reset = valid_reset_tokens().filter(token=token).first()
+        if not reset:
+            return Response({"status": False})
+        return Response({"status": True, "id": reset.pk, "user_id": reset.user_id})
+
 
 class PasswordResetTokenDestroyView(generics.DestroyAPIView):
-    permission_classes = [IsAuthenticated]
+    serializer_class = PasswordResetTokenSerializer
 
     def get_queryset(self):
         return PasswordResetToken.objects.filter(user=self.request.user)
 
-    queryset = PasswordResetToken.objects.all()
-    serializer_class = PasswordResetTokenSerializer
 
 class SendResetEmailView(APIView):
+    permission_classes = [AllowAny]
 
-    def post(self, request, *args, **kwargs):
-      email_receiver = request.data.get("email")
-      user = User.objects.filter(email=email_receiver).first()
-      admin = User.objects.filter(is_superuser=True).first()
-
-      if user:
-        token = uuid.uuid4()
-
-        PasswordResetToken.objects.create(user=user, token=token)
-        send_mail(
-          "Redefinição de Senha",
-          f'''
-          Olá,
-
-          Você solicitou a redefinição de senha. 
-
-          Clique no link abaixo para redefinir sua senha:
-
-          {settings.FRONTEND_URL}/authentication/recover-password?token={token}&isReady={token}&email={user.email}
-
-          Se você não solicitou essa mudança, ignore este e-mail.
-          ''',
-          admin.email if admin else settings.DEFAULT_FROM_EMAIL,
-          [user.email],
-          fail_silently=False
+    def post(self, request):
+        data = ResetEmailInput(data=request.data)
+        data.is_valid(raise_exception=True)
+        user = User.objects.filter(email=data.validated_data["email"]).first()
+        if user:
+            token = PasswordResetToken.objects.create(user=user, token=uuid.uuid4())
+            query = urlencode({"token": token.token})
+            url = f"{settings.FRONTEND_URL}/authentication/recover-password?{query}"
+            send_mail(
+                "Redefinição de Senha",
+                f"Olá,\n\nPara redefinir sua senha, acesse:\n{url}\n\nSe você não solicitou a mudança, ignore esta mensagem.",
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+                fail_silently=False,
+            )
+        return Response(
+            {
+                "status": "success",
+                "message": "Se houver uma conta com este e-mail, enviaremos o link de redefinição. Confira também o spam.",
+            }
         )
-        return Response({"status": "success", "message": "E-Mail de redefinição enviado. Certifique-se de checar o spam."})
-      return Response({"status": "error", "message": "Não existe nenhuma conta relacionada ao E-Mail fornecido."})

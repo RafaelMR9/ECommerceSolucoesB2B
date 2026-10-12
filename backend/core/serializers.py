@@ -1,53 +1,112 @@
 from rest_framework import serializers
-from .validators import CustomValidators
-from .models import User, PasswordResetToken
+
+from .models import PasswordResetToken, User
+from .validators import validate_cnpj, validate_cpf, validate_password
+
 
 class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        required=False,
+        write_only=True,
+        trim_whitespace=False,
+        validators=[validate_password],
+    )
+    confirmPassword = serializers.CharField(
+        required=False, write_only=True, trim_whitespace=False
+    )
+
     class Meta:
         model = User
-        fields = '__all__'
-        extra_kwargs = {'password': {'write_only': True}, 'email': {'required': False}}
-        read_only_fields = ('is_staff', 'is_superuser')
+        fields = (
+            "id",
+            "email",
+            "username",
+            "name",
+            "cpf",
+            "cnpj",
+            "address",
+            "authorizeFature",
+            "canPurchase",
+            "is_staff",
+            "is_superuser",
+            "last_login",
+            "password",
+            "confirmPassword",
+        )
+        read_only_fields = ("is_staff", "is_superuser", "canPurchase", "last_login")
+        extra_kwargs = {"email": {"required": False}}
 
-    password = serializers.CharField(required=False, write_only=True)
+    def validate_cpf(self, value):
+        validate_cpf(value)
+        return value or None
+
+    def validate_cnpj(self, value):
+        validate_cnpj(value)
+        return value or None
+
+    def validate_name(self, value):
+        return value or None
+
+    def validate_address(self, value):
+        return value or None
+
+    def validate(self, data):
+        if self.instance is None:
+            missing = {
+                field: "Este campo é obrigatório."
+                for field in ("email", "password", "confirmPassword")
+                if not data.get(field)
+            }
+            if missing:
+                raise serializers.ValidationError(missing)
+        confirmation = data.pop("confirmPassword", None)
+        if "password" in data and data["password"] != confirmation:
+            raise serializers.ValidationError(
+                {"confirmPassword": "As senhas não coincidem."}
+            )
+        request = self.context.get("request")
+        administrator = (
+            self.instance is not None and request and request.user.is_superuser
+        )
+        if not administrator and "authorizeFature" in data:
+            if data["authorizeFature"] is True:
+                raise serializers.ValidationError(
+                    {"authorizeFature": "A autorização depende da administração."}
+                )
+            if self.instance and self.instance.authorizeFature is True:
+                data.pop("authorizeFature")
+        return data
 
     def create(self, validated_data):
-        CustomValidators.validate_cpf(validated_data['cpf'])
-        CustomValidators.validate_cnpj(validated_data['cnpj'])
-        CustomValidators.validate_email(validated_data['email'])
-        CustomValidators.validate_password(validated_data['password'])
-        user = User.objects.create_user(**validated_data)
-        return user
-    
+        return User.objects.create_user(**validated_data)
+
     def update(self, instance, validated_data):
-        for key, value in validated_data.items():
-            if value is not None or key in ['authorizeFature']:
-                if key in ['cpf', 'email', 'cnpj', 'address', 'name'] and getattr(instance, key) == value:
-                    continue
-                if key == "password":
-                    CustomValidators.validate_password(value)
-                    instance.set_password(value)
-                else:
-                    setattr(instance, key, value)
-                if key == 'cpf':
-                    CustomValidators.validate_cpf(value)
-                    CustomValidators.validate_unique_cpf(value)
-                elif key == 'cnpj':
-                    CustomValidators.validate_cnpj(value)
-                    CustomValidators.validate_unique_cnpj(value)
-                elif key == 'email':
-                    CustomValidators.validate_email(value)
-                    CustomValidators.validate_unique_email(value)
-                elif key == 'password':
-                    CustomValidators.validate_password(value)
-                elif key == 'address':
-                    CustomValidators.validate_unique_address(value)
-                elif key == 'name':
-                    CustomValidators.validate_unique_name(value)
-        instance.save()
-        return instance
-    
+        password = validated_data.pop("password", None)
+        if password is not None:
+            instance.set_password(password)
+        return super().update(instance, validated_data)
+
+
 class PasswordResetTokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = PasswordResetToken
-        fields = '__all__'
+        fields = ("id", "user", "token", "created_at")
+
+
+class ResetPasswordInput(serializers.Serializer):
+    token = serializers.UUIDField()
+    password = serializers.CharField(
+        trim_whitespace=False, validators=[validate_password]
+    )
+    confirmPassword = serializers.CharField(trim_whitespace=False)
+
+    def validate(self, data):
+        if data["password"] != data["confirmPassword"]:
+            raise serializers.ValidationError(
+                {"confirmPassword": "As senhas não coincidem."}
+            )
+        return data
+
+
+class ResetEmailInput(serializers.Serializer):
+    email = serializers.EmailField()

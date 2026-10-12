@@ -1,7 +1,16 @@
 from django.contrib import admin
-from .models import SalesOrder, ItemSalesOrder, SupplierOrder, ItemSupplierOrder, SalesInvoice, ItemSalesInvoice, SupplierInvoice, ItemSupplierInvoice
 
-# Register your models here.
+from .models import (
+    ItemSalesInvoice,
+    ItemSalesOrder,
+    ItemSupplierInvoice,
+    ItemSupplierOrder,
+    SalesInvoice,
+    SalesOrder,
+    SupplierInvoice,
+    SupplierOrder,
+)
+
 admin.site.register(SalesOrder)
 admin.site.register(ItemSalesOrder)
 admin.site.register(SupplierOrder)

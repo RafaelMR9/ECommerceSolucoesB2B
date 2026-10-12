@@ -113,5 +113,5 @@ export const getServerSideProps = withSession(async ({ api, query, user }) => {
     api(`marketing/promotion/${query.productId}/`),
   ])
   if (!product.visible) return { notFound: true }
-  return { product, promotion: promotion?.salePrice ? promotion : null }
+  return { product, promotion: promotion?.salePrice != null ? promotion : null }
 })

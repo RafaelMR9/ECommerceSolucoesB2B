@@ -1,98 +1,112 @@
 from rest_framework import generics
-from rest_framework.response import Response
+
+from core.permissions import IsAdministrator
+
 from .models import Category, Product
-from .validators import CustomValidators
 from .serializers import CategorySerializer, ProductSerializer
+from .validators import validate_category_deletion
+
 
 class CategoryListView(generics.ListAPIView):
-    queryset = Category.objects.all()
+    queryset = Category.objects.order_by("pk")
     serializer_class = CategorySerializer
+
 
 class CategoryFilterView(generics.ListAPIView):
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        search_query = self.request.query_params.get('fetchCategories', '')
-        return Category.objects.all().filter(name__iregex=search_query)
+        search = self.request.query_params.get("fetchCategories", "").strip()
+        return Category.objects.filter(name__icontains=search).order_by("pk")
+
 
 class CategoryCreateView(generics.CreateAPIView):
-    queryset = Category.objects.all()
+    permission_classes = [IsAdministrator]
     serializer_class = CategorySerializer
+
 
 class CategoryRetrieveView(generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+
 class CategoryUpdateView(generics.UpdateAPIView):
+    permission_classes = [IsAdministrator]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        newSubcategory = serializer.validated_data.get('category')
-        newInstance = Category.objects.get(pk=instance.pk)
-        newInstance.category = newSubcategory
+        kwargs["partial"] = True
+        return super().update(request, *args, **kwargs)
 
-        CustomValidators.validate_category_same_subcategory(instance, newSubcategory)
-        CustomValidators.validate_category_circular_relationship(newInstance, newSubcategory)
-
-        self.perform_update(serializer)
-        return Response(serializer.data)
 
 class CategoryDestroyView(generics.DestroyAPIView):
+    permission_classes = [IsAdministrator]
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    def destroy(self, request, *args, **kwargs):
-        category = self.get_object()
-        
-        CustomValidators.validate_category_deletion(category)
-        return super().destroy(request, *args, **kwargs)
+    def perform_destroy(self, instance):
+        validate_category_deletion(instance)
+        instance.delete()
+
 
 class ProductListView(generics.ListAPIView):
+    queryset = Product.objects.filter(visible=True).order_by("pk")
     serializer_class = ProductSerializer
 
-    def get_queryset(self):
-        return Product.objects.all().filter(visible=True)
-    
+
 class ProductFilterNameView(generics.ListAPIView):
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        search_query = self.request.query_params.get('fetchProduct', '')
-        return Product.objects.all().filter(visible=True, name__iregex=search_query)
+        search = self.request.query_params.get("fetchProduct", "").strip()
+        return Product.objects.filter(visible=True, name__icontains=search).order_by(
+            "pk"
+        )
+
 
 class ProductFilterCategoryView(generics.ListAPIView):
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        search_query = self.request.query_params.get('categoryId', '')
-        return Product.objects.all().filter(visible=True, category__id=search_query)
+        category = self.request.query_params.get("categoryId", "")
+        if not category.isdecimal():
+            return Product.objects.none()
+        return Product.objects.filter(visible=True, category_id=category).order_by("pk")
+
 
 class ProductCreateView(generics.CreateAPIView):
-    queryset = Product.objects.all()
+    permission_classes = [IsAdministrator]
     serializer_class = ProductSerializer
+
 
 class ProductRetrieveView(generics.RetrieveAPIView):
-    queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    def get_queryset(self):
+        products = Product.objects.all()
+        return (
+            products
+            if self.request.user.is_superuser
+            else products.filter(visible=True)
+        )
+
+
 class ProductUpdateView(generics.UpdateAPIView):
+    permission_classes = [IsAdministrator]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
     def update(self, request, *args, **kwargs):
-        # Existing clients send subsets via PUT; omitted fields must be preserved,
-        # especially BooleanField values in multipart requests.
-        kwargs['partial'] = True
+        kwargs["partial"] = True
         return super().update(request, *args, **kwargs)
 
+
 class ProductDestroyView(generics.DestroyAPIView):
+    permission_classes = [IsAdministrator]
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
     def perform_destroy(self, instance):
         instance.visible = False
-        instance.save()
+        instance.save(update_fields=["visible"])
