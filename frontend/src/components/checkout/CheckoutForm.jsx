@@ -1,3 +1,5 @@
+import FormActions from '@/components/ui/FormActions'
+import FormPanel from '@/components/ui/FormPanel'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import { AuthContext } from '@/contexts/authContext'
@@ -43,21 +45,25 @@ export default function CheckoutForm() {
     }
   }
   return (
-    <form className="form-panel" onSubmit={submit}>
+    <FormPanel onSubmit={submit}>
       <Alert>{errors.detail || errors.non_field_errors}</Alert>
-      <h2 className="section-title mb-5">Entrega e Pagamento</h2>
-      <div className="check-field">
+      <h2 className="text-[23px] font-extrabold tracking-[-0.8px] mb-5">Entrega e Pagamento</h2>
+      <div className="flex gap-2.5 items-start mt-[15px] mr-0 mb-[22px] ml-0">
         <input
+          className="accent-brand-accent w-4.5 h-4.5 mt-[3px]"
           id="futureDelivery"
           type="checkbox"
           checked={future}
           onChange={(e) => setFuture(e.target.checked)}
         />
-        <label htmlFor="futureDelivery">Agendar uma entrega futura</label>
+        <label className="text-ui text-brand-ink" htmlFor="futureDelivery">
+          Agendar uma entrega futura
+        </label>
       </div>
       {future && (
         <>
           <Field
+            tone="tinted"
             name="deliveryDate"
             label="Primeira Entrega"
             type="date"
@@ -67,6 +73,7 @@ export default function CheckoutForm() {
             required
           />
           <Field
+            tone="tinted"
             name="deliveryFrequency"
             label="Repetir a Cada Quantos Dias?"
             type="number"
@@ -79,8 +86,9 @@ export default function CheckoutForm() {
           />
         </>
       )}
-      <div className="check-field">
+      <div className="flex gap-2.5 items-start mt-[15px] mr-0 mb-[22px] ml-0">
         <input
+          className="accent-brand-accent w-4.5 h-4.5 mt-[3px]"
           id="faturedPayment"
           name="faturedPayment"
           type="checkbox"
@@ -88,7 +96,7 @@ export default function CheckoutForm() {
           onChange={change}
           disabled={!user.authorizeFature}
         />
-        <label htmlFor="faturedPayment">
+        <label className="text-ui text-brand-ink" htmlFor="faturedPayment">
           Pagamento faturado
           <small className="block text-sm text-gray-500 mt-1">
             {user.authorizeFature
@@ -103,14 +111,14 @@ export default function CheckoutForm() {
           O pagamento será realizado no recebimento dos produtos.
         </p>
       )}
-      <div className="form-actions">
+      <FormActions>
         <Button type="submit" disabled={busy}>
           {busy ? 'Finalizando…' : 'Finalizar Compra'}
         </Button>
         <Button href="/cart" variant="secondary">
           Voltar ao Carrinho
         </Button>
-      </div>
-    </form>
+      </FormActions>
+    </FormPanel>
   )
 }

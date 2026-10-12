@@ -48,16 +48,18 @@ export default function PartnerDetails({ kind, partner, children }) {
         }
       />
       <Alert>{error}</Alert>
-      <div className="panel mb-8">
-        <dl className="profile-grid">
+      <div className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel max-[640px]:p-5 mb-8">
+        <dl className="grid grid-cols-2 gap-[22px] max-[600px]:grid-cols-1">
           {[
             ['Nome', partner.name],
             ['CNPJ', partner.cnpj],
             ['E-mail', partner.email],
           ].map(([label, value]) => (
-            <div key={label}>
-              <dt>{label}</dt>
-              <dd>{value || '—'}</dd>
+            <div className="last:odd:col-span-full" key={label}>
+              <dt className="flex items-center gap-[7px] text-brand-muted text-small mb-[9px]">
+                {label}
+              </dt>
+              <dd className="text-body font-semibold [overflow-wrap:anywhere]">{value || '—'}</dd>
             </div>
           ))}
         </dl>

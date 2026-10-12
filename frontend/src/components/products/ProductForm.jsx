@@ -1,3 +1,5 @@
+import FormActions from '@/components/ui/FormActions'
+import FormPanel from '@/components/ui/FormPanel'
 import { useState } from 'react'
 import { Boxes, ImagePlus, Package } from 'lucide-react'
 import FormLayout from '@/components/ui/FormLayout'
@@ -62,6 +64,7 @@ export default function ProductForm({ product, categories, suppliers }) {
   }
   const field = (name, label, props = {}) => (
     <Field
+      tone="tinted"
       name={name}
       label={label}
       value={values[name] ?? ''}
@@ -85,7 +88,7 @@ export default function ProductForm({ product, categories, suppliers }) {
         { title: 'Apresentação', text: 'Associe o fornecedor e use uma imagem nítida do produto.' },
       ]}
     >
-      <form className="form-panel" onSubmit={submit}>
+      <FormPanel wide onSubmit={submit}>
         <Alert>{errors.detail || errors.non_field_errors}</Alert>
         <Alert variant="success">{success}</Alert>
         <FormSection
@@ -110,11 +113,12 @@ export default function ProductForm({ product, categories, suppliers }) {
           {field('description', 'Descrição', { as: 'textarea', rows: 4 })}
         </FormSection>
         <FormSection
+          separated
           icon={Boxes}
           title="Estoque e Preços"
           description="Os preços se referem a cada embalagem."
         >
-          <div className="form-grid">
+          <div className="grid grid-cols-2 gap-y-0 gap-x-[22px] max-[640px]:grid-cols-1">
             {field('currentStockQuantity', 'Quantidade em Estoque', {
               type: 'number',
               min: 0,
@@ -126,6 +130,7 @@ export default function ProductForm({ product, categories, suppliers }) {
           </div>
         </FormSection>
         <FormSection
+          separated
           icon={ImagePlus}
           title="Fornecedor e Imagem"
           description="Identifique a origem e a apresentação do produto."
@@ -155,6 +160,7 @@ export default function ProductForm({ product, categories, suppliers }) {
             </div>
           )}
           <Field
+            tone="tinted"
             name="image"
             type="file"
             label={product ? 'Substituir Imagem' : 'Imagem do Produto'}
@@ -175,15 +181,15 @@ export default function ProductForm({ product, categories, suppliers }) {
             }}
           />
         </FormSection>
-        <div className="form-actions">
+        <FormActions>
           <Button type="submit" disabled={busy}>
             {busy ? 'Salvando…' : product ? 'Salvar Alterações' : 'Cadastrar Produto'}
           </Button>
           <Button href={product ? `/products/${product.id}` : '/products'} variant="secondary">
             Cancelar
           </Button>
-        </div>
-      </form>
+        </FormActions>
+      </FormPanel>
     </FormLayout>
   )
 }

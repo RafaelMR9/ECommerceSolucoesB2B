@@ -65,23 +65,25 @@ export default function Modal({
     }
   }
   return (
-    <div className="modal-overlay">
+    <div className="fixed inset-0 bg-[#17111fa6] z-[100] flex items-center justify-center p-[22px] backdrop-blur-[4px]">
       <section
         ref={dialog}
-        className="modal-dialog"
+        className="bg-white rounded-[18px] p-7 w-full max-w-[440px] shadow-[0_24px_80px_#0003] max-[640px]:p-6"
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
       >
-        <h2 id={titleId}>{title}</h2>
-        <p>{message}</p>
+        <h2 className="text-[22px] font-extrabold tracking-[-0.8px] mb-3" id={titleId}>
+          {title}
+        </h2>
+        <p className="text-body text-brand-muted leading-[1.7]">{message}</p>
         {leading && (
           <div className="mt-4">
             <Alert variant="info">{leading}</Alert>
           </div>
         )}
         {children && <div className="mt-5">{children}</div>}
-        <div className="modal-actions">
+        <div className="flex gap-[9px] justify-end mt-[25px] flex-wrap">
           {option2 && (
             <Button variant="secondary" disabled={busy} onClick={onClose}>
               {option2}

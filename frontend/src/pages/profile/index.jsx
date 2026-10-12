@@ -42,38 +42,51 @@ export default function Profile() {
         description="Seus dados e as informações da sua organização."
       />
       <Alert>{error}</Alert>
-      <section className="profile-cover" aria-label="Resumo da Conta">
-        <div className="profile-summary">
-          <span className="profile-avatar" aria-hidden="true">
+      <section
+        className="flex flex-wrap items-center justify-between gap-6 p-8 mb-6 bg-profile bg-[#241630] border border-[#674182] rounded-[18px] text-white max-[600px]:p-6"
+        aria-label="Resumo da Conta"
+      >
+        <div className="flex items-center gap-[22px] min-w-0 flex-[1_1_400px] max-[600px]:flex-wrap max-[600px]:gap-4">
+          <span
+            className="shrink-0 grid place-items-center w-[86px] h-[86px] rounded-3xl bg-[#50316d] border border-[#a77acd] text-[#ead8ff] text-[30px] font-extrabold max-[600px]:w-16 max-[600px]:h-16 max-[600px]:rounded-[18px] max-[600px]:text-[25px]"
+            aria-hidden="true"
+          >
             {initials}
           </span>
-          <div>
-            <span className="profile-role">
+          <div className="min-w-0">
+            <span className="inline-flex items-center gap-[7px] text-[#d5b1ff] text-small font-semibold">
               <RoleIcon size={15} aria-hidden="true" />
               {user.is_superuser ? 'Conta Administrativa' : 'Organização Compradora'}
             </span>
-            <h2>{name}</h2>
-            <p>
+            <h2 className="text-[clamp(23px,_3vw,_30px)] leading-[1.2] font-extrabold tracking-[-0.8px] my-[9px] mx-0 [overflow-wrap:anywhere]">
+              {name}
+            </h2>
+            <p className="text-[#e1d3ed] text-small">
               {user.is_superuser
                 ? 'Acompanhe a operação e cuide de cada etapa da loja.'
                 : 'Suas compras, seus pedidos e sua empresa conectados.'}
             </p>
           </div>
         </div>
-        <div className="profile-actions">
-          <Button href="/profile/update">
-            <Pencil size={17} aria-hidden="true" />
+        <div className="flex flex-wrap gap-2.5 max-[600px]:w-full">
+          <Button className="max-[600px]:flex-[1_1_170px]" href="/profile/update">
+            <Pencil className="shrink-0" size={17} aria-hidden="true" />
             Editar Cadastro
           </Button>
-          <Button variant="inverse" onClick={logout} disabled={busy}>
-            <LogOut size={17} aria-hidden="true" />
+          <Button
+            className="max-[600px]:flex-[1_1_170px]"
+            variant="inverse"
+            onClick={logout}
+            disabled={busy}
+          >
+            <LogOut className="shrink-0" size={17} aria-hidden="true" />
             {busy ? 'Saindo…' : 'Sair da Conta'}
           </Button>
         </div>
       </section>
-      <div className="profile-layout">
-        <ProfileDetails user={user} />
-        <ProfileShortcuts admin={user.is_superuser} />
+      <div className="grid grid-cols-[minmax(0,_1.5fr)_minmax(0,_1fr)] gap-6 items-start max-[800px]:grid-cols-1">
+        <ProfileDetails className="min-w-0" user={user} />
+        <ProfileShortcuts className="min-w-0" admin={user.is_superuser} />
       </div>
     </BaseLayout>
   )

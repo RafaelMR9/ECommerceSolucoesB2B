@@ -1,3 +1,4 @@
+import { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import BaseLayout from '@/components/shared/BaseLayout'
@@ -42,56 +43,59 @@ export default function Cart({ items, products }) {
         }
       />
       <Alert>{error}</Alert>
-      <div className="checkout-layout">
+      <div className="grid grid-cols-[minmax(0,_1fr)_340px] gap-[26px] items-start max-[1050px]:grid-cols-[minmax(0,_1fr)_280px] max-[760px]:grid-cols-1">
         <DataTable
           empty={!items.length}
           emptyMessage="Seu carrinho está vazio"
           label="Produtos do Carrinho"
         >
-          <thead>
+          <thead className="bg-[#3c2456]">
             <tr>
-              <th>Produto</th>
-              <th>Preço por Embalagem</th>
-              <th>Quantidade</th>
-              <th>Total</th>
-              <th>Ação</th>
+              <TableHeader>Produto</TableHeader>
+              <TableHeader>Preço por Embalagem</TableHeader>
+              <TableHeader>Quantidade</TableHeader>
+              <TableHeader>Total</TableHeader>
+              <TableHeader>Ação</TableHeader>
             </tr>
           </thead>
           <tbody>
             {items.map((item) => {
               const product = products.find((p) => p.id === item.product)
               return (
-                <tr key={item.id}>
-                  <td>{product?.name || 'Produto indisponível'}</td>
-                  <td>{money(value(item) / item.quantity)}</td>
-                  <td>{item.quantity}</td>
-                  <td className="font-semibold">{money(value(item))}</td>
-                  <td>
+                <TableRow key={item.id}>
+                  <TableCell>{product?.name || 'Produto indisponível'}</TableCell>
+                  <TableCell>{money(value(item) / item.quantity)}</TableCell>
+                  <TableCell>{item.quantity}</TableCell>
+                  <TableCell className="font-semibold">{money(value(item))}</TableCell>
+                  <TableCell>
                     <Button
+                      size="small"
                       variant="danger"
-                      className="button-small"
+                      className="whitespace-nowrap"
                       onClick={() => remove(item)}
                       disabled={busy !== null}
                     >
                       {busy === item.id ? 'Removendo…' : 'Remover'}
                     </Button>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               )
             })}
           </tbody>
         </DataTable>
-        <aside className="panel checkout-summary">
-          <h2>Resumo do Pedido</h2>
+        <aside className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel max-[640px]:p-5">
+          <h2 className="text-[18px] font-bold mb-4.5">Resumo do Pedido</h2>
           <p className="text-sm text-gray-500">
             {cartCount} {cartCount === 1 ? 'embalagem' : 'embalagens'} no carrinho
           </p>
-          <div className="total">
+          <div className="flex flex-wrap gap-5 justify-between items-center text-[15px] my-[23px] mx-0">
             <span>Total</span>
-            <strong>{money(total)}</strong>
+            <strong className="text-brand-accent text-[27px] font-extrabold">{money(total)}</strong>
           </div>
           {items.length ? (
-            <Button href="/purchase/data">Continuar para Entrega</Button>
+            <Button className="w-full" href="/purchase/data">
+              Continuar para Entrega
+            </Button>
           ) : (
             <p className="text-sm text-gray-500">Escolha um produto para começar seu pedido.</p>
           )}

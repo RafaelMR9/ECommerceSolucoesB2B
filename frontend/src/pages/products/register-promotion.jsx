@@ -1,3 +1,5 @@
+import FormActions from '@/components/ui/FormActions'
+import FormPanel from '@/components/ui/FormPanel'
 import { Tag } from 'lucide-react'
 import FormLayout from '@/components/ui/FormLayout'
 import FormSection from '@/components/ui/FormSection'
@@ -57,7 +59,7 @@ export default function RegisterPromotion({ product }) {
           { title: 'Catálogo', text: 'O desconto aparece durante o período de vigência.' },
         ]}
       >
-        <form className="form-panel" onSubmit={submit}>
+        <FormPanel wide onSubmit={submit}>
           <FormSection
             icon={Tag}
             title="Condições da Promoção"
@@ -65,12 +67,13 @@ export default function RegisterPromotion({ product }) {
           >
             <Alert>{errors.detail || errors.non_field_errors}</Alert>
             <Alert variant="success">{success}</Alert>
-            <div className="form-grid">
+            <div className="grid grid-cols-2 gap-y-0 gap-x-[22px] max-[640px]:grid-cols-1">
               {[
                 ['startDate', 'Início da promoção'],
                 ['endDate', 'Fim da promoção'],
               ].map(([name, label]) => (
                 <Field
+                  tone="tinted"
                   key={name}
                   name={name}
                   label={label}
@@ -83,6 +86,7 @@ export default function RegisterPromotion({ product }) {
               ))}
             </div>
             <Field
+              tone="tinted"
               name="salePrice"
               label="Preço Promocional (R$)"
               type="number"
@@ -94,15 +98,15 @@ export default function RegisterPromotion({ product }) {
               required
             />
           </FormSection>
-          <div className="form-actions">
+          <FormActions>
             <Button type="submit" disabled={busy}>
               {busy ? 'Salvando…' : 'Cadastrar Promoção'}
             </Button>
             <Button href={`/products/${product.id}`} variant="secondary">
               Cancelar
             </Button>
-          </div>
-        </form>
+          </FormActions>
+        </FormPanel>
       </FormLayout>
     </BaseLayout>
   )

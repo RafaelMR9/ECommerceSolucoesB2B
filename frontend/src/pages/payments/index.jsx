@@ -11,7 +11,7 @@ export default function Payments() {
         eyebrow="Administração"
         description="Acompanhe pagamentos e pendências das organizações compradoras."
       />
-      <div className="option-grid">
+      <div className="grid grid-cols-2 gap-4.5 max-[640px]:grid-cols-1">
         <FeatureLink
           href="/payments/recurring-payments"
           icon={Repeat2}

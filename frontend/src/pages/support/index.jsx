@@ -20,18 +20,28 @@ export default function Support({ tickets }) {
         }
       />
       {tickets.length ? (
-        <div className="option-grid">
+        <div className="grid grid-cols-2 gap-4.5 max-[640px]:grid-cols-1">
           {tickets.map((ticket) => (
-            <Link href={`/support/${ticket.id}`} className="option-card" key={ticket.id}>
-              <MessageSquare size={23} aria-hidden="true" />
-              <div>
-                <h2 className="text-base">{ticket.subject}</h2>
-                <p className="line-clamp-2">{ticket.content}</p>
-                <p>
+            <Link
+              href={`/support/${ticket.id}`}
+              className="min-w-0 bg-white border border-brand-border border-t-3 border-t-[#af8fce] rounded-panel p-6 flex gap-[17px] items-start transition-colors duration-150 hover:border-brand-accent hover:bg-[#f8f1ff]"
+              key={ticket.id}
+            >
+              <MessageSquare className="text-brand-accent shrink-0" size={23} aria-hidden="true" />
+              <div className="min-w-0 flex-1">
+                <h2 className="font-bold tracking-[-0.5px] text-base">{ticket.subject}</h2>
+                <p className="[overflow-wrap:anywhere] text-ui text-brand-muted mt-[7px] overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+                  {ticket.content}
+                </p>
+                <p className="[overflow-wrap:anywhere] text-ui text-brand-muted mt-[7px]">
                   #{ticket.id} · {date(ticket.dateHour, true)}
                 </p>
               </div>
-              <ArrowUpRight className="option-arrow" size={17} aria-hidden="true" />
+              <ArrowUpRight
+                className="text-brand-accent shrink-0 ml-auto"
+                size={17}
+                aria-hidden="true"
+              />
             </Link>
           ))}
         </div>

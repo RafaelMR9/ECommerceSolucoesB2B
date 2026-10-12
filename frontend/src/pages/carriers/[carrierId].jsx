@@ -1,3 +1,4 @@
+import { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import BaseLayout from '@/components/shared/BaseLayout'
 import PartnerDetails from '@/components/partners/PartnerDetails'
 import DataTable from '@/components/ui/DataTable'
@@ -8,28 +9,30 @@ export default function Carrier({ partner, shipments, orders }) {
   return (
     <BaseLayout>
       <PartnerDetails kind="carriers" partner={partner}>
-        <h2 className="section-title mb-5">Entregas Relacionadas</h2>
+        <h2 className="text-[23px] font-extrabold tracking-[-0.8px] mb-5">Entregas Relacionadas</h2>
         <DataTable
           empty={!shipments.length}
           emptyMessage="Nenhuma entrega desta transportadora"
           label="Entregas da Transportadora"
         >
-          <thead>
+          <thead className="bg-[#3c2456]">
             <tr>
-              <th>Pedido</th>
-              <th>Enviado em</th>
-              <th>Status</th>
+              <TableHeader>Pedido</TableHeader>
+              <TableHeader>Enviado em</TableHeader>
+              <TableHeader>Status</TableHeader>
             </tr>
           </thead>
           <tbody>
             {shipments.map((shipment) => {
               const order = orders.find((o) => o.id === shipment.salesOrder)
               return (
-                <tr key={shipment.id}>
-                  <td>#{shipment.salesOrder}</td>
-                  <td>{date(shipment.dateHour, true)}</td>
-                  <td>{order ? <OrderStatus order={order} /> : 'Pedido indisponível'}</td>
-                </tr>
+                <TableRow key={shipment.id}>
+                  <TableCell>#{shipment.salesOrder}</TableCell>
+                  <TableCell>{date(shipment.dateHour, true)}</TableCell>
+                  <TableCell>
+                    {order ? <OrderStatus order={order} /> : 'Pedido indisponível'}
+                  </TableCell>
+                </TableRow>
               )
             })}
           </tbody>

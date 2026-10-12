@@ -1,3 +1,5 @@
+import FormActions from '@/components/ui/FormActions'
+import FormPanel from '@/components/ui/FormPanel'
 import { useState } from 'react'
 import { Building2, Truck } from 'lucide-react'
 import FormLayout from '@/components/ui/FormLayout'
@@ -64,7 +66,7 @@ export default function PartnerForm({ kind, partner }) {
         { title: 'Organização', text: 'Consulte o parceiro e seus pedidos na plataforma.' },
       ]}
     >
-      <form className="form-panel" onSubmit={submit}>
+      <FormPanel wide onSubmit={submit}>
         <Alert>{errors.detail}</Alert>
         <Alert variant="success">{success}</Alert>
         <FormSection
@@ -72,9 +74,10 @@ export default function PartnerForm({ kind, partner }) {
           title={kind === 'suppliers' ? 'Dados do Fornecedor' : 'Dados da Transportadora'}
           description="Preencha os campos obrigatórios indicados por *."
         >
-          <div className="form-grid">
-            <div className="form-wide">
+          <div className="grid grid-cols-2 gap-y-0 gap-x-[22px] max-[640px]:grid-cols-1">
+            <div className="col-span-full">
               <Field
+                tone="tinted"
                 name="name"
                 label="Nome"
                 value={values.name}
@@ -84,6 +87,7 @@ export default function PartnerForm({ kind, partner }) {
               />
             </div>
             <Field
+              tone="tinted"
               name="cnpj"
               label="CNPJ"
               placeholder="00.000.000/0000-00"
@@ -93,6 +97,7 @@ export default function PartnerForm({ kind, partner }) {
               required
             />
             <Field
+              tone="tinted"
               name="email"
               label="E-mail"
               type="email"
@@ -103,15 +108,15 @@ export default function PartnerForm({ kind, partner }) {
             />
           </div>
         </FormSection>
-        <div className="form-actions">
+        <FormActions>
           <Button type="submit" disabled={busy}>
             {busy ? 'Salvando…' : partner ? 'Salvar Alterações' : 'Cadastrar'}
           </Button>
           <Button href={partner ? `/${kind}/${partner.id}` : `/${kind}`} variant="secondary">
             Cancelar
           </Button>
-        </div>
-      </form>
+        </FormActions>
+      </FormPanel>
     </FormLayout>
   )
 }
