@@ -4,7 +4,7 @@ import { ArrowUpRight, Package } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import { money, titleCase } from '@/lib/format'
 
-export default function ProductCard({ product, category, promotion, priority = false }) {
+export default function ProductCard({ product, categoryName, promotion, priority = false }) {
   const href = `/products/${product.id}`
   const price = promotion?.salePrice ?? product.salePrice
   const discounted = Number(price) < Number(product.salePrice)
@@ -37,7 +37,7 @@ export default function ProductCard({ product, category, promotion, priority = f
       </Link>
       <div className="flex flex-1 flex-col min-w-0 p-4.5 max-[520px]:py-3.5 max-[520px]:px-3 max-[360px]:py-3 max-[360px]:px-2.5">
         <p className="self-start py-1 px-[9px] rounded-[6px] bg-[#f3ebfc] text-[#63358a] text-caption font-semibold mb-2.5 [overflow-wrap:anywhere]">
-          {titleCase(category?.name || 'Produto')}
+          {titleCase(categoryName || 'Produto')}
         </p>
         <h3 className="min-h-12 text-body font-extrabold leading-[1.5] tracking-[-0.3px] [overflow-wrap:anywhere] max-[520px]:min-h-0">
           <Link

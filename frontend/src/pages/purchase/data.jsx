@@ -4,7 +4,7 @@ import BaseLayout from '@/components/shared/BaseLayout'
 import PageHeader from '@/components/ui/PageHeader'
 import CheckoutForm from '@/components/checkout/CheckoutForm'
 import { withSession } from '@/lib/server/page'
-import { loadCart } from '@/lib/server/orderLoaders'
+import { loadCartItems } from '@/lib/server/orderLoaders'
 export default function PurchaseData({ items, initialUser }) {
   const total = items.reduce(
     (sum, item) => sum + Number(initialUser.is_superuser ? item.costPrice : item.salePrice),
@@ -35,6 +35,6 @@ export default function PurchaseData({ items, initialUser }) {
   )
 }
 export const getServerSideProps = withSession(async (context) => {
-  const cart = await loadCart(context)
+  const cart = await loadCartItems(context)
   return cart.items.length ? cart : { redirect: { destination: '/cart', permanent: false } }
 })

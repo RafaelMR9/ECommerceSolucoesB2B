@@ -56,11 +56,13 @@ export default function Product({ product, category, supplier, promotion }) {
 }
 export const getServerSideProps = withSession(async ({ api, params, user }) => {
   if (!/^\d+$/.test(params.productId)) return { notFound: true }
-  const product = await api(`products/${params.productId}/detail/`)
-  if (!product.visible && !user.is_superuser) return { notFound: true }
-  const [category, promotions, supplier] = await Promise.all([
-    api(`products/categories/${product.category}/detail/`),
+  const [product, promotions] = await Promise.all([
+    api(`products/${params.productId}/detail/`),
     api('marketing/'),
+  ])
+  if (!product.visible && !user.is_superuser) return { notFound: true }
+  const [category, supplier] = await Promise.all([
+    api(`products/categories/${product.category}/detail/`),
     user.is_superuser ? api(`suppliers/${product.supplier}/detail/`) : Promise.resolve(null),
   ])
   return {

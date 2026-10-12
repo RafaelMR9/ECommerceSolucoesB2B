@@ -1,4 +1,5 @@
 import Input from '@/components/ui/Input'
+import Form from 'next/form'
 import { useContext, useState } from 'react'
 import BaseLayout from '@/components/shared/BaseLayout'
 import PageHeader from '@/components/ui/PageHeader'
@@ -27,9 +28,8 @@ export default function Categories({ categories: initialCategories, search }) {
       setSelected(null)
     }
   }
-  const matches = categories.filter(
-    (c) => !search || normalizeSearch(c.name).includes(normalizeSearch(search))
-  )
+  const normalizedSearch = normalizeSearch(search)
+  const matches = categories.filter((c) => normalizeSearch(c.name).includes(normalizedSearch))
   return (
     <BaseLayout>
       <PageHeader
@@ -41,7 +41,7 @@ export default function Categories({ categories: initialCategories, search }) {
         }
       />
       <div className="flex items-center justify-between gap-5 flex-wrap mb-[25px]">
-        <form
+        <Form
           action="/categories"
           className="flex flex-wrap gap-2 items-center min-w-0 flex-[1_1_400px] max-w-[650px]"
         >
@@ -61,7 +61,7 @@ export default function Categories({ categories: initialCategories, search }) {
               Limpar
             </Button>
           )}
-        </form>
+        </Form>
         <p className="text-small text-brand-muted">
           {categories.length} Categorias · Abra os Grupos para Explorar
         </p>

@@ -51,9 +51,10 @@ function CategoryNode({ category, admin, onRemove, root = false, className }) {
   )
 }
 export default function CategoryTree({ categories, admin, onRemove, search }) {
+  const normalizedSearch = normalizeSearch(search)
   const visible = search
     ? categories
-        .filter((category) => normalizeSearch(category.name).includes(normalizeSearch(search)))
+        .filter((category) => normalizeSearch(category.name).includes(normalizedSearch))
         .map((category) => ({ ...category, children: [] }))
     : categoryHierarchy(categories)
   return (

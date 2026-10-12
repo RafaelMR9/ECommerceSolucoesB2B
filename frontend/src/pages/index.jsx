@@ -1,6 +1,5 @@
 import Button from '@/components/ui/Button'
 import Container from '@/components/shared/Container'
-import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import BaseLayout from '@/components/shared/BaseLayout'
 import Hero from '@/components/commerce/Hero'
@@ -8,10 +7,10 @@ import RecurringBanner from '@/components/commerce/RecurringBanner'
 import CategoryCard from '@/components/commerce/CategoryCard'
 import ProductCard from '@/components/commerce/ProductCard'
 import EmptyState from '@/components/ui/EmptyState'
-import { activePromotion } from '@/lib/format'
+import { productCards } from '@/lib/catalog'
 import { withSession } from '@/lib/server/page'
 
-export default function Home({ products, categories, promotions, now }) {
+export default function Home({ cards, categories }) {
   return (
     <BaseLayout fullWidth>
       <Hero />
@@ -33,7 +32,7 @@ export default function Home({ products, categories, promotions, now }) {
             className="grid grid-cols-4 gap-3 mb-[35px] max-[1050px]:grid-cols-2 max-[520px]:gap-[9px]"
             aria-label="Categorias"
           >
-            {categories.slice(0, 4).map((category) => (
+            {categories.map((category) => (
               <CategoryCard category={category} key={category.id} />
             ))}
           </section>
@@ -50,17 +49,17 @@ export default function Home({ products, categories, promotions, now }) {
             <ArrowUpRight className="shrink-0" size={15} aria-hidden="true" />
           </Button>
         </div>
-        {products.length ? (
+        {cards.length ? (
           <section
             className="grid grid-cols-4 gap-4 max-[1050px]:grid-cols-3 max-[760px]:grid-cols-2 max-[520px]:grid-cols-1"
             aria-label="Produtos"
           >
-            {products.slice(0, 8).map((product) => (
+            {cards.map(({ product, categoryName, promotion }) => (
               <ProductCard
                 key={product.id}
                 product={product}
-                category={categories.find((c) => c.id === product.category)}
-                promotion={activePromotion(product, promotions, now)}
+                categoryName={categoryName}
+                promotion={promotion}
               />
             ))}
           </section>
@@ -78,5 +77,8 @@ export const getServerSideProps = withSession(async ({ api }) => {
     api('products/categories/'),
     api('marketing/'),
   ])
-  return { products, categories, promotions, now: Date.now() }
+  return {
+    cards: productCards(products.slice(0, 8), categories, promotions, Date.now()),
+    categories: categories.slice(0, 4),
+  }
 })

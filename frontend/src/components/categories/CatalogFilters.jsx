@@ -9,8 +9,9 @@ export default function CatalogFilters({ categories, categoryId }) {
   const [search, setSearch] = useState('')
   const contentId = useId()
   const selected = categories.find((category) => String(category.id) === categoryId)
+  const normalizedSearch = normalizeSearch(search)
   const visible = categories.filter((category) =>
-    normalizeSearch(category.name).includes(normalizeSearch(search))
+    normalizeSearch(category.name).includes(normalizedSearch)
   )
   return (
     <aside className="border border-[#d6c5e6] rounded-[14px] bg-white p-4.5 self-start min-w-0 shadow-panel max-[760px]:p-0">
