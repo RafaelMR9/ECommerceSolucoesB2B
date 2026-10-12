@@ -1,22 +1,49 @@
 import Link from 'next/link'
-import { useContext, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Building2, LayoutGrid, Menu, Search, ShoppingCart, UserRound, X } from 'lucide-react'
+import {
+  BadgeCheck,
+  ChevronRight,
+  ClipboardList,
+  CreditCard,
+  House,
+  LayoutGrid,
+  Menu,
+  MessagesSquare,
+  PackagePlus,
+  Search,
+  ShieldCheck,
+  ShoppingCart,
+  Store,
+  Tags,
+  Truck,
+  UserRound,
+  X,
+} from 'lucide-react'
 import { AuthContext } from '@/contexts/authContext'
 import Brand from './Brand'
 
 const adminLinks = [
-  ['/suppliers', 'Fornecedores'],
-  ['/carriers', 'Transportadoras'],
-  ['/restock', 'Ressuprimento'],
-  ['/analysis', 'Análise de Crédito'],
-  ['/payments', 'Pagamentos'],
+  ['/suppliers', 'Fornecedores', Store],
+  ['/carriers', 'Transportadoras', Truck],
+  ['/restock', 'Ressuprimento', PackagePlus],
+  ['/analysis', 'Análise de Crédito', BadgeCheck],
+  ['/payments', 'Pagamentos', CreditCard],
+]
+const storeLinks = [
+  ['/', 'Início', House],
+  ['/products', 'Catálogo', LayoutGrid],
+  ['/categories', 'Categorias', Tags],
+  ['/orders', 'Pedidos', ClipboardList],
+  ['/support', 'Suporte', MessagesSquare],
 ]
 export default function Nav() {
   const router = useRouter()
   const { user, cartCount } = useContext(AuthContext)
   const [query, setQuery] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
+  const menuButton = useRef(null)
+  const accountName = user?.name || user?.username || 'Bem-vindo'
   function search(event) {
     event.preventDefault()
     router.push({
@@ -25,7 +52,7 @@ export default function Nav() {
     })
     setMenuOpen(false)
   }
-  function navLink(href, text, icon) {
+  function navLink(href, text, Icon) {
     return (
       <Link
         key={href}
@@ -37,8 +64,9 @@ export default function Nav() {
             : undefined
         }
       >
-        {icon}
-        {text}
+        <Icon size={17} className="nav-link-icon" aria-hidden="true" />
+        <span>{text}</span>
+        <ChevronRight size={15} className="nav-link-arrow" aria-hidden="true" />
       </Link>
     )
   }
@@ -47,17 +75,15 @@ export default function Nav() {
       <a href="#main-content" className="skip-link">
         Pular para o Conteúdo
       </a>
-      <div className="site-top">
-        <div className="site-top-inner site-width">
-          <span>
-            <Building2 size={12} aria-hidden="true" />
-            Soluções para a Rotina da Sua Empresa
-          </span>
-          <span>Compras, Pedidos e Suporte em um Só Lugar</span>
-          <span>Projeto de Portfólio</span>
-        </div>
-      </div>
-      <header className="site-header">
+      <header
+        className="site-header"
+        onKeyDown={(event) => {
+          if (event.key === 'Escape' && menuOpen) {
+            setMenuOpen(false)
+            menuButton.current?.focus()
+          }
+        }}
+      >
         <div className="site-header-main site-width">
           <Brand />
           <form className="header-search" onSubmit={search} role="search">
@@ -78,10 +104,11 @@ export default function Nav() {
               className="header-account"
               href={user ? '/profile' : '/authentication'}
               aria-label="Minha Conta"
+              title={accountName}
             >
               <UserRound size={22} aria-hidden="true" />
               <span className="header-account-copy">
-                <small>{user?.name || user?.username || 'Bem-vindo'}</small>Minha Conta
+                <small>{accountName}</small>Minha Conta
               </span>
             </Link>
             <Link
@@ -102,37 +129,41 @@ export default function Nav() {
             </Link>
             <button
               type="button"
+              ref={menuButton}
               className="mobile-menu-button"
               aria-expanded={menuOpen}
               aria-controls="site-navigation"
               aria-label={menuOpen ? 'Fechar Menu' : 'Abrir Menu'}
               onClick={() => setMenuOpen(!menuOpen)}
             >
-              {menuOpen ? <X size={20} /> : <Menu size={20} />}
+              {menuOpen ? (
+                <X size={20} aria-hidden="true" />
+              ) : (
+                <Menu size={20} aria-hidden="true" />
+              )}
             </button>
           </div>
         </div>
-        {user?.is_superuser && (
-          <nav className="admin-nav" aria-label="Administração">
-            <div className="admin-nav-inner site-width">
-              <span className="admin-nav-label">Área Administrativa</span>
-              {adminLinks.map(([href, label]) => navLink(href, label))}
+        <div id="site-navigation" className={`site-navigation ${menuOpen ? 'is-open' : ''}`}>
+          {user?.is_superuser && (
+            <nav className="admin-nav" aria-label="Administração">
+              <div className="admin-nav-inner site-width">
+                <span className="admin-nav-label">
+                  <ShieldCheck size={16} aria-hidden="true" />
+                  Área Administrativa
+                </span>
+                <div className="admin-nav-links">
+                  {adminLinks.map(([href, label, Icon]) => navLink(href, label, Icon))}
+                </div>
+              </div>
+            </nav>
+          )}
+          <nav className="site-nav" aria-label="Navegação Principal">
+            <div className="site-nav-inner site-width">
+              {storeLinks.map(([href, label, Icon]) => navLink(href, label, Icon))}
             </div>
           </nav>
-        )}
-        <nav
-          id="site-navigation"
-          className={`site-nav ${menuOpen ? 'is-open' : ''}`}
-          aria-label="Navegação Principal"
-        >
-          <div className="site-nav-inner site-width">
-            {navLink('/', 'Início')}
-            {navLink('/products', 'Catálogo', <LayoutGrid size={15} aria-hidden="true" />)}
-            {navLink('/categories', 'Categorias')}
-            {navLink('/orders', 'Pedidos')}
-            {navLink('/support', 'Suporte')}
-          </div>
-        </nav>
+        </div>
       </header>
     </>
   )
