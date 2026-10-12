@@ -4,18 +4,19 @@ export default function DataTable({ children, empty, emptyMessage, label = 'Dado
   if (empty) return <EmptyState title={emptyMessage || 'Nenhum Registro Encontrado'} />
   return (
     <div
-      className="w-full overflow-x-auto rounded-panel border border-brand-border bg-brand-surface shadow-panel max-[640px]:rounded-[10px]"
+      className="min-w-0 w-full overflow-x-auto rounded-panel border border-brand-border bg-brand-surface shadow-panel max-[640px]:rounded-[10px]"
       role="region"
       aria-label={label}
       tabIndex={0}
     >
-      <table className="w-full border-collapse text-left text-ui">{children}</table>
+      <table className="w-full min-w-[560px] border-collapse text-left text-ui">{children}</table>
     </div>
   )
 }
 export function TableHeader({ className, children, ...props }) {
   return (
     <th
+      scope="col"
       className={cn(
         'whitespace-nowrap border-b border-[#62447e] px-[19px] py-4 text-small font-bold text-white',
         className
@@ -30,7 +31,7 @@ export function TableCell({ className, children, ...props }) {
   return (
     <td
       className={cn(
-        'border-b border-[#efebf3] px-[19px] py-4.5 align-middle text-small text-brand-ink group-last/row:border-b-0',
+        'border-b border-[#efebf3] px-[19px] py-4.5 align-middle text-small text-brand-ink [overflow-wrap:anywhere] group-last/row:border-b-0',
         className
       )}
       {...props}

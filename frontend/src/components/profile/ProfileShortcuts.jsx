@@ -21,7 +21,7 @@ export default function ProfileShortcuts({ admin }) {
   ]
   return (
     <aside
-      className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel border-t-3 border-t-[#ad86ce] max-[640px]:p-5"
+      className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel min-w-0 border-t-3 border-t-[#ad86ce] max-[640px]:p-5"
       aria-labelledby="profile-shortcuts-title"
     >
       <h2 className="text-[19px] font-extrabold tracking-[-0.4px]" id="profile-shortcuts-title">

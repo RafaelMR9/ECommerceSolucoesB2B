@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { categoryHierarchy, categorySearchText } from '../src/lib/categories.js'
+import { categoryHierarchy } from '../src/lib/categories.js'
+import { normalizeSearch } from '../src/lib/format.js'
 
 test('large hierarchies preserve every category without changing source records', () => {
   const records = Array.from({ length: 500 }, (_, id) => ({
@@ -28,8 +29,6 @@ test('orphaned and cyclic legacy categories remain reachable exactly once', () =
 })
 
 test('category search accepts Portuguese names without accents or exact casing', () => {
-  assert.ok(categorySearchText('Papel Fotográfico').includes(categorySearchText(' FOTOGRAFICO ')))
-  assert.ok(
-    categorySearchText('Materiais de Escritório').includes(categorySearchText('escritorio'))
-  )
+  assert.ok(normalizeSearch('Papel Fotográfico').includes(normalizeSearch(' FOTOGRAFICO ')))
+  assert.ok(normalizeSearch('Materiais de Escritório').includes(normalizeSearch('escritorio')))
 })

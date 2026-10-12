@@ -10,7 +10,7 @@ import CategoryTree from '@/components/categories/CategoryTree'
 import { AuthContext } from '@/contexts/authContext'
 import { getCategories, removeCategory } from '@/services/productService'
 import { errorFields } from '@/lib/format'
-import { categorySearchText } from '@/lib/categories'
+import { normalizeSearch } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 export default function Categories({ categories: initialCategories, search }) {
   const { user } = useContext(AuthContext),
@@ -28,7 +28,7 @@ export default function Categories({ categories: initialCategories, search }) {
     }
   }
   const matches = categories.filter(
-    (c) => !search || categorySearchText(c.name).includes(categorySearchText(search))
+    (c) => !search || normalizeSearch(c.name).includes(normalizeSearch(search))
   )
   return (
     <BaseLayout>

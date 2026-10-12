@@ -1,7 +1,6 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { AuthContext } from '@/contexts/authContext'
 import { loginUser } from '@/services/authService'
 import AuthLayout from '@/components/shared/AuthLayout'
 import Button from '@/components/ui/Button'
@@ -11,8 +10,7 @@ import { withSession } from '@/lib/server/page'
 import { errorFields } from '@/lib/format'
 
 export default function Login() {
-  const router = useRouter(),
-    auth = useContext(AuthContext)
+  const router = useRouter()
   const [values, setValues] = useState({ username: '', password: '' }),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false)
@@ -22,7 +20,7 @@ export default function Login() {
     setError('')
     setBusy(true)
     try {
-      await loginUser(values, auth)
+      await loginUser(values)
       const next = router.query.next
       await router.push(
         typeof next === 'string' &&

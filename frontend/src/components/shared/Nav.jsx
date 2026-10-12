@@ -173,7 +173,7 @@ export default function Nav() {
               aria-label="Administração"
             >
               <div className="mx-auto flex max-w-[1240px] items-center gap-2 px-8 py-[5px] max-[1100px]:block max-[1100px]:p-0">
-                <span className="flex items-center gap-[7px] text-small normal-case text-[#c5a2ed] shrink-0 whitespace-nowrap max-[1100px]:mb-3 max-[1100px]:text-caption max-[1100px]:font-bold">
+                <span className="flex items-center gap-[7px] text-small text-[#c5a2ed] shrink-0 whitespace-nowrap max-[1100px]:mb-3 max-[1100px]:text-caption max-[1100px]:font-bold">
                   <ShieldCheck size={16} aria-hidden="true" />
                   Área Administrativa
                 </span>

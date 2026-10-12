@@ -195,6 +195,22 @@ async function mutation(path, data, { admin = false, method = 'POST' } = {}) {
 }
 const stocked = products.find((p) => p.currentStockQuantity > 0)
 assert.ok(stocked, 'The local fixture database needs a product in stock')
+const invalidImage = new FormData()
+invalidImage.set(
+  'image',
+  new Blob([new Uint8Array(4 * 1024 * 1024)], { type: 'image/jpeg' }),
+  'invalid-image.jpg'
+)
+const imageValidation = await mutation(`products/${stocked.id}/update/`, invalidImage, {
+  admin: true,
+  method: 'PATCH',
+})
+assert.equal(
+  imageValidation.status,
+  400,
+  'Multipart overhead must not reject a 4 MB file in the proxy'
+)
+assert.ok((await imageValidation.json()).image, 'Django must still validate the image contents')
 const readProduct = async () => (await fetch(`${api}products/${stocked.id}/detail/`)).json()
 const original = await readProduct()
 assert.equal((await mutation('orders/cart/add/', { product: stocked.id, quantity: 0 })).status, 400)

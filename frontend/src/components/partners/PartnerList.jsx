@@ -1,6 +1,6 @@
 import Input from '@/components/ui/Input'
-import Link from 'next/link'
-import { Building2, Truck, ArrowUpRight } from 'lucide-react'
+import FeatureLink from '@/components/ui/FeatureLink'
+import { Building2, Truck } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import PageHeader from '@/components/ui/PageHeader'
 import EmptyState from '@/components/ui/EmptyState'
@@ -46,27 +46,19 @@ export default function PartnerList({ kind, partners, search }) {
       {partners.length ? (
         <div className="grid grid-cols-2 gap-4.5 max-[640px]:grid-cols-1">
           {partners.map((partner) => (
-            <Link
-              className="min-w-0 bg-white border border-brand-border border-t-3 border-t-[#af8fce] rounded-panel p-6 flex gap-[17px] items-start transition-colors duration-150 hover:border-brand-accent hover:bg-[#f8f1ff]"
+            <FeatureLink
               href={`/${kind}/${partner.id}`}
               key={partner.id}
+              icon={Icon}
+              title={partner.name}
             >
-              <Icon className="text-brand-accent shrink-0" size={25} aria-hidden="true" />
-              <div className="min-w-0 flex-1">
-                <h2 className="font-bold text-[18px] tracking-[-0.5px]">{partner.name}</h2>
-                <p className="[overflow-wrap:anywhere] text-ui text-brand-muted mt-[7px]">
-                  {partner.cnpj}
-                </p>
-                <p className="[overflow-wrap:anywhere] text-ui text-brand-muted mt-[7px]">
-                  {partner.email}
-                </p>
-              </div>
-              <ArrowUpRight
-                size={17}
-                className="text-brand-accent shrink-0 ml-auto"
-                aria-hidden="true"
-              />
-            </Link>
+              <p className="mt-[7px] text-ui text-brand-muted [overflow-wrap:anywhere]">
+                {partner.cnpj}
+              </p>
+              <p className="mt-[7px] text-ui text-brand-muted [overflow-wrap:anywhere]">
+                {partner.email}
+              </p>
+            </FeatureLink>
           ))}
         </div>
       ) : (

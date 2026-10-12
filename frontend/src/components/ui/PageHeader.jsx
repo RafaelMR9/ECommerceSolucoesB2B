@@ -6,15 +6,15 @@ export default function PageHeader({ title, description, eyebrow, back, actions 
       <div className="min-w-0">
         {back && (
           <Link
-            className="inline-flex gap-1.5 items-center text-small text-brand-muted mb-[17px] hover:text-brand-accent"
+            className="inline-flex max-w-full gap-1.5 items-center text-small text-brand-muted mb-[17px] hover:text-brand-accent"
             href={back.href}
           >
-            <ArrowLeft size={15} aria-hidden="true" />
-            {back.label || 'Voltar'}
+            <ArrowLeft className="shrink-0" size={15} aria-hidden="true" />
+            <span className="min-w-0 [overflow-wrap:anywhere]">{back.label || 'Voltar'}</span>
           </Link>
         )}
         {eyebrow && (
-          <p className="text-brand-accent text-caption font-extrabold tracking-[1.2px] normal-case mb-2.5">
+          <p className="text-brand-accent text-caption font-extrabold tracking-[1.2px] mb-2.5">
             {eyebrow}
           </p>
         )}

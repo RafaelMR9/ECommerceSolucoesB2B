@@ -6,7 +6,7 @@ import EmptyState from '@/components/ui/EmptyState'
 import ProductCard from '@/components/commerce/ProductCard'
 import CatalogFilters from '@/components/categories/CatalogFilters'
 import { AuthContext } from '@/contexts/authContext'
-import { activePromotion, titleCase } from '@/lib/format'
+import { activePromotion, titleCase, normalizeSearch } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 
 export default function Products({ products, categories, promotions, now, search, categoryId }) {
@@ -43,10 +43,11 @@ export default function Products({ products, categories, promotions, now, search
               className="grid gap-4 max-[760px]:grid-cols-2 max-[520px]:grid-cols-1 grid-cols-3 max-[1050px]:grid-cols-2"
               aria-label="Produtos"
             >
-              {products.map((product) => (
+              {products.map((product, index) => (
                 <ProductCard
                   key={product.id}
                   product={product}
+                  priority={index < 3}
                   category={categories.find((c) => c.id === product.category)}
                   promotion={activePromotion(product, promotions, now)}
                 />
@@ -75,7 +76,7 @@ export const getServerSideProps = withSession(async ({ api, query }) => {
   const products = allProducts.filter(
     (p) =>
       (!categoryId || String(p.category) === categoryId) &&
-      (!search || p.name.toLocaleLowerCase('pt-BR').includes(search.toLocaleLowerCase('pt-BR')))
+      (!search || normalizeSearch(p.name).includes(normalizeSearch(search)))
   )
   return { products, categories, promotions, now: Date.now(), search, categoryId }
 })

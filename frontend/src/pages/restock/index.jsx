@@ -1,7 +1,6 @@
-import { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import BaseLayout from '@/components/shared/BaseLayout'
 import PageHeader from '@/components/ui/PageHeader'
-import DataTable from '@/components/ui/DataTable'
+import DataTable, { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import Button from '@/components/ui/Button'
 import Alert from '@/components/ui/Alert'
 import EmptyState from '@/components/ui/EmptyState'
@@ -42,7 +41,7 @@ export default function Restock({ products, suppliers, order }) {
                   .filter((p) => p.supplier === supplier.id)
                   .map((product) => (
                     <TableRow key={product.id}>
-                      <TableCell>{product.name}</TableCell>
+                      <TableCell className="min-w-[160px]">{product.name}</TableCell>
                       <TableCell>{product.currentStockQuantity}</TableCell>
                       <TableCell>{money(product.costPrice)}</TableCell>
                       <TableCell>
@@ -55,7 +54,7 @@ export default function Restock({ products, suppliers, order }) {
                             Comprar para Reposição
                           </Button>
                         ) : (
-                          <span className="text-sm text-gray-500">
+                          <span className="text-sm text-brand-muted">
                             Outro fornecedor no carrinho
                           </span>
                         )}

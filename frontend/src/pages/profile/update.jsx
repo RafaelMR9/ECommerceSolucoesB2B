@@ -16,7 +16,7 @@ import { validateEmail, validateCpf, validateCnpj } from '@/utils/utils'
 import { errorFields } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 export default function UpdateProfile() {
-  const { user, setUser } = useContext(AuthContext),
+  const { user } = useContext(AuthContext),
     router = useRouter()
   const [values, setValues] = useState({
       email: user.email,
@@ -57,7 +57,7 @@ export default function UpdateProfile() {
     }
     setBusy(true)
     try {
-      const data = await updateUser(
+      await updateUser(
         {
           ...values,
           cpf: user.is_superuser ? values.cpf : null,
@@ -68,7 +68,6 @@ export default function UpdateProfile() {
         user.id,
         user.username
       )
-      setUser({ ...user, ...data })
       await router.push('/profile')
     } catch (error) {
       setErrors(errorFields(error))

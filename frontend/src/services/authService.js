@@ -13,10 +13,7 @@ export const registerUser = (data) =>
     authorizeFature: data.authorizeFature ? false : null,
     canPurchase: true,
   })
-export async function loginUser(data, authContext) {
-  const result = await apiRequest('/api/session', 'POST', data)
-  authContext.setUser(result.user)
-}
+export const loginUser = (data) => apiRequest('/api/session', 'POST', data)
 export const logoutUser = () => apiRequest('/api/session', 'DELETE')
 export const resetPassword = (data, id) =>
   apiRequest(`${apiUsersUrl}/passwordReset/${id}/update/`, 'PUT', data)

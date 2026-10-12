@@ -1,7 +1,6 @@
-import { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import DataTable from '@/components/ui/DataTable'
+import DataTable, { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import Field from '@/components/ui/Field'
 import Alert from '@/components/ui/Alert'
 import Modal from '@/components/shared/Modal'
@@ -100,16 +99,18 @@ export default function OrdersTable({
                   <strong>#{order.id}</strong>
                 </TableCell>
                 {(admin || supplier) && (
-                  <TableCell>
+                  <TableCell className="min-w-[190px]">
                     <p className="m-0">
                       {company?.name || company?.username || 'Cadastro indisponível'}
                     </p>
                     {company?.cnpj && (
-                      <p className="m-0 text-sm text-gray-500 mt-1">{company.cnpj}</p>
+                      <p className="mt-1 whitespace-nowrap text-small text-brand-muted">
+                        {company.cnpj}
+                      </p>
                     )}
                   </TableCell>
                 )}
-                <TableCell>{date(order.orderDate, true)}</TableCell>
+                <TableCell className="whitespace-nowrap">{date(order.orderDate, true)}</TableCell>
                 <TableCell className="whitespace-nowrap font-semibold">
                   {money(supplier ? order.totalCostValue : order.totalSaleValue)}
                 </TableCell>

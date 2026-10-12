@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import { useId, useState } from 'react'
 import { ChevronDown, LayoutGrid, Search, SlidersHorizontal } from 'lucide-react'
-import { titleCase } from '@/lib/format'
-import { categorySearchText } from '@/lib/categories'
+import { titleCase, normalizeSearch } from '@/lib/format'
 import { cn } from '@/lib/classes'
 
 export default function CatalogFilters({ categories, categoryId }) {
@@ -11,10 +10,10 @@ export default function CatalogFilters({ categories, categoryId }) {
   const contentId = useId()
   const selected = categories.find((category) => String(category.id) === categoryId)
   const visible = categories.filter((category) =>
-    categorySearchText(category.name).includes(categorySearchText(search))
+    normalizeSearch(category.name).includes(normalizeSearch(search))
   )
   return (
-    <aside className="border border-[#d6c5e6] rounded-[14px] bg-white p-4.5 self-start min-w-0 shadow-panel max-[760px]:static max-[760px]:p-0">
+    <aside className="border border-[#d6c5e6] rounded-[14px] bg-white p-4.5 self-start min-w-0 shadow-panel max-[760px]:p-0">
       <button
         type="button"
         className="hidden max-[760px]:flex max-[760px]:items-center max-[760px]:gap-3 max-[760px]:w-full max-[760px]:p-4 max-[760px]:text-[#4d296e] max-[760px]:text-left max-[760px]:min-h-16 max-[760px]:text-ui max-[760px]:font-bold"
@@ -50,6 +49,7 @@ export default function CatalogFilters({ categories, categoryId }) {
         </div>
         <Link
           className="flex gap-[9px] items-center p-3 rounded-lg bg-[#f4edfc] text-[#4d296e] text-small font-bold min-h-11 aria-[current=page]:bg-brand-accent aria-[current=page]:text-white hover:bg-brand-accent hover:text-white"
+          onClick={() => setOpen(false)}
           href="/products"
           aria-current={!categoryId ? 'page' : undefined}
         >

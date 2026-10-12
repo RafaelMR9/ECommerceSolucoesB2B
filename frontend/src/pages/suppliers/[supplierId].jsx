@@ -1,7 +1,6 @@
-import { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import BaseLayout from '@/components/shared/BaseLayout'
 import PartnerDetails from '@/components/partners/PartnerDetails'
-import DataTable from '@/components/ui/DataTable'
+import DataTable, { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import { money, activePromotion } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 export default function Supplier({ partner, products, promotions, now }) {
@@ -24,7 +23,7 @@ export default function Supplier({ partner, products, promotions, now }) {
           <tbody>
             {products.map((product) => (
               <TableRow key={product.id}>
-                <TableCell>{product.name}</TableCell>
+                <TableCell className="min-w-[160px]">{product.name}</TableCell>
                 <TableCell>
                   {money(activePromotion(product, promotions, now)?.salePrice ?? product.salePrice)}
                 </TableCell>

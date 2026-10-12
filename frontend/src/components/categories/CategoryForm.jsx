@@ -25,13 +25,14 @@ export default function CategoryForm({ category, categories: initialCategories }
     setValues((p) => ({ ...p, [e.target.name]: e.target.value }))
     setError('')
   }
+  const categoriesById = new Map(categories.map((item) => [item.id, item]))
   function canBeParent(candidate) {
     let parent = candidate
     const visited = new Set()
     while (parent) {
       if (parent.id === category?.id || visited.has(parent.id)) return false
       visited.add(parent.id)
-      parent = categories.find((c) => c.id === parent.category)
+      parent = categoriesById.get(parent.category)
     }
     return true
   }

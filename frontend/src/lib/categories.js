@@ -1,10 +1,3 @@
-export const categorySearchText = (value) =>
-  String(value || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLocaleLowerCase('pt-BR')
-    .trim()
-
 // Keep the hierarchy in presentation data; never change the category records.
 export function categoryHierarchy(categories) {
   const ids = new Set(categories.map((category) => category.id))

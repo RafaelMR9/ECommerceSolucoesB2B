@@ -5,7 +5,7 @@ export default function RecurringBanner() {
   return (
     <section className="grid grid-cols-[1.1fr_1fr] rounded-[18px] overflow-hidden bg-brand-accent-soft mt-[38px] max-[520px]:grid-cols-1">
       <div className="p-[30px] max-[520px]:p-6">
-        <p className="text-brand-accent text-caption font-extrabold tracking-[1.2px] normal-case mb-2.5">
+        <p className="text-brand-accent text-caption font-extrabold tracking-[1.2px] mb-2.5">
           Planeje o Próximo Pedido
         </p>
         <h2 className="text-[29px] leading-[1.25] tracking-[-1px] font-extrabold mt-2.5 mr-0 mb-3.5 ml-0 max-[520px]:text-[26px]">

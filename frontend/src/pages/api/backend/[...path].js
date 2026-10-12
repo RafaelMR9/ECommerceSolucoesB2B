@@ -2,6 +2,8 @@ import { backendFetch } from '@/lib/server/api'
 import { getSession, sameOrigin } from '@/lib/server/session'
 
 export const config = { api: { bodyParser: false, responseLimit: '4mb' } }
+// A 4 MB image also needs room for its multipart headers and product fields.
+const MAX_REQUEST_BYTES = 5 * 1024 * 1024
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'private, no-store')
   const segments = req.query.path
@@ -40,8 +42,8 @@ export default async function handler(req, res) {
       let bytes = 0
       for await (const chunk of req) {
         bytes += chunk.length
-        if (bytes > 4 * 1024 * 1024)
-          return res.status(413).json({ image: ['A imagem deve ter até 4 MB.'] })
+        if (bytes > MAX_REQUEST_BYTES)
+          return res.status(413).json({ detail: 'Os dados enviados excedem o tamanho permitido.' })
         chunks.push(chunk)
       }
       body = Buffer.concat(chunks)
