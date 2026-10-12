@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { ArrowUpRight, ChevronDown, FolderTree } from 'lucide-react'
 import CategoryActions from './CategoryActions'
-import { titleCase } from '@/lib/format'
-import { categoryHierarchy, categorySearchText } from '@/lib/categories'
+import { titleCase, normalizeSearch } from '@/lib/format'
+import { categoryHierarchy } from '@/lib/categories'
 import { cn } from '@/lib/classes'
 
 function CategoryNode({ category, admin, onRemove, root = false, className }) {
@@ -53,13 +53,11 @@ function CategoryNode({ category, admin, onRemove, root = false, className }) {
 export default function CategoryTree({ categories, admin, onRemove, search }) {
   const visible = search
     ? categories
-        .filter((category) =>
-          categorySearchText(category.name).includes(categorySearchText(search))
-        )
+        .filter((category) => normalizeSearch(category.name).includes(normalizeSearch(search)))
         .map((category) => ({ ...category, children: [] }))
     : categoryHierarchy(categories)
   return (
-    <div className="grid grid-cols-1 gap-4.5 items-start max-[900px]:grid-cols-1">
+    <div className="grid grid-cols-1 gap-4.5 items-start">
       {visible.map((category) => (
         <section
           className="relative border border-[#d6c5e6] rounded-[15px] bg-white p-[22px] shadow-panel border-t-3 border-t-brand-accent min-w-0 max-[520px]:p-4"
@@ -106,11 +104,13 @@ export default function CategoryTree({ categories, admin, onRemove, search }) {
                 </summary>
                 <div className="border-t border-t-brand-border pt-4 mt-5">
                   <Link
-                    className="inline-flex items-center gap-[9px] text-[#5a2789] text-small font-bold min-h-11 mb-2.5 hover:underline"
+                    className="inline-flex max-w-full items-center gap-[9px] text-[#5a2789] text-small font-bold min-h-11 mb-2.5 hover:underline"
                     href={`/products?categoryId=${category.id}`}
                   >
-                    Ver Produtos de {titleCase(category.name)}
-                    <ArrowUpRight size={16} aria-hidden="true" />
+                    <span className="min-w-0 [overflow-wrap:anywhere]">
+                      Ver Produtos de {titleCase(category.name)}
+                    </span>
+                    <ArrowUpRight className="shrink-0" size={16} aria-hidden="true" />
                   </Link>
                   <div className="grid gap-[9px]">
                     {category.children.map((child) => (

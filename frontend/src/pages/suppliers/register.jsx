@@ -13,9 +13,4 @@ export default function Partner(props) {
     </BaseLayout>
   )
 }
-export const getServerSideProps = withSession(
-  async ({ api, query }) => {
-    return {}
-  },
-  { admin: true }
-)
+export const getServerSideProps = withSession(undefined, { admin: true })

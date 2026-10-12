@@ -15,48 +15,26 @@ export default function Modal({
   children,
 }) {
   const dialog = useRef(null)
+  const heading = useRef(null)
   const titleId = useId()
   const [busy, setBusy] = useState(false)
-  const handlers = useRef({ busy, onClose })
-  useEffect(() => {
-    handlers.current = { busy, onClose }
-  }, [busy, onClose])
+
   useEffect(() => {
     if (!isOpen) return
-    const previousFocus = document.activeElement
-    const previousOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    dialog.current?.querySelector('button')?.focus()
-    function handleKey(event) {
-      if (event.key === 'Escape' && !handlers.current.busy) handlers.current.onClose?.()
-      if (event.key === 'Tab') {
-        const buttons = dialog.current?.querySelectorAll(
-          'button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href]'
-        )
-        if (!buttons?.length) {
-          event.preventDefault()
-          return
-        }
-        const first = buttons[0],
-          last = buttons[buttons.length - 1]
-        if (event.shiftKey && document.activeElement === first) {
-          event.preventDefault()
-          last.focus()
-        } else if (!event.shiftKey && document.activeElement === last) {
-          event.preventDefault()
-          first.focus()
-        }
-      }
-    }
-    document.addEventListener('keydown', handleKey)
+    const element = dialog.current
+    const alreadyLocked = document.body.classList.contains('overflow-hidden')
+    document.body.classList.add('overflow-hidden')
+    element.showModal()
+    if (element.scrollHeight > element.clientHeight) heading.current.focus()
     return () => {
-      document.body.style.overflow = previousOverflow
-      document.removeEventListener('keydown', handleKey)
-      previousFocus?.focus()
+      element.close()
+      if (!alreadyLocked) document.body.classList.remove('overflow-hidden')
     }
   }, [isOpen])
-  if (!isOpen) return null
-  async function confirmAction() {
+
+  async function submit(event) {
+    event.preventDefault()
+    if (busy) return
     setBusy(true)
     try {
       await onConfirm()
@@ -64,36 +42,44 @@ export default function Modal({
       setBusy(false)
     }
   }
+
   return (
-    <div className="fixed inset-0 bg-[#17111fa6] z-[100] flex items-center justify-center p-[22px] backdrop-blur-[4px]">
-      <section
-        ref={dialog}
-        className="bg-white rounded-[18px] p-7 w-full max-w-[440px] shadow-[0_24px_80px_#0003] max-[640px]:p-6"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={titleId}
-      >
-        <h2 className="text-[22px] font-extrabold tracking-[-0.8px] mb-3" id={titleId}>
+    <dialog
+      ref={dialog}
+      className="m-auto max-h-[calc(100dvh_-_44px)] w-[calc(100%_-_44px)] max-w-[440px] overflow-y-auto rounded-[18px] bg-white p-7 text-brand-ink shadow-[0_24px_80px_#0003] backdrop:bg-[#17111fa6] backdrop:backdrop-blur-[4px] max-[640px]:p-6"
+      aria-labelledby={titleId}
+      onCancel={(event) => {
+        event.preventDefault()
+        if (!busy) onClose()
+      }}
+    >
+      <form onSubmit={submit}>
+        <h2
+          ref={heading}
+          tabIndex={-1}
+          className="mb-3 text-[22px] font-extrabold tracking-[-0.8px] outline-none"
+          id={titleId}
+        >
           {title}
         </h2>
-        <p className="text-body text-brand-muted leading-[1.7]">{message}</p>
+        <p className="text-body leading-[1.7] text-brand-muted">{message}</p>
         {leading && (
-          <div className="mt-4">
-            <Alert variant="info">{leading}</Alert>
-          </div>
+          <Alert variant="info" className="mt-4 mb-0">
+            {leading}
+          </Alert>
         )}
         {children && <div className="mt-5">{children}</div>}
-        <div className="flex gap-[9px] justify-end mt-[25px] flex-wrap">
+        <div className="mt-[25px] flex flex-wrap justify-end gap-[9px]">
           {option2 && (
-            <Button variant="secondary" disabled={busy} onClick={onClose}>
+            <Button variant="secondary" disabled={busy} onClick={onClose} autoFocus>
               {option2}
             </Button>
           )}
-          <Button variant={confirm ? 'primary' : 'danger'} disabled={busy} onClick={confirmAction}>
+          <Button type="submit" variant={confirm ? 'primary' : 'danger'} disabled={busy}>
             {busy ? 'Aguarde…' : option1}
           </Button>
         </div>
-      </section>
-    </div>
+      </form>
+    </dialog>
   )
 }

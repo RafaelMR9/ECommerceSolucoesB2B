@@ -1,5 +1,6 @@
 import { Building2, ContactRound, Mail, MapPin, UserRound } from 'lucide-react'
 import StatusBadge from '@/components/ui/StatusBadge'
+import DetailItem from '@/components/ui/DetailItem'
 
 export default function ProfileDetails({ user }) {
   const details = [
@@ -14,7 +15,7 @@ export default function ProfileDetails({ user }) {
   ]
   return (
     <section
-      className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel max-[640px]:p-5 profile-details"
+      className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel min-w-0 max-[640px]:p-5"
       aria-labelledby="profile-details-title"
     >
       <div className="flex items-center gap-[13px] pb-[21px] border-b border-b-brand-border mb-6">
@@ -32,15 +33,9 @@ export default function ProfileDetails({ user }) {
       </div>
       <dl className="grid grid-cols-2 gap-[22px] max-[600px]:grid-cols-1">
         {details.map(([label, value, Icon]) => (
-          <div className="last:odd:col-span-full" key={label}>
-            <dt className="flex items-center gap-[7px] text-brand-muted text-small mb-[9px]">
-              <Icon className="text-brand-accent" size={16} aria-hidden="true" />
-              {label}
-            </dt>
-            <dd className="text-body font-semibold [overflow-wrap:anywhere]">
-              {value || 'Não informado'}
-            </dd>
-          </div>
+          <DetailItem key={label} label={label} icon={Icon}>
+            {value || 'Não informado'}
+          </DetailItem>
         ))}
       </dl>
       {!user.is_superuser && (

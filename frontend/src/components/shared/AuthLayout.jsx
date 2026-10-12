@@ -15,7 +15,7 @@ export default function AuthLayout({ title, description, children }) {
         />
         <Brand className="inline-flex items-center gap-[9px] whitespace-nowrap text-[21px] font-extrabold tracking-[-0.8px] text-white max-[600px]:text-[18px] relative z-[1]" />
         <div className="max-w-[430px] mt-[240px] max-[600px]:mt-[25px] max-[600px]:max-w-[270px] relative z-[1]">
-          <p className="font-extrabold tracking-[1.2px] normal-case mb-2.5 text-[#c1b0d1] text-ui leading-[1.8] max-[600px]:hidden">
+          <p className="font-extrabold tracking-[1.2px] mb-2.5 text-[#c1b0d1] text-ui leading-[1.8] max-[600px]:hidden">
             Seu Negócio em Movimento
           </p>
           <h2 className="text-[38px] leading-[1.17] tracking-[-1.6px] font-extrabold my-3.5 mx-0 max-[850px]:text-[31px] max-[600px]:text-[24px] max-[600px]:leading-[1.2]">
@@ -33,7 +33,7 @@ export default function AuthLayout({ title, description, children }) {
       </aside>
       <section className="py-[45px] px-10 flex items-center justify-center max-[850px]:py-[35px] max-[850px]:px-[25px] max-[600px]:py-8 max-[600px]:px-[23px]">
         <div className="w-full max-w-[460px]">
-          <p className="text-brand-accent text-caption font-extrabold tracking-[1.2px] normal-case mb-2.5">
+          <p className="text-brand-accent text-caption font-extrabold tracking-[1.2px] mb-2.5">
             B2B Soluções
           </p>
           <h1 className="text-[29px] tracking-[-1px] font-extrabold max-[600px]:text-[27px]">

@@ -98,7 +98,7 @@ export default function CheckoutForm() {
         />
         <label className="text-ui text-brand-ink" htmlFor="faturedPayment">
           Pagamento faturado
-          <small className="block text-sm text-gray-500 mt-1">
+          <small className="block text-sm text-brand-muted mt-1">
             {user.authorizeFature
               ? 'Pagamento em até 30 dias após a compra.'
               : 'Sua organização ainda não possui autorização para compras faturadas.'}
@@ -107,7 +107,7 @@ export default function CheckoutForm() {
       </div>
       <Alert>{errors.faturedPayment}</Alert>
       {!values.faturedPayment && (
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-sm text-brand-muted mb-6">
           O pagamento será realizado no recebimento dos produtos.
         </p>
       )}

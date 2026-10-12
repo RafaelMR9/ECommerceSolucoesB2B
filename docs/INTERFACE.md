@@ -50,6 +50,20 @@ A interface usa somente Tailwind para os estilos dos componentes. Paleta, tipogr
 
 ## Validação e publicação
 
+### Revisão final do frontend
+
+A sessão no cliente usa diretamente as propriedades recebidas por SSR, sem copiar o usuário para outro estado nem sincronizá-lo por efeito. Login e edição do perfil atualizam a sessão/dados no servidor e navegam para uma página com dados novos. Mudanças de endereço reiniciam o estado da página para impedir que formulários e conversas reaproveitem dados de outro registro; mudanças apenas de âncora preservam esse estado.
+
+`DetailItem` reúne a apresentação de dados em produtos, perfil e parceiros. `PurchaseLayout` e `OrderSummary` compartilham a estrutura do carrinho e da compra. Os cartões de parceiros e solicitações reutilizam `FeatureLink`; os grupos do rodapé são definidos em uma lista simples. Esses componentes substituem duplicação de marcação e classes, sem um sistema de configuração de páginas.
+
+O modal usa o elemento HTML `dialog`: o navegador mantém o restante da página inativo, trata a navegação por teclado e devolve o foco ao controle de origem. A confirmação é um formulário, portanto campos obrigatórios, como a transportadora, recebem validação nativa. O diálogo tem altura limitada e rolagem própria. Em conteúdo extenso, o foco inicial vai para o título para mostrar o começo da mensagem. Referência: [dialog no MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog).
+
+A busca usa `normalizeSearch` em categorias, produtos e parceiros, aceitando nomes sem acentos e espaços nas extremidades. O carregamento compartilhado de parceiros preserva links antigos e ignora parâmetros repetidos que antes provocavam erro. A validação de senha confere as letras e o tamanho indicados pelo formulário. O proxy permite o espaço adicional de cabeçalhos e campos multipart, evitando rejeitar antecipadamente uma imagem de 4 MB; a API mantém a validação do arquivo.
+
+As 43 telas foram conferidas em 320, 768 e 1440 px, com estados de administrador, comprador, autenticação, listas vazias e preenchidas, agendamento, recuperação válida/inválida e erros. Testes adicionais usaram nomes com até 255 caracteres, mais de 500 categorias e modais em uma tela de 400 px de altura. Etiquetas e links de retorno agora acomodam nomes extensos. No celular, ações de formulário ocupam a largura disponível; tabelas mantêm larguras legíveis com rolagem contida, e documentos como CNPJ não são partidos em várias linhas.
+
+Foram executados 14 testes unitários e 78 verificações integradas de páginas e permissões, além de carrinho, checkout, cancelamento, multipart e preservação de imagens. A revisão utiliza uma cópia descartável do SQLite, restaurada após os testes. O banco original e os serviços hospedados permanecem intactos.
+
 Foram verificados build de produção, lint, formatação, testes de moeda/datas/promoções/erros, testes Django dos fluxos, páginas SSR e permissões de administrador/comprador, cookies, checkout completo e preservação de imagem em multipart. A revisão visual inclui desktop e mobile.
 
 Os testes integrados usam uma cópia isolada do SQLite, e os testes Django usam banco temporário. O banco original, os dados hospedados e os serviços de produção não foram modificados. A documentação contém somente caminhos, configuração e descrição de comportamentos; não inclui chaves, dumps ou configurações privadas.

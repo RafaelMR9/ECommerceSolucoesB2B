@@ -1,7 +1,6 @@
-import { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import BaseLayout from '@/components/shared/BaseLayout'
 import PartnerDetails from '@/components/partners/PartnerDetails'
-import DataTable from '@/components/ui/DataTable'
+import DataTable, { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import OrderStatus from '@/components/orders/OrderStatus'
 import { date } from '@/lib/format'
 import { withSession } from '@/lib/server/page'

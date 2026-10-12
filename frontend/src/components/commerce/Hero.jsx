@@ -16,7 +16,7 @@ export default function Hero() {
       />
       <Container className="relative z-[1] pt-12 pb-[49px] min-h-[390px] max-[520px]:min-h-[465px] max-[520px]:pt-[35px] max-[520px]:pb-10">
         <div className="max-w-[475px] max-[520px]:max-w-[300px]">
-          <p className="text-caption font-extrabold tracking-[1.2px] normal-case mb-2.5 text-[#bd9af4] flex gap-[7px] items-center">
+          <p className="text-caption font-extrabold tracking-[1.2px] mb-2.5 text-[#bd9af4] flex gap-[7px] items-center">
             <Sparkles size={14} aria-hidden="true" />
             Seu Negócio em Movimento
           </p>

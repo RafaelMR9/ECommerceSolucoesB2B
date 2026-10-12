@@ -1,3 +1,10 @@
+export const normalizeSearch = (value) =>
+  String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLocaleLowerCase('pt-BR')
+    .trim()
+
 const titleConnectors = new Set(
   'a o as os e ou de do da dos das em no na nos nas para por pelo pela pelos pelas ao aos à às com sem sob sobre até entre ante após contra desde perante como um uma uns umas'.split(
     ' '

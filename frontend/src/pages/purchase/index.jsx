@@ -1,3 +1,5 @@
+import PurchaseLayout from '@/components/checkout/PurchaseLayout'
+import OrderSummary from '@/components/checkout/OrderSummary'
 import FormPanel from '@/components/ui/FormPanel'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -32,6 +34,7 @@ export default function Purchase({ product, promotion }) {
     }
   }
   const price = user.is_superuser ? product.costPrice : (promotion?.salePrice ?? product.salePrice)
+  const count = Number(quantity) || 0
   return (
     <BaseLayout>
       <PageHeader
@@ -42,7 +45,22 @@ export default function Purchase({ product, promotion }) {
           label: user.is_superuser ? 'Ressuprimento' : 'Produto',
         }}
       />
-      <div className="grid grid-cols-[minmax(0,_1fr)_340px] gap-[26px] items-start max-[1050px]:grid-cols-[minmax(0,_1fr)_280px] max-[760px]:grid-cols-1">
+      <PurchaseLayout
+        summary={
+          <OrderSummary
+            title="Resumo do Item"
+            label="Subtotal"
+            total={price * count}
+            description={`${count} ${count === 1 ? 'embalagem' : 'embalagens'} · ${count * product.packaging} unidades`}
+          >
+            {!user.is_superuser && (
+              <p className="text-small text-brand-muted">
+                Estoque disponível: {product.currentStockQuantity} embalagens.
+              </p>
+            )}
+          </OrderSummary>
+        }
+      >
         <FormPanel onSubmit={submit}>
           <Alert>{errors.detail}</Alert>
           <div className="flex items-center gap-3.5 mb-7">
@@ -52,12 +70,13 @@ export default function Purchase({ product, promotion }) {
                 src={product.image || '/images/product-placeholder.svg'}
                 alt={product.name}
                 fill
+                priority
                 unoptimized
               />
             </div>
-            <div>
-              <h2 className="font-semibold">{product.name}</h2>
-              <p className="text-sm text-gray-500">{money(price)} por embalagem</p>
+            <div className="min-w-0">
+              <h2 className="font-semibold [overflow-wrap:anywhere]">{product.name}</h2>
+              <p className="text-sm text-brand-muted">{money(price)} por embalagem</p>
             </div>
           </div>
           <Field
@@ -81,24 +100,7 @@ export default function Purchase({ product, promotion }) {
             {busy ? 'Adicionando…' : 'Adicionar ao Carrinho'}
           </Button>
         </FormPanel>
-        <aside className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel max-[640px]:p-5">
-          <h2 className="text-[18px] font-bold mb-4.5">Resumo do Item</h2>
-          <p className="text-sm text-gray-500">
-            {quantity || 0} embalagens · {Number(quantity || 0) * product.packaging} unidades
-          </p>
-          <div className="flex flex-wrap gap-5 justify-between items-center text-[15px] my-[23px] mx-0">
-            <span>Subtotal</span>
-            <strong className="text-brand-accent text-[27px] font-extrabold">
-              {money(price * Number(quantity || 0))}
-            </strong>
-          </div>
-          {!user.is_superuser && (
-            <p className="text-sm text-gray-500">
-              Estoque disponível: {product.currentStockQuantity} embalagens.
-            </p>
-          )}
-        </aside>
-      </div>
+      </PurchaseLayout>
     </BaseLayout>
   )
 }

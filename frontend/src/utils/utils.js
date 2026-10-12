@@ -1,6 +1,3 @@
-export const checkNullObject = (obj) =>
-  obj == null || Object.values(obj).every((value) => value === null)
-
 export const validateEmail = (email) => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return re.test(email)
@@ -16,11 +13,4 @@ export const validateCnpj = (cnpj) => {
   return re.test(cnpj)
 }
 
-export const validatePassword = (password) => {
-  const re = /^\d+$/
-  return password.length >= 8 && !re.test(password)
-}
-
-export const validateConfirmPassword = (password1, password2) => {
-  return password1 === password2
-}
+export const validatePassword = (password) => password.length >= 8 && /\p{L}/u.test(password)

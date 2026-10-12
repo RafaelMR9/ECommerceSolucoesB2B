@@ -1,9 +1,10 @@
-import { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
+import PurchaseLayout from '@/components/checkout/PurchaseLayout'
+import OrderSummary from '@/components/checkout/OrderSummary'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import BaseLayout from '@/components/shared/BaseLayout'
 import PageHeader from '@/components/ui/PageHeader'
-import DataTable from '@/components/ui/DataTable'
+import DataTable, { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import Button from '@/components/ui/Button'
 import Alert from '@/components/ui/Alert'
 import { AuthContext } from '@/contexts/authContext'
@@ -43,7 +44,24 @@ export default function Cart({ items, products }) {
         }
       />
       <Alert>{error}</Alert>
-      <div className="grid grid-cols-[minmax(0,_1fr)_340px] gap-[26px] items-start max-[1050px]:grid-cols-[minmax(0,_1fr)_280px] max-[760px]:grid-cols-1">
+      <PurchaseLayout
+        summary={
+          <OrderSummary
+            total={total}
+            description={`${cartCount} ${cartCount === 1 ? 'embalagem' : 'embalagens'} no carrinho`}
+          >
+            {items.length ? (
+              <Button className="w-full" href="/purchase/data">
+                Continuar para Entrega
+              </Button>
+            ) : (
+              <p className="text-small text-brand-muted">
+                Escolha um produto para começar seu pedido.
+              </p>
+            )}
+          </OrderSummary>
+        }
+      >
         <DataTable
           empty={!items.length}
           emptyMessage="Seu carrinho está vazio"
@@ -63,7 +81,9 @@ export default function Cart({ items, products }) {
               const product = products.find((p) => p.id === item.product)
               return (
                 <TableRow key={item.id}>
-                  <TableCell>{product?.name || 'Produto indisponível'}</TableCell>
+                  <TableCell className="min-w-[160px]">
+                    {product?.name || 'Produto indisponível'}
+                  </TableCell>
                   <TableCell>{money(value(item) / item.quantity)}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
                   <TableCell className="font-semibold">{money(value(item))}</TableCell>
@@ -83,24 +103,7 @@ export default function Cart({ items, products }) {
             })}
           </tbody>
         </DataTable>
-        <aside className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel max-[640px]:p-5">
-          <h2 className="text-[18px] font-bold mb-4.5">Resumo do Pedido</h2>
-          <p className="text-sm text-gray-500">
-            {cartCount} {cartCount === 1 ? 'embalagem' : 'embalagens'} no carrinho
-          </p>
-          <div className="flex flex-wrap gap-5 justify-between items-center text-[15px] my-[23px] mx-0">
-            <span>Total</span>
-            <strong className="text-brand-accent text-[27px] font-extrabold">{money(total)}</strong>
-          </div>
-          {items.length ? (
-            <Button className="w-full" href="/purchase/data">
-              Continuar para Entrega
-            </Button>
-          ) : (
-            <p className="text-sm text-gray-500">Escolha um produto para começar seu pedido.</p>
-          )}
-        </aside>
-      </div>
+      </PurchaseLayout>
     </BaseLayout>
   )
 }

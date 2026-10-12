@@ -9,7 +9,7 @@ export default function Input({
   ...props
 }) {
   const classes = cn(
-    'block min-h-11 w-full rounded-lg border border-[#dbd4e5] bg-white px-[13px] py-[11px] text-body leading-[1.4] text-brand-ink transition-colors placeholder:text-brand-muted hover:border-[#b8a7ce] focus:border-brand-accent focus:outline focus:outline-[3px] focus:outline-brand-accent/10 focus:outline-offset-1 aria-[invalid=true]:border-brand-danger disabled:bg-[#f6f4f8] disabled:text-[#857b91]',
+    'block min-h-11 min-w-0 max-w-full w-full rounded-lg border border-[#dbd4e5] bg-white px-[13px] py-[11px] text-body leading-[1.4] text-brand-ink transition-colors placeholder:text-brand-muted hover:border-[#b8a7ce] focus:border-brand-accent focus:outline focus:outline-[3px] focus:outline-brand-accent/10 focus:outline-offset-1 aria-[invalid=true]:border-brand-danger disabled:bg-[#f6f4f8] disabled:text-[#857b91]',
     tone === 'tinted' && 'border-[#cdbedc] bg-[#fcfaff] focus:bg-white',
     type === 'file' &&
       'text-small file:mr-2.5 file:rounded-[5px] file:border-0 file:bg-brand-accent-soft file:px-[9px] file:py-[5px] file:text-brand-accent',

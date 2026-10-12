@@ -4,13 +4,13 @@ import Button from '@/components/ui/Button'
 import PageHeader from '@/components/ui/PageHeader'
 import Modal from '@/components/shared/Modal'
 import Alert from '@/components/ui/Alert'
+import DetailItem from '@/components/ui/DetailItem'
 import { removeSupplier } from '@/services/supplierService'
 import { removeCarrier } from '@/services/carrierService'
 import { errorFields } from '@/lib/format'
 
 export default function PartnerDetails({ kind, partner, children }) {
-  const router = useRouter(),
-    singular = kind === 'suppliers' ? 'fornecedor' : 'transportadora'
+  const router = useRouter()
   const [confirm, setConfirm] = useState(false),
     [error, setError] = useState('')
   async function remove() {
@@ -42,7 +42,7 @@ export default function PartnerDetails({ kind, partner, children }) {
               Editar Cadastro
             </Button>
             <Button variant="danger" onClick={() => setConfirm(true)}>
-              Remover {singular}
+              {kind === 'suppliers' ? 'Remover Fornecedor' : 'Remover Transportadora'}
             </Button>
           </>
         }
@@ -55,12 +55,9 @@ export default function PartnerDetails({ kind, partner, children }) {
             ['CNPJ', partner.cnpj],
             ['E-mail', partner.email],
           ].map(([label, value]) => (
-            <div className="last:odd:col-span-full" key={label}>
-              <dt className="flex items-center gap-[7px] text-brand-muted text-small mb-[9px]">
-                {label}
-              </dt>
-              <dd className="text-body font-semibold [overflow-wrap:anywhere]">{value || '—'}</dd>
-            </div>
+            <DetailItem key={label} label={label}>
+              {value || '—'}
+            </DetailItem>
           ))}
         </dl>
       </div>

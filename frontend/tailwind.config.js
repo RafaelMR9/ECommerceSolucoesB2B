@@ -4,7 +4,6 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        gray: { 500: '#594f65' },
         brand: {
           accent: '#7c3aed',
           'accent-hover': '#6d28d9',
@@ -47,9 +46,6 @@ module.exports = {
         'hero-mobile': 'linear-gradient(180deg, #110d18e8 0%, #110d18b0 60%, #110d1830 100%)',
         guide: 'radial-gradient(circle at 100% 0%, #542c76, transparent 65%)',
         profile: 'radial-gradient(ellipse at top right, #653494 0%, transparent 65%)',
-      },
-      height: {
-        128: '32rem',
       },
     },
   },

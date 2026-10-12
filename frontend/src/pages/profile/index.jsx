@@ -11,8 +11,7 @@ import { AuthContext } from '@/contexts/authContext'
 import { logoutUser } from '@/services/authService'
 import { withSession } from '@/lib/server/page'
 export default function Profile() {
-  const auth = useContext(AuthContext),
-    { user } = auth,
+  const { user } = useContext(AuthContext),
     router = useRouter(),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false)
@@ -85,8 +84,8 @@ export default function Profile() {
         </div>
       </section>
       <div className="grid grid-cols-[minmax(0,_1.5fr)_minmax(0,_1fr)] gap-6 items-start max-[800px]:grid-cols-1">
-        <ProfileDetails className="min-w-0" user={user} />
-        <ProfileShortcuts className="min-w-0" admin={user.is_superuser} />
+        <ProfileDetails user={user} />
+        <ProfileShortcuts admin={user.is_superuser} />
       </div>
     </BaseLayout>
   )
