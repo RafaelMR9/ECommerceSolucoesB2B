@@ -48,6 +48,24 @@ Os tamanhos compartilhados ficam em `frontend/tailwind.config.js`: corpo de 16 p
 
 A interface usa somente Tailwind para os estilos dos componentes. Paleta, tipografia, sombras, raios e gradientes compartilhados ficam em `frontend/tailwind.config.js`. `styles/globals.css` carrega o Tailwind e define padrões globais de foco, seleção e movimento reduzido com `@apply`; os nove arquivos CSS de componentes foram removidos. `cn` combina classes usando `tailwind-merge` (compatível com Tailwind 3), preservando as variantes de fonte e cor do tema. Classes condicionais são escritas completas para que o Tailwind gere os estados corretos. Contêineres, links de navegação e células de tabela são componentes reutilizáveis; a renderização SSR e os serviços de negócio permanecem iguais.
 
+## Desempenho do frontend
+
+As buscas de categorias, fornecedores e transportadoras usam `Form` de `next/form`: a submissão atualiza a URL e busca dados SSR por navegação no cliente, sem recarregar o documento inteiro. Sem JavaScript, o formulário continua funcionando como GET normal. A navegação foi conferida nas três telas. Referência: [Form no Pages Router](https://nextjs.org/docs/pages/api-reference/components/form).
+
+`productCards` prepara os dados dos cartões no servidor. Categorias e promoções ativas são indexadas uma vez, mantendo a primeira promoção válida e os limites inclusivos de data. O navegador recebe somente identificação, nome, imagem, embalagem, preço, nome da categoria e preço promocional, em vez dos registros completos e da lista de promoções. A página inicial envia somente os oito produtos e quatro categorias que exibe; o catálogo preserva todos os resultados e categorias dos filtros.
+
+Na comparação local com os mesmos dados e builds de produção, o JSON de propriedades SSR da página inicial passou de 5.032 para 1.908 bytes (aproximadamente 62% menos); no catálogo, de 5.060 para 3.279 bytes (35% menos). Esses valores medem os dados da página, não o HTML, as imagens ou uma porcentagem de redução do tempo total. Os tempos locais variaram entre rodadas; não representam um resultado de rede/latência na hospedagem.
+
+O checkout carrega somente o carrinho, evitando uma leitura completa e a serialização do catálogo que não era usado. As leituras do produto e das promoções no detalhe acontecem em paralelo; categoria e fornecedor continuam dependendo do produto. As verificações de sessão/permissões permanecem atualizadas em cada requisição. A deduplicação de leituras continua limitada à própria requisição, sem compartilhar dados privados entre contas.
+
+Formatadores de moeda, data e data/hora são criados uma vez por módulo. Os filtros normalizam o termo de pesquisa uma vez, em vez de repetir a mesma transformação para cada registro. Não foram adicionados timers, polling, bibliotecas de cache nem memoização em todos os componentes.
+
+O ESLint combina `eslint:recommended` com `next/core-web-vitals` e trata dependências incorretas de hooks como erro. O ambiente ES2022 reconhece os recursos usados pelo projeto. `npm run lint` falha em qualquer aviso e usa cache em `node_modules/.cache/eslint/`, verificando novamente arquivos/configuração alterados. O cache acelera a ferramenta de desenvolvimento; regras de lint detectam problemas, não otimizam o programa automaticamente. Não foi necessário atualizar dependências. Referência: [ESLint do Next.js](https://nextjs.org/docs/pages/api-reference/config/eslint).
+
+A versão instalada do Next.js já otimiza os imports de `lucide-react`; a configuração foi mantida simples. Referência: [optimizePackageImports](https://nextjs.org/docs/pages/api-reference/config/next-config-js/optimizePackageImports).
+
+Esta etapa passou por build, lint, formatação, 18 testes unitários e 78 verificações de páginas/permissões, além dos fluxos de compra. As telas alteradas foram conferidas no navegador, incluindo 320 px. Os testes continuam usando a cópia isolada do banco, restaurada ao terminar.
+
 ## Validação e publicação
 
 ### Revisão final do frontend

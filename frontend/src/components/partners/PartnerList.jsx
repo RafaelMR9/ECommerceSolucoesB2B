@@ -1,4 +1,5 @@
 import Input from '@/components/ui/Input'
+import Form from 'next/form'
 import FeatureLink from '@/components/ui/FeatureLink'
 import { Building2, Truck } from 'lucide-react'
 import Button from '@/components/ui/Button'
@@ -25,7 +26,7 @@ export default function PartnerList({ kind, partners, search }) {
           </Button>
         }
       />
-      <form className="flex flex-wrap gap-2 items-center min-w-0 mb-6" action={`/${kind}`}>
+      <Form className="flex flex-wrap gap-2 items-center min-w-0 mb-6" action={`/${kind}`}>
         <Input
           className="duration-150 min-w-0 flex-[1_1_180px] max-w-md"
           type="search"
@@ -42,7 +43,7 @@ export default function PartnerList({ kind, partners, search }) {
             Limpar Busca
           </Button>
         )}
-      </form>
+      </Form>
       {partners.length ? (
         <div className="grid grid-cols-2 gap-4.5 max-[640px]:grid-cols-1">
           {partners.map((partner) => (

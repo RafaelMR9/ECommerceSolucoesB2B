@@ -112,6 +112,16 @@ for (const username of ['ui-review-admin', 'ui-review-buyer']) {
     assert.ok(!/A plataforma está indisponível/i.test(html), path)
     assert.ok(!html.includes('"password":'), `No password/hash in SSR data: ${path}`)
     const pageData = JSON.parse(html.match(/<script id="__NEXT_DATA__"[^>]*>(.*?)<\/script>/s)[1])
+    if (path === '/') {
+      assert.ok(
+        pageData.props.pageProps.cards.length <= 8,
+        'Home only sends displayed product cards'
+      )
+      assert.ok(
+        pageData.props.pageProps.categories.length <= 4,
+        'Home only sends displayed categories'
+      )
+    }
     assert.equal(
       pageData.props.pageProps.initialCartCount,
       expectedCount,
@@ -221,10 +231,17 @@ assert.equal((await readProduct()).currentStockQuantity, original.currentStockQu
 for (const path of ['/cart', '/purchase/data']) {
   const response = await fetch(origin + path, { headers: { Cookie: sessions.buyer } })
   assert.equal(response.status, 200)
-  assert.ok(
-    (await response.text()).includes(stocked.name),
-    'Cart and checkout render their products on the server'
-  )
+  const html = await response.text()
+  if (path === '/cart') {
+    assert.ok(html.includes(stocked.name), 'Cart products render on the server')
+  } else {
+    const { pageProps } = JSON.parse(
+      html.match(/<script id="__NEXT_DATA__"[^>]*>(.*?)<\/script>/s)[1]
+    ).props
+    assert.ok(html.includes('Finalizar Pedido') && html.includes('Entrega e Pagamento'))
+    assert.ok(pageProps.items.some((entry) => entry.product === stocked.id))
+    assert.ok(!('products' in pageProps), 'Checkout does not send the unused product catalog')
+  }
 }
 assert.equal(
   (await mutation(`orders/cart/items/${item.id}/delete/`, undefined, { method: 'DELETE' })).status,

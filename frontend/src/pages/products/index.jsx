@@ -6,10 +6,11 @@ import EmptyState from '@/components/ui/EmptyState'
 import ProductCard from '@/components/commerce/ProductCard'
 import CatalogFilters from '@/components/categories/CatalogFilters'
 import { AuthContext } from '@/contexts/authContext'
-import { activePromotion, titleCase, normalizeSearch } from '@/lib/format'
+import { titleCase, normalizeSearch } from '@/lib/format'
+import { productCards } from '@/lib/catalog'
 import { withSession } from '@/lib/server/page'
 
-export default function Products({ products, categories, promotions, now, search, categoryId }) {
+export default function Products({ cards, categories, search, categoryId }) {
   const { user } = useContext(AuthContext)
   return (
     <BaseLayout>
@@ -30,7 +31,7 @@ export default function Products({ products, categories, promotions, now, search
                       categories.find((c) => String(c.id) === categoryId)?.name || 'Categoria'
                     )
                   : 'Todos os Produtos'}{' '}
-              · {products.length} {products.length === 1 ? 'produto' : 'produtos'}
+              · {cards.length} {cards.length === 1 ? 'produto' : 'produtos'}
             </p>
             {(search || categoryId) && (
               <Button href="/products" variant="ghost">
@@ -38,18 +39,18 @@ export default function Products({ products, categories, promotions, now, search
               </Button>
             )}
           </div>
-          {products.length ? (
+          {cards.length ? (
             <section
               className="grid gap-4 max-[760px]:grid-cols-2 max-[520px]:grid-cols-1 grid-cols-3 max-[1050px]:grid-cols-2"
               aria-label="Produtos"
             >
-              {products.map((product, index) => (
+              {cards.map(({ product, categoryName, promotion }, index) => (
                 <ProductCard
                   key={product.id}
                   product={product}
                   priority={index < 3}
-                  category={categories.find((c) => c.id === product.category)}
-                  promotion={activePromotion(product, promotions, now)}
+                  categoryName={categoryName}
+                  promotion={promotion}
                 />
               ))}
             </section>
@@ -73,10 +74,16 @@ export const getServerSideProps = withSession(async ({ api, query }) => {
     api('products/categories/'),
     api('marketing/'),
   ])
+  const normalizedSearch = normalizeSearch(search)
   const products = allProducts.filter(
     (p) =>
       (!categoryId || String(p.category) === categoryId) &&
-      (!search || normalizeSearch(p.name).includes(normalizeSearch(search)))
+      (!normalizedSearch || normalizeSearch(p.name).includes(normalizedSearch))
   )
-  return { products, categories, promotions, now: Date.now(), search, categoryId }
+  return {
+    cards: productCards(products, categories, promotions, Date.now()),
+    categories,
+    search,
+    categoryId,
+  }
 })

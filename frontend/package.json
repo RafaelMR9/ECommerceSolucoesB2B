@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src --ext .js,.jsx",
+    "lint": "eslint src --ext .js,.jsx --cache --cache-location node_modules/.cache/eslint/ --max-warnings=0",
     "test": "node --experimental-default-type=module --test tests/*.test.mjs",
     "test:integration": "node scripts/verify-ui.mjs",
     "format": "prettier --write src tests scripts",

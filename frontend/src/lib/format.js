@@ -18,15 +18,20 @@ export function titleCase(value) {
       : word.charAt(0).toLocaleUpperCase('pt-BR') + word.slice(1)
   })
 }
-export const money = (value) =>
-  new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(value) || 0)
+const currencyFormatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
+const dateFormatter = new Intl.DateTimeFormat('pt-BR', {
+  dateStyle: 'short',
+  timeZone: 'America/Sao_Paulo',
+})
+const dateTimeFormatter = new Intl.DateTimeFormat('pt-BR', {
+  dateStyle: 'short',
+  timeStyle: 'short',
+  timeZone: 'America/Sao_Paulo',
+})
+export const money = (value) => currencyFormatter.format(Number(value) || 0)
 export const date = (value, withTime = false) =>
   value
-    ? new Intl.DateTimeFormat('pt-BR', {
-        dateStyle: 'short',
-        ...(withTime ? { timeStyle: 'short' } : {}),
-        timeZone: 'America/Sao_Paulo',
-      }).format(
+    ? (withTime ? dateTimeFormatter : dateFormatter).format(
         new Date(
           typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)
             ? value + 'T12:00:00Z'
