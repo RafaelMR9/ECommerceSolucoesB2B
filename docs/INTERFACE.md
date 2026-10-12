@@ -30,6 +30,8 @@ O navegador utiliza API routes do Next.js no mesmo domínio. A URL do Django pod
 
 As API routes aceitam URLs com ou sem barra final, sem redirecionamento. Isso evita reenvio de corpos multipart por clientes HTTP e mantém arquivos e campos intactos no encaminhamento ao Django.
 
+No proxy, `handler` confere a rota, origem e sessão; `forwardRequest`, no mesmo arquivo, cuida dos cabeçalhos, corpo e resposta. As exceções de barra final são uma lista explícita de caminhos. A leitura em chunks preserva os bytes de JSON e multipart e limita o corpo a 5 MB durante o recebimento, incluindo espaço para os campos de uma imagem de 4 MB. `bodyParser: false` é necessário para essa leitura bruta; o aviso padrão de respostas acima de 4 MB do Next.js foi mantido sem repetir a configuração. Referência: [configuração de API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes).
+
 ## Correções dos fluxos
 
 Carrinho e checkout foram movidos para operações transacionais no Django. O servidor determina preços e promoções, confere estoque, quantidade, autorização de compra/faturamento e propriedade do carrinho. Pedido, itens de nota e confirmação são gravados juntos; uma falha desfaz a transação. Reposição mantém um fornecedor por carrinho, conforme a estrutura original dos pedidos.

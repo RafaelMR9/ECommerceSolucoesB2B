@@ -191,6 +191,48 @@ const crossSite = await fetch(origin + '/api/session', {
   body: '{}',
 })
 assert.equal(crossSite.status, 403)
+const anonymousProxy = await fetch(`${origin}/api/backend/products/`)
+assert.equal(anonymousProxy.status, 401, 'Private proxy reads require a valid session')
+const publicRegistration = await fetch(`${origin}/api/backend/users/register/`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: '{}',
+})
+assert.equal(
+  publicRegistration.status,
+  400,
+  'Registration remains public and validates missing fields'
+)
+const publicResetCheck = await fetch(
+  `${origin}/api/backend/users/passwordReset/checkExistence/?token=invalid`
+)
+assert.equal(publicResetCheck.status, 200, 'Password reset validation remains public')
+assert.equal((await publicResetCheck.json()).status, false)
+for (const path of [
+  'users/admin_id',
+  'users/user_id?email=missing%40example.invalid',
+  'products/filterName?fetchProduct=not-a-product',
+  'products/filterCategory?categoryId=' + category.id,
+  'products/categories/filter?fetchCategories=not-a-category',
+  'suppliers/filter?fetchSuppliers=not-a-supplier',
+  'carriers/filter?fetchCarriers=not-a-carrier',
+]) {
+  const direct = await fetch(api + path)
+  const proxied = await fetch(`${origin}/api/backend/${path}`, {
+    headers: { Cookie: sessions.buyer },
+    redirect: 'manual',
+  })
+  assert.equal(
+    proxied.status,
+    direct.status,
+    `Legacy path is forwarded without a redirect: ${path}`
+  )
+  assert.deepEqual(
+    await proxied.json(),
+    await direct.json(),
+    `Proxy preserves the response: ${path}`
+  )
+}
 async function mutation(path, data, { admin = false, method = 'POST' } = {}) {
   const multipart = data instanceof FormData
   return fetch(`${origin}/api/backend/${path}`, {
@@ -223,6 +265,22 @@ assert.equal(
 assert.ok((await imageValidation.json()).image, 'Django must still validate the image contents')
 const readProduct = async () => (await fetch(`${api}products/${stocked.id}/detail/`)).json()
 const original = await readProduct()
+const oversizedImage = new FormData()
+oversizedImage.set(
+  'image',
+  new Blob([new Uint8Array(5 * 1024 * 1024)], { type: 'image/jpeg' }),
+  'oversized-image.jpg'
+)
+const oversizedRequest = await mutation(`products/${stocked.id}/update/`, oversizedImage, {
+  admin: true,
+  method: 'PATCH',
+})
+assert.equal(oversizedRequest.status, 413, 'The proxy rejects bodies over 5 MB')
+assert.equal(
+  (await readProduct()).image,
+  original.image,
+  'An oversized upload does not alter the product'
+)
 assert.equal((await mutation('orders/cart/add/', { product: stocked.id, quantity: 0 })).status, 400)
 let added = await mutation('orders/cart/add/', { product: stocked.id, quantity: 1 })
 assert.equal(added.status, 201)
