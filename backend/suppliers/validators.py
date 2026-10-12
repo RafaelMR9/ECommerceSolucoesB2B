@@ -1,53 +1,21 @@
-from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
 from rest_framework import serializers
-from products.models import Product
-from .models import Supplier
+
 from orders.models import SupplierOrder
-import re
+from products.models import Product
 
-class CustomValidators:
-        
-    @staticmethod    
-    def validate_email(value):
-        try:
-            validate_email(value)
-        except ValidationError as e:
-            raise serializers.ValidationError({'email': list(e)})
-    
-    @staticmethod
-    def validate_cnpj(value):
-      pattern = re.compile(r'^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$')
-      if value and not pattern.match(value):
-        raise serializers.ValidationError({'cnpj': ['CNPJ inválido.']})
-        
-    @staticmethod
-    def validate_unique_email(value):
-        if Supplier.objects.filter(email=value).exists():
-            raise serializers.ValidationError({'email': ['Já existe um Fornecedor com este E-Mail.']})
-    
-    @staticmethod
-    def validate_unique_name(value):
-        if Supplier.objects.filter(name=value).exists():
-            raise serializers.ValidationError({'name': ['Já existe um Fornecedor com este Nome.']})
 
-    @staticmethod
-    def validate_unique_cnpj(value):
-        if Supplier.objects.filter(cnpj=value).exists():
-            raise serializers.ValidationError({'cnpj': ['Já existe um Fornecedor com este CNPJ.']})
-    
-    @staticmethod
-    def validate_unique_cnpj(value):
-        if Supplier.objects.filter(cnpj=value).exists():
-            raise serializers.ValidationError({'cnpj': ['Já existe um Fornecedor com este CNPJ.']})
-        
-    @staticmethod
-    def validate_supplier_deletion(supplier):
-        supplierOrders = SupplierOrder.objects.filter(supplier=supplier)
-        pendingOrders = supplierOrders.filter(recieved=None)
-
-        if pendingOrders.exists():
-            raise serializers.ValidationError({'title':"Não é possível excluir este fornecedor, pois existem pedidos de ressuprimentos associados a ele.", "leading":"Espere a conclusão dos pedidos antes de prosseguir com a remoção."})
-        if Product.objects.filter(supplier=supplier).exists():
-            raise serializers.ValidationError({'title':"Não é possível excluir este fornecedor, pois existem produtos associados a ele.", "leading":"Associe os produtos a outros fornecedores antes de prosseguir com a remoção."})
-        
+def validate_supplier_deletion(supplier):
+    if SupplierOrder.objects.filter(supplier=supplier).exists():
+        raise serializers.ValidationError(
+            {
+                "title": "Não é possível excluir este fornecedor, pois existem pedidos de ressuprimentos associados a ele.",
+                "leading": "Mantenha o fornecedor para preservar o histórico dos pedidos.",
+            }
+        )
+    if Product.objects.filter(supplier=supplier).exists():
+        raise serializers.ValidationError(
+            {
+                "title": "Não é possível excluir este fornecedor, pois existem produtos associados a ele.",
+                "leading": "Associe os produtos a outros fornecedores antes de prosseguir com a remoção.",
+            }
+        )

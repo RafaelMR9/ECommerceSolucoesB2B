@@ -1,47 +1,62 @@
-from rest_framework import generics
 from django.db.models import Q
-from .validators import CustomValidators
+from django.shortcuts import get_object_or_404
+from rest_framework import generics
+
+from core.permissions import requested_user_id
+
 from .models import Ticket
 from .serializers import TicketSerializer
+
+
+def accessible_tickets(user):
+    tickets = Ticket.objects.all()
+    if not user.is_superuser:
+        tickets = tickets.filter(Q(sender=user) | Q(recipient=user))
+    return tickets
+
 
 class TicketListView(generics.ListAPIView):
     serializer_class = TicketSerializer
 
     def get_queryset(self):
-        queryset = Ticket.objects.filter(answer=None).order_by('-dateHour')
+        return (
+            accessible_tickets(self.request.user)
+            .filter(answer=None)
+            .order_by("-dateHour", "-pk")
+        )
 
-        return queryset
-    
+
 class TicketCreateView(generics.CreateAPIView):
-    queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
 
     def perform_create(self, serializer):
-        subject = serializer.validated_data.get('subject')
-        answer = serializer.validated_data.get('answer')
-        
-        if not answer:
-            CustomValidators.validate_subject(subject)
+        serializer.save(sender=self.request.user)
 
-        serializer.save()
 
 class TicketFilterView(generics.ListAPIView):
     serializer_class = TicketSerializer
 
     def get_queryset(self):
-        user = self.request.query_params.get('user')
-        queryset = Ticket.objects.filter(Q(sender=user) | Q(recipient=user), answer__isnull=True).order_by('-dateHour')
-        return queryset
-    
+        user_id = requested_user_id(self.request)
+        return (
+            accessible_tickets(self.request.user)
+            .filter(Q(sender_id=user_id) | Q(recipient_id=user_id), answer=None)
+            .order_by("-dateHour", "-pk")
+        )
+
+
 class TicketRetrieveView(generics.RetrieveAPIView):
-    queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
+
+    def get_queryset(self):
+        return accessible_tickets(self.request.user)
+
 
 class TicketResponsesListView(generics.ListAPIView):
     serializer_class = TicketSerializer
 
     def get_queryset(self):
-        originalTicket = self.kwargs['pk']
-        queryset = Ticket.objects.filter(answer__id=originalTicket).order_by('dateHour')
-
-        return queryset
+        original = get_object_or_404(
+            accessible_tickets(self.request.user), pk=self.kwargs["pk"], answer=None
+        )
+        return Ticket.objects.filter(answer=original).order_by("dateHour", "pk")

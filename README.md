@@ -68,13 +68,19 @@ Para habilitar a apresentação de portfólio no login, defina `NEXT_PUBLIC_DEMO
 ```powershell
 backend/.venv/Scripts/python.exe backend/manage.py check
 backend/.venv/Scripts/python.exe backend/manage.py makemigrations --check --dry-run
-backend/.venv/Scripts/python.exe backend/manage.py test api orders
+cd backend
+.venv/Scripts/python.exe manage.py test --noinput
+.venv/Scripts/python.exe -m ruff check .
+.venv/Scripts/python.exe -m ruff format --check .
+cd ..
 # Disponível nesta máquina, com as cópias preservadas dos bancos:
 backend/.venv/Scripts/python.exe scripts/verify_preservation.py
 backend/.venv/Scripts/python.exe scripts/check_private_files.py
 ```
 
 Para compilar o frontend, defina `API_URL` em `.env.local` ou no ambiente do build e execute `npm run build` em `frontend`. `NEXT_PUBLIC_API_URL` continua aceito para compatibilidade. A [documentação da interface](docs/INTERFACE.md) descreve a identidade visual, os componentes, SSR e as correções de fluxo.
+
+A [documentação do backend](docs/BACKEND.md) descreve a organização, as permissões, as validações e os fluxos transacionais. Para instalar as ferramentas de desenvolvimento, use `backend/requirements-dev.txt`; a instalação de produção continua usando `backend/requirements.txt`.
 
 `.env`, bancos, dumps, backups, uploads locais e bytecode ficam fora do Git. O verificador de arquivos privados examina o índice Git, incluindo o conteúdo realmente preparado para commit; rode novamente depois de preparar todas as alterações. A chave antiga e arquivos privados já existentes no histórico não são removidos retroativamente: rotacione qualquer chave real previamente publicada. Guarde os snapshots e bundles em armazenamento privado.
 

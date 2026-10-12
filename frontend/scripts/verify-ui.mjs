@@ -26,9 +26,17 @@ async function login(username) {
   assert.ok(cookies.every((c) => c.includes('HttpOnly') && c.includes('SameSite=Lax')))
   return cookies.map((c) => c.split(';')[0]).join('; ')
 }
+const backendLogin = await fetch(`${api}users/token/`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ username: 'ui-review-admin', password: 'test-password' }),
+})
+assert.equal(backendLogin.status, 200, 'Backend fixture login must succeed')
+const { access } = await backendLogin.json()
+const backendRead = (path) => fetch(api + path, { headers: { Authorization: `Bearer ${access}` } })
 const [products, categories, suppliers, carriers, tickets] = await Promise.all(
   ['products/', 'products/categories/', 'suppliers/', 'carriers/', 'support/'].map(async (path) =>
-    (await fetch(api + path)).json()
+    (await backendRead(path)).json()
   )
 )
 const product = products[0],
@@ -217,9 +225,9 @@ for (const path of [
   'suppliers/filter?fetchSuppliers=not-a-supplier',
   'carriers/filter?fetchCarriers=not-a-carrier',
 ]) {
-  const direct = await fetch(api + path)
+  const direct = await backendRead(path)
   const proxied = await fetch(`${origin}/api/backend/${path}`, {
-    headers: { Cookie: sessions.buyer },
+    headers: { Cookie: sessions.admin },
     redirect: 'manual',
   })
   assert.equal(
@@ -263,7 +271,7 @@ assert.equal(
   'Multipart overhead must not reject a 4 MB file in the proxy'
 )
 assert.ok((await imageValidation.json()).image, 'Django must still validate the image contents')
-const readProduct = async () => (await fetch(`${api}products/${stocked.id}/detail/`)).json()
+const readProduct = async () => (await backendRead(`products/${stocked.id}/detail/`)).json()
 const original = await readProduct()
 const oversizedImage = new FormData()
 oversizedImage.set(
