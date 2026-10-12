@@ -5,6 +5,7 @@ import OrderStatus from '@/components/orders/OrderStatus'
 import { date } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 export default function Carrier({ partner, shipments, orders }) {
+  const ordersById = new Map(orders.map((order) => [order.id, order]))
   return (
     <BaseLayout>
       <PartnerDetails kind="carriers" partner={partner}>
@@ -23,7 +24,7 @@ export default function Carrier({ partner, shipments, orders }) {
           </thead>
           <tbody>
             {shipments.map((shipment) => {
-              const order = orders.find((o) => o.id === shipment.salesOrder)
+              const order = ordersById.get(shipment.salesOrder)
               return (
                 <TableRow key={shipment.id}>
                   <TableCell>#{shipment.salesOrder}</TableCell>

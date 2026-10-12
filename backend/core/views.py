@@ -80,6 +80,12 @@ class UserUpdateView(generics.UpdateAPIView):
 class UserRetrieveView(generics.RetrieveAPIView):
     serializer_class = UserSerializer
 
+    def get_object(self):
+        if self.kwargs["pk"] == self.request.user.pk:
+            self.check_object_permissions(self.request, self.request.user)
+            return self.request.user
+        return super().get_object()
+
     def get_queryset(self):
         users = User.objects.all()
         return (

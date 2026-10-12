@@ -13,6 +13,7 @@ import { money, errorFields } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 import { loadCart } from '@/lib/server/orderLoaders'
 export default function Cart({ items, products }) {
+  const productsById = new Map(products.map((product) => [product.id, product]))
   const { user, cartCount } = useContext(AuthContext),
     router = useRouter(),
     [error, setError] = useState(''),
@@ -78,7 +79,7 @@ export default function Cart({ items, products }) {
           </thead>
           <tbody>
             {items.map((item) => {
-              const product = products.find((p) => p.id === item.product)
+              const product = productsById.get(item.product)
               return (
                 <TableRow key={item.id}>
                   <TableCell className="min-w-[160px]">

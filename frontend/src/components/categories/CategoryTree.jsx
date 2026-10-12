@@ -51,6 +51,7 @@ function CategoryNode({ category, admin, onRemove, root = false, className }) {
   )
 }
 export default function CategoryTree({ categories, admin, onRemove, search }) {
+  const categoriesById = new Map(categories.map((category) => [category.id, category]))
   const normalizedSearch = normalizeSearch(search)
   const visible = search
     ? categories
@@ -66,9 +67,7 @@ export default function CategoryTree({ categories, admin, onRemove, search }) {
         >
           {search && category.category && (
             <p className="text-brand-muted text-small mb-2.5">
-              {titleCase(
-                categories.find((parent) => parent.id === category.category)?.name || 'Categoria'
-              )}
+              {titleCase(categoriesById.get(category.category)?.name || 'Categoria')}
             </p>
           )}
           {category.children.length ? (

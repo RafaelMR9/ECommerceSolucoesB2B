@@ -1,5 +1,5 @@
 from django.db import transaction
-from django.db.models import F
+from django.db.models import F, Sum
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import serializers
@@ -17,9 +17,14 @@ from .serializers import OrderActionInput
 
 
 def restore_stock(items):
-    for item in items.order_by("product_id", "pk"):
-        Product.objects.filter(pk=item.product_id).update(
-            currentStockQuantity=F("currentStockQuantity") + item.quantity
+    quantities = (
+        items.values("product_id")
+        .annotate(total=Sum("quantity"))
+        .order_by("product_id")
+    )
+    for item in quantities:
+        Product.objects.filter(pk=item["product_id"]).update(
+            currentStockQuantity=F("currentStockQuantity") + item["total"]
         )
 
 
@@ -42,13 +47,12 @@ def record_payment(order, paid, administrator):
         )
     buyer = User.objects.select_for_update().get(pk=order.user_id)
     order.paid = paid
-    other_unpaid = (
+    buyer.canPurchase = paid and not (
         SalesOrder.objects.filter(user=buyer, paid=False)
         .exclude(pk=order.pk)
         .exclude(cancelled=True)
         .exists()
     )
-    buyer.canPurchase = paid and not other_unpaid
     buyer.save(update_fields=["canPurchase"])
     if not paid:
         Ticket.objects.create(

@@ -13,6 +13,7 @@ from marketing.models import Promotion
 from products.models import Category, Product
 from suppliers.models import Supplier
 
+from .actions import record_payment, restore_stock
 from .models import ItemSalesInvoice, SalesInvoice, SalesOrder, SupplierOrder
 
 
@@ -261,6 +262,24 @@ class CheckoutTests(TestCase):
         self.assertEqual(self.action(order, "paid").status_code, 200)
         self.buyer.refresh_from_db()
         self.assertTrue(self.buyer.canPurchase)
+
+    def test_stock_restoration_updates_repeated_product_once(self):
+        self.add(1)
+        self.add(2)
+        order = SalesOrder.objects.get()
+        with self.assertNumQueries(2):
+            restore_stock(order.itemsalesorder_set.all())
+        self.product.refresh_from_db()
+        self.assertEqual(self.product.currentStockQuantity, 10)
+
+    def test_unpaid_action_does_not_query_other_unpaid_orders(self):
+        order_id = self.finish()
+        order = SalesOrder.objects.get(pk=order_id)
+        order.cancelled = None
+        with self.assertNumQueries(3):
+            record_payment(order, False, self.admin)
+        self.buyer.refresh_from_db()
+        self.assertFalse(self.buyer.canPurchase)
 
     def test_administrator_lookup_accepts_multiple_administrators(self):
         User.objects.create_user(

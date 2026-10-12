@@ -7,7 +7,7 @@ import Alert from '@/components/ui/Alert'
 import Modal from '@/components/shared/Modal'
 import { AuthContext } from '@/contexts/authContext'
 import { removeProduct } from '@/services/productService'
-import { activePromotion, errorFields } from '@/lib/format'
+import { errorFields } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 
 export default function Product({ product, category, supplier, promotion }) {
@@ -56,9 +56,9 @@ export default function Product({ product, category, supplier, promotion }) {
 }
 export const getServerSideProps = withSession(async ({ api, params, user }) => {
   if (!/^\d+$/.test(params.productId)) return { notFound: true }
-  const [product, promotions] = await Promise.all([
+  const [product, promotion] = await Promise.all([
     api(`products/${params.productId}/detail/`),
-    api('marketing/'),
+    api(`marketing/promotion/${params.productId}/`),
   ])
   if (!product.visible && !user.is_superuser) return { notFound: true }
   const [category, supplier] = await Promise.all([
@@ -69,6 +69,6 @@ export const getServerSideProps = withSession(async ({ api, params, user }) => {
     product,
     category,
     supplier,
-    promotion: activePromotion(product, promotions, Date.now()) || null,
+    promotion,
   }
 })

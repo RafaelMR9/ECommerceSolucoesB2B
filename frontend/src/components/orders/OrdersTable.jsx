@@ -32,6 +32,7 @@ export default function OrdersTable({
   payments = false,
 }) {
   const router = useRouter()
+  const companiesById = new Map(companies.map((company) => [company.id, company]))
   const [action, setAction] = useState(null),
     [carrier, setCarrier] = useState(''),
     [error, setError] = useState('')
@@ -92,7 +93,7 @@ export default function OrdersTable({
         </thead>
         <tbody>
           {orders.map((order) => {
-            const company = companies.find((c) => c.id === (supplier ? order.supplier : order.user))
+            const company = companiesById.get(supplier ? order.supplier : order.user)
             return (
               <TableRow key={order.id}>
                 <TableCell>

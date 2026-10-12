@@ -1,5 +1,3 @@
-"""One ImageField contract for local uploads and existing Cloudinary references."""
-
 import cloudinary.uploader
 from cloudinary.models import CloudinaryField
 from django.conf import settings
@@ -33,14 +31,12 @@ class LocalMediaStorage(FileSystemStorage):
 
 class CloudinaryMediaStorage(Storage):
     def _save(self, name, content):
-        # Store the same reference format as the deployed CloudinaryField.
         result = cloudinary.uploader.upload(
             content, resource_type="image", unique_filename=True
         )
         return f"image/upload/v{result['version']}/{result['public_id']}.{result['format']}"
 
     def exists(self, name):
-        # Cloudinary allocates a unique public_id; avoid a remote check per upload.
         return False
 
     def url(self, name):

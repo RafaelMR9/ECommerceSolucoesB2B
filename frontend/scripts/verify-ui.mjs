@@ -166,9 +166,18 @@ for (const username of ['ui-review-admin', 'ui-review-buyer']) {
       checked++
     }
   const detail = await fetch(origin + `/products/${product.id}`, { headers: { Cookie: cookie } })
+  const detailHtml = await detail.text()
   assert.ok(
-    (await detail.text()).includes(product.name),
+    detailHtml.includes(product.name),
     'Product content must exist before JavaScript executes'
+  )
+  const productPage = JSON.parse(
+    detailHtml.match(/<script id="__NEXT_DATA__"[^>]*>(.*?)<\/script>/s)[1]
+  ).props.pageProps
+  assert.deepEqual(
+    productPage.promotion,
+    await (await backendRead(`marketing/promotion/${product.id}/`)).json(),
+    'Product pages only load the active promotion for the displayed product'
   )
 }
 for (const path of [

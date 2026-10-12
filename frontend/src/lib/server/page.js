@@ -21,7 +21,6 @@ export function withSession(load = async () => ({}), { admin = false, authPage =
         }
       if (admin && !session.user.is_superuser)
         return { redirect: { destination: '/', permanent: false } }
-      // Reuse identical reads within this request, including pages that also load the cart.
       const requests = new Map()
       const api = (path) => {
         if (!requests.has(path)) requests.set(path, backendData(path, session.access))
