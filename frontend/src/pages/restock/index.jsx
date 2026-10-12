@@ -13,11 +13,7 @@ export default function Restock({ products, suppliers, order }) {
         title="Ressuprimento"
         eyebrow="Administração"
         description="Organize a reposição de produtos por fornecedor."
-        actions={
-          <Button href="/cart" variant="secondary">
-            Ver Carrinho de Reposição
-          </Button>
-        }
+        actions={<Button href="/cart">Ver Carrinho de Reposição</Button>}
       />
       {order && (
         <Alert variant="info">

@@ -86,13 +86,48 @@ for (const username of ['ui-review-admin', 'ui-review-buyer']) {
   const cookie = await login(username),
     admin = username.endsWith('admin')
   sessions[admin ? 'admin' : 'buyer'] = cookie
+  const kind = admin ? 'Supplier' : 'Sales'
+  const cartRead = async (path) => {
+    const response = await fetch(`${origin}/api/backend/${path}`, { headers: { Cookie: cookie } })
+    assert.equal(response.status, 200, 'The cart must be readable by its owner')
+    return response.json()
+  }
+  const unfinished = await cartRead(
+    `orders/${kind.toLowerCase()}Order/getUnfinished/?user=${users[username].id}`
+  )
+  const cartItems = unfinished.length
+    ? await cartRead(`orders/item${kind}Order/${unfinished[0].id}/?user=${users[username].id}`)
+    : []
+  const expectedCount = cartItems.reduce((total, item) => total + Number(item.quantity), 0)
   for (const path of admin ? [...common, ...administrative] : common) {
     const response = await fetch(origin + path, { headers: { Cookie: cookie } })
     assert.equal(response.status, 200, `${username}: ${path}`)
     const html = await response.text()
+    assert.equal(
+      html.match(/<title[^>]*>(.*?)<\/title>/s)?.[1],
+      'B2B Soluções · Sua Empresa em Movimento',
+      `Shared site title: ${path}`
+    )
     assert.ok(html.includes('B2B'), 'Page shell must render on the server')
     assert.ok(!/A plataforma está indisponível/i.test(html), path)
     assert.ok(!html.includes('"password":'), `No password/hash in SSR data: ${path}`)
+    const pageData = JSON.parse(html.match(/<script id="__NEXT_DATA__"[^>]*>(.*?)<\/script>/s)[1])
+    assert.equal(
+      pageData.props.pageProps.initialCartCount,
+      expectedCount,
+      `SSR cart count: ${path}`
+    )
+    assert.equal(
+      html.includes('class="cart-count"'),
+      expectedCount > 0,
+      `Empty carts hide the badge: ${path}`
+    )
+    if (admin)
+      assert.ok(
+        html.indexOf('aria-label="Administração"') <
+          html.indexOf('aria-label="Navegação Principal"'),
+        'Administrative navigation precedes store links'
+      )
     checked++
   }
   if (!admin)
@@ -126,6 +161,11 @@ for (const path of [
 ]) {
   const response = await fetch(origin + path)
   assert.equal(response.status, 200, path)
+  assert.equal(
+    (await response.text()).match(/<title[^>]*>(.*?)<\/title>/s)?.[1],
+    'B2B Soluções · Sua Empresa em Movimento',
+    `Shared authentication title: ${path}`
+  )
   checked++
 }
 const anonymous = await fetch(origin + '/profile', { redirect: 'manual' })

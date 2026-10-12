@@ -11,7 +11,7 @@ import { money, errorFields } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 import { loadCart } from '@/lib/server/orderLoaders'
 export default function Cart({ items, products }) {
-  const { user } = useContext(AuthContext),
+  const { user, cartCount } = useContext(AuthContext),
     router = useRouter(),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(null)
@@ -84,7 +84,7 @@ export default function Cart({ items, products }) {
         <aside className="panel checkout-summary">
           <h2>Resumo do Pedido</h2>
           <p className="text-sm text-gray-500">
-            {items.length} {items.length === 1 ? 'item' : 'itens'} no carrinho
+            {cartCount} {cartCount === 1 ? 'embalagem' : 'embalagens'} no carrinho
           </p>
           <div className="total">
             <span>Total</span>

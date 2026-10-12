@@ -1,0 +1,193 @@
+@layer components {
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: white;
+    border: 1px solid #dccbea;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px #32144806;
+    transition: box-shadow 0.2s;
+  }
+  .product-card:hover,
+  .product-card:focus-within {
+    box-shadow: 0 10px 28px #4c24721a;
+  }
+  .product-card-media {
+    display: block;
+    position: relative;
+    padding: 14px;
+    background: linear-gradient(135deg, #f3eafa, #faf7fd);
+    border-bottom: 1px solid #e8dcf0;
+  }
+  .product-card-image {
+    display: block;
+    position: relative;
+    height: 184px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #30124005;
+    overflow: hidden;
+  }
+  .product-card-image img {
+    object-fit: contain;
+    padding: 14px;
+    transition: transform 0.2s;
+  }
+  .product-card-media:hover img {
+    transform: scale(1.04);
+  }
+  .product-card-media:focus-visible {
+    outline-offset: -5px;
+  }
+  .product-card-promotion {
+    position: absolute;
+    top: 21px;
+    left: 21px;
+    border-radius: 7px;
+    padding: 5px 9px;
+    background: #6023af;
+    color: white;
+    font-size: var(--text-small);
+    font-weight: 800;
+  }
+  .product-card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    padding: 18px;
+  }
+  .product-card-category {
+    align-self: flex-start;
+    padding: 4px 9px;
+    border-radius: 6px;
+    background: #f3ebfc;
+    color: #63358a;
+    font-size: var(--text-caption);
+    font-weight: 600;
+    margin-bottom: 10px;
+    overflow-wrap: anywhere;
+  }
+  .product-card h3 {
+    min-height: 48px;
+    font-size: var(--text-body);
+    font-weight: 800;
+    line-height: 1.5;
+    letter-spacing: -0.3px;
+    overflow-wrap: anywhere;
+  }
+  .product-card h3 a:hover {
+    color: #6023af;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .product-card-pack {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    color: var(--muted);
+    font-size: var(--text-small);
+    margin: 11px 0 18px;
+  }
+  .product-card-pack svg {
+    color: #8152a8;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .product-card-pack strong {
+    font-weight: 600;
+    color: #463153;
+  }
+  .product-card-pricing {
+    margin-top: auto;
+    border-radius: 10px;
+    padding: 12px;
+    background: #f8f3fc;
+    border: 1px solid #eadff2;
+  }
+  .product-card-price-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 9px;
+    color: #65516f;
+    font-size: var(--text-caption);
+  }
+  .product-card-old-price {
+    color: var(--muted);
+  }
+  .product-card-price {
+    color: #512278;
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -0.7px;
+    line-height: 1.3;
+    margin-top: 4px;
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+  }
+  .product-card .button {
+    margin-top: 12px;
+    width: 100%;
+    min-height: 46px;
+    border-radius: 10px;
+  }
+  @media (max-width: 520px) {
+    .product-card {
+      display: grid;
+      grid-template-columns: 110px minmax(0, 1fr);
+    }
+    .product-card-media {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      border-bottom: 0;
+      border-right: 1px solid #e8dcf0;
+    }
+    .product-card-image {
+      width: 100%;
+      height: 160px;
+    }
+    .product-card-image img {
+      padding: 8px;
+    }
+    .product-card-promotion {
+      top: 10px;
+      left: 10px;
+    }
+    .product-card-body {
+      padding: 14px 12px;
+    }
+    .product-card h3 {
+      min-height: 0;
+    }
+    .product-card-pack {
+      margin: 9px 0 13px;
+    }
+    .product-card-pricing {
+      padding: 10px;
+    }
+    .product-card-price {
+      font-size: 22px;
+    }
+  }
+  @media (max-width: 360px) {
+    .product-card {
+      grid-template-columns: 85px minmax(0, 1fr);
+    }
+    .product-card-media {
+      padding: 7px;
+    }
+    .product-card-body {
+      padding: 12px 10px;
+    }
+    .product-card-pricing {
+      padding: 9px;
+    }
+    .product-card .button {
+      padding: 10px;
+    }
+  }
+}

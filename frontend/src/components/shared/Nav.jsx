@@ -14,7 +14,7 @@ const adminLinks = [
 ]
 export default function Nav() {
   const router = useRouter()
-  const { user } = useContext(AuthContext)
+  const { user, cartCount } = useContext(AuthContext)
   const [query, setQuery] = useState('')
   const [menuOpen, setMenuOpen] = useState(false)
   function search(event) {
@@ -84,8 +84,21 @@ export default function Nav() {
                 <small>{user?.name || user?.username || 'Bem-vindo'}</small>Minha Conta
               </span>
             </Link>
-            <Link className="header-cart" href="/cart" aria-label="Carrinho">
+            <Link
+              className="header-cart"
+              href="/cart"
+              aria-label={
+                cartCount > 0
+                  ? `Carrinho: ${cartCount} ${cartCount === 1 ? 'item' : 'itens'}`
+                  : 'Carrinho'
+              }
+            >
               <ShoppingCart size={23} aria-hidden="true" />
+              {cartCount > 0 && (
+                <span className="cart-count" aria-hidden="true">
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
             </Link>
             <button
               type="button"
@@ -99,31 +112,28 @@ export default function Nav() {
             </button>
           </div>
         </div>
+        {user?.is_superuser && (
+          <nav className="admin-nav" aria-label="Administração">
+            <div className="admin-nav-inner site-width">
+              <span className="admin-nav-label">Área Administrativa</span>
+              {adminLinks.map(([href, label]) => navLink(href, label))}
+            </div>
+          </nav>
+        )}
         <nav
           id="site-navigation"
           className={`site-nav ${menuOpen ? 'is-open' : ''}`}
           aria-label="Navegação Principal"
         >
           <div className="site-nav-inner site-width">
-            {navLink('/products', 'Catálogo', <LayoutGrid size={15} aria-hidden="true" />)}
             {navLink('/', 'Início')}
+            {navLink('/products', 'Catálogo', <LayoutGrid size={15} aria-hidden="true" />)}
             {navLink('/categories', 'Categorias')}
             {navLink('/orders', 'Pedidos')}
             {navLink('/support', 'Suporte')}
-            {user?.is_superuser && (
-              <span className="nav-admin text-sm text-purple-300">Área Administrativa</span>
-            )}
           </div>
         </nav>
       </header>
-      {user?.is_superuser && (
-        <nav className="admin-nav" aria-label="Administração">
-          <div className="admin-nav-inner site-width">
-            <span className="admin-nav-label">Gestão</span>
-            {adminLinks.map(([href, label]) => navLink(href, label))}
-          </div>
-        </nav>
-      )}
     </>
   )
 }
