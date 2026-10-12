@@ -1,5 +1,6 @@
 import { getSession } from './session'
 import { backendData } from './api'
+import { countCartItems, loadCartItems } from './orderLoaders'
 
 export function withSession(load = async () => ({}), { admin = false, authPage = false } = {}) {
   return async (context) => {
@@ -20,13 +21,22 @@ export function withSession(load = async () => ({}), { admin = false, authPage =
         }
       if (admin && !session.user.is_superuser)
         return { redirect: { destination: '/', permanent: false } }
-      const data = await load({
+      // Reuse identical reads within this request, including pages that also load the cart.
+      const requests = new Map()
+      const api = (path) => {
+        if (!requests.has(path)) requests.set(path, backendData(path, session.access))
+        return requests.get(path)
+      }
+      const pageContext = {
         ...context,
         user: session.user,
-        api: (path) => backendData(path, session.access),
-      })
+        api,
+      }
+      const [data, cart] = await Promise.all([load(pageContext), loadCartItems(pageContext)])
       if (data.notFound || data.redirect) return data
-      return { props: { initialUser: session.user, ...data } }
+      return {
+        props: { initialUser: session.user, ...data, initialCartCount: countCartItems(cart.items) },
+      }
     } catch (error) {
       if (error.status === 404) return { notFound: true }
       context.res.statusCode = 503

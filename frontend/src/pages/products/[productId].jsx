@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Head from 'next/head'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import BaseLayout from '@/components/shared/BaseLayout'
@@ -28,9 +27,6 @@ export default function Product({ product, category, supplier, promotion }) {
   }
   return (
     <BaseLayout>
-      <Head>
-        <title>{`${product.name} · B2B Soluções`}</title>
-      </Head>
       <Link className="back-link" href="/products">
         ← Voltar ao Catálogo
       </Link>

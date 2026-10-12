@@ -14,13 +14,17 @@ export async function loadOrders(
   )
   return { orders, companies, carriers }
 }
-export async function loadCart({ api, user }) {
+export function countCartItems(items) {
+  return items.reduce((total, item) => total + Number(item.quantity), 0)
+}
+export async function loadCartItems({ api, user }) {
   const kind = user.is_superuser ? 'Supplier' : 'Sales'
   const orders = await api(`orders/${kind.toLowerCase()}Order/getUnfinished/?user=${user.id}`)
   const order = orders[0] || null
-  const [items, products] = await Promise.all([
-    order ? api(`orders/item${kind}Order/${order.id}/?user=${user.id}`) : Promise.resolve([]),
-    api('products/'),
-  ])
-  return { order, items, products }
+  const items = order ? await api(`orders/item${kind}Order/${order.id}/?user=${user.id}`) : []
+  return { order, items }
+}
+export async function loadCart(context) {
+  const [cart, products] = await Promise.all([loadCartItems(context), context.api('products/')])
+  return { ...cart, products }
 }

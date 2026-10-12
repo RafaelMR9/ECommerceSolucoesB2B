@@ -26,11 +26,11 @@
     --button-hover-background: var(--accent-hover);
   }
   .button-secondary {
-    --button-background: var(--surface);
-    --button-color: var(--ink);
-    --button-border: var(--border);
-    --button-hover-background: var(--accent-soft);
-    --button-hover-border: #d7c7ef;
+    --button-background: #f8f3ff;
+    --button-color: #6023af;
+    --button-border: #bfa1df;
+    --button-hover-background: #eadefa;
+    --button-hover-border: #9363c8;
   }
   .button-danger {
     --button-background: var(--danger-soft);

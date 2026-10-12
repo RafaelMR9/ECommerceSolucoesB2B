@@ -1,9 +1,7 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import BaseLayout from '@/components/shared/BaseLayout'
 import Hero from '@/components/commerce/Hero'
-import ServiceStrip from '@/components/commerce/ServiceStrip'
 import RecurringBanner from '@/components/commerce/RecurringBanner'
 import CategoryCard from '@/components/commerce/CategoryCard'
 import ProductCard from '@/components/commerce/ProductCard'
@@ -14,11 +12,7 @@ import { withSession } from '@/lib/server/page'
 export default function Home({ products, categories, promotions, now }) {
   return (
     <BaseLayout fullWidth>
-      <Head>
-        <title>B2B Soluções · Sua empresa em movimento</title>
-      </Head>
       <Hero />
-      <ServiceStrip />
       <div className="home-main site-width">
         <div className="section-heading">
           <div>

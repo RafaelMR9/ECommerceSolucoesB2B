@@ -58,38 +58,10 @@
     margin-bottom: 24px;
   }
   .hero-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .service-strip {
-    background: white;
-    border-bottom: 1px solid var(--border);
-  }
-  .service-strip-inner {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 23px;
-    padding-top: 25px;
-    padding-bottom: 25px;
-  }
-  .service-feature {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .service-feature svg {
-    color: var(--accent);
-    flex-shrink: 0;
-  }
-  .service-feature h2 {
-    font-weight: 700;
-    font-size: var(--text-ui);
-  }
-  .service-feature p {
-    font-size: var(--text-caption);
-    color: var(--muted);
-    margin-top: 3px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    max-width: 420px;
   }
   .home-main {
     padding-top: 32px;
@@ -138,70 +110,6 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 16px;
   }
-  .product-card {
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    transition:
-      box-shadow 0.2s,
-      border-color 0.2s;
-  }
-  .product-card:hover {
-    box-shadow: 0 9px 30px #29103b0c;
-    border-color: #d2bee8;
-  }
-  .product-card-image {
-    position: relative;
-    height: 170px;
-    background: white;
-    border-radius: 9px;
-    margin-bottom: 15px;
-    display: block;
-  }
-  .product-card-image img {
-    object-fit: contain;
-    padding: 10px;
-  }
-  .product-card-category {
-    font-size: var(--text-caption);
-    text-transform: none;
-    letter-spacing: 0.8px;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-  .product-card h3 {
-    font-size: var(--text-body);
-    font-weight: 700;
-    min-height: 42px;
-    line-height: 1.5;
-  }
-  .product-card-price {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.6px;
-    margin-top: 13px;
-  }
-  .product-card-old-price {
-    font-size: var(--text-small);
-    color: var(--muted);
-    text-decoration: line-through;
-    font-weight: 400;
-    display: block;
-    letter-spacing: 0;
-  }
-  .product-card-pack {
-    font-size: var(--text-caption);
-    color: var(--muted);
-    margin: 4px 0 17px;
-  }
-  .product-card .button {
-    margin-top: auto;
-    width: 100%;
-  }
   .recurring-banner {
     display: grid;
     grid-template-columns: 1.1fr 1fr;
@@ -245,53 +153,6 @@
     color: var(--muted);
     margin-bottom: 17px;
     gap: 12px;
-    flex-wrap: wrap;
-  }
-  .profile-summary {
-    display: flex;
-    align-items: center;
-    gap: 19px;
-    margin-bottom: 28px;
-  }
-  .profile-avatar {
-    flex-shrink: 0;
-    display: grid;
-    place-items: center;
-    background: var(--accent-soft);
-    color: var(--accent);
-    border-radius: 18px;
-    font-size: 28px;
-    font-weight: 800;
-    width: 75px;
-    height: 75px;
-  }
-  .profile-summary h2 {
-    font-size: 22px;
-    font-weight: 700;
-  }
-  .profile-summary p {
-    font-size: var(--text-ui);
-    color: var(--muted);
-    margin-top: 4px;
-  }
-  .profile-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 22px;
-  }
-  .profile-grid dt {
-    font-size: var(--text-caption);
-    color: var(--muted);
-    margin-bottom: 7px;
-  }
-  .profile-grid dd {
-    font-size: var(--text-body);
-    overflow-wrap: anywhere;
-  }
-  .profile-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 30px;
     flex-wrap: wrap;
   }
   .conversation {
@@ -420,11 +281,8 @@
       max-width: 235px;
     }
     .hero-buttons {
+      grid-template-columns: minmax(0, 1fr);
       max-width: 220px;
-    }
-    .service-strip-inner {
-      grid-template-columns: 1fr;
-      gap: 20px;
     }
     .category-grid {
       gap: 9px;
@@ -446,30 +304,6 @@
     .catalog-layout .product-grid {
       grid-template-columns: 1fr;
     }
-    .product-card {
-      display: grid;
-      grid-template-columns: 95px minmax(0, 1fr);
-      gap: 0 13px;
-      padding: 13px;
-    }
-    .product-card-image {
-      grid-row: 1/6;
-      height: 190px;
-      margin: 0;
-    }
-    .product-card-image img {
-      padding: 4px;
-    }
-    .product-card h3 {
-      min-height: 0;
-    }
-    .product-card-price {
-      margin-top: 9px;
-      font-size: 21px;
-    }
-    .product-card-pack {
-      margin-bottom: 11px;
-    }
     .recurring-banner {
       grid-template-columns: 1fr;
     }
@@ -481,9 +315,6 @@
     }
     .recurring-banner-image {
       min-height: 190px;
-    }
-    .profile-grid {
-      grid-template-columns: 1fr;
     }
     .conversation-message {
       padding: 17px;

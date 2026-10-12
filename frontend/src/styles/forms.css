@@ -58,8 +58,6 @@
     margin-top: 12px;
   }
   .form-guide {
-    position: sticky;
-    top: 24px;
     border-radius: 18px;
     padding: 28px;
     background: radial-gradient(circle at 100% 0%, #542c76, transparent 65%), #21132d;
@@ -123,9 +121,6 @@
   @media (max-width: 950px) {
     .form-layout {
       grid-template-columns: minmax(0, 1fr);
-    }
-    .form-guide {
-      position: static;
     }
     .form-guide ul {
       grid-template-columns: repeat(3, minmax(0, 1fr));

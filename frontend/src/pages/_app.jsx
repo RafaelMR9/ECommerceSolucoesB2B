@@ -16,7 +16,7 @@ export default function App({ Component, pageProps }) {
   return (
     <div className={`${manrope.variable} ${manrope.className}`}>
       <Head>
-        <title>B2B Soluções</title>
+        <title>B2B Soluções · Sua Empresa em Movimento</title>
         <meta
           name="description"
           content="Produtos, pedidos e atendimento para a rotina da sua empresa."
@@ -24,7 +24,10 @@ export default function App({ Component, pageProps }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AuthProvider initialUser={pageProps.initialUser}>
+      <AuthProvider
+        initialUser={pageProps.initialUser}
+        initialCartCount={pageProps.initialCartCount}
+      >
         {pageProps.serverError ? (
           <BaseLayout>
             <EmptyState

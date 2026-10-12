@@ -16,6 +16,14 @@ As categorias são apresentadas em uma hierarquia recolhível, com ações admin
 
 ## Renderização e sessão
 
+Os dois botões do hero têm a mesma largura, lado a lado no desktop e empilhados no celular. O hero é seguido diretamente pela seção de categorias, sem uma faixa adicional de atalhos. O hover do card de produto mantém a cor original da borda e aplica apenas a sombra já definida.
+
+`ProductCard` é compartilhado pela página inicial e pelo catálogo, com estilos em `product-card.css`. O card usa moldura lilás para a fotografia original, categoria em etiqueta, informações de embalagem e preço em destaque. O selo de desconto e o preço anterior aparecem somente quando a promoção ativa reduz o preço de venda. A grade de produtos foi mantida; no celular, o card continua compacto, com fotografia à esquerda e informações à direita. Todo o conteúdo continua renderizado no servidor.
+
+O título da aba é sempre “B2B Soluções · Sua Empresa em Movimento”, definido apenas em `_app.jsx`. Os títulos visíveis das páginas continuam específicos de cada tela. Início precede Catálogo na navegação da loja; as duas faixas de navegação compartilham as regras de hover e indicação da página atual. As orientações dos formulários e os filtros do catálogo acompanham o fluxo normal da página, sem posicionamento sticky. O rodapé usa uma faixa própria de marca, dois grupos de links e um cartão de atendimento; mantém o crédito ao desenvolvedor.
+
+O contador do carrinho é renderizado no servidor, soma as quantidades de embalagens e fica oculto quando vazio. Ele considera o carrinho de vendas do comprador ou o carrinho de reposição do administrador. Leituras iguais são compartilhadas apenas dentro de cada requisição, sem cache entre contas. Adicionar, remover ou finalizar direciona para uma página com contagem atualizada. O perfil separa resumo da conta, dados cadastrais, condições de compra e atalhos em componentes próprios. A navegação administrativa é identificada na sua faixa e aparece antes dos links da loja. O rodapé organiza marca, atalhos e atendimento, com crédito centralizado ao desenvolvedor.
+
 As páginas de negócio e autenticação usam `getServerSideProps`. Dados e verificações de sessão são carregados no servidor antes do HTML chegar ao navegador; interações de formulário permanecem no cliente. `withSession` evita repetir a lógica de sessão, autorização administrativa e tratamento de indisponibilidade. As páginas privadas usam `Cache-Control: private, no-store`.
 
 O navegador utiliza API routes do Next.js no mesmo domínio. A URL do Django pode ficar em `API_URL`, exclusiva do servidor; `NEXT_PUBLIC_API_URL` permanece como alternativa de compatibilidade. A sessão usa cookies HttpOnly, SameSite=Lax e Secure em produção HTTPS. O servidor renova o access token, e o Django confere sua assinatura; decodificação local só lê vencimento e identificador. Tokens e hashes de senha não são colocados nas propriedades SSR.

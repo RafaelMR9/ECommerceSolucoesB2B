@@ -5,6 +5,8 @@
 @import './forms.css';
 @import './categories.css';
 @import './products.css';
+@import './product-card.css';
+@import './profile.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
