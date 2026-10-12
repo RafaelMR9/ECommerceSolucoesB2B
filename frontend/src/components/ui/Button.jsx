@@ -13,7 +13,6 @@ const variants = {
   inverse:
     'border-[#71588a] bg-[#24172ccc] text-[#f3eafd] focus-visible:outline-brand-focus-light enabled:hover:border-brand-focus-light enabled:hover:bg-[#3a2550] enabled:active:bg-[#3a2550]',
 }
-// Links have no :enabled state, so their hover utilities are explicit.
 const linkVariants = {
   primary: 'hover:bg-brand-accent-hover active:bg-brand-accent-hover',
   secondary: 'hover:border-[#9363c8] hover:bg-[#eadefa] active:bg-[#eadefa]',

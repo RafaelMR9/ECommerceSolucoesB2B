@@ -1,4 +1,3 @@
-// Prepare only the data displayed by each card, before sending the page to the browser.
 export function productCards(products, categories, promotions, now) {
   const categoriesById = new Map(categories.map((category) => [category.id, category]))
   const promotionsByProduct = new Map()

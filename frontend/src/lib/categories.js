@@ -1,4 +1,3 @@
-// Keep the hierarchy in presentation data; never change the category records.
 export function categoryHierarchy(categories) {
   const ids = new Set(categories.map((category) => category.id))
   const children = new Map()
@@ -18,7 +17,6 @@ export function categoryHierarchy(categories) {
   }
   const roots = categories.filter((category) => !ids.has(category.category))
   const tree = roots.map(visit)
-  // Include orphaned or cyclic legacy records instead of silently hiding them.
   for (const category of categories) {
     if (!visited.has(category.id)) tree.push(visit(category))
   }

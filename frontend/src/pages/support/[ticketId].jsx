@@ -96,8 +96,11 @@ export default function Conversation({ ticket, responses: initialResponses }) {
 }
 export const getServerSideProps = withSession(async ({ api, params, user }) => {
   if (!/^\d+$/.test(params.ticketId)) return { notFound: true }
-  const ticket = await api(`support/${params.ticketId}/detail/`)
+  const [ticket, responses] = await Promise.all([
+    api(`support/${params.ticketId}/detail/`),
+    api(`support/${params.ticketId}/responses/`),
+  ])
   if (!user.is_superuser && ticket.sender !== user.id && ticket.recipient !== user.id)
     return { notFound: true }
-  return { ticket, responses: await api(`support/${params.ticketId}/responses/`) }
+  return { ticket, responses }
 })

@@ -1,5 +1,3 @@
-"""Upload local product images only when explicitly requested, preserving originals."""
-
 import json
 import os
 from datetime import datetime, timezone

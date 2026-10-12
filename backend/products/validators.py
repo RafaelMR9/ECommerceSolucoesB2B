@@ -1,4 +1,5 @@
 import math
+from collections import defaultdict
 
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
@@ -12,19 +13,16 @@ def validate_price(value):
 
 
 def validate_category_deletion(category):
-    category_ids = {category.pk}
-    pending = category_ids
+    children = defaultdict(list)
+    for category_id, parent_id in Category.objects.values_list("pk", "category_id"):
+        children[parent_id].append(category_id)
+    category_ids = set()
+    pending = [category.pk]
     while pending:
-        children = (
-            set(
-                Category.objects.filter(category_id__in=pending).values_list(
-                    "pk", flat=True
-                )
-            )
-            - category_ids
-        )
-        category_ids.update(children)
-        pending = children
+        category_id = pending.pop()
+        if category_id not in category_ids:
+            category_ids.add(category_id)
+            pending.extend(children[category_id])
     if Product.objects.filter(category_id__in=category_ids).exists():
         raise serializers.ValidationError(
             {

@@ -1,10 +1,12 @@
 from django.test import TestCase
+from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIClient
 
 from core.models import User
 from suppliers.models import Supplier
 
 from .models import Category, Product
+from .validators import validate_category_deletion
 
 
 class CatalogTests(TestCase):
@@ -37,6 +39,14 @@ class CatalogTests(TestCase):
         )
         self.client = APIClient()
         self.client.force_authenticate(self.admin)
+
+    def test_deep_category_deletion_validation_uses_two_queries(self):
+        parent = self.leaf
+        for level in range(30):
+            parent = Category.objects.create(name=f"Level {level}", category=parent)
+        Product.objects.filter(pk=self.product.pk).update(category=parent)
+        with self.assertNumQueries(2), self.assertRaises(ValidationError):
+            validate_category_deletion(self.root)
 
     def test_category_cycle_and_self_parent_are_rejected(self):
         path = f"/api/products/categories/{self.root.pk}/update/"

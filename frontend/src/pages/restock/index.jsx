@@ -7,6 +7,12 @@ import EmptyState from '@/components/ui/EmptyState'
 import { money } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 export default function Restock({ products, suppliers, order }) {
+  const productsBySupplier = new Map()
+  for (const product of products) {
+    const group = productsBySupplier.get(product.supplier) || []
+    group.push(product)
+    productsBySupplier.set(product.supplier, group)
+  }
   return (
     <BaseLayout>
       <PageHeader
@@ -23,7 +29,7 @@ export default function Restock({ products, suppliers, order }) {
       )}
       {!products.length && <EmptyState title="Nenhum Produto para Repor" />}
       {suppliers
-        .filter((s) => products.some((p) => p.supplier === s.id))
+        .filter((supplier) => productsBySupplier.has(supplier.id))
         .map((supplier) => (
           <section className="mb-8" key={supplier.id}>
             <h2 className="text-[23px] font-extrabold tracking-[-0.8px] mb-4">{supplier.name}</h2>
@@ -37,30 +43,28 @@ export default function Restock({ products, suppliers, order }) {
                 </tr>
               </thead>
               <tbody>
-                {products
-                  .filter((p) => p.supplier === supplier.id)
-                  .map((product) => (
-                    <TableRow key={product.id}>
-                      <TableCell className="min-w-[160px]">{product.name}</TableCell>
-                      <TableCell>{product.currentStockQuantity}</TableCell>
-                      <TableCell>{money(product.costPrice)}</TableCell>
-                      <TableCell>
-                        {!order || order.supplier === product.supplier ? (
-                          <Button
-                            size="small"
-                            href={`/purchase?productId=${product.id}`}
-                            className="whitespace-nowrap"
-                          >
-                            Comprar para Reposição
-                          </Button>
-                        ) : (
-                          <span className="text-sm text-brand-muted">
-                            Outro fornecedor no carrinho
-                          </span>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                {productsBySupplier.get(supplier.id).map((product) => (
+                  <TableRow key={product.id}>
+                    <TableCell className="min-w-[160px]">{product.name}</TableCell>
+                    <TableCell>{product.currentStockQuantity}</TableCell>
+                    <TableCell>{money(product.costPrice)}</TableCell>
+                    <TableCell>
+                      {!order || order.supplier === product.supplier ? (
+                        <Button
+                          size="small"
+                          href={`/purchase?productId=${product.id}`}
+                          className="whitespace-nowrap"
+                        >
+                          Comprar para Reposição
+                        </Button>
+                      ) : (
+                        <span className="text-sm text-brand-muted">
+                          Outro fornecedor no carrinho
+                        </span>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
               </tbody>
             </DataTable>
           </section>

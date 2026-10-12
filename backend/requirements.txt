@@ -1,4 +1,3 @@
-# Compatibility baseline from the deployed app. Upgrade before public cutover.
 -c requirements.lock
 Django==4.2.5
 djangorestframework==3.14.0

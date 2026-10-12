@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from django.test import TestCase
 from rest_framework.test import APIClient
+from rest_framework_simplejwt.tokens import AccessToken
 
 from orders.models import SalesOrder
 
@@ -23,6 +24,14 @@ class AccountTests(TestCase):
             is_superuser=True,
         )
         self.client = APIClient()
+
+    def test_authenticated_profile_reads_user_only_once(self):
+        token = AccessToken.for_user(self.buyer)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
+        with self.assertNumQueries(1):
+            response = self.client.get(f"/api/users/{self.buyer.pk}/detail/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["id"], self.buyer.pk)
 
     def test_registration_requires_password_and_confirmation(self):
         for fields in ({}, {"email": "new@example.test", "username": "new"}):

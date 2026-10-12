@@ -73,7 +73,6 @@ export async function getSession(req, res) {
     payload = tokenPayload(access)
     setSessionCookies(req, res, { access, refresh: tokens.refresh || stored[REFRESH_COOKIE] })
   }
-  // Decoding only reads expiry/id; Django validates the JWT signature on this request.
   try {
     return { user: await backendData(`users/${payload.user_id}/detail/`, access), access }
   } catch (error) {
