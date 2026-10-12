@@ -16,16 +16,16 @@ export default function PurchaseData({ items, initialUser }) {
         description="Confira a entrega e a forma de pagamento."
         back={{ href: '/cart', label: 'Carrinho' }}
       />
-      <div className="checkout-layout">
+      <div className="grid grid-cols-[minmax(0,_1fr)_340px] gap-[26px] items-start max-[1050px]:grid-cols-[minmax(0,_1fr)_280px] max-[760px]:grid-cols-1">
         <CheckoutForm />
-        <aside className="panel checkout-summary">
-          <h2>Resumo do Pedido</h2>
+        <aside className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel max-[640px]:p-5">
+          <h2 className="text-[18px] font-bold mb-4.5">Resumo do Pedido</h2>
           <p className="text-sm text-gray-500">
             {items.length} {items.length === 1 ? 'item' : 'itens'} no carrinho
           </p>
-          <div className="total">
+          <div className="flex flex-wrap gap-5 justify-between items-center text-[15px] my-[23px] mx-0">
             <span>Total</span>
-            <strong>{money(total)}</strong>
+            <strong className="text-brand-accent text-[27px] font-extrabold">{money(total)}</strong>
           </div>
           <p className="text-sm text-gray-500">
             Os valores serão conferidos pela plataforma ao finalizar.

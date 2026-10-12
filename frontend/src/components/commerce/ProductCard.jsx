@@ -12,10 +12,15 @@ export default function ProductCard({ product, category, promotion }) {
     ? Math.floor((1 - Number(price) / Number(product.salePrice)) * 100)
     : 0
   return (
-    <article className="product-card">
-      <Link className="product-card-media" href={href} aria-label={`Ver ${product.name}`}>
-        <span className="product-card-image">
+    <article className="flex flex-col min-w-0 bg-white border border-[#dccbea] rounded-[18px] overflow-hidden shadow-product transition-shadow duration-200 max-[520px]:grid max-[520px]:grid-cols-[110px_minmax(0,_1fr)] max-[360px]:grid-cols-[85px_minmax(0,_1fr)] hover:shadow-product-hover focus-within:shadow-product-hover">
+      <Link
+        className="block relative p-3.5 bg-[linear-gradient(135deg,_#f3eafa,_#faf7fd)] border-b border-b-[#e8dcf0] max-[520px]:p-2.5 max-[520px]:flex max-[520px]:items-center max-[520px]:border-b-0 max-[520px]:border-r max-[520px]:border-r-[#e8dcf0] max-[360px]:p-[7px] focus-visible:outline-offset-[-5px] group/product-card-media"
+        href={href}
+        aria-label={`Ver ${product.name}`}
+      >
+        <span className="block relative h-[184px] bg-white rounded-xl shadow-[0_2px_8px_#30124005] overflow-hidden max-[520px]:w-full max-[520px]:h-[160px]">
           <Image
+            className="object-contain p-3.5 transition-transform duration-200 max-[520px]:p-2 group-hover/product-card-media:scale-[1.04]"
             src={product.image || '/images/product-placeholder.svg'}
             alt={product.name}
             fill
@@ -24,34 +29,43 @@ export default function ProductCard({ product, category, promotion }) {
           />
         </span>
         {discounted && (
-          <span className="product-card-promotion">{discount ? `−${discount}%` : 'Oferta'}</span>
+          <span className="absolute top-[21px] left-[21px] rounded-[7px] py-[5px] px-[9px] bg-[#6023af] text-white text-small font-extrabold max-[520px]:top-2.5 max-[520px]:left-2.5">
+            {discount ? `−${discount}%` : 'Oferta'}
+          </span>
         )}
       </Link>
-      <div className="product-card-body">
-        <p className="product-card-category">{titleCase(category?.name || 'Produto')}</p>
-        <h3>
-          <Link href={href}>{product.name}</Link>
+      <div className="flex flex-1 flex-col min-w-0 p-4.5 max-[520px]:py-3.5 max-[520px]:px-3 max-[360px]:py-3 max-[360px]:px-2.5">
+        <p className="self-start py-1 px-[9px] rounded-[6px] bg-[#f3ebfc] text-[#63358a] text-caption font-semibold mb-2.5 [overflow-wrap:anywhere]">
+          {titleCase(category?.name || 'Produto')}
+        </p>
+        <h3 className="min-h-12 text-body font-extrabold leading-[1.5] tracking-[-0.3px] [overflow-wrap:anywhere] max-[520px]:min-h-0">
+          <Link
+            className="hover:text-[#6023af] hover:underline hover:underline-offset-4"
+            href={href}
+          >
+            {product.name}
+          </Link>
         </h3>
-        <p className="product-card-pack">
-          <Package size={17} aria-hidden="true" />
+        <p className="flex items-start gap-[7px] text-brand-muted text-small mt-[11px] mr-0 mb-4.5 ml-0 max-[520px]:mt-[9px] max-[520px]:mr-0 max-[520px]:mb-[13px] max-[520px]:ml-0">
+          <Package className="text-[#8152a8] shrink-0 mt-0.5" size={17} aria-hidden="true" />
           <span>
-            <strong>
+            <strong className="font-semibold text-[#463153]">
               {product.packaging} {Number(product.packaging) === 1 ? 'unidade' : 'unidades'}
             </strong>{' '}
             por embalagem
           </span>
         </p>
-        <div className="product-card-pricing">
-          <div className="product-card-price-label">
+        <div className="mt-auto rounded-[10px] p-3 bg-[#f8f3fc] border border-[#eadff2] max-[520px]:p-2.5 max-[360px]:p-[9px]">
+          <div className="flex flex-wrap items-center gap-y-1 gap-x-[9px] text-[#65516f] text-caption">
             <span>Por Embalagem</span>
-            {discounted && (
-              <del className="product-card-old-price">De {money(product.salePrice)}</del>
-            )}
+            {discounted && <del className="text-brand-muted">De {money(product.salePrice)}</del>}
           </div>
-          <p className="product-card-price">{money(price)}</p>
+          <p className="text-[#512278] text-[25px] font-extrabold tracking-[-0.7px] leading-[1.3] mt-1 [overflow-wrap:anywhere] tabular-nums max-[520px]:text-[22px]">
+            {money(price)}
+          </p>
         </div>
-        <Button href={href}>
-          Ver Produto <ArrowUpRight size={18} aria-hidden="true" />
+        <Button className="mt-3 w-full min-h-[46px] rounded-[10px] max-[360px]:p-2.5" href={href}>
+          Ver Produto <ArrowUpRight className="shrink-0" size={18} aria-hidden="true" />
         </Button>
       </div>
     </article>

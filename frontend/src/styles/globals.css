@@ -1,86 +1,47 @@
-@import './tokens.css';
-@import './layout.css';
-@import './commerce.css';
-@import './ui.css';
-@import './forms.css';
-@import './categories.css';
-@import './products.css';
-@import './product-card.css';
-@import './profile.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  * {
-    box-sizing: border-box;
-  }
   html {
-    color-scheme: light;
-    scroll-behavior: smooth;
+    @apply scroll-smooth [color-scheme:light] motion-reduce:scroll-auto;
   }
   body {
-    margin: 0;
-    background: var(--background);
-    color: var(--ink);
-    font-family: var(--font-manrope, Arial), sans-serif;
-    font-size: var(--text-body);
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
+    @apply bg-brand-background font-sans text-body text-brand-ink antialiased;
   }
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-  button,
   a,
+  button,
   input,
   select,
   textarea {
-    -webkit-tap-highlight-color: transparent;
+    @apply [-webkit-tap-highlight-color:transparent];
   }
   button {
-    cursor: pointer;
+    @apply cursor-pointer disabled:cursor-not-allowed;
   }
-  button:disabled {
-    cursor: not-allowed;
-  }
-  button:focus-visible,
-  a:focus-visible {
-    outline: 3px solid var(--focus-ring, var(--accent));
-    outline-offset: 4px;
+  a:focus-visible,
+  button:focus-visible {
+    @apply outline outline-[3px] outline-offset-4 outline-brand-accent;
   }
   hr {
-    border-color: var(--border);
+    @apply border-brand-border;
   }
   input[type='checkbox'],
   input[type='radio'] {
-    accent-color: var(--accent);
-  }
-  img {
-    max-width: 100%;
+    @apply accent-brand-accent;
   }
   h1,
   h2,
-  h3 {
-    overflow-wrap: break-word;
-  }
+  h3,
   p {
-    overflow-wrap: break-word;
+    @apply break-words;
   }
   ::selection {
-    background: #ddccfa;
-    color: #3c1764;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
+    @apply bg-[#ddccfa] text-[#3c1764];
   }
   *,
-  *:before,
-  *:after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+  ::before,
+  ::after {
+    @apply motion-reduce:!duration-[0.01ms] motion-reduce:![animation-duration:0.01ms];
   }
 }

@@ -118,7 +118,7 @@ for (const username of ['ui-review-admin', 'ui-review-buyer']) {
       `SSR cart count: ${path}`
     )
     assert.equal(
-      html.includes('class="cart-count"'),
+      html.includes('aria-label="Carrinho: '),
       expectedCount > 0,
       `Empty carts hide the badge: ${path}`
     )

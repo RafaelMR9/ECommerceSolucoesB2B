@@ -1,3 +1,6 @@
+import { cn } from '@/lib/classes'
+import Input from './Input'
+
 export default function Field({
   label,
   error,
@@ -7,47 +10,46 @@ export default function Field({
   id,
   name,
   className = '',
+  tone = 'plain',
   ...props
 }) {
-  const Control = as
   const inputId = id || name
-  const describedBy = error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined
+  const describedBy = error ? inputId + '-error' : hint ? inputId + '-hint' : undefined
   return (
-    <div className={`field ${className}`}>
+    <div className={cn('mb-[21px] min-w-0', className)}>
       {label && (
-        <label htmlFor={inputId}>
+        <label className="mb-2 block text-ui font-semibold text-brand-ink" htmlFor={inputId}>
           {label}
-          {props.required && <span aria-hidden="true"> *</span>}
+          {props.required && (
+            <span className="text-brand-accent" aria-hidden="true">
+              {' '}
+              *
+            </span>
+          )}
         </label>
       )}
-      {as === 'input' ? (
-        <input
-          id={inputId}
-          name={name}
-          className="field-control"
-          aria-invalid={Boolean(error)}
-          aria-describedby={describedBy}
-          {...props}
-        />
-      ) : (
-        <Control
-          id={inputId}
-          name={name}
-          className="field-control"
-          aria-invalid={Boolean(error)}
-          aria-describedby={describedBy}
-          {...props}
-        >
-          {children}
-        </Control>
-      )}
+      <Input
+        as={as}
+        tone={tone}
+        id={inputId}
+        name={name}
+        aria-invalid={Boolean(error)}
+        aria-describedby={describedBy}
+        {...props}
+      >
+        {children}
+      </Input>
       {hint && !error && (
-        <p className="field-hint" id={`${inputId}-hint`}>
+        <p className="mt-[7px] text-small text-brand-muted" id={inputId + '-hint'}>
           {hint}
         </p>
       )}
       {error && (
-        <p className="field-error" id={`${inputId}-error`} role="alert">
+        <p
+          className="mt-[7px] whitespace-pre-line text-small text-brand-danger"
+          id={inputId + '-error'}
+          role="alert"
+        >
           {error}
         </p>
       )}

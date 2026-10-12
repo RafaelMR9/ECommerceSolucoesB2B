@@ -18,10 +18,10 @@ export default function Products({ products, categories, promotions, now, search
         description="Encontre os essenciais que acompanham a rotina da sua empresa."
         actions={user.is_superuser && <Button href="/products/register">Cadastrar Produto</Button>}
       />
-      <div className="catalog-layout">
+      <div className="grid grid-cols-[260px_minmax(0,_1fr)] gap-7 max-[760px]:grid-cols-1 max-[760px]:gap-5">
         <CatalogFilters categories={categories} categoryId={categoryId} />
         <div>
-          <div className="catalog-summary">
+          <div className="flex justify-between items-center text-small text-brand-muted mb-[17px] gap-3 flex-wrap">
             <p>
               {search
                 ? `Resultados para “${search}”`
@@ -39,7 +39,10 @@ export default function Products({ products, categories, promotions, now, search
             )}
           </div>
           {products.length ? (
-            <section className="product-grid" aria-label="Produtos">
+            <section
+              className="grid gap-4 max-[760px]:grid-cols-2 max-[520px]:grid-cols-1 grid-cols-3 max-[1050px]:grid-cols-2"
+              aria-label="Produtos"
+            >
               {products.map((product) => (
                 <ProductCard
                   key={product.id}

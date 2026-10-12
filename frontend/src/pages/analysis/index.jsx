@@ -1,3 +1,4 @@
+import { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import BaseLayout from '@/components/shared/BaseLayout'
@@ -50,22 +51,23 @@ export default function Analysis({ companies }) {
         emptyMessage="Nenhuma solicitação aguardando análise"
         label="Solicitações de Crédito"
       >
-        <thead>
+        <thead className="bg-[#3c2456]">
           <tr>
-            <th>Organização</th>
-            <th>CNPJ</th>
-            <th>Ações</th>
+            <TableHeader>Organização</TableHeader>
+            <TableHeader>CNPJ</TableHeader>
+            <TableHeader>Ações</TableHeader>
           </tr>
         </thead>
         <tbody>
           {companies.map((company) => (
-            <tr key={company.id}>
-              <td>{company.name}</td>
-              <td>{company.cnpj}</td>
-              <td>
-                <div className="table-actions">
+            <TableRow key={company.id}>
+              <TableCell>{company.name}</TableCell>
+              <TableCell>{company.cnpj}</TableCell>
+              <TableCell>
+                <div className="flex gap-[7px] flex-wrap min-w-[160px]">
                   <Button
-                    className="button-small"
+                    size="small"
+                    className="whitespace-nowrap"
                     onClick={() => {
                       setSelected({ company, approved: true })
                       setError('')
@@ -74,8 +76,9 @@ export default function Analysis({ companies }) {
                     Autorizar
                   </Button>
                   <Button
+                    size="small"
                     variant="danger"
-                    className="button-small"
+                    className="whitespace-nowrap"
                     onClick={() => {
                       setSelected({ company, approved: false })
                       setError('')
@@ -84,8 +87,8 @@ export default function Analysis({ companies }) {
                     Não Autorizar
                   </Button>
                 </div>
-              </td>
-            </tr>
+              </TableCell>
+            </TableRow>
           ))}
         </tbody>
       </DataTable>

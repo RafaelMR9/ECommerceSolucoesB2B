@@ -1,4 +1,6 @@
+import FormPanel from '@/components/ui/FormPanel'
 import { useContext, useState } from 'react'
+import { cn } from '@/lib/classes'
 import BaseLayout from '@/components/shared/BaseLayout'
 import PageHeader from '@/components/ui/PageHeader'
 import Button from '@/components/ui/Button'
@@ -42,7 +44,7 @@ export default function Conversation({ ticket, responses: initialResponses }) {
         description={`Solicitação #${ticket.id} · Aberta em ${date(ticket.dateHour, true)}`}
         back={{ href: '/support', label: 'Atendimento' }}
       />
-      <div className="conversation">
+      <div className="max-w-[900px]">
         <section
           className="overflow-hidden rounded-xl border border-gray-200"
           aria-label="Histórico da Conversa"
@@ -50,10 +52,13 @@ export default function Conversation({ ticket, responses: initialResponses }) {
           {[ticket, ...responses].map((response) => (
             <article
               key={response.id}
-              className={`conversation-message ${response.sender === user.id ? 'is-mine' : ''}`}
+              className={cn(
+                'border-b border-brand-border px-[23px] py-5 first:rounded-t-panel last:rounded-b-panel last:border-b-0 max-[520px]:p-[17px]',
+                response.sender === user.id ? 'bg-[#f5f0fd]' : 'bg-white'
+              )}
             >
-              <header className="conversation-meta">
-                <strong>
+              <header className="flex items-center gap-2.5 justify-between mb-3 text-caption text-brand-muted max-[520px]:flex-wrap">
+                <strong className="text-brand-accent">
                   {response.sender === user.id
                     ? 'Você'
                     : user.is_superuser
@@ -62,13 +67,16 @@ export default function Conversation({ ticket, responses: initialResponses }) {
                 </strong>
                 <time dateTime={response.dateHour}>{date(response.dateHour, true)}</time>
               </header>
-              <p>{response.content}</p>
+              <p className="text-body leading-[1.8] whitespace-pre-wrap [overflow-wrap:anywhere]">
+                {response.content}
+              </p>
             </article>
           ))}
         </section>
-        <form className="form-panel conversation-reply" onSubmit={submit}>
+        <FormPanel className="mt-[25px]" onSubmit={submit}>
           <Alert>{error}</Alert>
           <Field
+            tone="tinted"
             as="textarea"
             name="response"
             label="Sua Resposta"
@@ -81,7 +89,7 @@ export default function Conversation({ ticket, responses: initialResponses }) {
           <Button type="submit" disabled={busy}>
             {busy ? 'Enviando…' : 'Enviar Resposta'}
           </Button>
-        </form>
+        </FormPanel>
       </div>
     </BaseLayout>
   )

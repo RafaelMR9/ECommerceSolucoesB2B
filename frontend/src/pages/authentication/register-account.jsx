@@ -90,22 +90,23 @@ export default function RegisterAccount() {
             required
           />
         ))}
-        <div className="check-field">
+        <div className="flex gap-2.5 items-start mt-[15px] mr-0 mb-[22px] ml-0">
           <input
+            className="accent-brand-accent w-4.5 h-4.5 mt-[3px]"
             type="checkbox"
             name="authorizeFature"
             id="authorizeFature"
             checked={values.authorizeFature}
             onChange={change}
           />
-          <label htmlFor="authorizeFature">
+          <label className="text-ui text-brand-ink" htmlFor="authorizeFature">
             Solicitar análise de crédito para compras faturadas
           </label>
         </div>
         <Button type="submit" className="w-full" disabled={busy}>
           {busy ? 'Criando Conta…' : 'Criar Minha Conta'}
         </Button>
-        <div className="auth-links">
+        <div className="flex justify-between gap-[15px] items-center flex-wrap text-small my-4.5 mx-0">
           <span>Já tem uma conta?</span>
           <Button href="/authentication" variant="ghost">
             Entrar

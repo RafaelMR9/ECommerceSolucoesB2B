@@ -1,3 +1,5 @@
+import FormActions from '@/components/ui/FormActions'
+import FormPanel from '@/components/ui/FormPanel'
 import { UserRound } from 'lucide-react'
 import FormLayout from '@/components/ui/FormLayout'
 import FormSection from '@/components/ui/FormSection'
@@ -91,7 +93,7 @@ export default function UpdateProfile() {
           { title: 'Atualização', text: 'Salve as alterações para atualizar os dados da conta.' },
         ]}
       >
-        <form className="form-panel" onSubmit={submit}>
+        <FormPanel wide onSubmit={submit}>
           <FormSection
             icon={UserRound}
             title="Dados da Conta"
@@ -100,6 +102,7 @@ export default function UpdateProfile() {
             <Alert>{errors.detail}</Alert>
             {fields.map(([name, label, type]) => (
               <Field
+                tone="tinted"
                 key={name}
                 name={name}
                 label={label}
@@ -111,15 +114,15 @@ export default function UpdateProfile() {
               />
             ))}
           </FormSection>
-          <div className="form-actions">
+          <FormActions>
             <Button type="submit" disabled={busy}>
               {busy ? 'Salvando…' : 'Salvar Alterações'}
             </Button>
             <Button href="/profile" variant="secondary">
               Cancelar
             </Button>
-          </div>
-        </form>
+          </FormActions>
+        </FormPanel>
       </FormLayout>
     </BaseLayout>
   )

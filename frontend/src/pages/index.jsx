@@ -1,3 +1,5 @@
+import Button from '@/components/ui/Button'
+import Container from '@/components/shared/Container'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import BaseLayout from '@/components/shared/BaseLayout'
@@ -13,19 +15,24 @@ export default function Home({ products, categories, promotions, now }) {
   return (
     <BaseLayout fullWidth>
       <Hero />
-      <div className="home-main site-width">
-        <div className="section-heading">
+      <Container className="pt-8 pb-10">
+        <div className="flex items-center justify-between gap-3.5 mb-5 flex-wrap">
           <div>
-            <h2 className="section-title">O Que Sua Empresa Precisa?</h2>
-            <p>Encontre seu próximo essencial</p>
+            <h2 className="text-[23px] font-extrabold tracking-[-0.8px]">
+              O Que Sua Empresa Precisa?
+            </h2>
+            <p className="text-small text-brand-muted mt-1">Encontre seu próximo essencial</p>
           </div>
-          <Link className="button button-ghost" href="/categories">
+          <Button variant="ghost" href="/categories">
             Ver Categorias
-            <ArrowUpRight size={15} aria-hidden="true" />
-          </Link>
+            <ArrowUpRight className="shrink-0" size={15} aria-hidden="true" />
+          </Button>
         </div>
         {categories.length ? (
-          <section className="category-grid" aria-label="Categorias">
+          <section
+            className="grid grid-cols-4 gap-3 mb-[35px] max-[1050px]:grid-cols-2 max-[520px]:gap-[9px]"
+            aria-label="Categorias"
+          >
             {categories.slice(0, 4).map((category) => (
               <CategoryCard category={category} key={category.id} />
             ))}
@@ -33,18 +40,21 @@ export default function Home({ products, categories, promotions, now }) {
         ) : (
           <EmptyState title="Nenhuma Categoria Cadastrada" />
         )}
-        <div className="section-heading">
+        <div className="flex items-center justify-between gap-3.5 mb-5 flex-wrap">
           <div>
-            <h2 className="section-title">Catálogo de Produtos</h2>
-            <p>Essenciais para sua organização</p>
+            <h2 className="text-[23px] font-extrabold tracking-[-0.8px]">Catálogo de Produtos</h2>
+            <p className="text-small text-brand-muted mt-1">Essenciais para sua organização</p>
           </div>
-          <Link className="button button-ghost" href="/products">
+          <Button variant="ghost" href="/products">
             Todos os Produtos
-            <ArrowUpRight size={15} aria-hidden="true" />
-          </Link>
+            <ArrowUpRight className="shrink-0" size={15} aria-hidden="true" />
+          </Button>
         </div>
         {products.length ? (
-          <section className="product-grid" aria-label="Produtos">
+          <section
+            className="grid grid-cols-4 gap-4 max-[1050px]:grid-cols-3 max-[760px]:grid-cols-2 max-[520px]:grid-cols-1"
+            aria-label="Produtos"
+          >
             {products.slice(0, 8).map((product) => (
               <ProductCard
                 key={product.id}
@@ -58,7 +68,7 @@ export default function Home({ products, categories, promotions, now }) {
           <EmptyState title="Nenhum Produto Cadastrado" />
         )}
         <RecurringBanner />
-      </div>
+      </Container>
     </BaseLayout>
   )
 }

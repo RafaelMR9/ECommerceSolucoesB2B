@@ -1,3 +1,5 @@
+import FormActions from '@/components/ui/FormActions'
+import FormPanel from '@/components/ui/FormPanel'
 import { useState } from 'react'
 import { FolderTree } from 'lucide-react'
 import FormLayout from '@/components/ui/FormLayout'
@@ -69,7 +71,7 @@ export default function CategoryForm({ category, categories: initialCategories }
         { title: 'Navegação', text: 'A categoria ficará disponível nos filtros do catálogo.' },
       ]}
     >
-      <form className="form-panel" onSubmit={submit}>
+      <FormPanel wide onSubmit={submit}>
         <Alert>{error}</Alert>
         <Alert variant="success">{success}</Alert>
         <FormSection
@@ -78,6 +80,7 @@ export default function CategoryForm({ category, categories: initialCategories }
           description="Defina o nome e a posição no catálogo."
         >
           <Field
+            tone="tinted"
             name="name"
             label="Nome da Categoria"
             value={values.name}
@@ -85,6 +88,7 @@ export default function CategoryForm({ category, categories: initialCategories }
             required
           />
           <Field
+            tone="tinted"
             name="subCategory"
             label="Categoria Principal"
             as="select"
@@ -100,15 +104,15 @@ export default function CategoryForm({ category, categories: initialCategories }
             ))}
           </Field>
         </FormSection>
-        <div className="form-actions">
+        <FormActions>
           <Button type="submit" disabled={busy}>
             {busy ? 'Salvando…' : category ? 'Salvar Alterações' : 'Cadastrar Categoria'}
           </Button>
           <Button href="/categories" variant="secondary">
             Cancelar
           </Button>
-        </div>
-      </form>
+        </FormActions>
+      </FormPanel>
     </FormLayout>
   )
 }

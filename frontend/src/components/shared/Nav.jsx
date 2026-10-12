@@ -3,7 +3,6 @@ import { useContext, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import {
   BadgeCheck,
-  ChevronRight,
   ClipboardList,
   CreditCard,
   House,
@@ -22,6 +21,9 @@ import {
 } from 'lucide-react'
 import { AuthContext } from '@/contexts/authContext'
 import Brand from './Brand'
+import Container from './Container'
+import NavLink from './NavLink'
+import { cn } from '@/lib/classes'
 
 const adminLinks = [
   ['/suppliers', 'Fornecedores', Store],
@@ -52,31 +54,30 @@ export default function Nav() {
     })
     setMenuOpen(false)
   }
-  function navLink(href, text, Icon) {
+  function navLink(href, text, Icon, administrative = false) {
     return (
-      <Link
+      <NavLink
         key={href}
         href={href}
-        onClick={() => setMenuOpen(false)}
-        aria-current={
-          router.pathname === href || (href !== '/' && router.pathname.startsWith(href))
-            ? 'page'
-            : undefined
-        }
+        onNavigate={() => setMenuOpen(false)}
+        icon={Icon}
+        administrative={administrative}
+        active={router.pathname === href || (href !== '/' && router.pathname.startsWith(href))}
       >
-        <Icon size={17} className="nav-link-icon" aria-hidden="true" />
-        <span>{text}</span>
-        <ChevronRight size={15} className="nav-link-arrow" aria-hidden="true" />
-      </Link>
+        {text}
+      </NavLink>
     )
   }
   return (
     <>
-      <a href="#main-content" className="skip-link">
+      <a
+        href="#main-content"
+        className="absolute top-[-60px] left-4 z-[200] bg-white text-brand-accent py-3 px-[17px] rounded-lg focus:top-3"
+      >
         Pular para o Conteúdo
       </a>
       <header
-        className="site-header"
+        className="bg-brand-nav text-white"
         onKeyDown={(event) => {
           if (event.key === 'Escape' && menuOpen) {
             setMenuOpen(false)
@@ -84,35 +85,47 @@ export default function Nav() {
           }
         }}
       >
-        <div className="site-header-main site-width">
-          <Brand />
-          <form className="header-search" onSubmit={search} role="search">
-            <Search size={20} aria-hidden="true" />
+        <Container className="flex items-center gap-7 py-6 max-[850px]:flex-wrap max-[850px]:gap-4.5 max-[600px]:gap-3 max-[600px]:py-4.5 max-[360px]:gap-1">
+          <Brand className="shrink-0" small />
+          <form
+            className="flex items-center flex-1 min-w-0 pl-[13px] rounded-[9px] bg-white text-[#7b6c87] overflow-hidden max-[850px]:order-3 max-[850px]:basis-full focus-within:outline focus-within:outline-[3px] focus-within:outline-brand-focus-light focus-within:outline-offset-3"
+            onSubmit={search}
+            role="search"
+          >
+            <Search className="shrink-0" size={20} aria-hidden="true" />
             <input
+              className="flex-1 py-3 px-[9px] border-0 text-[#2e2239] bg-white text-body min-w-0 w-auto outline-offset-[-3px] max-[600px]:text-[16px] placeholder:text-brand-muted placeholder:opacity-[1]"
               aria-label="Buscar Produtos"
               type="search"
               placeholder="O Que Sua Empresa Precisa Hoje?"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
-            <button type="submit" aria-label="Pesquisar Produtos">
+            <button
+              className="flex-[0_0_52px] grid place-items-center min-h-12 bg-brand-accent p-0 text-white border-0 hover:bg-brand-accent-hover focus-visible:outline-brand-focus-light"
+              type="submit"
+              aria-label="Pesquisar Produtos"
+            >
               <Search size={22} aria-hidden="true" />
             </button>
           </form>
-          <div className="header-actions">
+          <div className="flex shrink-0 items-center gap-[23px] max-[850px]:ml-auto max-[600px]:gap-2 max-[360px]:gap-1">
             <Link
-              className="header-account"
+              className="min-h-11 min-w-11 justify-center flex gap-[9px] items-center text-small hover:text-[#d8beff] focus-visible:outline-brand-focus-light"
               href={user ? '/profile' : '/authentication'}
               aria-label="Minha Conta"
               title={accountName}
             >
-              <UserRound size={22} aria-hidden="true" />
-              <span className="header-account-copy">
-                <small>{accountName}</small>Minha Conta
+              <UserRound className="shrink-0" size={22} aria-hidden="true" />
+              <span className="block min-w-0 max-w-[160px] whitespace-nowrap max-[700px]:hidden">
+                <small className="block text-[#b3a4c6] text-caption overflow-hidden text-ellipsis whitespace-nowrap">
+                  {accountName}
+                </small>
+                Minha Conta
               </span>
             </Link>
             <Link
-              className="header-cart"
+              className="relative min-h-11 min-w-11 justify-center p-[7px] flex items-center gap-1.5 hover:text-[#d8beff] focus-visible:outline-brand-focus-light"
               href="/cart"
               aria-label={
                 cartCount > 0
@@ -122,7 +135,10 @@ export default function Nav() {
             >
               <ShoppingCart size={23} aria-hidden="true" />
               {cartCount > 0 && (
-                <span className="cart-count" aria-hidden="true">
+                <span
+                  className="absolute top-0 right-0 grid place-items-center min-w-[21px] h-[21px] py-0 px-1 border-2 border-brand-nav rounded-full bg-brand-accent text-white text-[11px] font-extrabold leading-[1] tabular-nums"
+                  aria-hidden="true"
+                >
                   {cartCount > 99 ? '99+' : cartCount}
                 </span>
               )}
@@ -130,7 +146,7 @@ export default function Nav() {
             <button
               type="button"
               ref={menuButton}
-              className="mobile-menu-button"
+              className="h-11 w-11 flex-[0_0_44px] hidden place-items-center bg-transparent text-white border border-[#564365] p-0 rounded-lg max-[1100px]:grid focus-visible:outline-brand-focus-light"
               aria-expanded={menuOpen}
               aria-controls="site-navigation"
               aria-label={menuOpen ? 'Fechar Menu' : 'Abrir Menu'}
@@ -143,23 +159,35 @@ export default function Nav() {
               )}
             </button>
           </div>
-        </div>
-        <div id="site-navigation" className={`site-navigation ${menuOpen ? 'is-open' : ''}`}>
+        </Container>
+        <div
+          id="site-navigation"
+          className={cn(
+            'max-[1100px]:mx-auto max-[1100px]:max-w-[1240px] max-[1100px]:px-8 max-[1100px]:pb-5 max-[600px]:px-5 max-[600px]:pb-4.5 max-[360px]:px-4',
+            menuOpen ? 'max-[1100px]:block' : 'max-[1100px]:hidden'
+          )}
+        >
           {user?.is_superuser && (
-            <nav className="admin-nav" aria-label="Administração">
-              <div className="admin-nav-inner site-width">
-                <span className="admin-nav-label">
+            <nav
+              className="bg-brand-nav border-t border-t-[#34283f] max-[1100px]:p-4 max-[1100px]:border max-[1100px]:border-[#382a46] max-[1100px]:rounded-xl max-[1100px]:bg-[#1c1526] max-[1100px]:mb-3"
+              aria-label="Administração"
+            >
+              <div className="mx-auto flex max-w-[1240px] items-center gap-2 px-8 py-[5px] max-[1100px]:block max-[1100px]:p-0">
+                <span className="flex items-center gap-[7px] text-small normal-case text-[#c5a2ed] shrink-0 whitespace-nowrap max-[1100px]:mb-3 max-[1100px]:text-caption max-[1100px]:font-bold">
                   <ShieldCheck size={16} aria-hidden="true" />
                   Área Administrativa
                 </span>
-                <div className="admin-nav-links">
-                  {adminLinks.map(([href, label, Icon]) => navLink(href, label, Icon))}
+                <div className="flex items-center gap-2 min-w-0 max-[1100px]:grid max-[1100px]:grid-cols-3 max-[1100px]:gap-2 max-[700px]:grid-cols-2 max-[520px]:grid-cols-1">
+                  {adminLinks.map(([href, label, Icon]) => navLink(href, label, Icon, true))}
                 </div>
               </div>
             </nav>
           )}
-          <nav className="site-nav" aria-label="Navegação Principal">
-            <div className="site-nav-inner site-width">
+          <nav
+            className="border-t border-t-[#34283f] max-[1100px]:border-0"
+            aria-label="Navegação Principal"
+          >
+            <div className="mx-auto flex max-w-[1240px] items-center gap-2 px-8 py-[7px] max-[1100px]:grid max-[1100px]:grid-cols-5 max-[1100px]:p-0 max-[700px]:grid-cols-2">
               {storeLinks.map(([href, label, Icon]) => navLink(href, label, Icon))}
             </div>
           </nav>

@@ -10,13 +10,18 @@ function categoryIcon(name) {
 export default function CategoryCard({ category }) {
   const Icon = categoryIcon(category.name)
   return (
-    <Link className="category-card" href={`/products?categoryId=${category.id}`}>
-      <span className="category-icon">
+    <Link
+      className="flex items-center gap-3 bg-white border border-brand-border rounded-xl py-5 px-4 transition-colors duration-150 max-[520px]:py-[13px] max-[520px]:px-2.5 max-[520px]:gap-2 hover:bg-brand-accent-soft hover:border-[#c6a8f1]"
+      href={`/products?categoryId=${category.id}`}
+    >
+      <span className="text-brand-accent grid place-items-center bg-brand-accent-soft rounded-[10px] p-2.5 max-[520px]:p-[7px]">
         <Icon size={21} aria-hidden="true" />
       </span>
       <div>
-        <h3>{titleCase(category.name)}</h3>
-        <p>Explorar Produtos</p>
+        <h3 className="text-ui font-bold max-[520px]:text-ui">{titleCase(category.name)}</h3>
+        <p className="text-caption text-brand-muted mt-[3px] max-[520px]:hidden">
+          Explorar Produtos
+        </p>
       </div>
     </Link>
   )

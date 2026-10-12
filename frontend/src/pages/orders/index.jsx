@@ -13,8 +13,12 @@ export default function Orders() {
         title="Pedidos"
         description="Acompanhe as compras da sua organização e planeje os próximos passos."
       />
-      {user.is_superuser && <h2 className="section-title mb-5">Organizações Compradoras</h2>}
-      <div className="option-grid">
+      {user.is_superuser && (
+        <h2 className="text-[23px] font-extrabold tracking-[-0.8px] mb-5">
+          Organizações Compradoras
+        </h2>
+      )}
+      <div className="grid grid-cols-2 gap-4.5 max-[640px]:grid-cols-1">
         <FeatureLink
           href={user.is_superuser ? '/orders/adm-recurring-orders' : '/orders/recurring-orders'}
           icon={Repeat2}
@@ -32,8 +36,8 @@ export default function Orders() {
       </div>
       {user.is_superuser && (
         <>
-          <h2 className="section-title mt-9 mb-5">Fornecedores</h2>
-          <div className="option-grid">
+          <h2 className="text-[23px] font-extrabold tracking-[-0.8px] mt-9 mb-5">Fornecedores</h2>
+          <div className="grid grid-cols-2 gap-4.5 max-[640px]:grid-cols-1">
             <FeatureLink
               href="/orders/suppliers-recurring-orders"
               icon={Repeat2}

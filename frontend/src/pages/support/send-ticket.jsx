@@ -1,3 +1,5 @@
+import FormActions from '@/components/ui/FormActions'
+import FormPanel from '@/components/ui/FormPanel'
 import { MessagesSquare } from 'lucide-react'
 import FormLayout from '@/components/ui/FormLayout'
 import FormSection from '@/components/ui/FormSection'
@@ -58,7 +60,7 @@ export default function SendTicket({ administrator }) {
           { title: 'Histórico', text: 'As respostas ficam reunidas na conversa do ticket.' },
         ]}
       >
-        <form className="form-panel" onSubmit={submit}>
+        <FormPanel wide onSubmit={submit}>
           <FormSection
             icon={MessagesSquare}
             title="Sua Solicitação"
@@ -66,6 +68,7 @@ export default function SendTicket({ administrator }) {
           >
             <Alert>{errors.detail}</Alert>
             <Field
+              tone="tinted"
               name="subject"
               label="Assunto"
               value={values.subject}
@@ -74,6 +77,7 @@ export default function SendTicket({ administrator }) {
               required
             />
             <Field
+              tone="tinted"
               name="content"
               label="Sua Mensagem"
               as="textarea"
@@ -84,15 +88,15 @@ export default function SendTicket({ administrator }) {
               required
             />
           </FormSection>
-          <div className="form-actions">
+          <FormActions>
             <Button type="submit" disabled={busy}>
               {busy ? 'Enviando…' : 'Enviar Solicitação'}
             </Button>
             <Button href="/support" variant="secondary">
               Cancelar
             </Button>
-          </div>
-        </form>
+          </FormActions>
+        </FormPanel>
       </FormLayout>
     </BaseLayout>
   )

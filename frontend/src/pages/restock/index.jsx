@@ -1,3 +1,4 @@
+import { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import BaseLayout from '@/components/shared/BaseLayout'
 import PageHeader from '@/components/ui/PageHeader'
 import DataTable from '@/components/ui/DataTable'
@@ -26,29 +27,30 @@ export default function Restock({ products, suppliers, order }) {
         .filter((s) => products.some((p) => p.supplier === s.id))
         .map((supplier) => (
           <section className="mb-8" key={supplier.id}>
-            <h2 className="section-title mb-4">{supplier.name}</h2>
+            <h2 className="text-[23px] font-extrabold tracking-[-0.8px] mb-4">{supplier.name}</h2>
             <DataTable label={`Produtos de ${supplier.name}`}>
-              <thead>
+              <thead className="bg-[#3c2456]">
                 <tr>
-                  <th>Produto</th>
-                  <th>Estoque</th>
-                  <th>Preço de Custo</th>
-                  <th>Ação</th>
+                  <TableHeader>Produto</TableHeader>
+                  <TableHeader>Estoque</TableHeader>
+                  <TableHeader>Preço de Custo</TableHeader>
+                  <TableHeader>Ação</TableHeader>
                 </tr>
               </thead>
               <tbody>
                 {products
                   .filter((p) => p.supplier === supplier.id)
                   .map((product) => (
-                    <tr key={product.id}>
-                      <td>{product.name}</td>
-                      <td>{product.currentStockQuantity}</td>
-                      <td>{money(product.costPrice)}</td>
-                      <td>
+                    <TableRow key={product.id}>
+                      <TableCell>{product.name}</TableCell>
+                      <TableCell>{product.currentStockQuantity}</TableCell>
+                      <TableCell>{money(product.costPrice)}</TableCell>
+                      <TableCell>
                         {!order || order.supplier === product.supplier ? (
                           <Button
+                            size="small"
                             href={`/purchase?productId=${product.id}`}
-                            className="button-small"
+                            className="whitespace-nowrap"
                           >
                             Comprar para Reposição
                           </Button>
@@ -57,8 +59,8 @@ export default function Restock({ products, suppliers, order }) {
                             Outro fornecedor no carrinho
                           </span>
                         )}
-                      </td>
-                    </tr>
+                      </TableCell>
+                    </TableRow>
                   ))}
               </tbody>
             </DataTable>

@@ -1,3 +1,4 @@
+import Input from '@/components/ui/Input'
 import { useContext, useState } from 'react'
 import BaseLayout from '@/components/shared/BaseLayout'
 import PageHeader from '@/components/ui/PageHeader'
@@ -39,10 +40,13 @@ export default function Categories({ categories: initialCategories, search }) {
           user.is_superuser && <Button href="/categories/register">Cadastrar Categoria</Button>
         }
       />
-      <div className="category-toolbar">
-        <form action="/categories" className="search-form">
-          <input
-            className="field-control max-w-md"
+      <div className="flex items-center justify-between gap-5 flex-wrap mb-[25px]">
+        <form
+          action="/categories"
+          className="flex flex-wrap gap-2 items-center min-w-0 flex-[1_1_400px] max-w-[650px]"
+        >
+          <Input
+            className="duration-150 min-w-0 flex-[1_1_180px] max-w-md"
             name="search"
             type="search"
             defaultValue={search}
@@ -58,7 +62,9 @@ export default function Categories({ categories: initialCategories, search }) {
             </Button>
           )}
         </form>
-        <p>{categories.length} Categorias · Abra os Grupos para Explorar</p>
+        <p className="text-small text-brand-muted">
+          {categories.length} Categorias · Abra os Grupos para Explorar
+        </p>
       </div>
       <Alert>{error}</Alert>
       {matches.length ? (

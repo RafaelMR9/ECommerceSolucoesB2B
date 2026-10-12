@@ -1,3 +1,4 @@
+import FormPanel from '@/components/ui/FormPanel'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
@@ -41,12 +42,13 @@ export default function Purchase({ product, promotion }) {
           label: user.is_superuser ? 'Ressuprimento' : 'Produto',
         }}
       />
-      <div className="checkout-layout">
-        <form className="form-panel" onSubmit={submit}>
+      <div className="grid grid-cols-[minmax(0,_1fr)_340px] gap-[26px] items-start max-[1050px]:grid-cols-[minmax(0,_1fr)_280px] max-[760px]:grid-cols-1">
+        <FormPanel onSubmit={submit}>
           <Alert>{errors.detail}</Alert>
-          <div className="checkout-item mb-7">
-            <div className="checkout-item-image">
+          <div className="flex items-center gap-3.5 mb-7">
+            <div className="relative w-[65px] h-[65px] shrink-0">
               <Image
+                className="object-contain"
                 src={product.image || '/images/product-placeholder.svg'}
                 alt={product.name}
                 fill
@@ -59,6 +61,7 @@ export default function Purchase({ product, promotion }) {
             </div>
           </div>
           <Field
+            tone="tinted"
             name="quantity"
             label="Quantidade de Embalagens"
             type="number"
@@ -77,15 +80,17 @@ export default function Purchase({ product, promotion }) {
           >
             {busy ? 'Adicionando…' : 'Adicionar ao Carrinho'}
           </Button>
-        </form>
-        <aside className="panel checkout-summary">
-          <h2>Resumo do Item</h2>
+        </FormPanel>
+        <aside className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel max-[640px]:p-5">
+          <h2 className="text-[18px] font-bold mb-4.5">Resumo do Item</h2>
           <p className="text-sm text-gray-500">
             {quantity || 0} embalagens · {Number(quantity || 0) * product.packaging} unidades
           </p>
-          <div className="total">
+          <div className="flex flex-wrap gap-5 justify-between items-center text-[15px] my-[23px] mx-0">
             <span>Subtotal</span>
-            <strong>{money(price * Number(quantity || 0))}</strong>
+            <strong className="text-brand-accent text-[27px] font-extrabold">
+              {money(price * Number(quantity || 0))}
+            </strong>
           </div>
           {!user.is_superuser && (
             <p className="text-sm text-gray-500">

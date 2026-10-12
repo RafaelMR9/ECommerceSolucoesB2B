@@ -13,33 +13,42 @@ export default function ProfileDetails({ user }) {
         ]),
   ]
   return (
-    <section className="panel profile-details" aria-labelledby="profile-details-title">
-      <div className="profile-section-heading">
-        <span className="profile-section-icon">
+    <section
+      className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel max-[640px]:p-5 profile-details"
+      aria-labelledby="profile-details-title"
+    >
+      <div className="flex items-center gap-[13px] pb-[21px] border-b border-b-brand-border mb-6">
+        <span className="grid place-items-center w-[46px] h-[46px] shrink-0 rounded-[13px] bg-brand-accent-soft text-brand-accent">
           <ContactRound size={22} aria-hidden="true" />
         </span>
         <div>
-          <h2 id="profile-details-title">Dados do Cadastro</h2>
-          <p>Informações da sua {user.is_superuser ? 'conta administrativa' : 'organização'}.</p>
+          <h2 className="text-[19px] font-extrabold tracking-[-0.4px]" id="profile-details-title">
+            Dados do Cadastro
+          </h2>
+          <p className="text-brand-muted text-small mt-[5px]">
+            Informações da sua {user.is_superuser ? 'conta administrativa' : 'organização'}.
+          </p>
         </div>
       </div>
-      <dl className="profile-grid">
+      <dl className="grid grid-cols-2 gap-[22px] max-[600px]:grid-cols-1">
         {details.map(([label, value, Icon]) => (
-          <div key={label}>
-            <dt>
-              <Icon size={16} aria-hidden="true" />
+          <div className="last:odd:col-span-full" key={label}>
+            <dt className="flex items-center gap-[7px] text-brand-muted text-small mb-[9px]">
+              <Icon className="text-brand-accent" size={16} aria-hidden="true" />
               {label}
             </dt>
-            <dd>{value || 'Não informado'}</dd>
+            <dd className="text-body font-semibold [overflow-wrap:anywhere]">
+              {value || 'Não informado'}
+            </dd>
           </div>
         ))}
       </dl>
       {!user.is_superuser && (
-        <div className="profile-purchase-status">
-          <h3>Condições de Compra</h3>
-          <dl>
+        <div className="rounded-xl bg-[#f8f3fd] border border-[#e3d4f0] p-[19px] mt-[27px]">
+          <h3 className="text-ui font-bold mb-[17px]">Condições de Compra</h3>
+          <dl className="grid grid-cols-2 gap-4.5 max-[600px]:grid-cols-1">
             <div>
-              <dt>Compras Faturadas</dt>
+              <dt className="text-brand-muted text-small mb-[9px]">Compras Faturadas</dt>
               <dd>
                 <StatusBadge variant={user.authorizeFature ? 'success' : 'neutral'}>
                   {user.authorizeFature
@@ -51,7 +60,7 @@ export default function ProfileDetails({ user }) {
               </dd>
             </div>
             <div>
-              <dt>Permissão de Compra</dt>
+              <dt className="text-brand-muted text-small mb-[9px]">Permissão de Compra</dt>
               <dd>
                 <StatusBadge variant={user.canPurchase ? 'success' : 'danger'}>
                   {user.canPurchase ? 'Disponível' : 'Pagamentos pendentes'}

@@ -1,3 +1,4 @@
+import { TableHeader, TableRow, TableCell } from '@/components/ui/DataTable'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import DataTable from '@/components/ui/DataTable'
@@ -66,59 +67,65 @@ export default function OrdersTable({
         }
         label={payments ? 'Pagamentos' : 'Pedidos'}
       >
-        <thead>
+        <thead className="bg-[#3c2456]">
           <tr>
-            <th>Pedido</th>
-            {(admin || supplier) && <th>{supplier ? 'Fornecedor' : 'Organização'}</th>}
-            <th>Realizado em</th>
-            <th>Valor</th>
+            <TableHeader>Pedido</TableHeader>
+            {(admin || supplier) && (
+              <TableHeader>{supplier ? 'Fornecedor' : 'Organização'}</TableHeader>
+            )}
+            <TableHeader>Realizado em</TableHeader>
+            <TableHeader>Valor</TableHeader>
             {recurring ? (
               <>
-                <th>Recorrência</th>
-                <th>Próxima Entrega</th>
-                <th>Última Entrega</th>
+                <TableHeader>Recorrência</TableHeader>
+                <TableHeader>Próxima Entrega</TableHeader>
+                <TableHeader>Última Entrega</TableHeader>
               </>
             ) : (
               <>
-                <th>Faturado</th>
-                <th>Entrega</th>
+                <TableHeader>Faturado</TableHeader>
+                <TableHeader>Entrega</TableHeader>
               </>
             )}
-            <th>{payments ? 'Pagamento' : 'Status'}</th>
-            <th>Ações</th>
+            <TableHeader>{payments ? 'Pagamento' : 'Status'}</TableHeader>
+            <TableHeader>Ações</TableHeader>
           </tr>
         </thead>
         <tbody>
           {orders.map((order) => {
             const company = companies.find((c) => c.id === (supplier ? order.supplier : order.user))
             return (
-              <tr key={order.id}>
-                <td>
+              <TableRow key={order.id}>
+                <TableCell>
                   <strong>#{order.id}</strong>
-                </td>
+                </TableCell>
                 {(admin || supplier) && (
-                  <td>
-                    <p>{company?.name || company?.username || 'Cadastro indisponível'}</p>
-                    {company?.cnpj && <p className="text-sm text-gray-500 mt-1">{company.cnpj}</p>}
-                  </td>
+                  <TableCell>
+                    <p className="m-0">
+                      {company?.name || company?.username || 'Cadastro indisponível'}
+                    </p>
+                    {company?.cnpj && (
+                      <p className="m-0 text-sm text-gray-500 mt-1">{company.cnpj}</p>
+                    )}
+                  </TableCell>
                 )}
-                <td>{date(order.orderDate, true)}</td>
-                <td className="whitespace-nowrap font-semibold">
+                <TableCell>{date(order.orderDate, true)}</TableCell>
+                <TableCell className="whitespace-nowrap font-semibold">
                   {money(supplier ? order.totalCostValue : order.totalSaleValue)}
-                </td>
+                </TableCell>
                 {recurring ? (
                   <>
-                    <td>A cada {order.deliveryFrequency} dias</td>
-                    <td>{nextDelivery(order)}</td>
-                    <td>{date(order.deliveryDate)}</td>
+                    <TableCell>A cada {order.deliveryFrequency} dias</TableCell>
+                    <TableCell>{nextDelivery(order)}</TableCell>
+                    <TableCell>{date(order.deliveryDate)}</TableCell>
                   </>
                 ) : (
                   <>
-                    <td>{order.faturedPayment ? 'Sim' : 'Não'}</td>
-                    <td>{date(order.deliveryDate)}</td>
+                    <TableCell>{order.faturedPayment ? 'Sim' : 'Não'}</TableCell>
+                    <TableCell>{date(order.deliveryDate)}</TableCell>
                   </>
                 )}
-                <td>
+                <TableCell>
                   {payments ? (
                     <StatusBadge
                       variant={
@@ -134,9 +141,9 @@ export default function OrdersTable({
                   ) : (
                     <OrderStatus order={order} supplier={supplier} />
                   )}
-                </td>
-                <td>
-                  <div className="table-actions">
+                </TableCell>
+                <TableCell>
+                  <div className="flex gap-[7px] flex-wrap min-w-[160px]">
                     <OrderActions
                       order={order}
                       payments={payments}
@@ -145,8 +152,8 @@ export default function OrdersTable({
                       onAction={ask}
                     />
                   </div>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )
           })}
         </tbody>
