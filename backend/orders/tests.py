@@ -1,8 +1,12 @@
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
+from threading import Barrier
+from unittest import skipUnless
 from unittest.mock import patch
 
-from django.test import TestCase
+from django.db import close_old_connections, connection
+from django.test import TestCase, TransactionTestCase
 from django.utils import timezone
 from rest_framework.test import APIClient
 
@@ -14,7 +18,64 @@ from products.models import Category, Product
 from suppliers.models import Supplier
 
 from .actions import record_payment, restore_stock
-from .models import ItemSalesInvoice, SalesInvoice, SalesOrder, SupplierOrder
+from .models import (
+    ItemSalesInvoice,
+    ItemSalesOrder,
+    SalesInvoice,
+    SalesOrder,
+    SupplierOrder,
+)
+
+
+@skipUnless(connection.vendor == "postgresql", "Requires PostgreSQL row locks.")
+class ConcurrentCartTests(TransactionTestCase):
+    def test_two_buyers_cannot_reserve_the_same_last_unit(self):
+        supplier = Supplier.objects.create(
+            name="Concurrent supplier", email="concurrent@example.test", cnpj="test"
+        )
+        category = Category.objects.create(name="Concurrent category")
+        product = Product.objects.create(
+            name="Last unit",
+            category=category,
+            supplier=supplier,
+            currentStockQuantity=1,
+            costPrice=10,
+            salePrice=20,
+            description="Test",
+            image="test.jpg",
+        )
+        buyers = [
+            User.objects.create_user(
+                email=f"buyer{index}@example.test",
+                username=f"buyer{index}",
+                password="test-password",
+            )
+            for index in range(2)
+        ]
+        ready = Barrier(2)
+
+        def reserve(buyer):
+            close_old_connections()
+            try:
+                client = APIClient()
+                client.force_authenticate(buyer)
+                ready.wait(timeout=10)
+                response = client.post(
+                    "/api/orders/cart/add/",
+                    {"product": product.pk, "quantity": 1},
+                    format="json",
+                )
+                return response.status_code
+            finally:
+                close_old_connections()
+
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            statuses = list(executor.map(reserve, buyers))
+        self.assertEqual(sorted(statuses), [201, 400])
+        product.refresh_from_db()
+        self.assertEqual(product.currentStockQuantity, 0)
+        self.assertEqual(ItemSalesOrder.objects.count(), 1)
+        self.assertEqual(SalesOrder.objects.count(), 1)
 
 
 class CheckoutTests(TestCase):

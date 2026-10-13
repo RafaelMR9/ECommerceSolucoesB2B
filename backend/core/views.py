@@ -175,7 +175,7 @@ class SendResetEmailView(APIView):
                 f"Olá,\n\nPara redefinir sua senha, acesse:\n{url}\n\nSe você não solicitou a mudança, ignore esta mensagem.",
                 settings.DEFAULT_FROM_EMAIL,
                 [user.email],
-                fail_silently=False,
+                using="default",
             )
         return Response(
             {

@@ -4,6 +4,7 @@ import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
+from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.management import call_command
 from django.test import SimpleTestCase, TestCase, override_settings
@@ -73,6 +74,23 @@ class ImageStorageTests(SimpleTestCase):
 
 
 class PasswordResetEnvironmentTests(TestCase):
+    @override_settings(
+        MAILERS={
+            "default": {"BACKEND": "django.core.mail.backends.locmem.EmailBackend"}
+        }
+    )
+    def test_password_reset_sends_with_the_configured_mailer(self):
+        user = User.objects.create_user(
+            email="recovery@example.test", username="recovery", password="test-password"
+        )
+        response = APIClient().post(
+            "/api/users/passwordReset/sendResetEmail/", {"email": user.email}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [user.email])
+        self.assertIn("/authentication/recover-password?token=", mail.outbox[0].body)
+
     @override_settings(FRONTEND_URL="https://portfolio.example")
     @patch("core.views.send_mail")
     def test_password_reset_uses_configured_frontend(self, send_mail):
