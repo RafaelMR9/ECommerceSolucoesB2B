@@ -1,7 +1,7 @@
 [tool.ruff]
-target-version = "py311"
+target-version = "py313"
 line-length = 88
-extend-exclude = ["migrations", ".venv"]
+extend-exclude = ["migrations", ".venv", ".python-runtime", "backups"]
 force-exclude = true
 
 [tool.ruff.lint]

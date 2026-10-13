@@ -219,21 +219,26 @@ STORAGES = {
     },
 }
 
-EMAIL_BACKEND = os.getenv(
+email_backend = os.getenv(
     "EMAIL_BACKEND",
     "django.core.mail.backends.smtp.EmailBackend"
     if IS_PRODUCTION
     else "django.core.mail.backends.console.EmailBackend",
 )
-EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.outlook.com")
-EMAIL_PORT = int(os.getenv("EMAIL_PORT", "587"))
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", os.getenv("EMAIL_ADDRESS", ""))
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", os.getenv("EMAIL_PASSWORD", ""))
-EMAIL_USE_TLS = env_bool("EMAIL_USE_TLS", True)
-EMAIL_USE_SSL = env_bool("EMAIL_USE_SSL", False)
-EMAIL_TIMEOUT = int(os.getenv("EMAIL_TIMEOUT", "15"))
+email_host_user = os.getenv("EMAIL_HOST_USER", os.getenv("EMAIL_ADDRESS", ""))
+MAILERS = {"default": {"BACKEND": email_backend}}
+if email_backend == "django.core.mail.backends.smtp.EmailBackend":
+    MAILERS["default"]["OPTIONS"] = {
+        "host": os.getenv("EMAIL_HOST", "smtp.outlook.com"),
+        "port": int(os.getenv("EMAIL_PORT", "587")),
+        "username": email_host_user,
+        "password": os.getenv("EMAIL_HOST_PASSWORD", os.getenv("EMAIL_PASSWORD", "")),
+        "use_tls": env_bool("EMAIL_USE_TLS", True),
+        "use_ssl": env_bool("EMAIL_USE_SSL", False),
+        "timeout": int(os.getenv("EMAIL_TIMEOUT", "15")),
+    }
 DEFAULT_FROM_EMAIL = os.getenv(
-    "DEFAULT_FROM_EMAIL", EMAIL_HOST_USER or "demo@localhost"
+    "DEFAULT_FROM_EMAIL", email_host_user or "demo@localhost"
 )
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", os.getenv("EMAIL_ADDRESS", "admin@localhost"))
 

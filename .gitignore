@@ -6,6 +6,7 @@
 **/.next/
 **/out/
 **/.venv/
+backend/.python-runtime/
 **/__pycache__/
 **/.ruff_cache/
 *.py[cod]
