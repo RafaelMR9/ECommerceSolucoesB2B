@@ -194,12 +194,14 @@ class CheckoutTests(TestCase):
 
     def test_failed_checkout_rolls_back_invoice_and_order(self):
         self.add()
-        with patch(
-            "orders.checkout.Ticket.objects.create",
-            side_effect=RuntimeError("simulated failure"),
+        with (
+            patch(
+                "orders.checkout.Ticket.objects.create",
+                side_effect=RuntimeError("simulated failure"),
+            ),
+            self.assertRaises(RuntimeError),
         ):
-            with self.assertRaises(RuntimeError):
-                self.client.post("/api/orders/checkout/", {}, format="json")
+            self.client.post("/api/orders/checkout/", {}, format="json")
         self.assertFalse(SalesInvoice.objects.exists())
         self.assertFalse(SalesOrder.objects.get().finished)
 
@@ -409,12 +411,14 @@ class CheckoutTests(TestCase):
         order = self.finish()
         self.client.force_authenticate(self.admin)
         self.action(order, "prepare")
-        with patch(
-            "orders.actions.Ticket.objects.create",
-            side_effect=RuntimeError("simulated failure"),
+        with (
+            patch(
+                "orders.actions.Ticket.objects.create",
+                side_effect=RuntimeError("simulated failure"),
+            ),
+            self.assertRaises(RuntimeError),
         ):
-            with self.assertRaises(RuntimeError):
-                self.action(order, "unpaid")
+            self.action(order, "unpaid")
         self.assertIsNone(SalesOrder.objects.get(pk=order).paid)
         self.buyer.refresh_from_db()
         self.assertTrue(self.buyer.canPurchase)

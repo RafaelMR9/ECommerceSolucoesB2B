@@ -100,7 +100,7 @@ export default function OrdersTable({
                   <strong>#{order.id}</strong>
                 </TableCell>
                 {(admin || supplier) && (
-                  <TableCell className="min-w-[190px]">
+                  <TableCell className="min-w-47.5">
                     <p className="m-0">
                       {company?.name || company?.username || 'Cadastro indisponível'}
                     </p>
@@ -145,7 +145,7 @@ export default function OrdersTable({
                   )}
                 </TableCell>
                 <TableCell>
-                  <div className="flex gap-[7px] flex-wrap min-w-[160px]">
+                  <div className="flex gap-1.75 flex-wrap min-w-40">
                     <OrderActions
                       order={order}
                       payments={payments}

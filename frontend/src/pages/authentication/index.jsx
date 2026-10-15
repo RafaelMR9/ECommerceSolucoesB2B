@@ -60,7 +60,7 @@ export default function Login() {
           onChange={(e) => setValues((p) => ({ ...p, password: e.target.value }))}
           required
         />
-        <div className="flex justify-between gap-[15px] items-center flex-wrap text-small my-4.5 mx-0">
+        <div className="flex justify-between gap-3.75 items-center flex-wrap text-small my-4.5 mx-0">
           <span>Seu acesso à plataforma</span>
           <Link className="text-brand-accent" href="/authentication/forgot-password">
             Esqueci Minha Senha
@@ -70,21 +70,21 @@ export default function Login() {
           {busy ? 'Entrando…' : 'Entrar na Conta'}
         </Button>
       </form>
-      <div className="flex items-center gap-[13px] text-caption text-brand-muted mt-[27px] mr-0 mb-5 ml-0 before:content-[''] before:h-px before:flex-1 before:bg-brand-border after:content-[''] after:h-px after:flex-1 after:bg-brand-border">
+      <div className="flex items-center gap-3.25 text-caption text-brand-muted mt-6.75 mr-0 mb-5 ml-0 before:content-[''] before:h-px before:flex-1 before:bg-brand-border after:content-[''] after:h-px after:flex-1 after:bg-brand-border">
         Sua empresa ainda não tem uma conta?
       </div>
       <Button href="/authentication/register-account" variant="secondary" className="w-full">
         Criar Conta da Organização
       </Button>
       {process.env.NEXT_PUBLIC_DEMO_MODE === 'true' && (
-        <aside className="bg-brand-accent-soft border border-[#e1d2f6] rounded-xl p-4 mt-[25px]">
+        <aside className="bg-brand-accent-soft border border-[#e1d2f6] rounded-xl p-4 mt-6.25">
           <h2 className="text-small font-bold text-[#6132a5]">Conheça a Demonstração</h2>
-          <p className="text-caption text-[#7b5c9b] mt-[7px] leading-[1.8]">
+          <p className="text-caption text-[#7b5c9b] mt-1.75 leading-[1.8]">
             Uma conta administrativa está disponível para explorar as ferramentas de gestão. Para
             conhecer a experiência de compra, cadastre uma organização.
           </p>
           {process.env.NEXT_PUBLIC_DEMO_PASSWORD && (
-            <div className="flex gap-4.5 flex-wrap mt-[9px] text-small text-[#503275]">
+            <div className="flex gap-4.5 flex-wrap mt-2.25 text-small text-[#503275]">
               <span>
                 Usuário: <strong>{process.env.NEXT_PUBLIC_DEMO_USERNAME || 'admin'}</strong>
               </span>

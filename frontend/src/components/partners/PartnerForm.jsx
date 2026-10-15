@@ -74,7 +74,7 @@ export default function PartnerForm({ kind, partner }) {
           title={kind === 'suppliers' ? 'Dados do Fornecedor' : 'Dados da Transportadora'}
           description="Preencha os campos obrigatórios indicados por *."
         >
-          <div className="grid grid-cols-2 gap-y-0 gap-x-[22px] max-[640px]:grid-cols-1">
+          <div className="grid grid-cols-2 gap-y-0 gap-x-5.5 max-[640px]:grid-cols-1">
             <div className="col-span-full">
               <Field
                 tone="tinted"

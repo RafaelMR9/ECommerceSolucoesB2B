@@ -9,7 +9,7 @@ export default function StatusBadge({ children, variant = 'neutral' }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center whitespace-nowrap rounded-full px-[9px] py-[5px] text-caption font-semibold leading-[1.2]',
+        'inline-flex items-center whitespace-nowrap rounded-full px-2.25 py-1.25 text-caption font-semibold leading-[1.2]',
         variants[variant] || variants.neutral
       )}
     >

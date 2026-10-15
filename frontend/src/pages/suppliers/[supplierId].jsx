@@ -23,7 +23,7 @@ export default function Supplier({ partner, products, promotions, now }) {
           <tbody>
             {products.map((product) => (
               <TableRow key={product.id}>
-                <TableCell className="min-w-[160px]">{product.name}</TableCell>
+                <TableCell className="min-w-40">{product.name}</TableCell>
                 <TableCell>
                   {money(activePromotion(product, promotions, now)?.salePrice ?? product.salePrice)}
                 </TableCell>

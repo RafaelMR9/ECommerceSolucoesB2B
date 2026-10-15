@@ -118,7 +118,7 @@ export default function ProductForm({ product, categories, suppliers }) {
           title="Estoque e Preços"
           description="Os preços se referem a cada embalagem."
         >
-          <div className="grid grid-cols-2 gap-y-0 gap-x-[22px] max-[640px]:grid-cols-1">
+          <div className="grid grid-cols-2 gap-y-0 gap-x-5.5 max-[640px]:grid-cols-1">
             {field('currentStockQuantity', 'Quantidade em Estoque', {
               type: 'number',
               min: 0,

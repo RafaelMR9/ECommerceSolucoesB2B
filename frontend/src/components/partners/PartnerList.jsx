@@ -53,12 +53,8 @@ export default function PartnerList({ kind, partners, search }) {
               icon={Icon}
               title={partner.name}
             >
-              <p className="mt-[7px] text-ui text-brand-muted [overflow-wrap:anywhere]">
-                {partner.cnpj}
-              </p>
-              <p className="mt-[7px] text-ui text-brand-muted [overflow-wrap:anywhere]">
-                {partner.email}
-              </p>
+              <p className="mt-1.75 text-ui text-brand-muted wrap-anywhere">{partner.cnpj}</p>
+              <p className="mt-1.75 text-ui text-brand-muted wrap-anywhere">{partner.email}</p>
             </FeatureLink>
           ))}
         </div>

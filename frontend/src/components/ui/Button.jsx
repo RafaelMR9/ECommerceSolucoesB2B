@@ -31,10 +31,10 @@ export default function Button({
 }) {
   const tone = variants[variant] ? variant : 'primary'
   const classes = cn(
-    'inline-flex min-h-11 items-center justify-center gap-2 whitespace-normal rounded-lg border px-[17px] py-2.5 text-ui font-semibold no-underline transition-colors disabled:cursor-not-allowed disabled:opacity-55 [&_svg]:shrink-0',
+    'inline-flex min-h-11 items-center justify-center gap-2 whitespace-normal rounded-lg border px-4.25 py-2.5 text-ui font-semibold no-underline transition-colors disabled:cursor-not-allowed disabled:opacity-55 [&_svg]:shrink-0',
     variants[tone],
     href && !disabled && linkVariants[tone],
-    size === 'small' && 'px-[11px] py-[7px] text-small',
+    size === 'small' && 'px-2.75 py-1.75 text-small',
     className
   )
   if (href && disabled)

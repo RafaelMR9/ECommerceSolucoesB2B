@@ -19,10 +19,10 @@ export default function Products({ cards, categories, search, categoryId }) {
         description="Encontre os essenciais que acompanham a rotina da sua empresa."
         actions={user.is_superuser && <Button href="/products/register">Cadastrar Produto</Button>}
       />
-      <div className="grid grid-cols-[260px_minmax(0,_1fr)] gap-7 max-[760px]:grid-cols-1 max-[760px]:gap-5">
+      <div className="grid grid-cols-[260px_minmax(0,1fr)] gap-7 max-[760px]:grid-cols-1 max-[760px]:gap-5">
         <CatalogFilters categories={categories} categoryId={categoryId} />
         <div>
-          <div className="flex justify-between items-center text-small text-brand-muted mb-[17px] gap-3 flex-wrap">
+          <div className="flex justify-between items-center text-small text-brand-muted mb-4.25 gap-3 flex-wrap">
             <p>
               {search
                 ? `Resultados para “${search}”`

@@ -21,19 +21,19 @@ export default function ProfileShortcuts({ admin }) {
   ]
   return (
     <aside
-      className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel min-w-0 border-t-3 border-t-[#ad86ce] max-[640px]:p-5"
+      className="bg-brand-surface border border-brand-border rounded-panel p-6.25 shadow-panel min-w-0 border-t-3 border-t-[#ad86ce] max-[640px]:p-5"
       aria-labelledby="profile-shortcuts-title"
     >
       <h2 className="text-[19px] font-extrabold tracking-[-0.4px]" id="profile-shortcuts-title">
         Sua Rotina em um Só Lugar
       </h2>
-      <p className="text-brand-muted text-small mt-[5px]">
+      <p className="text-brand-muted text-small mt-1.25">
         Acesse o que você precisa para continuar.
       </p>
       <nav className="mt-5" aria-label="Atalhos da Conta">
         {shortcuts.map(([href, title, description, Icon]) => (
           <Link
-            className="flex items-start gap-3 min-h-11 py-[17px] px-0 border-t border-t-brand-border group/a"
+            className="flex items-start gap-3 min-h-11 py-4.25 px-0 border-t border-t-brand-border group/a"
             href={href}
             key={href}
           >
@@ -44,7 +44,7 @@ export default function ProfileShortcuts({ admin }) {
               <strong className="text-ui block group-hover/a:text-brand-accent group-hover/a:underline group-hover/a:underline-offset-4">
                 {title}
               </strong>
-              <small className="text-brand-muted text-small leading-[1.6] block mt-[5px]">
+              <small className="text-brand-muted text-small leading-[1.6] block mt-1.25">
                 {description}
               </small>
             </span>

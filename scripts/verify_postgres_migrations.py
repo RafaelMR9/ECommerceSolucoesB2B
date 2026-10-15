@@ -42,7 +42,9 @@ def rows(connection):
                 sql.SQL("SELECT * FROM public.{}").format(sql.Identifier(table))
             )
             columns = [column.name for column in cursor.description]
-            records = [dict(zip(columns, row)) for row in cursor.fetchall()]
+            records = [
+                dict(zip(columns, row, strict=True)) for row in cursor.fetchall()
+            ]
             records.sort(key=lambda row: json.dumps(row, default=str, sort_keys=True))
             result[table] = records
     return result

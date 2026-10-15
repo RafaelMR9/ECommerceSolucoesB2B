@@ -9,7 +9,7 @@ export default function DataTable({ children, empty, emptyMessage, label = 'Dado
       aria-label={label}
       tabIndex={0}
     >
-      <table className="w-full min-w-[560px] border-collapse text-left text-ui">{children}</table>
+      <table className="w-full min-w-140 border-collapse text-left text-ui">{children}</table>
     </div>
   )
 }
@@ -18,7 +18,7 @@ export function TableHeader({ className, children, ...props }) {
     <th
       scope="col"
       className={cn(
-        'whitespace-nowrap border-b border-[#62447e] px-[19px] py-4 text-small font-bold text-white',
+        'whitespace-nowrap border-b border-[#62447e] px-4.75 py-4 text-small font-bold text-white',
         className
       )}
       {...props}
@@ -31,7 +31,7 @@ export function TableCell({ className, children, ...props }) {
   return (
     <td
       className={cn(
-        'border-b border-[#efebf3] px-[19px] py-4.5 align-middle text-small text-brand-ink [overflow-wrap:anywhere] group-last/row:border-b-0',
+        'border-b border-[#efebf3] px-4.75 py-4.5 align-middle text-small text-brand-ink wrap-anywhere group-last/row:border-b-0',
         className
       )}
       {...props}

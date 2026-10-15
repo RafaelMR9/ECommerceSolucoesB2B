@@ -28,10 +28,10 @@ export default function Support({ tickets }) {
               icon={MessageSquare}
               title={ticket.subject}
             >
-              <p className="mt-[7px] overflow-hidden text-ui text-brand-muted [overflow-wrap:anywhere] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
+              <p className="mt-1.75 overflow-hidden text-ui text-brand-muted wrap-anywhere [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]">
                 {ticket.content}
               </p>
-              <p className="mt-[7px] text-small text-brand-muted">
+              <p className="mt-1.75 text-small text-brand-muted">
                 #{ticket.id} · {date(ticket.dateHour, true)}
               </p>
             </FeatureLink>

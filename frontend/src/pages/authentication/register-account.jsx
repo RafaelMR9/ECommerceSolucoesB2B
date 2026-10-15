@@ -90,9 +90,9 @@ export default function RegisterAccount() {
             required
           />
         ))}
-        <div className="flex gap-2.5 items-start mt-[15px] mr-0 mb-[22px] ml-0">
+        <div className="flex gap-2.5 items-start mt-3.75 mr-0 mb-5.5 ml-0">
           <input
-            className="accent-brand-accent w-4.5 h-4.5 mt-[3px]"
+            className="accent-brand-accent w-4.5 h-4.5 mt-0.75"
             type="checkbox"
             name="authorizeFature"
             id="authorizeFature"
@@ -106,7 +106,7 @@ export default function RegisterAccount() {
         <Button type="submit" className="w-full" disabled={busy}>
           {busy ? 'Criando Conta…' : 'Criar Minha Conta'}
         </Button>
-        <div className="flex justify-between gap-[15px] items-center flex-wrap text-small my-4.5 mx-0">
+        <div className="flex justify-between gap-3.75 items-center flex-wrap text-small my-4.5 mx-0">
           <span>Já tem uma conta?</span>
           <Button href="/authentication" variant="ghost">
             Entrar

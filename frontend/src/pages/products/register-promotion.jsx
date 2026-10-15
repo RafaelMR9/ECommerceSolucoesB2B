@@ -67,7 +67,7 @@ export default function RegisterPromotion({ product }) {
           >
             <Alert>{errors.detail || errors.non_field_errors}</Alert>
             <Alert variant="success">{success}</Alert>
-            <div className="grid grid-cols-2 gap-y-0 gap-x-[22px] max-[640px]:grid-cols-1">
+            <div className="grid grid-cols-2 gap-y-0 gap-x-5.5 max-[640px]:grid-cols-1">
               {[
                 ['startDate', 'Início da promoção'],
                 ['endDate', 'Fim da promoção'],

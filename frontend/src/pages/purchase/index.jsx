@@ -64,7 +64,7 @@ export default function Purchase({ product, promotion }) {
         <FormPanel onSubmit={submit}>
           <Alert>{errors.detail}</Alert>
           <div className="flex items-center gap-3.5 mb-7">
-            <div className="relative w-[65px] h-[65px] shrink-0">
+            <div className="relative w-16.25 h-16.25 shrink-0">
               <Image
                 className="object-contain"
                 src={product.image || '/images/product-placeholder.svg'}
@@ -75,7 +75,7 @@ export default function Purchase({ product, promotion }) {
               />
             </div>
             <div className="min-w-0">
-              <h2 className="font-semibold [overflow-wrap:anywhere]">{product.name}</h2>
+              <h2 className="font-semibold wrap-anywhere">{product.name}</h2>
               <p className="text-sm text-brand-muted">{money(price)} por embalagem</p>
             </div>
           </div>

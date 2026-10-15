@@ -63,7 +63,7 @@ export default function Analysis({ companies }) {
               <TableCell>{company.name}</TableCell>
               <TableCell>{company.cnpj}</TableCell>
               <TableCell>
-                <div className="flex gap-[7px] flex-wrap min-w-[160px]">
+                <div className="flex gap-1.75 flex-wrap min-w-40">
                   <Button
                     size="small"
                     className="whitespace-nowrap"

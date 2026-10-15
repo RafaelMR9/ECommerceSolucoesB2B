@@ -21,13 +21,13 @@ export default function CategoryActions({ category, onRemove }) {
       }}
     >
       <summary
-        className="grid place-items-center w-11 h-11 border border-brand-border rounded-lg text-[#573479] bg-white cursor-pointer list-none [&::-webkit-details-marker]:hidden hover:bg-brand-accent-soft hover:border-[#bfa0df] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-brand-accent focus-visible:outline-offset-3"
+        className="grid place-items-center w-11 h-11 border border-brand-border rounded-lg text-[#573479] bg-white cursor-pointer list-none [&::-webkit-details-marker]:hidden hover:bg-brand-accent-soft hover:border-[#bfa0df] focus-visible:outline-solid focus-visible:outline-3 focus-visible:outline-brand-accent focus-visible:outline-offset-3"
         aria-label={`Gerenciar ${name}`}
         title={`Gerenciar ${name}`}
       >
         <Ellipsis size={20} aria-hidden="true" />
       </summary>
-      <div className="absolute right-0 top-[calc(100%_+_6px)] w-[210px] p-2 grid gap-1.5 border border-brand-border rounded-[10px] bg-white shadow-[0_12px_32px_#28113729] z-[20]">
+      <div className="absolute right-0 top-[calc(100%+6px)] w-52.5 p-2 grid gap-1.5 border border-brand-border rounded-[10px] bg-white shadow-[0_12px_32px_#28113729] z-20">
         <Button
           className="justify-start text-small"
           href={`/categories/update?categoryId=${category.id}`}

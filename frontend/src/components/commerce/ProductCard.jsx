@@ -12,13 +12,13 @@ export default function ProductCard({ product, categoryName, promotion, preload 
     ? Math.floor((1 - Number(price) / Number(product.salePrice)) * 100)
     : 0
   return (
-    <article className="flex flex-col min-w-0 bg-white border border-[#dccbea] rounded-[18px] overflow-hidden shadow-product transition-shadow duration-200 max-[520px]:grid max-[520px]:grid-cols-[110px_minmax(0,_1fr)] max-[360px]:grid-cols-[85px_minmax(0,_1fr)] hover:shadow-product-hover focus-within:shadow-product-hover">
+    <article className="flex flex-col min-w-0 bg-white border border-[#dccbea] rounded-[18px] overflow-hidden shadow-product transition-shadow duration-200 max-[520px]:grid max-[520px]:grid-cols-[110px_minmax(0,1fr)] max-[360px]:grid-cols-[85px_minmax(0,1fr)] hover:shadow-product-hover focus-within:shadow-product-hover">
       <Link
-        className="block relative p-3.5 bg-[linear-gradient(135deg,_#f3eafa,_#faf7fd)] border-b border-b-[#e8dcf0] max-[520px]:p-2.5 max-[520px]:flex max-[520px]:items-center max-[520px]:border-b-0 max-[520px]:border-r max-[520px]:border-r-[#e8dcf0] max-[360px]:p-[7px] focus-visible:outline-offset-[-5px] group/product-card-media"
+        className="block relative p-3.5 bg-[linear-gradient(135deg,#f3eafa,#faf7fd)] border-b border-b-[#e8dcf0] max-[520px]:p-2.5 max-[520px]:flex max-[520px]:items-center max-[520px]:border-b-0 max-[520px]:border-r max-[520px]:border-r-[#e8dcf0] max-[360px]:p-1.75 focus-visible:outline-offset-[-5px] group/product-card-media"
         href={href}
         aria-label={`Ver ${product.name}`}
       >
-        <span className="block relative h-[184px] bg-white rounded-xl shadow-[0_2px_8px_#30124005] overflow-hidden max-[520px]:w-full max-[520px]:h-[160px]">
+        <span className="block relative h-46 bg-white rounded-xl shadow-[0_2px_8px_#30124005] overflow-hidden max-[520px]:w-full max-[520px]:h-40">
           <Image
             className="object-contain p-3.5 transition-transform duration-200 max-[520px]:p-2 group-hover/product-card-media:scale-[1.04]"
             src={product.image || '/images/product-placeholder.svg'}
@@ -30,16 +30,16 @@ export default function ProductCard({ product, categoryName, promotion, preload 
           />
         </span>
         {discounted && (
-          <span className="absolute top-[21px] left-[21px] rounded-[7px] py-[5px] px-[9px] bg-[#6023af] text-white text-small font-extrabold max-[520px]:top-2.5 max-[520px]:left-2.5">
+          <span className="absolute top-5.25 left-5.25 rounded-[7px] py-1.25 px-2.25 bg-[#6023af] text-white text-small font-extrabold max-[520px]:top-2.5 max-[520px]:left-2.5">
             {discount ? `−${discount}%` : 'Oferta'}
           </span>
         )}
       </Link>
       <div className="flex flex-1 flex-col min-w-0 p-4.5 max-[520px]:py-3.5 max-[520px]:px-3 max-[360px]:py-3 max-[360px]:px-2.5">
-        <p className="self-start py-1 px-[9px] rounded-[6px] bg-[#f3ebfc] text-[#63358a] text-caption font-semibold mb-2.5 [overflow-wrap:anywhere]">
+        <p className="self-start py-1 px-2.25 rounded-md bg-[#f3ebfc] text-[#63358a] text-caption font-semibold mb-2.5 wrap-anywhere">
           {titleCase(categoryName || 'Produto')}
         </p>
-        <h3 className="min-h-12 text-body font-extrabold leading-[1.5] tracking-[-0.3px] [overflow-wrap:anywhere] max-[520px]:min-h-0">
+        <h3 className="min-h-12 text-body font-extrabold leading-normal tracking-[-0.3px] wrap-anywhere max-[520px]:min-h-0">
           <Link
             className="hover:text-[#6023af] hover:underline hover:underline-offset-4"
             href={href}
@@ -47,7 +47,7 @@ export default function ProductCard({ product, categoryName, promotion, preload 
             {product.name}
           </Link>
         </h3>
-        <p className="flex items-start gap-[7px] text-brand-muted text-small mt-[11px] mr-0 mb-4.5 ml-0 max-[520px]:mt-[9px] max-[520px]:mr-0 max-[520px]:mb-[13px] max-[520px]:ml-0">
+        <p className="flex items-start gap-1.75 text-brand-muted text-small mt-2.75 mr-0 mb-4.5 ml-0 max-[520px]:mt-2.25 max-[520px]:mr-0 max-[520px]:mb-3.25 max-[520px]:ml-0">
           <Package className="text-[#8152a8] shrink-0 mt-0.5" size={17} aria-hidden="true" />
           <span>
             <strong className="font-semibold text-[#463153]">
@@ -56,16 +56,16 @@ export default function ProductCard({ product, categoryName, promotion, preload 
             por embalagem
           </span>
         </p>
-        <div className="mt-auto rounded-[10px] p-3 bg-[#f8f3fc] border border-[#eadff2] max-[520px]:p-2.5 max-[360px]:p-[9px]">
-          <div className="flex flex-wrap items-center gap-y-1 gap-x-[9px] text-[#65516f] text-caption">
+        <div className="mt-auto rounded-[10px] p-3 bg-[#f8f3fc] border border-[#eadff2] max-[520px]:p-2.5 max-[360px]:p-2.25">
+          <div className="flex flex-wrap items-center gap-y-1 gap-x-2.25 text-[#65516f] text-caption">
             <span>Por Embalagem</span>
             {discounted && <del className="text-brand-muted">De {money(product.salePrice)}</del>}
           </div>
-          <p className="text-[#512278] text-[25px] font-extrabold tracking-[-0.7px] leading-[1.3] mt-1 [overflow-wrap:anywhere] tabular-nums max-[520px]:text-[22px]">
+          <p className="text-[#512278] text-[25px] font-extrabold tracking-[-0.7px] leading-[1.3] mt-1 wrap-anywhere tabular-nums max-[520px]:text-[22px]">
             {money(price)}
           </p>
         </div>
-        <Button className="mt-3 w-full min-h-[46px] rounded-[10px] max-[360px]:p-2.5" href={href}>
+        <Button className="mt-3 w-full min-h-11.5 rounded-[10px] max-[360px]:p-2.5" href={href}>
           Ver Produto <ArrowUpRight className="shrink-0" size={18} aria-hidden="true" />
         </Button>
       </div>

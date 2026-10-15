@@ -47,7 +47,7 @@
 
 @layer base {
   html {
-    @apply scroll-smooth [color-scheme:light] motion-reduce:scroll-auto;
+    @apply scroll-smooth scheme-light motion-reduce:scroll-auto;
   }
   body {
     @apply bg-brand-background font-sans text-body text-brand-ink antialiased;
@@ -64,7 +64,7 @@
   }
   a:focus-visible,
   button:focus-visible {
-    @apply outline outline-[3px] outline-offset-4 outline-brand-accent;
+    @apply outline-solid outline-3 outline-offset-4 outline-brand-accent;
   }
   hr {
     @apply border-brand-border;
@@ -77,7 +77,7 @@
   h2,
   h3,
   p {
-    @apply break-words;
+    @apply wrap-break-word;
   }
   ::selection {
     @apply bg-[#ddccfa] text-[#3c1764];

@@ -48,8 +48,8 @@ export default function PartnerDetails({ kind, partner, children }) {
         }
       />
       <Alert>{error}</Alert>
-      <div className="bg-brand-surface border border-brand-border rounded-panel p-[25px] shadow-panel max-[640px]:p-5 mb-8">
-        <dl className="grid grid-cols-2 gap-[22px] max-[600px]:grid-cols-1">
+      <div className="bg-brand-surface border border-brand-border rounded-panel p-6.25 shadow-panel max-[640px]:p-5 mb-8">
+        <dl className="grid grid-cols-2 gap-5.5 max-[600px]:grid-cols-1">
           {[
             ['Nome', partner.name],
             ['CNPJ', partner.cnpj],

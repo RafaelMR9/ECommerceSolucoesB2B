@@ -29,7 +29,7 @@ export default function Home({ cards, categories }) {
         </div>
         {categories.length ? (
           <section
-            className="grid grid-cols-4 gap-3 mb-[35px] max-[1050px]:grid-cols-2 max-[520px]:gap-[9px]"
+            className="grid grid-cols-4 gap-3 mb-8.75 max-[1050px]:grid-cols-2 max-[520px]:gap-2.25"
             aria-label="Categorias"
           >
             {categories.map((category) => (

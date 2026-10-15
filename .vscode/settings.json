@@ -1,0 +1,5 @@
+{
+  "tailwindCSS.classFunctions": ["cn"],
+  "python.defaultInterpreterPath": "${workspaceFolder}/backend/.venv",
+  "python.analysis.extraPaths": ["${workspaceFolder}/backend"]
+}
