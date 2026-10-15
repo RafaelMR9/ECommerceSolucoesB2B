@@ -61,7 +61,7 @@ export default function CatalogFilters({ categories, categoryId }) {
           <Search className="shrink-0" size={17} aria-hidden="true" />
           <span className="sr-only">Buscar nas Categorias</span>
           <input
-            className="min-w-0 w-full bg-white text-brand-ink text-[16px] focus:outline-none placeholder:text-brand-muted placeholder:opacity-[1]"
+            className="min-w-0 w-full bg-white text-brand-ink text-[16px] focus:outline-hidden placeholder:text-brand-muted placeholder:opacity-[1]"
             type="search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}

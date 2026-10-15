@@ -4,7 +4,7 @@ import { ArrowUpRight, Package } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import { money, titleCase } from '@/lib/format'
 
-export default function ProductCard({ product, categoryName, promotion, priority = false }) {
+export default function ProductCard({ product, categoryName, promotion, preload = false }) {
   const href = `/products/${product.id}`
   const price = promotion?.salePrice ?? product.salePrice
   const discounted = Number(price) < Number(product.salePrice)
@@ -24,7 +24,7 @@ export default function ProductCard({ product, categoryName, promotion, priority
             src={product.image || '/images/product-placeholder.svg'}
             alt={product.name}
             fill
-            priority={priority}
+            preload={preload}
             sizes="(max-width: 520px) 110px, (max-width: 1050px) 33vw, 25vw"
             unoptimized
           />

@@ -11,7 +11,7 @@ export default function Hero() {
         src="/images/brand/hero-workspace.webp"
         alt="Escritório com notebook, teclado e iluminação violeta"
         fill
-        priority
+        preload
         sizes="100vw"
       />
       <Container className="relative z-[1] pt-12 pb-[49px] min-h-[390px] max-[520px]:min-h-[465px] max-[520px]:pt-[35px] max-[520px]:pb-10">
