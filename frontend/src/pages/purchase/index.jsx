@@ -70,7 +70,7 @@ export default function Purchase({ product, promotion }) {
                 src={product.image || '/images/product-placeholder.svg'}
                 alt={product.name}
                 fill
-                priority
+                preload
                 unoptimized
               />
             </div>

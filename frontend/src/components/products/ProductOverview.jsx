@@ -27,7 +27,7 @@ export default function ProductOverview({
               src={product.image || '/images/product-placeholder.svg'}
               alt={product.name}
               fill
-              priority
+              preload
               sizes="(max-width:760px) 100vw, 50vw"
               unoptimized
             />

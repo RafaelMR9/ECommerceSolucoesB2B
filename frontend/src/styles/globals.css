@@ -1,6 +1,49 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss' source('../');
+
+@theme {
+  --color-brand-accent: #7c3aed;
+  --color-brand-accent-hover: #6d28d9;
+  --color-brand-accent-soft: #f2ebff;
+  --color-brand-background: #faf9fc;
+  --color-brand-surface: #ffffff;
+  --color-brand-ink: #241b30;
+  --color-brand-muted: #594f65;
+  --color-brand-border: #ded4e7;
+  --color-brand-nav: #110d18;
+  --color-brand-danger: #b4233c;
+  --color-brand-danger-soft: #fff1f3;
+  --color-brand-success: #167352;
+  --color-brand-success-soft: #edf9f3;
+  --color-brand-focus-light: #c9a6ff;
+  --font-sans: var(--font-manrope, Arial), sans-serif;
+  --text-body: 1rem;
+  --text-body--line-height: 1.5;
+  --text-ui: 0.9375rem;
+  --text-ui--line-height: 1.5;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.5;
+  --radius-panel: 14px;
+  --shadow-panel: 0 6px 24px rgb(30 16 53 / 4%);
+  --shadow-product: 0 4px 16px #32144806;
+  --shadow-product-hover: 0 10px 28px #4c24721a;
+  --background-image-hero: linear-gradient(
+    90deg,
+    #110d18f5 0%,
+    #110d18d9 33%,
+    #110d1840 65%,
+    transparent 100%
+  );
+  --background-image-hero-mobile: linear-gradient(
+    180deg,
+    #110d18e8 0%,
+    #110d18b0 60%,
+    #110d1830 100%
+  );
+  --background-image-guide: radial-gradient(circle at 100% 0%, #542c76, transparent 65%);
+  --background-image-profile: radial-gradient(ellipse at top right, #653494 0%, transparent 65%);
+}
 
 @layer base {
   html {
@@ -42,6 +85,6 @@
   *,
   ::before,
   ::after {
-    @apply motion-reduce:!duration-[0.01ms] motion-reduce:![animation-duration:0.01ms];
+    @apply motion-reduce:duration-[0.01ms]! motion-reduce:[animation-duration:0.01ms]!;
   }
 }

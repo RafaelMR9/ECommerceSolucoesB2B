@@ -57,7 +57,7 @@ export default function Modal({
         <h2
           ref={heading}
           tabIndex={-1}
-          className="mb-3 text-[22px] font-extrabold tracking-[-0.8px] outline-none"
+          className="mb-3 text-[22px] font-extrabold tracking-[-0.8px] outline-hidden"
           id={titleId}
         >
           {title}

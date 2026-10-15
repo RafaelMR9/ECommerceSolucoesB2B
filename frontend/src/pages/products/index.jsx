@@ -48,7 +48,7 @@ export default function Products({ cards, categories, search, categoryId }) {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  priority={index < 3}
+                  preload={index < 3}
                   categoryName={categoryName}
                   promotion={promotion}
                 />

@@ -58,7 +58,7 @@ export default function Profile() {
               {user.is_superuser ? 'Conta Administrativa' : 'Organização Compradora'}
             </span>
             <h2
-              className="overflow-hidden [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical] text-[clamp(23px,_3vw,_30px)] leading-[1.2] font-extrabold tracking-[-0.8px] my-[9px] mx-0 [overflow-wrap:anywhere]"
+              className="line-clamp-3 text-[clamp(23px,_3vw,_30px)] leading-[1.2] font-extrabold tracking-[-0.8px] my-[9px] mx-0 [overflow-wrap:anywhere]"
               title={name}
             >
               {name}

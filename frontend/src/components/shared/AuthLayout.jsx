@@ -11,7 +11,7 @@ export default function AuthLayout({ title, description, children }) {
           alt=""
           fill
           sizes="50vw"
-          priority
+          preload
         />
         <Brand className="inline-flex items-center gap-[9px] whitespace-nowrap text-[21px] font-extrabold tracking-[-0.8px] text-white max-[600px]:text-[18px] relative z-[1]" />
         <div className="max-w-[430px] mt-[240px] max-[600px]:mt-[25px] max-[600px]:max-w-[270px] relative z-[1]">

@@ -2,29 +2,33 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src --ext .js,.jsx --cache --cache-location node_modules/.cache/eslint/ --max-warnings=0",
+    "lint": "eslint src --cache --cache-location node_modules/.cache/eslint/ --max-warnings=0",
     "test": "node --experimental-default-type=module --test tests/*.test.mjs",
     "test:integration": "node scripts/verify-ui.mjs",
     "format": "prettier --write src tests scripts",
     "format:check": "prettier --check src tests scripts"
   },
   "dependencies": {
-    "eslint-config-next": "15.5.27",
     "lucide-react": "1.55.0",
-    "next": "15.5.27",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "tailwind-merge": "2.6.0"
+    "next": "16.4.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwind-merge": "3.7.0"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.13",
-    "eslint": "^8.57.1",
-    "postcss": "^8.4.21",
-    "prettier": "^3.9.10",
-    "tailwindcss": "^3.2.7"
+    "@eslint/js": "9.39.5",
+    "@tailwindcss/postcss": "4.3.3",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.1",
+    "postcss": "8.5.30",
+    "prettier": "3.9.10",
+    "tailwindcss": "4.3.3"
   }
 }
