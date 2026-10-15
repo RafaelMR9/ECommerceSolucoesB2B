@@ -24,7 +24,7 @@ def rows(path):
             cursor = connection.execute(f'SELECT * FROM "{table}"')
             columns = [column[0] for column in cursor.description]
             result[table] = sorted(
-                [dict(zip(columns, row)) for row in cursor],
+                [dict(zip(columns, row, strict=True)) for row in cursor],
                 key=lambda row: repr(sorted(row.items())),
             )
         return result
@@ -61,21 +61,23 @@ def main():
             )
             actual = rows(copy)
             for table in expected:
-                if table.startswith(
-                    (
-                        "core_",
-                        "products_",
-                        "orders_",
-                        "suppliers_",
-                        "carriers_",
-                        "marketing_",
-                        "support_",
-                    )
-                ):
-                    if actual[table] != expected[table]:
-                        raise RuntimeError(
-                            f"Changed application data in {source.name}: {table}"
+                if (
+                    table.startswith(
+                        (
+                            "core_",
+                            "products_",
+                            "orders_",
+                            "suppliers_",
+                            "carriers_",
+                            "marketing_",
+                            "support_",
                         )
+                    )
+                    and actual[table] != expected[table]
+                ):
+                    raise RuntimeError(
+                        f"Changed application data in {source.name}: {table}"
+                    )
             with closing(sqlite3.connect(copy)) as connection:
                 assert (
                     connection.execute("PRAGMA integrity_check").fetchone()[0] == "ok"

@@ -48,9 +48,9 @@ export default function CheckoutForm() {
     <FormPanel onSubmit={submit}>
       <Alert>{errors.detail || errors.non_field_errors}</Alert>
       <h2 className="text-[23px] font-extrabold tracking-[-0.8px] mb-5">Entrega e Pagamento</h2>
-      <div className="flex gap-2.5 items-start mt-[15px] mr-0 mb-[22px] ml-0">
+      <div className="flex gap-2.5 items-start mt-3.75 mr-0 mb-5.5 ml-0">
         <input
-          className="accent-brand-accent w-4.5 h-4.5 mt-[3px]"
+          className="accent-brand-accent w-4.5 h-4.5 mt-0.75"
           id="futureDelivery"
           type="checkbox"
           checked={future}
@@ -86,9 +86,9 @@ export default function CheckoutForm() {
           />
         </>
       )}
-      <div className="flex gap-2.5 items-start mt-[15px] mr-0 mb-[22px] ml-0">
+      <div className="flex gap-2.5 items-start mt-3.75 mr-0 mb-5.5 ml-0">
         <input
-          className="accent-brand-accent w-4.5 h-4.5 mt-[3px]"
+          className="accent-brand-accent w-4.5 h-4.5 mt-0.75"
           id="faturedPayment"
           name="faturedPayment"
           type="checkbox"

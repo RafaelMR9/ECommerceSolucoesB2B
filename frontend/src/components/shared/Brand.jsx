@@ -5,7 +5,7 @@ export default function Brand({ compact = false, className, small = false }) {
   return (
     <Link
       className={cn(
-        'inline-flex items-center gap-[9px] whitespace-nowrap text-[21px] font-extrabold tracking-[-0.8px] text-white focus-visible:outline-brand-focus-light max-[600px]:text-[18px]',
+        'inline-flex items-center gap-2.25 whitespace-nowrap text-[21px] font-extrabold tracking-[-0.8px] text-white focus-visible:outline-brand-focus-light max-[600px]:text-[18px]',
         small && 'max-[360px]:gap-1 max-[360px]:text-[16px]',
         className
       )}
@@ -15,7 +15,7 @@ export default function Brand({ compact = false, className, small = false }) {
       {!compact && (
         <span
           className={cn(
-            'grid h-[35px] w-[35px] place-items-center rounded-[10px] bg-brand-accent text-white',
+            'grid h-8.75 w-8.75 place-items-center rounded-[10px] bg-brand-accent text-white',
             small && 'max-[360px]:h-7 max-[360px]:w-7'
           )}
         >

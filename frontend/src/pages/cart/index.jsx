@@ -82,7 +82,7 @@ export default function Cart({ items, products }) {
               const product = productsById.get(item.product)
               return (
                 <TableRow key={item.id}>
-                  <TableCell className="min-w-[160px]">
+                  <TableCell className="min-w-40">
                     {product?.name || 'Produto indisponível'}
                   </TableCell>
                   <TableCell>{money(value(item) / item.quantity)}</TableCell>

@@ -44,7 +44,7 @@ export default function Conversation({ ticket, responses: initialResponses }) {
         description={`Solicitação #${ticket.id} · Aberta em ${date(ticket.dateHour, true)}`}
         back={{ href: '/support', label: 'Atendimento' }}
       />
-      <div className="max-w-[900px]">
+      <div className="max-w-225">
         <section
           className="overflow-hidden rounded-xl border border-gray-200"
           aria-label="Histórico da Conversa"
@@ -53,7 +53,7 @@ export default function Conversation({ ticket, responses: initialResponses }) {
             <article
               key={response.id}
               className={cn(
-                'border-b border-brand-border px-[23px] py-5 first:rounded-t-panel last:rounded-b-panel last:border-b-0 max-[520px]:p-[17px]',
+                'border-b border-brand-border px-5.75 py-5 first:rounded-t-panel last:rounded-b-panel last:border-b-0 max-[520px]:p-4.25',
                 response.sender === user.id ? 'bg-[#f5f0fd]' : 'bg-white'
               )}
             >
@@ -67,13 +67,13 @@ export default function Conversation({ ticket, responses: initialResponses }) {
                 </strong>
                 <time dateTime={response.dateHour}>{date(response.dateHour, true)}</time>
               </header>
-              <p className="text-body leading-[1.8] whitespace-pre-wrap [overflow-wrap:anywhere]">
+              <p className="text-body leading-[1.8] whitespace-pre-wrap wrap-anywhere">
                 {response.content}
               </p>
             </article>
           ))}
         </section>
-        <FormPanel className="mt-[25px]" onSubmit={submit}>
+        <FormPanel className="mt-6.25" onSubmit={submit}>
           <Alert>{error}</Alert>
           <Field
             tone="tinted"

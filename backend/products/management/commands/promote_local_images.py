@@ -1,6 +1,6 @@
 import json
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from django.conf import settings
@@ -56,9 +56,7 @@ class Command(BaseCommand):
         output = settings.BASE_DIR.parent / "backups"
         output.mkdir(exist_ok=True)
         manifest_path = output / (
-            "image-mapping-"
-            + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-            + ".json"
+            "image-mapping-" + datetime.now(UTC).strftime("%Y%m%dT%H%M%S%fZ") + ".json"
         )
         manifest = {"status": "uploading", "images": []}
         manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")

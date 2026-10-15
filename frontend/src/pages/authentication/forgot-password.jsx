@@ -48,7 +48,7 @@ export default function ForgotPassword() {
           {busy ? 'Enviando…' : 'Enviar Instruções'}
         </Button>
       </form>
-      <div className="flex justify-between gap-[15px] items-center flex-wrap text-small my-4.5 mx-0">
+      <div className="flex justify-between gap-3.75 items-center flex-wrap text-small my-4.5 mx-0">
         <Button href="/authentication" variant="ghost">
           Voltar para Entrar
         </Button>

@@ -40,10 +40,10 @@ export default function Categories({ categories: initialCategories, search }) {
           user.is_superuser && <Button href="/categories/register">Cadastrar Categoria</Button>
         }
       />
-      <div className="flex items-center justify-between gap-5 flex-wrap mb-[25px]">
+      <div className="flex items-center justify-between gap-5 flex-wrap mb-6.25">
         <Form
           action="/categories"
-          className="flex flex-wrap gap-2 items-center min-w-0 flex-[1_1_400px] max-w-[650px]"
+          className="flex flex-wrap gap-2 items-center min-w-0 flex-[1_1_400px] max-w-162.5"
         >
           <Input
             className="duration-150 min-w-0 flex-[1_1_180px] max-w-md"

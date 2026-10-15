@@ -28,7 +28,7 @@ export default function Product({ product, category, supplier, promotion }) {
   return (
     <BaseLayout>
       <Link
-        className="inline-flex gap-1.5 items-center text-small text-brand-muted mb-[17px] hover:text-brand-accent"
+        className="inline-flex gap-1.5 items-center text-small text-brand-muted mb-4.25 hover:text-brand-accent"
         href="/products"
       >
         ← Voltar ao Catálogo

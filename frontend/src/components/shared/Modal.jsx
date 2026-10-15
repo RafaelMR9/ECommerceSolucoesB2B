@@ -46,7 +46,7 @@ export default function Modal({
   return (
     <dialog
       ref={dialog}
-      className="m-auto max-h-[calc(100dvh_-_44px)] w-[calc(100%_-_44px)] max-w-[440px] overflow-y-auto rounded-[18px] bg-white p-7 text-brand-ink shadow-[0_24px_80px_#0003] backdrop:bg-[#17111fa6] backdrop:backdrop-blur-[4px] max-[640px]:p-6"
+      className="m-auto max-h-[calc(100dvh-44px)] w-[calc(100%-44px)] max-w-110 overflow-y-auto rounded-[18px] bg-white p-7 text-brand-ink shadow-[0_24px_80px_#0003] backdrop:bg-[#17111fa6] backdrop:backdrop-blur-xs max-[640px]:p-6"
       aria-labelledby={titleId}
       onCancel={(event) => {
         event.preventDefault()
@@ -69,7 +69,7 @@ export default function Modal({
           </Alert>
         )}
         {children && <div className="mt-5">{children}</div>}
-        <div className="mt-[25px] flex flex-wrap justify-end gap-[9px]">
+        <div className="mt-6.25 flex flex-wrap justify-end gap-2.25">
           {option2 && (
             <Button variant="secondary" disabled={busy} onClick={onClose} autoFocus>
               {option2}

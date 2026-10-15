@@ -18,7 +18,7 @@ export default function Alert({ children, variant = 'error', className }) {
       role={variant === 'error' ? 'alert' : 'status'}
     >
       <Icon className="mt-px shrink-0" size={18} aria-hidden="true" />
-      <div className="min-w-0 [overflow-wrap:anywhere]">{children}</div>
+      <div className="min-w-0 wrap-anywhere">{children}</div>
     </div>
   )
 }

@@ -11,7 +11,7 @@ export default function BaseLayout({ children, fullWidth = false }) {
           'mx-auto min-w-0 flex-1',
           fullWidth
             ? 'w-full'
-            : 'w-full max-w-[1240px] px-8 pb-[55px] pt-[37px] max-[600px]:px-5 max-[600px]:pb-10 max-[600px]:pt-[27px]'
+            : 'w-full max-w-310 px-8 pb-13.75 pt-9.25 max-[600px]:px-5 max-[600px]:pb-10 max-[600px]:pt-6.75'
         )}
       >
         {children}

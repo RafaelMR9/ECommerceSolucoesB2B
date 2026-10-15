@@ -148,7 +148,10 @@ def main():
                         sql.SQL("SELECT * FROM public.{}").format(sql.Identifier(table))
                     )
                     columns = [item.name for item in cursor.description]
-                    records = [dict(zip(columns, row)) for row in cursor.fetchall()]
+                    records = [
+                        dict(zip(columns, row, strict=True))
+                        for row in cursor.fetchall()
+                    ]
                     records.sort(
                         key=lambda row: json.dumps(row, default=str, sort_keys=True)
                     )

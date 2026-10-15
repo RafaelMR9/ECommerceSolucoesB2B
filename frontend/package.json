@@ -9,7 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "oxlint --tsconfig jsconfig.json --deny-warnings src",
+    "lint": "oxlint --tsconfig jsconfig.json --deny-warnings src tests scripts next.config.js postcss.config.js",
     "test": "node --experimental-default-type=module --test tests/*.test.mjs",
     "test:integration": "node scripts/verify-ui.mjs",
     "format": "prettier --write src tests scripts",

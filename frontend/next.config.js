@@ -2,6 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   skipTrailingSlashRedirect: true,
+  devIndicators: false,
+  agentRules: false,
 }
 
 module.exports = nextConfig
