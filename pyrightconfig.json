@@ -1,0 +1,11 @@
+{
+  "include": ["backend", "scripts"],
+  "exclude": ["backend/backups", "backend/.venv", "backend/.python-runtime"],
+  "extraPaths": ["backend"],
+  "venvPath": "backend",
+  "venv": ".venv",
+  "pythonVersion": "3.13",
+  "typeCheckingMode": "standard",
+  "useLibraryCodeForTypes": false,
+  "reportUnnecessaryTypeIgnoreComment": "error"
+}

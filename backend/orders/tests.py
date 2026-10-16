@@ -111,7 +111,7 @@ class CheckoutTests(TestCase):
         self.client = APIClient()
         self.client.force_authenticate(self.buyer)
 
-    def add(self, quantity=2):
+    def add(self, quantity: int | float = 2):
         return self.client.post(
             "/api/orders/cart/add/",
             {"product": self.product.pk, "quantity": quantity},

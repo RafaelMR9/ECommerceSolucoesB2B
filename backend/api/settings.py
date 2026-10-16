@@ -140,7 +140,7 @@ if DATABASE_URL:
     DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
     if (
         IS_PRODUCTION
-        and DATABASES["default"]["ENGINE"] != "django.db.backends.postgresql"
+        and DATABASES["default"].get("ENGINE") != "django.db.backends.postgresql"
     ):
         raise ImproperlyConfigured("Production requires PostgreSQL DATABASE_URL.")
 else:
@@ -226,7 +226,7 @@ email_backend = os.getenv(
     else "django.core.mail.backends.console.EmailBackend",
 )
 email_host_user = os.getenv("EMAIL_HOST_USER", os.getenv("EMAIL_ADDRESS", ""))
-MAILERS = {"default": {"BACKEND": email_backend}}
+MAILERS: dict[str, dict[str, object]] = {"default": {"BACKEND": email_backend}}
 if email_backend == "django.core.mail.backends.smtp.EmailBackend":
     MAILERS["default"]["OPTIONS"] = {
         "host": os.getenv("EMAIL_HOST", "smtp.outlook.com"),
