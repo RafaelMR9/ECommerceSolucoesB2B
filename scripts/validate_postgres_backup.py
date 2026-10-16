@@ -29,12 +29,12 @@ def main():
     cluster = private_root / "validation-postgres"
     if cluster.exists() and not args.resume_empty_cluster:
         raise SystemExit("Validation cluster already exists; refusing to overwrite it.")
-    executables = {
-        name: shutil.which(name)
-        for name in ("initdb", "pg_ctl", "createdb", "pg_restore")
-    }
-    if not all(executables.values()):
-        raise SystemExit("PostgreSQL command-line binaries must be on PATH.")
+    executables = {}
+    for name in ("initdb", "pg_ctl", "createdb", "pg_restore"):
+        executable = shutil.which(name)
+        if executable is None:
+            raise SystemExit(f"PostgreSQL binary {name} must be on PATH.")
+        executables[name] = executable
     with socket.socket() as probe:
         probe.bind(("127.0.0.1", 0))
         port = probe.getsockname()[1]
@@ -147,6 +147,10 @@ def main():
                     cursor.execute(
                         sql.SQL("SELECT * FROM public.{}").format(sql.Identifier(table))
                     )
+                    if cursor.description is None:
+                        raise RuntimeError(
+                            "The table query returned no column metadata."
+                        )
                     columns = [item.name for item in cursor.description]
                     records = [
                         dict(zip(columns, row, strict=True))
@@ -173,7 +177,10 @@ def main():
                 cursor.execute(
                     "SELECT count(*) FROM pg_constraint WHERE contype IN ('f','c') AND NOT convalidated"
                 )
-                unvalidated = cursor.fetchone()[0]
+                constraint_count = cursor.fetchone()
+                if constraint_count is None:
+                    raise RuntimeError("The constraint query returned no result.")
+                unvalidated = constraint_count[0]
                 if unvalidated:
                     raise RuntimeError("Restored database has unvalidated constraints.")
             report = {

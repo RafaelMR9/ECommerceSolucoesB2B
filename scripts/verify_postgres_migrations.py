@@ -60,6 +60,14 @@ def main():
         or not (CLUSTER / "PG_VERSION").is_file()
     ):
         raise SystemExit("Expected isolated validation cluster/database not found.")
+    pg_ctl_path = shutil.which("pg_ctl")
+    createdb_path = shutil.which("createdb")
+    if pg_ctl_path is None or createdb_path is None:
+        raise SystemExit("PostgreSQL binaries pg_ctl and createdb must be on PATH.")
+    cloud = dotenv_values(ROOT.parent / "ECommerceServer/.env", encoding="utf-8")
+    cloud_name = cloud.get("CLOUDINARY_CLOUD_NAME")
+    if not cloud_name:
+        raise SystemExit("CLOUDINARY_CLOUD_NAME is required for image URL validation.")
     clone = "portfolio_migration_" + uuid.uuid4().hex[:8]
     with socket.socket() as probe:
         probe.bind(("127.0.0.1", 0))
@@ -70,7 +78,7 @@ def main():
     def pg_ctl(*arguments):
         with (PRIVATE / "migration-pg_ctl.log").open("ab") as output:
             subprocess.run(
-                [shutil.which("pg_ctl"), "-D", str(CLUSTER), *arguments],
+                [pg_ctl_path, "-D", str(CLUSTER), *arguments],
                 env=env,
                 stdout=output,
                 stderr=output,
@@ -91,7 +99,7 @@ def main():
         started = True
         subprocess.run(
             [
-                shutil.which("createdb"),
+                createdb_path,
                 "-h",
                 "127.0.0.1",
                 "-p",
@@ -106,20 +114,17 @@ def main():
             check=True,
             creationflags=flags,
         )
-        connect = dict(
-            host="127.0.0.1", port=port, user="portfolio_validation", dbname=clone
-        )
-        with closing(psycopg2.connect(**connect)) as connection:
+        database_url = f"postgresql://portfolio_validation@127.0.0.1:{port}/{clone}?sslmode=disable"
+        with closing(psycopg2.connect(database_url)) as connection:
             before = rows(connection)
-        cloud = dotenv_values(ROOT.parent / "ECommerceServer/.env", encoding="utf-8")
         child_env = dict(
             env,
             DJANGO_ENV="development",
             DJANGO_DEBUG="true",
             DJANGO_ALLOWED_HOSTS="localhost,127.0.0.1,testserver",
-            DATABASE_URL=f"postgresql://portfolio_validation@127.0.0.1:{port}/{clone}?sslmode=disable",
+            DATABASE_URL=database_url,
             MEDIA_STORAGE="cloudinary",
-            CLOUDINARY_CLOUD_NAME=cloud["CLOUDINARY_CLOUD_NAME"],
+            CLOUDINARY_CLOUD_NAME=cloud_name,
             CLOUDINARY_API_KEY="not-used-read-only-validation",
             CLOUDINARY_API_SECRET="not-used-read-only-validation",
         )
@@ -159,7 +164,7 @@ print('PASS: product detail API and full Cloudinary URLs for', Product.objects.c
             check=True,
             creationflags=flags,
         )
-        with closing(psycopg2.connect(**connect)) as connection:
+        with closing(psycopg2.connect(database_url)) as connection:
             after = rows(connection)
         if before != after:
             raise RuntimeError("Business data changed in migration clone.")
