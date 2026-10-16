@@ -6,21 +6,21 @@ import AuthLayout from '@/components/shared/AuthLayout'
 import Button from '@/components/ui/Button'
 import Field from '@/components/ui/Field'
 import Alert from '@/components/ui/Alert'
+import DemoAccess from '@/components/authentication/DemoAccess'
 import { withSession } from '@/lib/server/page'
 import { errorFields } from '@/lib/format'
 
-export default function Login() {
+export default function Login({ demoAccounts = [] }) {
   const router = useRouter()
   const [values, setValues] = useState({ username: '', password: '' }),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false)
-  async function submit(e) {
-    e.preventDefault()
+  async function signIn(credentials) {
     if (busy) return
     setError('')
     setBusy(true)
     try {
-      await loginUser(values)
+      await loginUser(credentials)
       const next = router.query.next
       await router.push(
         typeof next === 'string' &&
@@ -41,7 +41,12 @@ export default function Login() {
       title="Bom Ter Você por Aqui"
       description="Entre na sua conta para acompanhar pedidos, encontrar produtos e cuidar da rotina da sua empresa."
     >
-      <form onSubmit={submit}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault()
+          signIn(values)
+        }}
+      >
         <Alert>{error}</Alert>
         <Field
           name="username"
@@ -76,26 +81,30 @@ export default function Login() {
       <Button href="/authentication/register-account" variant="secondary" className="w-full">
         Criar Conta da Organização
       </Button>
-      {process.env.NEXT_PUBLIC_DEMO_MODE === 'true' && (
-        <aside className="bg-brand-accent-soft border border-[#e1d2f6] rounded-xl p-4 mt-6.25">
-          <h2 className="text-small font-bold text-[#6132a5]">Conheça a Demonstração</h2>
-          <p className="text-caption text-[#7b5c9b] mt-1.75 leading-[1.8]">
-            Uma conta administrativa está disponível para explorar as ferramentas de gestão. Para
-            conhecer a experiência de compra, cadastre uma organização.
-          </p>
-          {process.env.NEXT_PUBLIC_DEMO_PASSWORD && (
-            <div className="flex gap-4.5 flex-wrap mt-2.25 text-small text-[#503275]">
-              <span>
-                Usuário: <strong>{process.env.NEXT_PUBLIC_DEMO_USERNAME || 'admin'}</strong>
-              </span>
-              <span>
-                Senha: <strong>{process.env.NEXT_PUBLIC_DEMO_PASSWORD}</strong>
-              </span>
-            </div>
-          )}
-        </aside>
-      )}
+      <DemoAccess accounts={demoAccounts} onLogin={signIn} disabled={busy} />
     </AuthLayout>
   )
 }
-export const getServerSideProps = withSession(undefined, { authPage: true })
+export const getServerSideProps = withSession(
+  async () => {
+    const demoAccounts = []
+    if (process.env.NODE_ENV === 'production' && process.env.DEMO_MODE === 'true') {
+      if (process.env.DEMO_BUYER_USERNAME && process.env.DEMO_BUYER_PASSWORD) {
+        demoAccounts.push({
+          role: 'buyer',
+          username: process.env.DEMO_BUYER_USERNAME,
+          password: process.env.DEMO_BUYER_PASSWORD,
+        })
+      }
+      if (process.env.DEMO_ADMIN_USERNAME && process.env.DEMO_ADMIN_PASSWORD) {
+        demoAccounts.push({
+          role: 'admin',
+          username: process.env.DEMO_ADMIN_USERNAME,
+          password: process.env.DEMO_ADMIN_PASSWORD,
+        })
+      }
+    }
+    return { demoAccounts }
+  },
+  { authPage: true }
+)
