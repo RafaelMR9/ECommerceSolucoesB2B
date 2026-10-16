@@ -8,6 +8,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import SimpleTestCase, TestCase, override_settings
 from PIL import Image
 from rest_framework.test import APIClient, APIRequestFactory
+from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
 
 from api.media import CloudinaryMediaStorage, LocalMediaStorage
 from core.models import User
@@ -120,11 +121,26 @@ class PasswordResetEnvironmentTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn("access", response.data)
+        access = AccessToken(response.data["access"])
+        refresh = RefreshToken(response.data["refresh"])
+        self.assertEqual(
+            response.data["access_max_age"],
+            int(access["exp"]) - int(access["iat"]) - 30,
+        )
+        self.assertEqual(
+            response.data["refresh_max_age"], int(refresh["exp"]) - int(refresh["iat"])
+        )
         refreshed = client.post(
             "/api/users/token/refresh/", {"refresh": response.data["refresh"]}
         )
         self.assertEqual(refreshed.status_code, 200)
         self.assertIn("access", refreshed.data)
+        access = AccessToken(refreshed.data["access"])
+        self.assertEqual(
+            refreshed.data["access_max_age"],
+            int(access["exp"]) - int(access["iat"]) - 30,
+        )
+        self.assertNotIn("refresh", refreshed.data)
 
 
 class ProductUploadContractTests(TestCase):

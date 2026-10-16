@@ -6,29 +6,33 @@ export async function loadOrders(
   let ordersPath = `orders/${endpoint}/`
   if (!admin && !supplier) ordersPath += `user/?user=${user.id}`
 
-  let companiesRequest = []
-  if (admin) companiesRequest = api('users/')
-  else if (supplier) companiesRequest = api('suppliers/')
+  let companiesPath = ''
+  if (admin) companiesPath = 'users/'
+  else if (supplier) companiesPath = 'suppliers/'
 
   const [allOrders, companies, carriers] = await Promise.all([
     api(ordersPath),
-    companiesRequest,
+    companiesPath ? api(companiesPath) : [],
     admin && !payments ? api('carriers/') : [],
   ])
-  const orders = allOrders.filter(
-    (order) =>
-      (order.deliveryFrequency !== null) === recurring && (!payments || order.cancelled === null)
-  )
+  const orders = allOrders.filter((order) => {
+    const isRecurring = order.deliveryFrequency !== null
+    if (isRecurring !== recurring) return false
+    if (payments && order.cancelled !== null) return false
+    return true
+  })
   return { orders, companies, carriers }
 }
 export function countCartItems(items) {
   return items.reduce((total, item) => total + Number(item.quantity), 0)
 }
 export async function loadCartItems({ api, user }) {
-  const kind = user.is_superuser ? 'Supplier' : 'Sales'
-  const orders = await api(`orders/${kind.toLowerCase()}Order/getUnfinished/?user=${user.id}`)
+  const orderType = user.is_superuser ? 'supplierOrder' : 'salesOrder'
+  const itemType = user.is_superuser ? 'itemSupplierOrder' : 'itemSalesOrder'
+  const orders = await api(`orders/${orderType}/getUnfinished/?user=${user.id}`)
   const order = orders[0] || null
-  const items = order ? await api(`orders/item${kind}Order/${order.id}/?user=${user.id}`) : []
+  if (!order) return { order: null, items: [] }
+  const items = await api(`orders/${itemType}/${order.id}/?user=${user.id}`)
   return { order, items }
 }
 export async function loadCart(context) {

@@ -28,7 +28,9 @@ test('network errors remain visible and API field errors retain their field', ()
   assert.deepEqual(errorFields(new Error('Connection unavailable')), {
     detail: 'Connection unavailable',
   })
-  assert.deepEqual(errorFields(new Error('{"quantity":["Insufficient stock"]}')), {
+  const error = new Error('Não foi possível concluir a ação.')
+  error.fields = { quantity: ['Insufficient stock'] }
+  assert.deepEqual(errorFields(error), {
     quantity: 'Insufficient stock',
   })
 })

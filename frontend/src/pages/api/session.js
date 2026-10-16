@@ -30,8 +30,7 @@ export default async function handler(req, res) {
     if (!response.ok)
       return res.status(response.status).json({ detail: 'Usuário ou senha inválidos.' })
     const tokens = await response.json()
-    const payload = JSON.parse(Buffer.from(tokens.access.split('.')[1], 'base64url').toString())
-    const user = await backendData(`users/${payload.user_id}/detail/`, tokens.access)
+    const user = await backendData('users/me/', tokens.access)
     setSessionCookies(req, res, tokens)
     return res.status(200).json({ user })
   } catch {

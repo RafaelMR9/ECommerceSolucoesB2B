@@ -38,16 +38,13 @@ export function date(value, withTime = false) {
   return formatter.format(new Date(value))
 }
 export function errorFields(error) {
-  try {
-    const data = JSON.parse(error.message)
-    if (typeof data === 'object' && data)
-      return Object.fromEntries(
-        Object.entries(data).map(([key, value]) => [
-          key,
-          Array.isArray(value) ? value.join(' ') : String(value),
-        ])
-      )
-  } catch {}
+  if (error.fields && typeof error.fields === 'object') {
+    const messages = {}
+    for (const [name, value] of Object.entries(error.fields)) {
+      messages[name] = Array.isArray(value) ? value.join(' ') : String(value)
+    }
+    return messages
+  }
   return { detail: error.message || 'Não foi possível concluir a ação.' }
 }
 export function activePromotion(product, promotions, now) {

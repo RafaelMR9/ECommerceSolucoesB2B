@@ -38,6 +38,7 @@ test('erros preservam as mensagens dos campos retornadas pela API', async (t) =>
   const errors = { quantity: ['Estoque insuficiente.'] }
   t.mock.method(globalThis, 'fetch', async () => Response.json(errors, { status: 400 }))
   await assert.rejects(apiRequest('/api/cart', 'POST', {}), {
-    message: JSON.stringify(errors),
+    message: 'Não foi possível concluir a ação.',
+    fields: errors,
   })
 })
