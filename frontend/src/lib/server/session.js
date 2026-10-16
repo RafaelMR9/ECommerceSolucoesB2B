@@ -9,17 +9,6 @@ function tokenPayload(token) {
     return null
   }
 }
-function cookies(req) {
-  return Object.fromEntries(
-    (req.headers.cookie || '')
-      .split(';')
-      .filter(Boolean)
-      .map((item) => {
-        const separator = item.indexOf('=')
-        return [item.slice(0, separator).trim(), item.slice(separator + 1)]
-      })
-  )
-}
 function cookie(name, value, maxAge, req) {
   const secure =
     req.headers['x-forwarded-proto'] === 'https' ||
@@ -51,7 +40,7 @@ export function clearSession(req, res) {
   ])
 }
 export async function getSession(req, res) {
-  const stored = cookies(req)
+  const stored = req.cookies
   let access = stored[ACCESS_COOKIE]
   let payload = tokenPayload(access || '')
   if (!payload || payload.exp <= Date.now() / 1000 + 30) {
