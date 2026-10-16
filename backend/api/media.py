@@ -14,7 +14,7 @@ def is_cloudinary_reference(name):
 def cloudinary_url(name):
     if not settings.CLOUDINARY_CLOUD_NAME:
         raise ImproperlyConfigured(
-            "CLOUDINARY_CLOUD_NAME is needed to display legacy cloud images."
+            "Defina CLOUDINARY_CLOUD_NAME para exibir as imagens antigas do Cloudinary."
         )
     resource = CloudinaryField("image").to_python(str(name))
     return resource.build_url(secure=True, cloud_name=settings.CLOUDINARY_CLOUD_NAME)
@@ -46,7 +46,9 @@ class CloudinaryMediaStorage(Storage):
 
     def delete(self, name):
         if not is_cloudinary_reference(name):
-            raise ValueError("Refusing to delete an ambiguous legacy image reference.")
+            raise ValueError(
+                "Não é possível excluir uma imagem sem identificar sua origem."
+            )
         resource = CloudinaryField("image").to_python(str(name))
         cloudinary.uploader.destroy(
             resource.public_id, resource_type=resource.resource_type, type=resource.type

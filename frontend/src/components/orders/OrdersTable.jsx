@@ -4,9 +4,8 @@ import DataTable, { TableHeader, TableRow, TableCell } from '@/components/ui/Dat
 import Field from '@/components/ui/Field'
 import Alert from '@/components/ui/Alert'
 import Modal from '@/components/shared/Modal'
-import OrderStatus from './OrderStatus'
+import OrderStatus, { PaymentStatus } from './OrderStatus'
 import OrderActions from './OrderActions'
-import StatusBadge from '@/components/ui/StatusBadge'
 import { money, date, errorFields } from '@/lib/format'
 import {
   cancelOrder,
@@ -129,17 +128,7 @@ export default function OrdersTable({
                 )}
                 <TableCell>
                   {payments ? (
-                    <StatusBadge
-                      variant={
-                        order.paid === true ? 'success' : order.paid === false ? 'danger' : 'accent'
-                      }
-                    >
-                      {order.paid === true
-                        ? 'Pago'
-                        : order.paid === false
-                          ? 'Não pago'
-                          : 'Aguardando pagamento'}
-                    </StatusBadge>
+                    <PaymentStatus paid={order.paid} />
                   ) : (
                     <OrderStatus order={order} supplier={supplier} />
                   )}

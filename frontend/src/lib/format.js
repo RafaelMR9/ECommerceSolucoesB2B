@@ -29,16 +29,14 @@ const dateTimeFormatter = new Intl.DateTimeFormat('pt-BR', {
   timeZone: 'America/Sao_Paulo',
 })
 export const money = (value) => currencyFormatter.format(Number(value) || 0)
-export const date = (value, withTime = false) =>
-  value
-    ? (withTime ? dateTimeFormatter : dateFormatter).format(
-        new Date(
-          typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)
-            ? value + 'T12:00:00Z'
-            : value
-        )
-      )
-    : '—'
+export function date(value, withTime = false) {
+  if (!value) return '—'
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    value += 'T12:00:00Z'
+  }
+  const formatter = withTime ? dateTimeFormatter : dateFormatter
+  return formatter.format(new Date(value))
+}
 export function errorFields(error) {
   try {
     const data = JSON.parse(error.message)

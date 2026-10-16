@@ -65,16 +65,14 @@ class UserSerializer(serializers.ModelSerializer):
                 {"confirmPassword": "As senhas não coincidem."}
             )
         request = self.context.get("request")
-        administrator = (
-            self.instance is not None and request and request.user.is_superuser
-        )
-        if not administrator and "authorizeFature" in data:
-            if data["authorizeFature"] is True:
+        is_admin = request is not None and request.user.is_superuser
+        if self.instance is None or not is_admin:
+            if data.get("authorizeFature") is True:
                 raise serializers.ValidationError(
                     {"authorizeFature": "A autorização depende da administração."}
                 )
             if self.instance and self.instance.authorizeFature is True:
-                data.pop("authorizeFature")
+                data.pop("authorizeFature", None)
         return data
 
     def create(self, validated_data):

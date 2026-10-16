@@ -95,4 +95,4 @@ class PasswordResetToken(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"User {self.user}: {self.created_at}"
+        return f"Usuário {self.user}: {self.created_at}"

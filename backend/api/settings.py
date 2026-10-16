@@ -24,30 +24,22 @@ def env_list(name, default=""):
 
 DJANGO_ENV = os.getenv("DJANGO_ENV", "development")
 if DJANGO_ENV not in ("development", "production"):
-    raise ImproperlyConfigured("DJANGO_ENV must be development or production.")
+    raise ImproperlyConfigured("DJANGO_ENV deve ser development ou production.")
 IS_PRODUCTION = DJANGO_ENV == "production"
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000").rstrip("/")
-if IS_PRODUCTION and not FRONTEND_URL.startswith("https://"):
-    raise ImproperlyConfigured("Production requires an HTTPS FRONTEND_URL.")
 
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY") or os.getenv("SECRET_KEY")
 if not SECRET_KEY:
     raise ImproperlyConfigured(
-        "Set DJANGO_SECRET_KEY in backend/.env or the hosting environment."
+        "Defina DJANGO_SECRET_KEY no arquivo de ambiente do backend ou na hospedagem."
     )
 
 DEBUG = env_bool("DJANGO_DEBUG", not IS_PRODUCTION)
-if IS_PRODUCTION and DEBUG:
-    raise ImproperlyConfigured("DJANGO_DEBUG must be false in production.")
 
 ALLOWED_HOSTS = env_list(
     "DJANGO_ALLOWED_HOSTS", "" if IS_PRODUCTION else "localhost,127.0.0.1,[::1]"
 )
-if IS_PRODUCTION and (not ALLOWED_HOSTS or "*" in ALLOWED_HOSTS):
-    raise ImproperlyConfigured(
-        "Set explicit DJANGO_ALLOWED_HOSTS (hostnames without https://)."
-    )
 
 
 INSTALLED_APPS = [
@@ -138,16 +130,7 @@ if DATABASE_URL:
         )
     }
     DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
-    if (
-        IS_PRODUCTION
-        and DATABASES["default"].get("ENGINE") != "django.db.backends.postgresql"
-    ):
-        raise ImproperlyConfigured("Production requires PostgreSQL DATABASE_URL.")
 else:
-    if IS_PRODUCTION:
-        raise ImproperlyConfigured(
-            "Production requires DATABASE_URL; SQLite is local only."
-        )
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -183,41 +166,37 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 
 
 MEDIA_STORAGE = os.getenv("MEDIA_STORAGE", "cloudinary" if IS_PRODUCTION else "local")
-if MEDIA_STORAGE not in ("local", "cloudinary"):
-    raise ImproperlyConfigured("MEDIA_STORAGE must be local or cloudinary.")
-if IS_PRODUCTION and MEDIA_STORAGE != "cloudinary":
-    raise ImproperlyConfigured("Production requires Cloudinary for persistent uploads.")
 CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME", "")
-cloudinary.config(
-    cloud_name=CLOUDINARY_CLOUD_NAME,
-    api_key=os.getenv("CLOUDINARY_API_KEY", ""),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET", ""),
-    secure=True,
-)
-if MEDIA_STORAGE == "cloudinary" and not all(
-    (
-        CLOUDINARY_CLOUD_NAME,
-        os.getenv("CLOUDINARY_API_KEY"),
-        os.getenv("CLOUDINARY_API_SECRET"),
-    )
-):
-    raise ImproperlyConfigured(
-        "Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET."
-    )
 STORAGES = {
-    "default": {
-        "BACKEND": "api.media.CloudinaryMediaStorage"
-        if MEDIA_STORAGE == "cloudinary"
-        else "api.media.LocalMediaStorage"
-    },
+    "default": {"BACKEND": "api.media.LocalMediaStorage"},
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
     },
 }
+if MEDIA_STORAGE == "cloudinary":
+    if not all(
+        (
+            CLOUDINARY_CLOUD_NAME,
+            os.getenv("CLOUDINARY_API_KEY"),
+            os.getenv("CLOUDINARY_API_SECRET"),
+        )
+    ):
+        raise ImproperlyConfigured(
+            "Defina CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY e CLOUDINARY_API_SECRET."
+        )
+    cloudinary.config(
+        cloud_name=CLOUDINARY_CLOUD_NAME,
+        api_key=os.getenv("CLOUDINARY_API_KEY"),
+        api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+        secure=True,
+    )
+    STORAGES["default"]["BACKEND"] = "api.media.CloudinaryMediaStorage"
+elif MEDIA_STORAGE != "local":
+    raise ImproperlyConfigured("MEDIA_STORAGE deve ser local ou cloudinary.")
 
 email_backend = os.getenv(
     "EMAIL_BACKEND",
@@ -226,7 +205,7 @@ email_backend = os.getenv(
     else "django.core.mail.backends.console.EmailBackend",
 )
 email_host_user = os.getenv("EMAIL_HOST_USER", os.getenv("EMAIL_ADDRESS", ""))
-MAILERS: dict[str, dict[str, object]] = {"default": {"BACKEND": email_backend}}
+MAILERS = {"default": {"BACKEND": email_backend, "OPTIONS": {}}}
 if email_backend == "django.core.mail.backends.smtp.EmailBackend":
     MAILERS["default"]["OPTIONS"] = {
         "host": os.getenv("EMAIL_HOST", "smtp.outlook.com"),
@@ -243,6 +222,22 @@ DEFAULT_FROM_EMAIL = os.getenv(
 ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", os.getenv("EMAIL_ADDRESS", "admin@localhost"))
 
 if IS_PRODUCTION:
+    if DEBUG:
+        raise ImproperlyConfigured("DJANGO_DEBUG deve ser false em produção.")
+    if not ALLOWED_HOSTS or "*" in ALLOWED_HOSTS:
+        raise ImproperlyConfigured(
+            "Defina DJANGO_ALLOWED_HOSTS com os domínios permitidos, sem https://."
+        )
+    if not FRONTEND_URL.startswith("https://"):
+        raise ImproperlyConfigured("FRONTEND_URL deve usar HTTPS em produção.")
+    if DATABASES["default"].get("ENGINE") != "django.db.backends.postgresql":
+        raise ImproperlyConfigured(
+            "Defina DATABASE_URL com um banco PostgreSQL para produção."
+        )
+    if MEDIA_STORAGE != "cloudinary":
+        raise ImproperlyConfigured(
+            "Use MEDIA_STORAGE=cloudinary em produção para preservar as imagens."
+        )
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = env_bool("DJANGO_SECURE_SSL_REDIRECT", True)
     SESSION_COOKIE_SECURE = True

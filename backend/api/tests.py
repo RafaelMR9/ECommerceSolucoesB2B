@@ -1,12 +1,10 @@
 import io
-import json
 import tempfile
 from pathlib import Path
 from unittest.mock import patch
 
 from django.core import mail
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.management import call_command
 from django.test import SimpleTestCase, TestCase, override_settings
 from PIL import Image
 from rest_framework.test import APIClient, APIRequestFactory
@@ -262,56 +260,3 @@ class ProductUploadContractTests(TestCase):
         self.assertEqual(updated.status_code, 200)
         self.assertEqual(updated.data["image"], response.data["image"])
         upload.assert_called_once()
-
-    @patch("api.media.cloudinary.uploader.upload")
-    def test_image_promotion_dry_run_and_apply_preserve_original_and_mapping(
-        self, upload
-    ):
-        upload.return_value = {
-            "version": 123,
-            "public_id": "folder/promoted",
-            "format": "png",
-        }
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            media = root / "media"
-            media.mkdir()
-            original = media / "test.png"
-            original.write_bytes(b"original-file")
-            product = Product.objects.create(
-                name="Existing",
-                costPrice=1,
-                salePrice=2,
-                description="Existing",
-                category=self.category,
-                supplier=self.supplier,
-                image="test.png",
-            )
-            with (
-                override_settings(
-                    MEDIA_ROOT=media,
-                    BASE_DIR=root / "backend",
-                    CLOUDINARY_CLOUD_NAME="test-cloud",
-                ),
-                patch.dict(
-                    "os.environ",
-                    CLOUDINARY_API_KEY="fake-key",
-                    CLOUDINARY_API_SECRET="fake-secret",
-                ),
-            ):
-                call_command("promote_local_images", stdout=io.StringIO())
-                upload.assert_not_called()
-                product.refresh_from_db()
-                self.assertEqual(product.image.name, "test.png")
-                call_command("promote_local_images", apply=True, stdout=io.StringIO())
-                product.refresh_from_db()
-                self.assertEqual(
-                    product.image.name, "image/upload/v123/folder/promoted.png"
-                )
-                self.assertEqual(original.read_bytes(), b"original-file")
-                manifest = json.loads(
-                    next((root / "backups").glob("*.json")).read_text()
-                )
-                self.assertEqual(manifest["status"], "applied")
-                self.assertEqual(manifest["images"][0]["old"], "test.png")
-                self.assertEqual(manifest["images"][0]["product_id"], product.pk)

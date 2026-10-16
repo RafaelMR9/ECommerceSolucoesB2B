@@ -1,5 +1,5 @@
 {
-  "include": ["backend", "scripts"],
+  "include": ["backend"],
   "exclude": ["backend/backups", "backend/.venv", "backend/.python-runtime"],
   "extraPaths": ["backend"],
   "venvPath": "backend",

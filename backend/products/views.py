@@ -84,12 +84,9 @@ class ProductRetrieveView(generics.RetrieveAPIView):
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        products = Product.objects.all()
-        return (
-            products
-            if self.request.user.is_superuser
-            else products.filter(visible=True)
-        )
+        if self.request.user.is_superuser:
+            return Product.objects.all()
+        return Product.objects.filter(visible=True)
 
 
 class ProductUpdateView(generics.UpdateAPIView):

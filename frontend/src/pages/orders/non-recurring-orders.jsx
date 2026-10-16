@@ -11,12 +11,8 @@ export default function Orders(props) {
         description="Acompanhe o andamento e os detalhes dos pedidos."
         back={{ href: '/orders', label: 'Pedidos' }}
       />
-      <OrdersTable {...props} supplier={false} admin={false} recurring={false} payments={false} />
+      <OrdersTable {...props} />
     </BaseLayout>
   )
 }
-export const getServerSideProps = withSession(
-  (context) =>
-    loadOrders(context, { supplier: false, admin: false, recurring: false, payments: false }),
-  { admin: false }
-)
+export const getServerSideProps = withSession((context) => loadOrders(context))

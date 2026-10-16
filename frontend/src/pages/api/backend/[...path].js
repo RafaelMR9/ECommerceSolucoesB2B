@@ -32,7 +32,10 @@ async function forwardRequest(req, res, path, access) {
   }
 
   const response = await backendFetch(path, { method: req.method, headers, body })
-  if (response.status === 204) return res.status(204).end()
+  if (response.status === 204) {
+    res.status(204).end()
+    return
+  }
   const type = response.headers.get('content-type')
   if (type) res.setHeader('Content-Type', type)
   return res.status(response.status).send(Buffer.from(await response.arrayBuffer()))
@@ -49,7 +52,10 @@ export default async function handler(req, res) {
     segments.some((part) => part === '.' || part === '..')
   )
     return res.status(404).json({ detail: 'Recurso não encontrado.' })
-  if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) return res.status(405).end()
+  if (!['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method)) {
+    res.status(405).end()
+    return
+  }
   if (req.method !== 'GET' && !sameOrigin(req))
     return res.status(403).json({ detail: 'Origem inválida.' })
   const pathname = segments.map(encodeURIComponent).join('/')
@@ -61,7 +67,7 @@ export default async function handler(req, res) {
     const query = new URLSearchParams(queryParameters)
     const slash = PATHS_WITHOUT_TRAILING_SLASH.has(pathname) ? '' : '/'
     const path = `${pathname}${slash}${query.size ? `?${query}` : ''}`
-    return await forwardRequest(req, res, path, session?.access)
+    await forwardRequest(req, res, path, session?.access)
   } catch {
     return res.status(502).json({ detail: 'Não foi possível conectar à plataforma.' })
   }

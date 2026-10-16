@@ -3,10 +3,17 @@ export async function loadOrders(
   { supplier = false, admin = false, recurring = false, payments = false } = {}
 ) {
   const endpoint = supplier ? 'supplierOrder' : 'salesOrder'
+  let ordersPath = `orders/${endpoint}/`
+  if (!admin && !supplier) ordersPath += `user/?user=${user.id}`
+
+  let companiesRequest = []
+  if (admin) companiesRequest = api('users/')
+  else if (supplier) companiesRequest = api('suppliers/')
+
   const [allOrders, companies, carriers] = await Promise.all([
-    api(`orders/${endpoint}/${admin || supplier ? '' : `user/?user=${user.id}`}`),
-    admin ? api('users/') : supplier ? api('suppliers/') : Promise.resolve([]),
-    admin && !payments ? api('carriers/') : Promise.resolve([]),
+    api(ordersPath),
+    companiesRequest,
+    admin && !payments ? api('carriers/') : [],
   ])
   const orders = allOrders.filter(
     (order) =>
