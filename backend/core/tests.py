@@ -25,6 +25,22 @@ class AccountTests(TestCase):
         )
         self.client = APIClient()
 
+    def test_current_user_requires_authentication_and_ignores_other_user_ids(self):
+        self.assertEqual(self.client.get("/api/users/me/").status_code, 401)
+        token = AccessToken.for_user(self.buyer)
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
+        with self.assertNumQueries(1):
+            response = self.client.get(f"/api/users/me/?user={self.other.pk}")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["id"], self.buyer.pk)
+        self.assertNotIn("password", response.data)
+
+    def test_invalid_refresh_token_is_rejected(self):
+        response = self.client.post(
+            "/api/users/token/refresh/", {"refresh": "invalid"}, format="json"
+        )
+        self.assertEqual(response.status_code, 401)
+
     def test_authenticated_profile_reads_user_only_once(self):
         token = AccessToken.for_user(self.buyer)
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")

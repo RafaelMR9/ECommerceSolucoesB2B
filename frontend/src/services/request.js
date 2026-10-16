@@ -11,7 +11,10 @@ export async function apiRequest(url, method = 'GET', data) {
   }
   const response = await fetch(url, options)
   const result = response.status === 204 ? null : await response.json().catch(() => null)
-  if (!response.ok)
-    throw new Error(JSON.stringify(result || { detail: 'Não foi possível concluir a ação.' }))
+  if (!response.ok) {
+    const error = new Error(result?.detail || 'Não foi possível concluir a ação.')
+    error.fields = result
+    throw error
+  }
   return result
 }

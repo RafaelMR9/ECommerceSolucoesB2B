@@ -202,6 +202,29 @@ const forged = await fetch(origin + '/profile', {
   redirect: 'manual',
 })
 assert.equal(forged.status, 307)
+const refreshCookie = sessions.buyer.split('; ').find((cookie) => cookie.startsWith('b2b_refresh='))
+for (const accessCookie of ['', 'b2b_access=invalid; ']) {
+  const refreshed = await fetch(origin + '/api/session', {
+    headers: { Cookie: accessCookie + refreshCookie },
+  })
+  assert.equal(refreshed.status, 200)
+  assert.equal((await refreshed.json()).user.id, users['ui-review-buyer'].id)
+  const cookies = refreshed.headers.getSetCookie()
+  assert.equal(cookies.length, 1, 'Renewal must not extend the existing refresh cookie')
+  assert.ok(cookies[0].startsWith('b2b_access=') && cookies[0].includes('HttpOnly'))
+}
+for (const path of ['/products', '/api/backend/products/']) {
+  const response = await fetch(origin + path, {
+    headers: { Cookie: refreshCookie },
+    redirect: 'manual',
+  })
+  assert.equal(response.status, 200, 'SSR pages and proxy requests must renew the session')
+}
+const expiredSession = await fetch(origin + '/api/session', {
+  headers: { Cookie: 'b2b_access=invalid; b2b_refresh=invalid' },
+})
+assert.equal((await expiredSession.json()).user, null)
+assert.ok(expiredSession.headers.getSetCookie().every((cookie) => cookie.includes('Max-Age=0')))
 const crossSite = await fetch(origin + '/api/session', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json', Origin: 'https://unrelated.example' },
