@@ -3,7 +3,7 @@ import test from 'node:test'
 import { categoryHierarchy } from '../src/lib/categories.js'
 import { normalizeSearch } from '../src/lib/format.js'
 
-test('large hierarchies preserve every category without changing source records', () => {
+test('hierarquias grandes preservam todas as categorias sem alterar os registros originais', () => {
   const records = Array.from({ length: 500 }, (_, id) => ({
     id: id + 1,
     name: `Category ${id + 1}`,
@@ -17,7 +17,7 @@ test('large hierarchies preserve every category without changing source records'
   assert.deepEqual(records, original)
 })
 
-test('orphaned and cyclic legacy categories remain reachable exactly once', () => {
+test('categorias antigas sem pai válido ou com ciclos aparecem uma única vez', () => {
   const records = [
     { id: 1, category: 2 },
     { id: 2, category: 1 },
@@ -28,7 +28,7 @@ test('orphaned and cyclic legacy categories remain reachable exactly once', () =
   assert.deepEqual(flatten(categoryHierarchy(records)).sort(), [1, 2, 3, 4])
 })
 
-test('category search accepts Portuguese names without accents or exact casing', () => {
+test('busca de categorias aceita nomes sem acentos e ignora maiúsculas e minúsculas', () => {
   assert.ok(normalizeSearch('Papel Fotográfico').includes(normalizeSearch(' FOTOGRAFICO ')))
   assert.ok(normalizeSearch('Materiais de Escritório').includes(normalizeSearch('escritorio')))
 })

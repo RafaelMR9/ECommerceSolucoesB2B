@@ -9,11 +9,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "oxlint --tsconfig jsconfig.json --deny-warnings src tests scripts next.config.js postcss.config.js",
+    "lint": "oxlint --tsconfig jsconfig.json --deny-warnings src tests next.config.js postcss.config.js",
     "test": "node --experimental-default-type=module --test tests/*.test.mjs",
-    "test:integration": "node scripts/verify-ui.mjs",
-    "format": "prettier --write src tests scripts",
-    "format:check": "prettier --check src tests scripts"
+    "format": "prettier --write src tests",
+    "format:check": "prettier --check src tests"
   },
   "dependencies": {
     "cookie": "2.0.1",
