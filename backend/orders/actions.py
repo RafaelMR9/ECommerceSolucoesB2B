@@ -47,12 +47,14 @@ def record_payment(order, paid, administrator):
         )
     buyer = User.objects.select_for_update().get(pk=order.user_id)
     order.paid = paid
-    buyer.canPurchase = paid and not (
-        SalesOrder.objects.filter(user=buyer, paid=False)
-        .exclude(pk=order.pk)
-        .exclude(cancelled=True)
-        .exists()
-    )
+    buyer.canPurchase = False
+    if paid:
+        pending_orders = (
+            SalesOrder.objects.filter(user=buyer, paid=False)
+            .exclude(pk=order.pk)
+            .exclude(cancelled=True)
+        )
+        buyer.canPurchase = not pending_orders.exists()
     buyer.save(update_fields=["canPurchase"])
     if not paid:
         Ticket.objects.create(
@@ -70,9 +72,11 @@ def process_sales_order(order, data, administrator):
             raise serializers.ValidationError(
                 {"detail": "Este pedido já foi processado."}
             )
-        order.cancelled = True if action == "cancel" else None
         if action == "cancel":
+            order.cancelled = True
             restore_stock(order.itemsalesorder_set.all())
+        else:
+            order.cancelled = None
     elif action == "send":
         if order.cancelled is not None or order.sending:
             raise serializers.ValidationError(

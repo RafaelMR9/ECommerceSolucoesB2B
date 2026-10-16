@@ -56,75 +56,73 @@ def create_invoice(order, items):
     invoice.save(update_fields=["number"])
 
 
+def add_supplier_item(user, product, quantity):
+    order = (
+        SupplierOrder.objects.filter(user=user, finished=False).order_by("pk").first()
+    )
+    if order and order.supplier_id != product.supplier_id:
+        raise serializers.ValidationError(
+            {"detail": "Finalize o pedido atual antes de comprar de outro fornecedor."}
+        )
+    if not order:
+        order = SupplierOrder.objects.create(
+            user=user, supplier_id=product.supplier_id, totalCostValue=0
+        )
+    item = ItemSupplierOrder.objects.create(
+        supplierOrder=order,
+        product=product,
+        quantity=quantity,
+        costPrice=product.costPrice * quantity,
+    )
+    return item, order
+
+
+def add_sales_item(user, product, quantity):
+    if not user.canPurchase:
+        raise serializers.ValidationError(
+            {"detail": "Regularize os pagamentos pendentes para comprar."}
+        )
+    if quantity > product.currentStockQuantity:
+        raise serializers.ValidationError(
+            {
+                "quantity": f"Estoque disponível: {product.currentStockQuantity} embalagens."
+            }
+        )
+    order = SalesOrder.objects.filter(user=user, finished=False).order_by("pk").first()
+    if not order:
+        order = SalesOrder.objects.create(user=user, totalSaleValue=0)
+    now = timezone.now()
+    promotion = (
+        Promotion.objects.filter(product=product, startDate__lte=now, endDate__gte=now)
+        .order_by("pk")
+        .first()
+    )
+    price = promotion.salePrice if promotion else product.salePrice
+    item = ItemSalesOrder.objects.create(
+        salesOrder=order,
+        product=product,
+        quantity=quantity,
+        salePrice=price * quantity,
+    )
+    product.currentStockQuantity -= quantity
+    product.save(update_fields=["currentStockQuantity"])
+    return item, order
+
+
 class AddCartItemView(APIView):
     @transaction.atomic
     def post(self, request):
-        data = CartItemInput(data=request.data)
-        data.is_valid(raise_exception=True)
+        serializer = CartItemInput(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
         user = User.objects.select_for_update().get(pk=request.user.pk)
         product = get_object_or_404(
-            Product.objects.select_for_update(),
-            pk=data.validated_data["product"],
-            visible=True,
+            Product.objects.select_for_update(), pk=data["product"], visible=True
         )
-        quantity = data.validated_data["quantity"]
         if user.is_superuser:
-            order = (
-                SupplierOrder.objects.filter(user=user, finished=False)
-                .order_by("pk")
-                .first()
-            )
-            if order and order.supplier_id != product.supplier_id:
-                raise serializers.ValidationError(
-                    {
-                        "detail": "Finalize o pedido atual antes de comprar de outro fornecedor."
-                    }
-                )
-            if not order:
-                order = SupplierOrder.objects.create(
-                    user=user, supplier_id=product.supplier_id, totalCostValue=0
-                )
-            item = ItemSupplierOrder.objects.create(
-                supplierOrder=order,
-                product=product,
-                quantity=quantity,
-                costPrice=product.costPrice * quantity,
-            )
+            item, order = add_supplier_item(user, product, data["quantity"])
         else:
-            if not user.canPurchase:
-                raise serializers.ValidationError(
-                    {"detail": "Regularize os pagamentos pendentes para comprar."}
-                )
-            if quantity > product.currentStockQuantity:
-                raise serializers.ValidationError(
-                    {
-                        "quantity": f"Estoque disponível: {product.currentStockQuantity} embalagens."
-                    }
-                )
-            order = (
-                SalesOrder.objects.filter(user=user, finished=False)
-                .order_by("pk")
-                .first()
-            )
-            if not order:
-                order = SalesOrder.objects.create(user=user, totalSaleValue=0)
-            now = timezone.now()
-            promotion = (
-                Promotion.objects.filter(
-                    product=product, startDate__lte=now, endDate__gte=now
-                )
-                .order_by("pk")
-                .first()
-            )
-            price = promotion.salePrice if promotion else product.salePrice
-            item = ItemSalesOrder.objects.create(
-                salesOrder=order,
-                product=product,
-                quantity=quantity,
-                salePrice=price * quantity,
-            )
-            product.currentStockQuantity -= quantity
-            product.save(update_fields=["currentStockQuantity"])
+            item, order = add_sales_item(user, product, data["quantity"])
         return Response({"id": item.id, "order": order.id}, status=201)
 
 
@@ -160,14 +158,15 @@ class RemoveCartItemView(APIView):
 class CheckoutView(APIView):
     @transaction.atomic
     def post(self, request):
-        data = CheckoutInput(data=request.data)
-        data.is_valid(raise_exception=True)
+        serializer = CheckoutInput(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
         user = User.objects.select_for_update().get(pk=request.user.pk)
         if not user.is_superuser and not user.canPurchase:
             raise serializers.ValidationError(
                 {"detail": "Regularize os pagamentos pendentes para comprar."}
             )
-        if data.validated_data["faturedPayment"] and not user.authorizeFature:
+        if data["faturedPayment"] and not user.authorizeFature:
             raise serializers.ValidationError(
                 {"faturedPayment": "Compras faturadas ainda não estão autorizadas."}
             )
@@ -185,9 +184,9 @@ class CheckoutView(APIView):
         if not items:
             raise serializers.ValidationError({"detail": "O carrinho está vazio."})
         create_invoice(order, items)
-        order.deliveryDate = data.validated_data["deliveryDate"]
-        order.deliveryFrequency = data.validated_data["deliveryFrequency"]
-        order.faturedPayment = data.validated_data["faturedPayment"]
+        order.deliveryDate = data["deliveryDate"]
+        order.deliveryFrequency = data["deliveryFrequency"]
+        order.faturedPayment = data["faturedPayment"]
         order.finished = True
         order.save()
         if not user.is_superuser:

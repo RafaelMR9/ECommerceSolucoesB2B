@@ -12,7 +12,8 @@ export default async function handler(req, res) {
   try {
     if (req.method === 'DELETE') {
       clearSession(req, res)
-      return res.status(204).end()
+      res.status(204).end()
+      return
     }
     if (req.method === 'GET') {
       const session = await getSession(req, res)

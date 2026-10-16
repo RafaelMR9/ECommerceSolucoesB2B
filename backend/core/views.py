@@ -65,12 +65,9 @@ class UserUpdateView(generics.UpdateAPIView):
     serializer_class = UserSerializer
 
     def get_queryset(self):
-        users = User.objects.all()
-        return (
-            users
-            if self.request.user.is_superuser
-            else users.filter(pk=self.request.user.pk)
-        )
+        if self.request.user.is_superuser:
+            return User.objects.all()
+        return User.objects.filter(pk=self.request.user.pk)
 
     def update(self, request, *args, **kwargs):
         kwargs["partial"] = True
@@ -87,12 +84,9 @@ class UserRetrieveView(generics.RetrieveAPIView):
         return super().get_object()
 
     def get_queryset(self):
-        users = User.objects.all()
-        return (
-            users
-            if self.request.user.is_superuser
-            else users.filter(pk=self.request.user.pk)
-        )
+        if self.request.user.is_superuser:
+            return User.objects.all()
+        return User.objects.filter(pk=self.request.user.pk)
 
 
 class UserCreateView(generics.CreateAPIView):
