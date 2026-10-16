@@ -7,8 +7,14 @@ export default function OrderActions({ order, payments, supplier, admin, onActio
         Marcar como Pago
       </Button>
     )
-  if (payments)
-    return order.paid === null ? (
+  if (payments) {
+    if (order.paid !== null)
+      return (
+        <StatusBadge variant={order.paid ? 'success' : 'danger'}>
+          {order.paid ? 'Pago' : 'Não pago'}
+        </StatusBadge>
+      )
+    return (
       <>
         <Button size="small" onClick={() => onAction(order, 'paid', 'Registrar Pagamento')}>
           Marcar como Pago
@@ -21,13 +27,11 @@ export default function OrderActions({ order, payments, supplier, admin, onActio
           Não Pago
         </Button>
       </>
-    ) : (
-      <StatusBadge variant={order.paid ? 'success' : 'danger'}>
-        {order.paid ? 'Pago' : 'Não pago'}
-      </StatusBadge>
     )
-  if (supplier)
-    return order.recieved === null ? (
+  }
+  if (supplier) {
+    if (order.recieved !== null) return null
+    return (
       <>
         <Button size="small" onClick={() => onAction(order, 'receive', 'Confirmar Recebimento')}>
           Recebido
@@ -40,7 +44,8 @@ export default function OrderActions({ order, payments, supplier, admin, onActio
           Não Recebido
         </Button>
       </>
-    ) : null
+    )
+  }
   if (order.cancelled === false)
     return (
       <>

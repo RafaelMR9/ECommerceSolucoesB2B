@@ -24,11 +24,15 @@ const emptyProduct = {
 }
 export default function ProductForm({ product, categories, suppliers }) {
   const router = useRouter()
-  const [values, setValues] = useState(
-    product
-      ? Object.fromEntries(Object.keys(emptyProduct).map((key) => [key, product[key] ?? '']))
-      : { ...emptyProduct }
-  )
+  const [values, setValues] = useState(() => {
+    const initialValues = { ...emptyProduct }
+    if (product) {
+      for (const key of Object.keys(initialValues)) {
+        initialValues[key] = product[key] ?? ''
+      }
+    }
+    return initialValues
+  })
   const [image, setImage] = useState(null)
   const [errors, setErrors] = useState({})
   const [busy, setBusy] = useState(false)
@@ -45,7 +49,8 @@ export default function ProductForm({ product, categories, suppliers }) {
     setErrors({})
     setSuccess('')
     try {
-      const data = { ...values, ...(image ? { image } : {}) }
+      const data = { ...values }
+      if (image) data.image = image
       if (product) {
         await updateProduct(data, product.id)
         await router.push(`/products/${product.id}`)
