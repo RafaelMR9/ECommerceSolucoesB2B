@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import { countCartItems, loadCartItems } from '../src/lib/server/orderLoaders.js'
 
-test('cart badges count quantities, including repeated products, and return zero when empty', () => {
+test('contador do carrinho soma as quantidades, inclusive de produtos repetidos, e retorna zero quando vazio', () => {
   assert.equal(countCartItems([]), 0)
   assert.equal(
     countCartItems([
@@ -14,7 +14,7 @@ test('cart badges count quantities, including repeated products, and return zero
   )
 })
 
-test('cart reads stay scoped to the buyer or administrator and only load an unfinished order', async () => {
+test('consulta do carrinho carrega apenas o pedido não finalizado do comprador ou administrador', async () => {
   for (const [admin, kind] of [
     [false, 'Sales'],
     [true, 'Supplier'],
@@ -33,7 +33,7 @@ test('cart reads stay scoped to the buyer or administrator and only load an unfi
   }
 })
 
-test('empty carts do not fetch items or the product catalog', async () => {
+test('carrinhos vazios não consultam itens nem o catálogo de produtos', async () => {
   const paths = []
   const cart = await loadCartItems({
     user: { id: 7, is_superuser: false },

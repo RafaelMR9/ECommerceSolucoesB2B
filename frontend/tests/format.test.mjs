@@ -2,19 +2,19 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { money, date, activePromotion, errorFields } from '../src/lib/format.js'
 
-test('date-only delivery dates do not move back a day in Brazilian time', () => {
+test('datas de entrega sem horário não retrocedem um dia no fuso brasileiro', () => {
   assert.equal(date('2026-10-11'), '11/10/2026')
   assert.equal(date(null), '—')
 })
-test('currency accepts numeric strings returned by an API', () => {
+test('formatação de moeda aceita números retornados pela API como texto', () => {
   assert.equal(money('1234.5').replace(/\s/g, ' '), 'R$ 1.234,50')
 })
-test('reused date formatters preserve date-only and date-time output in Brazilian time', () => {
+test('formatadores reutilizados preservam a data e o horário no fuso brasileiro', () => {
   assert.equal(date('2026-10-12T12:00:00Z'), '12/10/2026')
   assert.equal(date('2026-10-12T12:00:00Z', true), '12/10/2026, 09:00')
   assert.equal(date('2026-10-12'), '12/10/2026')
 })
-test('only a currently active promotion for this product is applied', () => {
+test('somente uma promoção vigente do próprio produto é aplicada', () => {
   const product = { id: 5 },
     now = Date.parse('2026-10-11T12:00:00Z')
   const promotions = [
@@ -24,7 +24,7 @@ test('only a currently active promotion for this product is applied', () => {
   ]
   assert.equal(activePromotion(product, promotions, now).salePrice, 25)
 })
-test('network errors remain visible and API field errors retain their field', () => {
+test('erros de rede mantêm a mensagem e erros de validação permanecem associados aos campos', () => {
   assert.deepEqual(errorFields(new Error('Connection unavailable')), {
     detail: 'Connection unavailable',
   })

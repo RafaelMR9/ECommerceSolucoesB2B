@@ -14,7 +14,7 @@ const product = {
   description: 'Not shown on cards',
 }
 
-test('cards include only displayed data and keep the first currently active promotion', () => {
+test('cards incluem apenas os dados exibidos e mantêm a primeira promoção vigente', () => {
   const promotions = [
     { product: 5, startDate: '2020-01-01', endDate: '2020-01-02', salePrice: 1 },
     { product: 6, startDate: '2026-01-01', endDate: '2027-01-01', salePrice: 2 },
@@ -31,7 +31,7 @@ test('cards include only displayed data and keep the first currently active prom
   assert.deepEqual({ product, promotions }, original)
 })
 
-test('missing categories and promotions are serializable, including empty collections', () => {
+test('dados podem ser serializados mesmo sem categorias, promoções ou produtos', () => {
   const cards = productCards([product], [], [], now)
   assert.equal(cards[0].categoryName, null)
   assert.equal(cards[0].promotion, null)
@@ -39,7 +39,7 @@ test('missing categories and promotions are serializable, including empty collec
   assert.deepEqual(productCards([], [], [], now), [])
 })
 
-test('promotion date boundaries match the existing inclusive rule', () => {
+test('promoções são válidas também nas datas de início e fim', () => {
   const promotion = {
     product: 5,
     startDate: new Date(now).toISOString(),

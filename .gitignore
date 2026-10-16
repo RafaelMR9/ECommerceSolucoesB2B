@@ -19,6 +19,7 @@ backend/.python-runtime/
 backend/media/
 backend/staticfiles/
 backups/
+frontend/scripts/
 .vercel/
 **/.vercel/
 coverage/

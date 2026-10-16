@@ -10,7 +10,7 @@ const api = async (path) => {
   ]
 }
 
-test('partner search accepts names without accents and surrounding spaces', async () => {
+test('busca de parceiros aceita nomes sem acentos e ignora espaços nas extremidades', async () => {
   const result = await loadPartners({ api, query: { search: ' FOTOGRAFICO ' } }, 'suppliers')
   assert.deepEqual(
     result.partners.map((partner) => partner.id),
@@ -18,13 +18,13 @@ test('partner search accepts names without accents and surrounding spaces', asyn
   )
 })
 
-test('repeated query parameters do not crash the partner list', async () => {
+test('parâmetros de busca repetidos não interrompem a listagem de parceiros', async () => {
   const result = await loadPartners({ api, query: { fetchSuppliers: ['one', 'two'] } }, 'suppliers')
   assert.equal(result.search, '')
   assert.equal(result.partners.length, 2)
 })
 
-test('legacy search links remain supported', async () => {
+test('links antigos de busca continuam funcionando', async () => {
   const result = await loadPartners({ api, query: { fetchSuppliers: 'escritorio' } }, 'suppliers')
   assert.deepEqual(
     result.partners.map((partner) => partner.id),
