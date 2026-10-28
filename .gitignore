@@ -16,7 +16,8 @@ backend/.python-runtime/
 *.sql
 *.pem
 *.key
-backend/media/
+backend/media/*
+!backend/media/demo/
 backend/staticfiles/
 backups/
 frontend/scripts/

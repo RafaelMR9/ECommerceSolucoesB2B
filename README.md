@@ -28,6 +28,7 @@ Preencha uma chave própria em `DJANGO_SECRET_KEY`. Para usar o PostgreSQL, pree
 
 ```powershell
 python manage.py migrate
+python manage.py loaddata demo
 python manage.py runserver
 ```
 

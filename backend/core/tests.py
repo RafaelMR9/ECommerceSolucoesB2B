@@ -4,7 +4,10 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import AccessToken
 
+from carriers.models import Carrier
 from orders.models import SalesOrder
+from products.models import Category
+from suppliers.models import Supplier
 
 from .models import PasswordResetToken, User
 
@@ -248,3 +251,26 @@ class AccountTests(TestCase):
                 User.objects.create_superuser(
                     username="invalid", cpf="111.111.111-11", **{flag: False}
                 )
+
+
+class DemoDataTests(TestCase):
+    fixtures = ["demo"]
+
+    def test_contatos_da_demonstracao_sao_ficticios(self):
+        for model in (User, Supplier, Carrier):
+            emails = list(model.objects.values_list("email", flat=True))
+            self.assertTrue(emails)
+            self.assertTrue(
+                all(email.endswith("@demonstracao.invalid") for email in emails)
+            )
+
+    def test_demonstracao_preserva_perfis_e_permite_novos_cadastros(self):
+        buyer = User.objects.get(username="compradora-demo")
+        admin = User.objects.get(username="atacadista-demo")
+        self.assertFalse(buyer.is_superuser)
+        self.assertTrue(buyer.canPurchase)
+        self.assertTrue(admin.is_superuser)
+        self.assertTrue(admin.is_staff)
+        existing_ids = set(Category.objects.values_list("pk", flat=True))
+        category = Category.objects.create(name="Categoria de Teste")
+        self.assertNotIn(category.pk, existing_ids)

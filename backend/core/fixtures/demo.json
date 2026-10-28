@@ -1,0 +1,808 @@
+[
+  {
+    "model": "core.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$1500000$PBGSU12LgRCjWDvus653Qz$r/3Q3X0MTWP85fNH79vTwpoDytlU491+Up0Mk6hhk3o=",
+      "last_login": null,
+      "email": "atacadista@demonstracao.invalid",
+      "username": "atacadista-demo",
+      "name": "Organização Atacadista Demo",
+      "is_staff": true,
+      "is_superuser": true,
+      "cpf": "000.000.000-00",
+      "cnpj": null,
+      "address": "Endereço Fictício, 100 — Demonstração",
+      "authorizeFature": true,
+      "canPurchase": true
+    }
+  },
+  {
+    "model": "core.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$1500000$5oqylCnQx3lds9lNX1Ccak$uvHpnXxrUfBOhNN109Hx2sr9+aoV0+ObSYMwqu2hkho=",
+      "last_login": null,
+      "email": "compradora@demonstracao.invalid",
+      "username": "compradora-demo",
+      "name": "Organização Compradora Demo",
+      "is_staff": false,
+      "is_superuser": false,
+      "cpf": null,
+      "cnpj": "00.000.000/0000-01",
+      "address": "Endereço Fictício, 200 — Demonstração",
+      "authorizeFature": true,
+      "canPurchase": true
+    }
+  },
+  {
+    "model": "core.user",
+    "pk": 3,
+    "fields": {
+      "password": "!S97Rq8epRiFn0gsx4uJIFxeRKn5ZkGWR5U1mvPWh",
+      "last_login": null,
+      "email": "credito@demonstracao.invalid",
+      "username": "compradora-analise-exemplo",
+      "name": "Compradora Fictícia — Análise",
+      "is_staff": false,
+      "is_superuser": false,
+      "cpf": null,
+      "cnpj": "00.000.000/0000-02",
+      "address": "Endereço Fictício, 300 — Demonstração",
+      "authorizeFature": false,
+      "canPurchase": true
+    }
+  },
+  {
+    "model": "core.user",
+    "pk": 4,
+    "fields": {
+      "password": "!R80LGtZNUSSl3qmm8vZzKp9cCjdhNFrWHovWaQdW",
+      "last_login": null,
+      "email": "financeiro@demonstracao.invalid",
+      "username": "compradora-financeiro-exemplo",
+      "name": "Compradora Fictícia — Financeiro",
+      "is_staff": false,
+      "is_superuser": false,
+      "cpf": null,
+      "cnpj": "00.000.000/0000-03",
+      "address": "Endereço Fictício, 400 — Demonstração",
+      "authorizeFature": true,
+      "canPurchase": false
+    }
+  },
+  {
+    "model": "suppliers.supplier",
+    "pk": 1,
+    "fields": {
+      "email": "fornecedor1@demonstracao.invalid",
+      "name": "Fornecedor Demo — Tecnologia",
+      "cnpj": "00.000.000/0000-11"
+    }
+  },
+  {
+    "model": "suppliers.supplier",
+    "pk": 2,
+    "fields": {
+      "email": "fornecedor2@demonstracao.invalid",
+      "name": "Fornecedor Demo — Escritório",
+      "cnpj": "00.000.000/0000-12"
+    }
+  },
+  {
+    "model": "suppliers.supplier",
+    "pk": 3,
+    "fields": {
+      "email": "fornecedor3@demonstracao.invalid",
+      "name": "Fornecedor Demo — Mobiliário",
+      "cnpj": "00.000.000/0000-13"
+    }
+  },
+  {
+    "model": "carriers.carrier",
+    "pk": 1,
+    "fields": {
+      "email": "transportadora1@demonstracao.invalid",
+      "name": "Transportadora Demo — Distribuição",
+      "cnpj": "00.000.000/0000-21"
+    }
+  },
+  {
+    "model": "carriers.carrier",
+    "pk": 2,
+    "fields": {
+      "email": "transportadora2@demonstracao.invalid",
+      "name": "Transportadora Demo — Expresso",
+      "cnpj": "00.000.000/0000-22"
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 1,
+    "fields": {
+      "name": "Tecnologia",
+      "category": null
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 2,
+    "fields": {
+      "name": "Materiais de Escritório",
+      "category": null
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 3,
+    "fields": {
+      "name": "Mobiliário",
+      "category": null
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 4,
+    "fields": {
+      "name": "Smartphones",
+      "category": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 5,
+    "fields": {
+      "name": "Áudio",
+      "category": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 6,
+    "fields": {
+      "name": "Periféricos",
+      "category": 1
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 7,
+    "fields": {
+      "name": "Papelaria",
+      "category": 2
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 8,
+    "fields": {
+      "name": "Cadernos",
+      "category": 7
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 9,
+    "fields": {
+      "name": "Escrita",
+      "category": 7
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 10,
+    "fields": {
+      "name": "Impressão",
+      "category": 2
+    }
+  },
+  {
+    "model": "products.category",
+    "pk": 11,
+    "fields": {
+      "name": "Cartuchos",
+      "category": 10
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 1,
+    "fields": {
+      "name": "Smartphone Corporativo 128 GB",
+      "currentStockQuantity": 24,
+      "costPrice": 900.0,
+      "salePrice": 1299.9,
+      "description": "Smartphone para comunicação e organização das tarefas da empresa. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-01.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 4,
+      "supplier": 1
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 2,
+    "fields": {
+      "name": "Fone de Ouvido com Fio",
+      "currentStockQuantity": 65,
+      "costPrice": 35.0,
+      "salePrice": 59.9,
+      "description": "Fone compacto para chamadas e atividades do dia a dia. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-02.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 5,
+      "supplier": 1
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 3,
+    "fields": {
+      "name": "Fone de Ouvido Sem Fio",
+      "currentStockQuantity": 38,
+      "costPrice": 89.0,
+      "salePrice": 149.9,
+      "description": "Fone sem fio com estojo para armazenamento e transporte. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-03.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 5,
+      "supplier": 1
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 4,
+    "fields": {
+      "name": "Teclado para Escritório",
+      "currentStockQuantity": 30,
+      "costPrice": 110.0,
+      "salePrice": 179.9,
+      "description": "Teclado para uso em estações de trabalho e atendimento. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-04.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 6,
+      "supplier": 1
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 5,
+    "fields": {
+      "name": "Caderno Executivo",
+      "currentStockQuantity": 120,
+      "costPrice": 12.5,
+      "salePrice": 24.9,
+      "description": "Caderno para registrar reuniões, ideias e o planejamento da equipe. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-05.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 8,
+      "supplier": 2
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 6,
+    "fields": {
+      "name": "Cartucho de Impressão Preto",
+      "currentStockQuantity": 45,
+      "costPrice": 65.0,
+      "salePrice": 109.9,
+      "description": "Suprimento de impressão para a rotina administrativa. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-06.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 11,
+      "supplier": 2
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 7,
+    "fields": {
+      "name": "Cartucho de Impressão Colorido",
+      "currentStockQuantity": 32,
+      "costPrice": 75.0,
+      "salePrice": 129.9,
+      "description": "Suprimento colorido para documentos e materiais internos. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-07.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 11,
+      "supplier": 2
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 8,
+    "fields": {
+      "name": "Smartphone Corporativo 256 GB",
+      "currentStockQuantity": 18,
+      "costPrice": 1200.0,
+      "salePrice": 1699.9,
+      "description": "Smartphone com armazenamento para documentos e aplicativos de trabalho. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-08.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 4,
+      "supplier": 1
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 9,
+    "fields": {
+      "name": "Caneta Esferográfica Azul",
+      "currentStockQuantity": 300,
+      "costPrice": 1.2,
+      "salePrice": 2.9,
+      "description": "Caneta azul para anotações, formulários e documentos. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-09.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 9,
+      "supplier": 2
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 10,
+    "fields": {
+      "name": "Caneta Esferográfica Preta",
+      "currentStockQuantity": 240,
+      "costPrice": 1.4,
+      "salePrice": 3.2,
+      "description": "Caneta preta para os materiais de uso diário da organização. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-10.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 9,
+      "supplier": 2
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 11,
+    "fields": {
+      "name": "Caneta para Anotações",
+      "currentStockQuantity": 180,
+      "costPrice": 2.1,
+      "salePrice": 4.9,
+      "description": "Caneta para organizar tarefas e registrar informações. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-11.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 9,
+      "supplier": 2
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 12,
+    "fields": {
+      "name": "Caderno de Planejamento",
+      "currentStockQuantity": 85,
+      "costPrice": 15.0,
+      "salePrice": 29.9,
+      "description": "Caderno para acompanhar atividades e o planejamento das compras. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-12.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 8,
+      "supplier": 2
+    }
+  },
+  {
+    "model": "products.product",
+    "pk": 13,
+    "fields": {
+      "name": "Cadeira para Escritório",
+      "currentStockQuantity": 16,
+      "costPrice": 420.0,
+      "salePrice": 699.9,
+      "description": "Cadeira para compor estações de trabalho e espaços administrativos. Produto de demonstração; valores e estoque são fictícios.",
+      "image": "demo/produto-13.jpg",
+      "packaging": 1,
+      "visible": true,
+      "category": 3,
+      "supplier": 3
+    }
+  },
+  {
+    "model": "orders.salesorder",
+    "pk": 1,
+    "fields": {
+      "orderDate": "2026-10-26T12:00:00Z",
+      "deliveryDate": "2026-11-04",
+      "cancelled": false,
+      "sending": false,
+      "recieved": false,
+      "paid": null,
+      "faturedPayment": true,
+      "finished": true,
+      "totalSaleValue": 49.8,
+      "deliveryFrequency": null,
+      "user": 2
+    }
+  },
+  {
+    "model": "orders.salesorder",
+    "pk": 2,
+    "fields": {
+      "orderDate": "2026-10-24T12:00:00Z",
+      "deliveryDate": "2026-11-04",
+      "cancelled": null,
+      "sending": true,
+      "recieved": false,
+      "paid": null,
+      "faturedPayment": true,
+      "finished": true,
+      "totalSaleValue": 179.9,
+      "deliveryFrequency": 30,
+      "user": 2
+    }
+  },
+  {
+    "model": "orders.salesorder",
+    "pk": 3,
+    "fields": {
+      "orderDate": "2026-10-22T12:00:00Z",
+      "deliveryDate": "2026-11-04",
+      "cancelled": null,
+      "sending": true,
+      "recieved": true,
+      "paid": true,
+      "faturedPayment": false,
+      "finished": true,
+      "totalSaleValue": 29.0,
+      "deliveryFrequency": null,
+      "user": 2
+    }
+  },
+  {
+    "model": "orders.salesorder",
+    "pk": 4,
+    "fields": {
+      "orderDate": "2026-10-20T12:00:00Z",
+      "deliveryDate": "2026-11-04",
+      "cancelled": null,
+      "sending": true,
+      "recieved": true,
+      "paid": false,
+      "faturedPayment": true,
+      "finished": true,
+      "totalSaleValue": 149.5,
+      "deliveryFrequency": null,
+      "user": 4
+    }
+  },
+  {
+    "model": "orders.salesorder",
+    "pk": 5,
+    "fields": {
+      "orderDate": "2026-10-18T12:00:00Z",
+      "deliveryDate": "2026-11-04",
+      "cancelled": true,
+      "sending": false,
+      "recieved": false,
+      "paid": null,
+      "faturedPayment": true,
+      "finished": true,
+      "totalSaleValue": 59.9,
+      "deliveryFrequency": null,
+      "user": 2
+    }
+  },
+  {
+    "model": "orders.itemsalesorder",
+    "pk": 1,
+    "fields": {
+      "salePrice": 49.8,
+      "quantity": 2,
+      "product": 5,
+      "salesOrder": 1
+    }
+  },
+  {
+    "model": "orders.itemsalesorder",
+    "pk": 2,
+    "fields": {
+      "salePrice": 179.9,
+      "quantity": 1,
+      "product": 4,
+      "salesOrder": 2
+    }
+  },
+  {
+    "model": "orders.itemsalesorder",
+    "pk": 3,
+    "fields": {
+      "salePrice": 29.0,
+      "quantity": 10,
+      "product": 9,
+      "salesOrder": 3
+    }
+  },
+  {
+    "model": "orders.itemsalesorder",
+    "pk": 4,
+    "fields": {
+      "salePrice": 149.5,
+      "quantity": 5,
+      "product": 12,
+      "salesOrder": 4
+    }
+  },
+  {
+    "model": "orders.itemsalesorder",
+    "pk": 5,
+    "fields": {
+      "salePrice": 59.9,
+      "quantity": 1,
+      "product": 2,
+      "salesOrder": 5
+    }
+  },
+  {
+    "model": "orders.salesinvoice",
+    "pk": 1,
+    "fields": {
+      "salePrice": 49.8,
+      "number": 1
+    }
+  },
+  {
+    "model": "orders.salesinvoice",
+    "pk": 2,
+    "fields": {
+      "salePrice": 179.9,
+      "number": 2
+    }
+  },
+  {
+    "model": "orders.salesinvoice",
+    "pk": 3,
+    "fields": {
+      "salePrice": 29.0,
+      "number": 3
+    }
+  },
+  {
+    "model": "orders.salesinvoice",
+    "pk": 4,
+    "fields": {
+      "salePrice": 149.5,
+      "number": 4
+    }
+  },
+  {
+    "model": "orders.salesinvoice",
+    "pk": 5,
+    "fields": {
+      "salePrice": 59.9,
+      "number": 5
+    }
+  },
+  {
+    "model": "orders.itemsalesinvoice",
+    "pk": 1,
+    "fields": {
+      "quantity": 2,
+      "salePrice": 49.8,
+      "salesInvoice": 1
+    }
+  },
+  {
+    "model": "orders.itemsalesinvoice",
+    "pk": 2,
+    "fields": {
+      "quantity": 1,
+      "salePrice": 179.9,
+      "salesInvoice": 2
+    }
+  },
+  {
+    "model": "orders.itemsalesinvoice",
+    "pk": 3,
+    "fields": {
+      "quantity": 10,
+      "salePrice": 29.0,
+      "salesInvoice": 3
+    }
+  },
+  {
+    "model": "orders.itemsalesinvoice",
+    "pk": 4,
+    "fields": {
+      "quantity": 5,
+      "salePrice": 149.5,
+      "salesInvoice": 4
+    }
+  },
+  {
+    "model": "orders.itemsalesinvoice",
+    "pk": 5,
+    "fields": {
+      "quantity": 1,
+      "salePrice": 59.9,
+      "salesInvoice": 5
+    }
+  },
+  {
+    "model": "orders.supplierorder",
+    "pk": 1,
+    "fields": {
+      "orderDate": "2026-10-25T12:00:00Z",
+      "deliveryDate": "2026-11-02",
+      "recieved": null,
+      "faturedPayment": false,
+      "finished": true,
+      "totalCostValue": 550.0,
+      "deliveryFrequency": null,
+      "supplier": 1,
+      "user": 1
+    }
+  },
+  {
+    "model": "orders.supplierorder",
+    "pk": 2,
+    "fields": {
+      "orderDate": "2026-10-25T12:00:00Z",
+      "deliveryDate": "2026-11-02",
+      "recieved": true,
+      "faturedPayment": false,
+      "finished": true,
+      "totalCostValue": 250.0,
+      "deliveryFrequency": 30,
+      "supplier": 2,
+      "user": 1
+    }
+  },
+  {
+    "model": "orders.itemsupplierorder",
+    "pk": 1,
+    "fields": {
+      "costPrice": 550.0,
+      "quantity": 5,
+      "product": 4,
+      "supplierOrder": 1
+    }
+  },
+  {
+    "model": "orders.itemsupplierorder",
+    "pk": 2,
+    "fields": {
+      "costPrice": 250.0,
+      "quantity": 20,
+      "product": 5,
+      "supplierOrder": 2
+    }
+  },
+  {
+    "model": "orders.supplierinvoice",
+    "pk": 1,
+    "fields": {
+      "costPrice": 550.0,
+      "number": 1
+    }
+  },
+  {
+    "model": "orders.supplierinvoice",
+    "pk": 2,
+    "fields": {
+      "costPrice": 250.0,
+      "number": 2
+    }
+  },
+  {
+    "model": "orders.itemsupplierinvoice",
+    "pk": 1,
+    "fields": {
+      "quantity": 5,
+      "costPrice": 550.0,
+      "supplierInvoice": 1
+    }
+  },
+  {
+    "model": "orders.itemsupplierinvoice",
+    "pk": 2,
+    "fields": {
+      "quantity": 20,
+      "costPrice": 250.0,
+      "supplierInvoice": 2
+    }
+  },
+  {
+    "model": "carriers.salesshipment",
+    "pk": 1,
+    "fields": {
+      "dateHour": "2026-10-27T12:00:00Z",
+      "salesOrder": 2,
+      "carrier": 1
+    }
+  },
+  {
+    "model": "carriers.salesshipment",
+    "pk": 2,
+    "fields": {
+      "dateHour": "2026-10-27T12:00:00Z",
+      "salesOrder": 3,
+      "carrier": 1
+    }
+  },
+  {
+    "model": "carriers.salesshipment",
+    "pk": 3,
+    "fields": {
+      "dateHour": "2026-10-27T12:00:00Z",
+      "salesOrder": 4,
+      "carrier": 1
+    }
+  },
+  {
+    "model": "support.ticket",
+    "pk": 1,
+    "fields": {
+      "answer": null,
+      "originalTicket": null,
+      "sender": 2,
+      "recipient": 1,
+      "subject": "Organização Compradora Demo: Entrega do pedido",
+      "content": "Olá! Gostaria de acompanhar a previsão de entrega do meu pedido de demonstração.",
+      "dateHour": "2026-10-28T18:03:15.776Z"
+    }
+  },
+  {
+    "model": "support.ticket",
+    "pk": 2,
+    "fields": {
+      "answer": 1,
+      "originalTicket": 1,
+      "sender": 1,
+      "recipient": 2,
+      "subject": null,
+      "content": "Olá! O pedido pode ser acompanhado na área de pedidos. Esta conversa é um exemplo fictício.",
+      "dateHour": "2026-10-28T18:03:15.778Z"
+    }
+  },
+  {
+    "model": "support.ticket",
+    "pk": 3,
+    "fields": {
+      "answer": null,
+      "originalTicket": null,
+      "sender": 3,
+      "recipient": 1,
+      "subject": "Compradora Fictícia — Análise: Compras faturadas",
+      "content": "Solicitação fictícia para demonstrar o fluxo de análise de crédito.",
+      "dateHour": "2026-10-28T18:03:15.779Z"
+    }
+  },
+  {
+    "model": "support.ticket",
+    "pk": 4,
+    "fields": {
+      "answer": null,
+      "originalTicket": null,
+      "sender": 1,
+      "recipient": 4,
+      "subject": "Compradora Fictícia — Financeiro: Pagamento pendente",
+      "content": "Aviso fictício de pagamento pendente, usado apenas para demonstrar a área financeira.",
+      "dateHour": "2026-10-28T18:03:15.779Z"
+    }
+  },
+  {
+    "model": "marketing.promotion",
+    "pk": 1,
+    "fields": {
+      "startDate": "2026-10-28T12:00:00Z",
+      "endDate": "2027-12-31T00:00:00Z",
+      "salePrice": 19.9,
+      "product": 5
+    }
+  }
+]
