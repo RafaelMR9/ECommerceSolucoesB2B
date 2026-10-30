@@ -1,9 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": ["gru1"],
   "functions": {
     "api/wsgi.py": {
       "maxDuration": 60,
-      "excludeFiles": "{media/**,backups/**,.env*,db.sqlite3*,.venv/**}"
+      "excludeFiles": "{media/**,backups/**,.env*,db.sqlite3*,.venv/**,.python-runtime/**,.ruff_cache/**,**/tests.py,**/fixtures/**}"
     }
   }
 }

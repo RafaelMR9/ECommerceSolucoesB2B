@@ -40,6 +40,8 @@ DEBUG = env_bool("DJANGO_DEBUG", not IS_PRODUCTION)
 ALLOWED_HOSTS = env_list(
     "DJANGO_ALLOWED_HOSTS", "" if IS_PRODUCTION else "localhost,127.0.0.1,[::1]"
 )
+if os.getenv("VERCEL_URL"):
+    ALLOWED_HOSTS.append(os.environ["VERCEL_URL"])
 
 
 INSTALLED_APPS = [
@@ -240,5 +242,6 @@ if IS_PRODUCTION:
         )
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_SSL_REDIRECT = env_bool("DJANGO_SECURE_SSL_REDIRECT", True)
+    SECURE_HSTS_SECONDS = 31536000
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True

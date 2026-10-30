@@ -3,6 +3,11 @@ db.sqlite3*
 media/
 backups/
 .venv/
+.python-runtime/
+.ruff_cache/
+staticfiles/
+**/tests.py
+**/fixtures/
 __pycache__/
 **/__pycache__/
 *.dump
