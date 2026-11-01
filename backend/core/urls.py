@@ -3,6 +3,7 @@ from django.urls import path
 from .authentication import CurrentUserView, LoginView, RefreshView
 from .views import (
     AdministratorIdView,
+    CreditAnalysisView,
     GetUserIdByEmail,
     PasswordResetTokenCheckView,
     PasswordResetTokenDestroyView,
@@ -22,6 +23,7 @@ urlpatterns = [
     path("me/", CurrentUserView.as_view()),
     path("register/", UserCreateView.as_view()),
     path("<int:pk>/update/", UserUpdateView.as_view()),
+    path("<int:pk>/credit-analysis/", CreditAnalysisView.as_view()),
     path("<int:pk>/delete/", UserDestroyView.as_view()),
     path("<int:pk>/detail/", UserRetrieveView.as_view()),
     path("admin_id", AdministratorIdView.as_view()),

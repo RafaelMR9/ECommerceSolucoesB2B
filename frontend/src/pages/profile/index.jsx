@@ -16,12 +16,14 @@ export default function Profile() {
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false)
   async function logout() {
+    if (busy) return
     setBusy(true)
     try {
       await logoutUser()
       await router.push('/authentication')
     } catch (e) {
       setError(e.message)
+    } finally {
       setBusy(false)
     }
   }
@@ -79,10 +81,10 @@ export default function Profile() {
             className="max-[600px]:flex-[1_1_170px]"
             variant="inverse"
             onClick={logout}
-            disabled={busy}
+            loading={busy}
           >
             <LogOut className="shrink-0" size={17} aria-hidden="true" />
-            {busy ? 'Saindo…' : 'Sair da Conta'}
+            Sair da Conta
           </Button>
         </div>
       </section>

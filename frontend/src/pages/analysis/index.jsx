@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import BaseLayout from '@/components/shared/BaseLayout'
 import PageHeader from '@/components/ui/PageHeader'
@@ -6,34 +6,18 @@ import DataTable, { TableHeader, TableRow, TableCell } from '@/components/ui/Dat
 import Button from '@/components/ui/Button'
 import Alert from '@/components/ui/Alert'
 import Modal from '@/components/shared/Modal'
-import { AuthContext } from '@/contexts/authContext'
-import { updateUser } from '@/services/userService'
-import { registerTicket } from '@/services/supportService'
+import { reviewCredit } from '@/services/userService'
 import { withSession } from '@/lib/server/page'
 import { errorFields } from '@/lib/format'
 export default function Analysis({ companies }) {
-  const { user } = useContext(AuthContext),
-    router = useRouter(),
+  const router = useRouter(),
     [selected, setSelected] = useState(null),
     [error, setError] = useState('')
   async function confirm() {
     try {
-      await updateUser(
-        { authorizeFature: selected.approved ? true : null },
-        selected.company.id,
-        selected.company.username
-      )
-      await registerTicket({
-        sender: user.id,
-        recipient: selected.company.id,
-        subject: `${selected.company.name}: Resultado da análise de crédito`,
-        content: selected.approved
-          ? 'Sua organização está autorizada a realizar compras faturadas.'
-          : 'Sua solicitação de compras faturadas não foi aprovada neste momento.',
-        answer: null,
-      })
-      setSelected(null)
+      await reviewCredit(selected.company.id, selected.approved)
       await router.replace(router.asPath)
+      setSelected(null)
     } catch (e) {
       setError(Object.values(errorFields(e)).join(' '))
     }

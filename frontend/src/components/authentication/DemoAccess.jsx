@@ -17,7 +17,7 @@ const profiles = {
   },
 }
 
-export default function DemoAccess({ accounts, onLogin, disabled }) {
+export default function DemoAccess({ accounts, onLogin, disabled, loadingRole }) {
   if (!accounts.length) return null
 
   return (
@@ -62,7 +62,8 @@ export default function DemoAccess({ accounts, onLogin, disabled }) {
                 variant="secondary"
                 className="mt-4 w-full"
                 disabled={disabled}
-                onClick={() => onLogin({ username, password })}
+                loading={loadingRole === role}
+                onClick={() => onLogin({ username, password }, role)}
               >
                 {profile.action}
                 <ArrowRight size={17} aria-hidden="true" />

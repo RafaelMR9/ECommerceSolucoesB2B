@@ -106,10 +106,10 @@ export default function CategoryForm({ category, categories: initialCategories }
           </Field>
         </FormSection>
         <FormActions>
-          <Button type="submit" disabled={busy}>
-            {busy ? 'Salvando…' : category ? 'Salvar Alterações' : 'Cadastrar Categoria'}
+          <Button type="submit" loading={busy}>
+            {category ? 'Salvar Alterações' : 'Cadastrar Categoria'}
           </Button>
-          <Button href="/categories" variant="secondary">
+          <Button href="/categories" variant="secondary" disabled={busy}>
             Cancelar
           </Button>
         </FormActions>

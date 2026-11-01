@@ -112,10 +112,10 @@ export default function CheckoutForm() {
         </p>
       )}
       <FormActions>
-        <Button type="submit" disabled={busy}>
-          {busy ? 'Finalizando…' : 'Finalizar Compra'}
+        <Button type="submit" loading={busy}>
+          Finalizar Compra
         </Button>
-        <Button href="/cart" variant="secondary">
+        <Button href="/cart" variant="secondary" disabled={busy}>
           Voltar ao Carrinho
         </Button>
       </FormActions>

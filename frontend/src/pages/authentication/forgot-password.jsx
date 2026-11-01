@@ -44,12 +44,12 @@ export default function ForgotPassword() {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <Button type="submit" className="w-full" disabled={busy}>
-          {busy ? 'Enviando…' : 'Enviar Instruções'}
+        <Button type="submit" className="w-full" loading={busy}>
+          Enviar Instruções
         </Button>
       </form>
       <div className="flex justify-between gap-3.75 items-center flex-wrap text-small my-4.5 mx-0">
-        <Button href="/authentication" variant="ghost">
+        <Button href="/authentication" variant="ghost" disabled={busy}>
           Voltar para Entrar
         </Button>
       </div>

@@ -5,9 +5,10 @@ from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import AccessToken
 
 from carriers.models import Carrier
-from orders.models import SalesOrder
-from products.models import Category
+from orders.models import ItemSalesOrder, ItemSupplierOrder, SalesOrder, SupplierOrder
+from products.models import Category, Product
 from suppliers.models import Supplier
+from support.models import Ticket
 
 from .models import PasswordResetToken, User
 
@@ -32,10 +33,11 @@ class AccountTests(TestCase):
         self.assertEqual(self.client.get("/api/users/me/").status_code, 401)
         token = AccessToken.for_user(self.buyer)
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             response = self.client.get(f"/api/users/me/?user={self.other.pk}")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["id"], self.buyer.pk)
+        self.assertEqual(response.data["cartCount"], 0)
         self.assertNotIn("password", response.data)
 
     def test_invalid_refresh_token_is_rejected(self):
@@ -251,6 +253,200 @@ class AccountTests(TestCase):
                 User.objects.create_superuser(
                     username="invalid", cpf="111.111.111-11", **{flag: False}
                 )
+
+    def test_analise_de_credito_exige_administrador(self):
+        path = f"/api/users/{self.buyer.pk}/credit-analysis/"
+        self.assertEqual(
+            self.client.post(path, {"approved": True}, format="json").status_code,
+            401,
+        )
+        self.client.force_authenticate(self.buyer)
+        self.assertEqual(
+            self.client.post(path, {"approved": True}, format="json").status_code,
+            403,
+        )
+        self.assertFalse(Ticket.objects.exists())
+
+    def test_aprovacao_de_credito_cria_ticket_e_nao_pode_ser_repetida(self):
+        User.objects.filter(pk=self.buyer.pk).update(authorizeFature=False)
+        self.client.force_authenticate(self.admin)
+        path = f"/api/users/{self.buyer.pk}/credit-analysis/"
+        response = self.client.post(path, {"approved": True}, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data["authorizeFature"])
+        ticket = Ticket.objects.get()
+        self.assertEqual(ticket.sender_id, self.admin.pk)
+        self.assertEqual(ticket.recipient_id, self.buyer.pk)
+        self.assertEqual(
+            ticket.content,
+            "Sua organização está autorizada a realizar compras faturadas.",
+        )
+        self.assertEqual(
+            self.client.post(path, {"approved": False}, format="json").status_code,
+            400,
+        )
+        self.buyer.refresh_from_db()
+        self.assertTrue(self.buyer.authorizeFature)
+        self.assertEqual(Ticket.objects.count(), 1)
+
+    def test_recusa_de_credito_cria_ticket_sem_autorizar_compras(self):
+        User.objects.filter(pk=self.buyer.pk).update(authorizeFature=False)
+        self.client.force_authenticate(self.admin)
+        path = f"/api/users/{self.buyer.pk}/credit-analysis/"
+        response = self.client.post(path, {"approved": False}, format="json")
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNone(response.data["authorizeFature"])
+        self.assertEqual(
+            Ticket.objects.get().content,
+            "Sua solicitação de compras faturadas não foi aprovada neste momento.",
+        )
+
+    def test_analise_rejeita_resultado_invalido_ou_conta_administrativa(self):
+        User.objects.filter(pk=self.buyer.pk).update(authorizeFature=False)
+        self.client.force_authenticate(self.admin)
+        path = f"/api/users/{self.buyer.pk}/credit-analysis/"
+        for data in ({}, {"approved": None}, {"approved": "inválido"}):
+            self.assertEqual(
+                self.client.post(path, data, format="json").status_code, 400
+            )
+        self.assertEqual(
+            self.client.post(
+                f"/api/users/{self.admin.pk}/credit-analysis/",
+                {"approved": True},
+                format="json",
+            ).status_code,
+            404,
+        )
+        self.buyer.refresh_from_db()
+        self.assertFalse(self.buyer.authorizeFature)
+        self.assertFalse(Ticket.objects.exists())
+
+    @patch(
+        "core.views.Ticket.objects.create", side_effect=RuntimeError("Falha no ticket")
+    )
+    def test_falha_no_ticket_desfaz_a_aprovacao_de_credito(self, create_ticket):
+        User.objects.filter(pk=self.buyer.pk).update(authorizeFature=False)
+        self.client.force_authenticate(self.admin)
+        with self.assertRaises(RuntimeError):
+            self.client.post(
+                f"/api/users/{self.buyer.pk}/credit-analysis/",
+                {"approved": True},
+                format="json",
+            )
+        create_ticket.assert_called_once()
+        self.buyer.refresh_from_db()
+        self.assertFalse(self.buyer.authorizeFature)
+        self.assertFalse(Ticket.objects.exists())
+
+    def test_analise_aceita_organizacao_com_nome_longo(self):
+        User.objects.filter(pk=self.buyer.pk).update(
+            name="A" * 255, authorizeFature=False
+        )
+        self.client.force_authenticate(self.admin)
+        response = self.client.post(
+            f"/api/users/{self.buyer.pk}/credit-analysis/",
+            {"approved": True},
+            format="json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertLessEqual(len(Ticket.objects.get().subject), 255)
+
+
+class CartCountTests(TestCase):
+    def setUp(self):
+        self.buyer = User.objects.create_user(
+            email="buyer@example.test", username="buyer", password="test-password"
+        )
+        self.other = User.objects.create_user(
+            email="other@example.test", username="other", password="test-password"
+        )
+        self.admin = User.objects.create_user(
+            email="admin@example.test",
+            username="admin",
+            password="test-password",
+            is_superuser=True,
+        )
+        self.supplier = Supplier.objects.create(
+            name="Fornecedor", email="supplier@example.test", cnpj="00.000.000/0001-00"
+        )
+        self.product = Product.objects.create(
+            name="Produto",
+            category=Category.objects.create(name="Categoria"),
+            supplier=self.supplier,
+            currentStockQuantity=100,
+            costPrice=5,
+            salePrice=10,
+            packaging=1,
+            description="Produto de teste",
+            image="produto.jpg",
+        )
+        self.client = APIClient()
+
+    def test_contador_vazio_retorna_zero_para_os_dois_perfis(self):
+        for user in (self.buyer, self.admin):
+            self.client.force_authenticate(user)
+            self.assertEqual(self.client.get("/api/users/me/").data["cartCount"], 0)
+
+    def test_contador_soma_quantidades_apenas_do_primeiro_carrinho_do_usuario(self):
+        first = SalesOrder.objects.create(user=self.buyer, totalSaleValue=0)
+        later = SalesOrder.objects.create(user=self.buyer, totalSaleValue=0)
+        finished = SalesOrder.objects.create(
+            user=self.buyer, totalSaleValue=50, finished=True
+        )
+        other = SalesOrder.objects.create(user=self.other, totalSaleValue=0)
+        for order, quantity in (
+            (first, 2),
+            (first, 3),
+            (later, 20),
+            (finished, 30),
+            (other, 40),
+        ):
+            ItemSalesOrder.objects.create(
+                salesOrder=order,
+                product=self.product,
+                quantity=quantity,
+                salePrice=quantity * 10,
+            )
+        self.client.force_authenticate(self.buyer)
+        with self.assertNumQueries(2):
+            response = self.client.get(f"/api/users/me/?user={self.other.pk}")
+        self.assertEqual(response.data["cartCount"], 5)
+        self.client.force_authenticate(self.other)
+        self.assertEqual(self.client.get("/api/users/me/").data["cartCount"], 40)
+
+    def test_contador_administrativo_usa_apenas_o_carrinho_de_reposicao(self):
+        sales = SalesOrder.objects.create(user=self.admin, totalSaleValue=0)
+        ItemSalesOrder.objects.create(
+            salesOrder=sales, product=self.product, quantity=50, salePrice=500
+        )
+        first = SupplierOrder.objects.create(
+            user=self.admin, supplier=self.supplier, totalCostValue=0
+        )
+        later = SupplierOrder.objects.create(
+            user=self.admin, supplier=self.supplier, totalCostValue=0
+        )
+        for order, quantity in ((first, 4), (later, 20)):
+            ItemSupplierOrder.objects.create(
+                supplierOrder=order,
+                product=self.product,
+                quantity=quantity,
+                costPrice=quantity * 5,
+            )
+        self.client.force_authenticate(self.admin)
+        self.assertEqual(self.client.get("/api/users/me/").data["cartCount"], 4)
+
+    def test_contador_reflete_alteracoes_sem_cache_entre_leituras(self):
+        order = SalesOrder.objects.create(user=self.buyer, totalSaleValue=0)
+        self.client.force_authenticate(self.buyer)
+        self.assertEqual(self.client.get("/api/users/me/").data["cartCount"], 0)
+        item = ItemSalesOrder.objects.create(
+            salesOrder=order, product=self.product, quantity=3, salePrice=30
+        )
+        self.assertEqual(self.client.get("/api/users/me/").data["cartCount"], 3)
+        item.delete()
+        response = self.client.get("/api/users/me/")
+        self.assertEqual(response.data["cartCount"], 0)
+        self.assertEqual(response["Cache-Control"], "private, no-store")
 
 
 class DemoDataTests(TestCase):

@@ -89,10 +89,10 @@ export default function SendTicket({ administrator }) {
             />
           </FormSection>
           <FormActions>
-            <Button type="submit" disabled={busy}>
-              {busy ? 'Enviando…' : 'Enviar Solicitação'}
+            <Button type="submit" loading={busy}>
+              Enviar Solicitação
             </Button>
-            <Button href="/support" variant="secondary">
+            <Button href="/support" variant="secondary" disabled={busy}>
               Cancelar
             </Button>
           </FormActions>

@@ -28,7 +28,12 @@ export default async function handler(req, res) {
       body: JSON.stringify({ username, password }),
     })
     if (!response.ok)
-      return res.status(response.status).json({ detail: 'Usuário ou senha inválidos.' })
+      return res.status(response.status).json({
+        detail:
+          response.status === 401
+            ? 'Usuário ou senha inválidos.'
+            : 'Não foi possível entrar na conta. Tente novamente em instantes.',
+      })
     const tokens = await response.json()
     const user = await backendData('users/me/', tokens.access)
     setSessionCookies(req, res, tokens)

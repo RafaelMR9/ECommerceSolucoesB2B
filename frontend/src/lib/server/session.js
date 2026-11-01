@@ -1,5 +1,5 @@
 import { stringifySetCookie } from 'cookie'
-import { backendData, backendFetch } from './api'
+import { backendData, backendFetch } from './api.js'
 
 const ACCESS_COOKIE = 'b2b_access'
 const REFRESH_COOKIE = 'b2b_refresh'
@@ -40,15 +40,10 @@ async function authenticatedUser(access) {
     throw error
   }
 }
-export async function getSession(req, res) {
-  const access = req.cookies[ACCESS_COOKIE]
+export async function refreshAccessToken(req, res) {
   const refresh = req.cookies[REFRESH_COOKIE]
-  if (access) {
-    const user = await authenticatedUser(access)
-    if (user) return { user, access }
-  }
   if (!refresh) {
-    if (access) clearSession(req, res)
+    if (req.cookies[ACCESS_COOKIE]) clearSession(req, res)
     return null
   }
   const response = await backendFetch('users/token/refresh/', {
@@ -62,13 +57,26 @@ export async function getSession(req, res) {
   }
   if (!response.ok) throw new Error('Não foi possível verificar sua sessão.')
   const tokens = await response.json()
-  const user = await authenticatedUser(tokens.access)
+  setSessionCookies(req, res, tokens)
+  return tokens.access
+}
+export async function getAccessToken(req, res) {
+  return req.cookies[ACCESS_COOKIE] || refreshAccessToken(req, res)
+}
+export async function getSession(req, res) {
+  const access = req.cookies[ACCESS_COOKIE]
+  if (access) {
+    const user = await authenticatedUser(access)
+    if (user) return { user, access }
+  }
+  const renewedAccess = await refreshAccessToken(req, res)
+  if (!renewedAccess) return null
+  const user = await authenticatedUser(renewedAccess)
   if (!user) {
     clearSession(req, res)
     return null
   }
-  setSessionCookies(req, res, tokens)
-  return { user, access: tokens.access }
+  return { user, access: renewedAccess }
 }
 export function sameOrigin(req) {
   if (req.headers['sec-fetch-site'] === 'cross-site') return false

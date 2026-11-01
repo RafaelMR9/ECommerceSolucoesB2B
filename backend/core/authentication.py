@@ -3,12 +3,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from orders.cart import cart_count
+
 from .serializers import UserSerializer
 
 
 class CurrentUserView(APIView):
     def get(self, request):
-        return Response(UserSerializer(request.user).data)
+        data = UserSerializer(request.user).data
+        data["cartCount"] = cart_count(request.user)
+        return Response(data, headers={"Cache-Control": "private, no-store"})
 
 
 class LoginView(TokenObtainPairView):

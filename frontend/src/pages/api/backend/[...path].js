@@ -1,5 +1,5 @@
 import { backendFetch } from '@/lib/server/api'
-import { getSession, sameOrigin } from '@/lib/server/session'
+import { getAccessToken, refreshAccessToken, clearSession, sameOrigin } from '@/lib/server/session'
 
 export const config = { api: { bodyParser: false } }
 const MAX_REQUEST_BYTES = 5 * 1024 * 1024
@@ -31,7 +31,16 @@ async function forwardRequest(req, res, path, access) {
     body = Buffer.concat(chunks, bytes)
   }
 
-  const response = await backendFetch(path, { method: req.method, headers, body })
+  let response = await backendFetch(path, { method: req.method, headers, body })
+  if (access && response.status === 401 && req.cookies.b2b_access) {
+    await response.body?.cancel()
+    const renewedAccess = await refreshAccessToken(req, res)
+    if (!renewedAccess)
+      return res.status(401).json({ detail: 'Entre na sua conta para continuar.' })
+    headers.Authorization = `Bearer ${renewedAccess}`
+    response = await backendFetch(path, { method: req.method, headers, body })
+  }
+  if (access && response.status === 401) clearSession(req, res)
   if (response.status === 204) {
     res.status(204).end()
     return
@@ -61,13 +70,13 @@ export default async function handler(req, res) {
   const pathname = segments.map(encodeURIComponent).join('/')
   const publicAuth = segments[0] === 'users' && ['register', 'passwordReset'].includes(segments[1])
   try {
-    const session = publicAuth ? null : await getSession(req, res)
-    if (!publicAuth && !session)
+    const access = publicAuth ? null : await getAccessToken(req, res)
+    if (!publicAuth && !access)
       return res.status(401).json({ detail: 'Entre na sua conta para continuar.' })
     const query = new URLSearchParams(queryParameters)
     const slash = PATHS_WITHOUT_TRAILING_SLASH.has(pathname) ? '' : '/'
     const path = `${pathname}${slash}${query.size ? `?${query}` : ''}`
-    await forwardRequest(req, res, path, session?.access)
+    await forwardRequest(req, res, path, access)
   } catch {
     return res.status(502).json({ detail: 'Não foi possível conectar à plataforma.' })
   }

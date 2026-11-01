@@ -1,6 +1,10 @@
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from core.permissions import IsAdministrator
+from marketing.models import Promotion
+from marketing.serializers import PromotionSerializer
 
 from .models import Category, Product
 from .serializers import CategorySerializer, ProductSerializer
@@ -53,6 +57,23 @@ class CategoryDestroyView(generics.DestroyAPIView):
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.filter(visible=True).order_by("pk")
     serializer_class = ProductSerializer
+
+
+class CatalogView(APIView):
+    def get(self, request):
+        products = Product.objects.filter(visible=True).order_by("pk")
+        categories = Category.objects.order_by("pk")
+        promotions = Promotion.objects.order_by("pk")
+        return Response(
+            {
+                "products": ProductSerializer(
+                    products, many=True, context={"request": request}
+                ).data,
+                "categories": CategorySerializer(categories, many=True).data,
+                "promotions": PromotionSerializer(promotions, many=True).data,
+            },
+            headers={"Cache-Control": "private, no-store"},
+        )
 
 
 class ProductFilterNameView(generics.ListAPIView):

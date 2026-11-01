@@ -1,6 +1,5 @@
-import { getSession } from './session'
-import { backendData } from './api'
-import { countCartItems, loadCartItems } from './orderLoaders'
+import { getSession } from './session.js'
+import { backendData } from './api.js'
 
 export function withSession(load = async () => ({}), { admin = false, authPage = false } = {}) {
   return async (context) => {
@@ -31,10 +30,10 @@ export function withSession(load = async () => ({}), { admin = false, authPage =
         user: session.user,
         api,
       }
-      const [data, cart] = await Promise.all([load(pageContext), loadCartItems(pageContext)])
+      const data = await load(pageContext)
       if (data.notFound || data.redirect) return data
       return {
-        props: { initialUser: session.user, ...data, initialCartCount: countCartItems(cart.items) },
+        props: { initialUser: session.user, ...data, initialCartCount: session.user.cartCount },
       }
     } catch (error) {
       if (error.status === 404) return { notFound: true }

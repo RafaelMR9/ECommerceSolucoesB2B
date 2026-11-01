@@ -35,6 +35,7 @@ export default function Purchase({ product, promotion }) {
   }
   const price = user.is_superuser ? product.costPrice : (promotion?.salePrice ?? product.salePrice)
   const count = Number(quantity) || 0
+  const units = count * product.packaging
   return (
     <BaseLayout>
       <PageHeader
@@ -51,7 +52,7 @@ export default function Purchase({ product, promotion }) {
             title="Resumo do Item"
             label="Subtotal"
             total={price * count}
-            description={`${count} ${count === 1 ? 'embalagem' : 'embalagens'} · ${count * product.packaging} unidades`}
+            description={`${count} ${count === 1 ? 'embalagem' : 'embalagens'} · ${units} ${units === 1 ? 'unidade' : 'unidades'}`}
           >
             {!user.is_superuser && (
               <p className="text-small text-brand-muted">
@@ -90,14 +91,15 @@ export default function Purchase({ product, promotion }) {
             value={quantity}
             onChange={(e) => setQuantity(e.target.value)}
             error={errors.quantity}
-            hint={`${product.packaging} unidades por embalagem.`}
+            hint={`${product.packaging} ${Number(product.packaging) === 1 ? 'unidade' : 'unidades'} por embalagem.`}
             required
           />
           <Button
             type="submit"
-            disabled={busy || (!user.is_superuser && !product.currentStockQuantity)}
+            loading={busy}
+            disabled={!user.is_superuser && !product.currentStockQuantity}
           >
-            {busy ? 'Adicionando…' : 'Adicionar ao Carrinho'}
+            Adicionar ao Carrinho
           </Button>
         </FormPanel>
       </PurchaseLayout>

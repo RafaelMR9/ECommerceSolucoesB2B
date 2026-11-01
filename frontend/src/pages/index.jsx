@@ -72,11 +72,7 @@ export default function Home({ cards, categories }) {
   )
 }
 export const getServerSideProps = withSession(async ({ api }) => {
-  const [products, categories, promotions] = await Promise.all([
-    api('products/'),
-    api('products/categories/'),
-    api('marketing/'),
-  ])
+  const { products, categories, promotions } = await api('products/catalog/')
   return {
     cards: productCards(products.slice(0, 8), categories, promotions, Date.now()),
     categories: categories.slice(0, 4),

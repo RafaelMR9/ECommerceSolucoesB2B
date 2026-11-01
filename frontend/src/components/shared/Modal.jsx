@@ -75,8 +75,8 @@ export default function Modal({
               {option2}
             </Button>
           )}
-          <Button type="submit" variant={confirm ? 'primary' : 'danger'} disabled={busy}>
-            {busy ? 'Aguarde…' : option1}
+          <Button type="submit" variant={confirm ? 'primary' : 'danger'} loading={busy}>
+            {option1}
           </Button>
         </div>
       </form>

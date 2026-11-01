@@ -1,18 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { countCartItems, loadCartItems } from '../src/lib/server/orderLoaders.js'
-
-test('contador do carrinho soma as quantidades, inclusive de produtos repetidos, e retorna zero quando vazio', () => {
-  assert.equal(countCartItems([]), 0)
-  assert.equal(
-    countCartItems([
-      { product: 1, quantity: 2 },
-      { product: 1, quantity: '3' },
-      { product: 2, quantity: 1 },
-    ]),
-    6
-  )
-})
+import { loadCartItems } from '../src/lib/server/orderLoaders.js'
 
 test('consulta do carrinho carrega apenas o pedido não finalizado do comprador ou administrador', async () => {
   for (const [admin, kind] of [
@@ -29,7 +17,7 @@ test('consulta do carrinho carrega apenas o pedido não finalizado do comprador 
       `orders/${kind.toLowerCase()}Order/getUnfinished/?user=7`,
       `orders/item${kind}Order/42/?user=7`,
     ])
-    assert.equal(countCartItems(result.items), 3)
+    assert.deepEqual(result, { order: { id: 42 }, items: [{ quantity: 3 }] })
   }
 })
 

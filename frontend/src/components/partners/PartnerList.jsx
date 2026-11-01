@@ -5,8 +5,11 @@ import { Building2, Truck } from 'lucide-react'
 import Button from '@/components/ui/Button'
 import PageHeader from '@/components/ui/PageHeader'
 import EmptyState from '@/components/ui/EmptyState'
+import ResultsLoading from '@/components/shared/ResultsLoading'
+import { useNavigationLoading } from '@/contexts/navigationContext'
 
 export default function PartnerList({ kind, partners, search }) {
+  const loading = useNavigationLoading() === 'results'
   const suppliers = kind === 'suppliers',
     title = suppliers ? 'Fornecedores' : 'Transportadoras',
     Icon = suppliers ? Building2 : Truck
@@ -44,26 +47,31 @@ export default function PartnerList({ kind, partners, search }) {
           </Button>
         )}
       </Form>
-      {partners.length ? (
-        <div className="grid grid-cols-2 gap-4.5 max-[640px]:grid-cols-1">
-          {partners.map((partner) => (
-            <FeatureLink
-              href={`/${kind}/${partner.id}`}
-              key={partner.id}
-              icon={Icon}
-              title={partner.name}
-            >
-              <p className="mt-1.75 text-ui text-brand-muted wrap-anywhere">{partner.cnpj}</p>
-              <p className="mt-1.75 text-ui text-brand-muted wrap-anywhere">{partner.email}</p>
-            </FeatureLink>
-          ))}
-        </div>
-      ) : (
-        <EmptyState
-          title="Nenhum Parceiro Encontrado"
-          description="Tente outra busca ou cadastre um novo parceiro."
-        />
-      )}
+      <div className="flex min-h-6 justify-end mb-3">
+        <ResultsLoading />
+      </div>
+      <div aria-busy={loading}>
+        {partners.length ? (
+          <div className="grid grid-cols-2 gap-4.5 max-[640px]:grid-cols-1">
+            {partners.map((partner) => (
+              <FeatureLink
+                href={`/${kind}/${partner.id}`}
+                key={partner.id}
+                icon={Icon}
+                title={partner.name}
+              >
+                <p className="mt-1.75 text-ui text-brand-muted wrap-anywhere">{partner.cnpj}</p>
+                <p className="mt-1.75 text-ui text-brand-muted wrap-anywhere">{partner.email}</p>
+              </FeatureLink>
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="Nenhum Parceiro Encontrado"
+            description="Tente outra busca ou cadastre um novo parceiro."
+          />
+        )}
+      </div>
     </>
   )
 }

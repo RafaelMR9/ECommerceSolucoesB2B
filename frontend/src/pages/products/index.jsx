@@ -6,12 +6,15 @@ import EmptyState from '@/components/ui/EmptyState'
 import ProductCard from '@/components/commerce/ProductCard'
 import CatalogFilters from '@/components/categories/CatalogFilters'
 import { AuthContext } from '@/contexts/authContext'
+import ResultsLoading from '@/components/shared/ResultsLoading'
+import { useNavigationLoading } from '@/contexts/navigationContext'
 import { titleCase, normalizeSearch } from '@/lib/format'
 import { productCards } from '@/lib/catalog'
 import { withSession } from '@/lib/server/page'
 
 export default function Products({ cards, categories, search, categoryId }) {
   const { user } = useContext(AuthContext)
+  const loading = useNavigationLoading() === 'results'
   return (
     <BaseLayout>
       <PageHeader
@@ -39,28 +42,33 @@ export default function Products({ cards, categories, search, categoryId }) {
               </Button>
             )}
           </div>
-          {cards.length ? (
-            <section
-              className="grid gap-4 max-[760px]:grid-cols-2 max-[520px]:grid-cols-1 grid-cols-3 max-[1050px]:grid-cols-2"
-              aria-label="Produtos"
-            >
-              {cards.map(({ product, categoryName, promotion }, index) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  preload={index < 3}
-                  categoryName={categoryName}
-                  promotion={promotion}
-                />
-              ))}
-            </section>
-          ) : (
-            <EmptyState
-              title="Nenhum Produto Encontrado"
-              description="Tente buscar por outro nome ou escolher outra categoria."
-              action={<Button href="/products">Ver Todo o Catálogo</Button>}
-            />
-          )}
+          <div className="flex min-h-6 justify-end mb-3">
+            <ResultsLoading />
+          </div>
+          <div aria-busy={loading}>
+            {cards.length ? (
+              <section
+                className="grid gap-4 max-[760px]:grid-cols-2 max-[520px]:grid-cols-1 grid-cols-3 max-[1050px]:grid-cols-2"
+                aria-label="Produtos"
+              >
+                {cards.map(({ product, categoryName, promotion }, index) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    preload={index < 3}
+                    categoryName={categoryName}
+                    promotion={promotion}
+                  />
+                ))}
+              </section>
+            ) : (
+              <EmptyState
+                title="Nenhum Produto Encontrado"
+                description="Tente buscar por outro nome ou escolher outra categoria."
+                action={<Button href="/products">Ver Todo o Catálogo</Button>}
+              />
+            )}
+          </div>
         </div>
       </div>
     </BaseLayout>
@@ -69,11 +77,7 @@ export default function Products({ cards, categories, search, categoryId }) {
 export const getServerSideProps = withSession(async ({ api, query }) => {
   const search = typeof query.fetchProduct === 'string' ? query.fetchProduct : '',
     categoryId = typeof query.categoryId === 'string' ? query.categoryId : ''
-  const [allProducts, categories, promotions] = await Promise.all([
-    api('products/'),
-    api('products/categories/'),
-    api('marketing/'),
-  ])
+  const { products: allProducts, categories, promotions } = await api('products/catalog/')
   const normalizedSearch = normalizeSearch(search)
   const products = allProducts.filter(
     (p) =>

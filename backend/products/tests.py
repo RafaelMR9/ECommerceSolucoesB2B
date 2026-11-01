@@ -1,8 +1,12 @@
+from datetime import timedelta
+
 from django.test import TestCase
+from django.utils import timezone
 from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIClient
 
 from core.models import User
+from marketing.models import Promotion
 from suppliers.models import Supplier
 
 from .models import Category, Product
@@ -153,3 +157,50 @@ class CatalogTests(TestCase):
         self.client.force_authenticate(self.buyer)
         for path in ("/api/products/register/", "/api/products/categories/register/"):
             self.assertEqual(self.client.post(path, {}, format="json").status_code, 403)
+
+    def test_catalogo_agrupado_exige_login_e_atende_os_dois_perfis(self):
+        self.client.force_authenticate(None)
+        self.assertEqual(self.client.get("/api/products/catalog/").status_code, 401)
+        for user in (self.buyer, self.admin):
+            self.client.force_authenticate(user)
+            response = self.client.get("/api/products/catalog/")
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response["Cache-Control"], "private, no-store")
+            self.assertEqual(
+                set(response.data), {"products", "categories", "promotions"}
+            )
+
+    def test_catalogo_preserva_listas_e_quantidade_constante_de_consultas(self):
+        now = timezone.now()
+        for name, visible in (("Produto visível", True), ("Produto oculto", False)):
+            Product.objects.create(
+                name=name,
+                category=self.leaf,
+                supplier=self.supplier,
+                currentStockQuantity=10,
+                costPrice=20,
+                salePrice=50,
+                packaging=1,
+                description="Produto de teste",
+                image="produto.jpg",
+                visible=visible,
+            )
+        for start, end in (
+            (now - timedelta(days=3), now - timedelta(days=2)),
+            (now - timedelta(days=1), now + timedelta(days=1)),
+            (now + timedelta(days=2), now + timedelta(days=3)),
+        ):
+            Promotion.objects.create(
+                product=self.product, startDate=start, endDate=end, salePrice=40
+            )
+        with self.assertNumQueries(3):
+            response = self.client.get("/api/products/catalog/")
+        self.assertEqual(response.status_code, 200)
+        for key, path in (
+            ("products", "/api/products/"),
+            ("categories", "/api/products/categories/"),
+            ("promotions", "/api/marketing/"),
+        ):
+            self.assertEqual(response.data[key], self.client.get(path).data)
+        self.assertEqual(len(response.data["products"]), 2)
+        self.assertEqual(len(response.data["promotions"]), 3)

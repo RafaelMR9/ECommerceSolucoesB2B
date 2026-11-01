@@ -9,11 +9,14 @@ import EmptyState from '@/components/ui/EmptyState'
 import Modal from '@/components/shared/Modal'
 import CategoryTree from '@/components/categories/CategoryTree'
 import { AuthContext } from '@/contexts/authContext'
+import ResultsLoading from '@/components/shared/ResultsLoading'
+import { useNavigationLoading } from '@/contexts/navigationContext'
 import { getCategories, removeCategory } from '@/services/productService'
 import { errorFields } from '@/lib/format'
 import { normalizeSearch } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 export default function Categories({ categories: initialCategories, search }) {
+  const loading = useNavigationLoading() === 'results'
   const { user } = useContext(AuthContext),
     [categories, setCategories] = useState(initialCategories),
     [selected, setSelected] = useState(null),
@@ -67,16 +70,21 @@ export default function Categories({ categories: initialCategories, search }) {
         </p>
       </div>
       <Alert>{error}</Alert>
-      {matches.length ? (
-        <CategoryTree
-          categories={categories}
-          search={search}
-          admin={user.is_superuser}
-          onRemove={setSelected}
-        />
-      ) : (
-        <EmptyState title="Nenhuma Categoria Encontrada" />
-      )}
+      <div className="flex min-h-6 justify-end mb-3">
+        <ResultsLoading />
+      </div>
+      <div aria-busy={loading}>
+        {matches.length ? (
+          <CategoryTree
+            categories={categories}
+            search={search}
+            admin={user.is_superuser}
+            onRemove={setSelected}
+          />
+        ) : (
+          <EmptyState title="Nenhuma Categoria Encontrada" />
+        )}
+      </div>
       <Modal
         isOpen={Boolean(selected)}
         title="Remover Categoria"

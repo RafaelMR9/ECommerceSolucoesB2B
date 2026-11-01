@@ -114,10 +114,10 @@ export default function UpdateProfile() {
             ))}
           </FormSection>
           <FormActions>
-            <Button type="submit" disabled={busy}>
-              {busy ? 'Salvando…' : 'Salvar Alterações'}
+            <Button type="submit" loading={busy}>
+              Salvar Alterações
             </Button>
-            <Button href="/profile" variant="secondary">
+            <Button href="/profile" variant="secondary" disabled={busy}>
               Cancelar
             </Button>
           </FormActions>

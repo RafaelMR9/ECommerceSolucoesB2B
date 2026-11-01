@@ -5,15 +5,19 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.core.mail import send_mail
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import generics, serializers
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from support.models import Ticket
+
 from .models import PasswordResetToken, User
 from .permissions import IsAdministrator
 from .serializers import (
+    CreditAnalysisInput,
     PasswordResetTokenSerializer,
     ResetEmailInput,
     ResetPasswordInput,
@@ -92,6 +96,38 @@ class UserRetrieveView(generics.RetrieveAPIView):
 class UserCreateView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
+
+
+class CreditAnalysisView(APIView):
+    permission_classes = [IsAdministrator]
+
+    @transaction.atomic
+    def post(self, request, pk):
+        serializer = CreditAnalysisInput(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        company = get_object_or_404(
+            User.objects.select_for_update(), pk=pk, is_superuser=False
+        )
+        if company.authorizeFature is not False:
+            raise serializers.ValidationError(
+                {"detail": "Esta organização não possui uma análise pendente."}
+            )
+        approved = serializer.validated_data["approved"]
+        company.authorizeFature = True if approved else None
+        company.save(update_fields=["authorizeFature"])
+        Ticket.objects.create(
+            sender=request.user,
+            recipient=company,
+            subject=f"{company.name or company.username}: Resultado da análise de crédito"[
+                :255
+            ],
+            content=(
+                "Sua organização está autorizada a realizar compras faturadas."
+                if approved
+                else "Sua solicitação de compras faturadas não foi aprovada neste momento."
+            ),
+        )
+        return Response(UserSerializer(company).data)
 
 
 class GetUserIdByEmail(APIView):

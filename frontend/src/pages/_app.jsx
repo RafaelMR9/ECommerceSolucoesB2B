@@ -3,6 +3,7 @@ import Head from 'next/head'
 import localFont from 'next/font/local'
 import { useRouter } from 'next/router'
 import { AuthProvider } from '@/contexts/authContext'
+import { NavigationProvider } from '@/contexts/navigationContext'
 import BaseLayout from '@/components/shared/BaseLayout'
 import EmptyState from '@/components/ui/EmptyState'
 import Button from '@/components/ui/Button'
@@ -31,18 +32,20 @@ export default function App({ Component, pageProps }) {
         initialUser={pageProps.initialUser}
         initialCartCount={pageProps.initialCartCount}
       >
-        {pageProps.serverError ? (
-          <BaseLayout>
-            <EmptyState
-              heading="h1"
-              title="A Plataforma Está Indisponível"
-              description={pageProps.serverError}
-              action={<Button onClick={() => window.location.reload()}>Tentar Novamente</Button>}
-            />
-          </BaseLayout>
-        ) : (
-          <Component key={router.asPath.split('#')[0]} {...pageProps} />
-        )}
+        <NavigationProvider>
+          {pageProps.serverError ? (
+            <BaseLayout>
+              <EmptyState
+                heading="h1"
+                title="A Plataforma Está Indisponível"
+                description={pageProps.serverError}
+                action={<Button onClick={() => window.location.reload()}>Tentar Novamente</Button>}
+              />
+            </BaseLayout>
+          ) : (
+            <Component key={router.asPath.split('#')[0]} {...pageProps} />
+          )}
+        </NavigationProvider>
       </AuthProvider>
     </div>
   )

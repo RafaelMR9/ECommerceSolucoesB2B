@@ -108,3 +108,12 @@ class ResetPasswordInput(serializers.Serializer):
 
 class ResetEmailInput(serializers.Serializer):
     email = serializers.EmailField()
+
+
+class CreditAnalysisInput(serializers.Serializer):
+    approved = serializers.BooleanField(
+        error_messages={
+            "required": "Informe o resultado da análise.",
+            "invalid": "Informe um resultado válido para a análise.",
+        }
+    )

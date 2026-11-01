@@ -99,10 +99,10 @@ export default function RegisterPromotion({ product }) {
             />
           </FormSection>
           <FormActions>
-            <Button type="submit" disabled={busy}>
-              {busy ? 'Salvando…' : 'Cadastrar Promoção'}
+            <Button type="submit" loading={busy}>
+              Cadastrar Promoção
             </Button>
-            <Button href={`/products/${product.id}`} variant="secondary">
+            <Button href={`/products/${product.id}`} variant="secondary" disabled={busy}>
               Cancelar
             </Button>
           </FormActions>

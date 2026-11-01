@@ -187,10 +187,14 @@ export default function ProductForm({ product, categories, suppliers }) {
           />
         </FormSection>
         <FormActions>
-          <Button type="submit" disabled={busy}>
-            {busy ? 'Salvando…' : product ? 'Salvar Alterações' : 'Cadastrar Produto'}
+          <Button type="submit" loading={busy}>
+            {product ? 'Salvar Alterações' : 'Cadastrar Produto'}
           </Button>
-          <Button href={product ? `/products/${product.id}` : '/products'} variant="secondary">
+          <Button
+            href={product ? `/products/${product.id}` : '/products'}
+            variant="secondary"
+            disabled={busy}
+          >
             Cancelar
           </Button>
         </FormActions>

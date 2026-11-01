@@ -109,10 +109,14 @@ export default function PartnerForm({ kind, partner }) {
           </div>
         </FormSection>
         <FormActions>
-          <Button type="submit" disabled={busy}>
-            {busy ? 'Salvando…' : partner ? 'Salvar Alterações' : 'Cadastrar'}
+          <Button type="submit" loading={busy}>
+            {partner ? 'Salvar Alterações' : 'Cadastrar'}
           </Button>
-          <Button href={partner ? `/${kind}/${partner.id}` : `/${kind}`} variant="secondary">
+          <Button
+            href={partner ? `/${kind}/${partner.id}` : `/${kind}`}
+            variant="secondary"
+            disabled={busy}
+          >
             Cancelar
           </Button>
         </FormActions>

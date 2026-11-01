@@ -95,8 +95,9 @@ export default function Cart({ items, products }) {
                       className="whitespace-nowrap"
                       onClick={() => remove(item)}
                       disabled={busy !== null}
+                      loading={busy === item.id}
                     >
-                      {busy === item.id ? 'Removendo…' : 'Remover'}
+                      Remover
                     </Button>
                   </TableCell>
                 </TableRow>

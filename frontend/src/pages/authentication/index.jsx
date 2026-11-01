@@ -14,11 +14,11 @@ export default function Login({ demoAccounts = [] }) {
   const router = useRouter()
   const [values, setValues] = useState({ username: '', password: '' }),
     [error, setError] = useState(''),
-    [busy, setBusy] = useState(false)
-  async function signIn(credentials) {
-    if (busy) return
+    [pendingLogin, setPendingLogin] = useState(null)
+  async function signIn(credentials, source = 'account') {
+    if (pendingLogin) return
     setError('')
-    setBusy(true)
+    setPendingLogin(source)
     try {
       await loginUser(credentials)
       const next = router.query.next
@@ -33,7 +33,7 @@ export default function Login({ demoAccounts = [] }) {
     } catch (e) {
       setError(Object.values(errorFields(e)).join(' '))
     } finally {
-      setBusy(false)
+      setPendingLogin(null)
     }
   }
   return (
@@ -71,17 +71,32 @@ export default function Login({ demoAccounts = [] }) {
             Esqueci Minha Senha
           </Link>
         </div>
-        <Button type="submit" className="w-full" disabled={busy}>
-          {busy ? 'Entrando…' : 'Entrar na Conta'}
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={Boolean(pendingLogin)}
+          loading={pendingLogin === 'account'}
+        >
+          Entrar na Conta
         </Button>
       </form>
       <div className="flex items-center gap-3.25 text-caption text-brand-muted mt-6.75 mr-0 mb-5 ml-0 before:content-[''] before:h-px before:flex-1 before:bg-brand-border after:content-[''] after:h-px after:flex-1 after:bg-brand-border">
         Sua empresa ainda não tem uma conta?
       </div>
-      <Button href="/authentication/register-account" variant="secondary" className="w-full">
+      <Button
+        href="/authentication/register-account"
+        variant="secondary"
+        className="w-full"
+        disabled={Boolean(pendingLogin)}
+      >
         Criar Conta da Organização
       </Button>
-      <DemoAccess accounts={demoAccounts} onLogin={signIn} disabled={busy} />
+      <DemoAccess
+        accounts={demoAccounts}
+        onLogin={signIn}
+        disabled={Boolean(pendingLogin)}
+        loadingRole={pendingLogin}
+      />
     </AuthLayout>
   )
 }

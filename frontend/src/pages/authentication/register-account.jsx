@@ -103,12 +103,12 @@ export default function RegisterAccount() {
             Solicitar análise de crédito para compras faturadas
           </label>
         </div>
-        <Button type="submit" className="w-full" disabled={busy}>
-          {busy ? 'Criando Conta…' : 'Criar Minha Conta'}
+        <Button type="submit" className="w-full" loading={busy}>
+          Criar Minha Conta
         </Button>
         <div className="flex justify-between gap-3.75 items-center flex-wrap text-small my-4.5 mx-0">
           <span>Já tem uma conta?</span>
-          <Button href="/authentication" variant="ghost">
+          <Button href="/authentication" variant="ghost" disabled={busy}>
             Entrar
           </Button>
         </div>

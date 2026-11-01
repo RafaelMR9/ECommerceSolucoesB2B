@@ -62,8 +62,8 @@ export default function RecoverPassword({ token, resetUserId, valid }) {
               required
             />
           ))}
-          <Button type="submit" className="w-full" disabled={busy}>
-            {busy ? 'Atualizando…' : 'Salvar Nova Senha'}
+          <Button type="submit" className="w-full" loading={busy}>
+            Salvar Nova Senha
           </Button>
         </form>
       ) : (

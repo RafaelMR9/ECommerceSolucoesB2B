@@ -86,8 +86,8 @@ export default function Conversation({ ticket, responses: initialResponses }) {
             placeholder="Digite sua mensagem…"
             required
           />
-          <Button type="submit" disabled={busy}>
-            {busy ? 'Enviando…' : 'Enviar Resposta'}
+          <Button type="submit" loading={busy}>
+            Enviar Resposta
           </Button>
         </FormPanel>
       </div>

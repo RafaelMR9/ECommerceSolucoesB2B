@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { cn } from '@/lib/classes'
+import Spinner from './Spinner'
+import { useNavigationLoading } from '@/contexts/navigationContext'
 
 const variants = {
   primary:
@@ -27,14 +29,18 @@ export default function Button({
   className = '',
   children,
   disabled,
+  loading = false,
   ...props
 }) {
+  const navigation = useNavigationLoading()
+  const showSpinner = loading && navigation !== 'page'
   const tone = variants[variant] ? variant : 'primary'
   const classes = cn(
-    'inline-flex min-h-11 items-center justify-center gap-2 whitespace-normal rounded-lg border px-4.25 py-2.5 text-ui font-semibold no-underline transition-colors disabled:cursor-not-allowed disabled:opacity-55 [&_svg]:shrink-0',
+    'relative inline-flex min-h-11 items-center justify-center gap-2 whitespace-normal rounded-lg border px-4.25 py-2.5 text-ui font-semibold no-underline transition-colors disabled:cursor-not-allowed disabled:opacity-55 [&_svg]:shrink-0',
     variants[tone],
     href && !disabled && linkVariants[tone],
     size === 'small' && 'px-2.75 py-1.75 text-small',
+    loading && !href && 'disabled:opacity-100',
     className
   )
   if (href && disabled)
@@ -48,8 +54,21 @@ export default function Button({
       {children}
     </Link>
   ) : (
-    <button type="button" disabled={disabled} className={classes} {...props}>
-      {children}
+    <button
+      type="button"
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      className={classes}
+      {...props}
+    >
+      <span
+        className={cn('inline-flex items-center justify-center gap-2', showSpinner && 'opacity-0')}
+      >
+        {children}
+      </span>
+      {showSpinner && (
+        <Spinner className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+      )}
     </button>
   )
 }

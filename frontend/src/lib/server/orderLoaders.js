@@ -23,9 +23,6 @@ export async function loadOrders(
   })
   return { orders, companies, carriers }
 }
-export function countCartItems(items) {
-  return items.reduce((total, item) => total + Number(item.quantity), 0)
-}
 export async function loadCartItems({ api, user }) {
   const orderType = user.is_superuser ? 'supplierOrder' : 'salesOrder'
   const itemType = user.is_superuser ? 'itemSupplierOrder' : 'itemSalesOrder'

@@ -50,8 +50,8 @@ export default function OrdersTable({
       if (kind === 'unreceived') await receiveOrder(order, true, false)
       if (kind === 'paid') await recordPayment(order, true)
       if (kind === 'unpaid') await recordPayment(order, false)
-      setAction(null)
       await router.replace(router.asPath)
+      setAction(null)
     } catch (e) {
       setError(Object.values(errorFields(e)).join(' '))
     }
