@@ -28,6 +28,17 @@
   --shadow-panel: 0 6px 24px rgb(30 16 53 / 4%);
   --shadow-product: 0 4px 16px #32144806;
   --shadow-product-hover: 0 10px 28px #4c24721a;
+  --animate-navigation: navigation 1.2s ease-in-out infinite alternate;
+
+  @keyframes navigation {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(150%);
+    }
+  }
+
   --background-image-hero: linear-gradient(
     90deg,
     #110d18f5 0%,

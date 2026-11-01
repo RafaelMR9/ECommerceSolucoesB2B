@@ -195,7 +195,7 @@ class CheckoutView(APIView):
                 Ticket.objects.create(
                     sender=admin,
                     recipient=user,
-                    subject=f"{user.name or user.username}: Compra realizada com sucesso.",
+                    subject=f"{(user.name or user.username)[:180]}: Compra realizada com sucesso.",
                     content=f"Sua compra foi efetuada com sucesso. Número do pedido: {order.pk}.",
                 )
         return Response(

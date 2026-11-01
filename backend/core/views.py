@@ -118,9 +118,7 @@ class CreditAnalysisView(APIView):
         Ticket.objects.create(
             sender=request.user,
             recipient=company,
-            subject=f"{company.name or company.username}: Resultado da análise de crédito"[
-                :255
-            ],
+            subject=f"{(company.name or company.username)[:180]}: Resultado da análise de crédito",
             content=(
                 "Sua organização está autorizada a realizar compras faturadas."
                 if approved

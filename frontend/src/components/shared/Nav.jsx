@@ -54,14 +54,13 @@ export default function Nav() {
     })
     setMenuOpen(false)
   }
-  function navLink(href, text, Icon, administrative = false) {
+  function navLink(href, text, Icon) {
     return (
       <NavLink
         key={href}
         href={href}
         onNavigate={() => setMenuOpen(false)}
         icon={Icon}
-        administrative={administrative}
         active={router.pathname === href || (href !== '/' && router.pathname.startsWith(href))}
       >
         {text}
@@ -85,10 +84,10 @@ export default function Nav() {
           }
         }}
       >
-        <Container className="flex items-center gap-7 py-6 max-[850px]:flex-wrap max-[850px]:gap-4.5 max-[600px]:gap-3 max-[600px]:py-4.5 max-[360px]:gap-1">
+        <Container className="flex items-center gap-7 py-6 max-[850px]:grid max-[850px]:grid-cols-[minmax(0,1fr)_auto] max-[850px]:gap-x-4 max-[850px]:gap-y-4.5 max-[600px]:gap-x-2 max-[600px]:gap-y-3 max-[600px]:py-4.5 max-[360px]:gap-x-1">
           <Brand className="shrink-0" small />
           <form
-            className="flex items-center flex-1 min-w-0 pl-3.25 rounded-[9px] bg-white text-[#7b6c87] overflow-hidden max-[850px]:order-3 max-[850px]:basis-full focus-within:outline-solid focus-within:outline-3 focus-within:outline-brand-focus-light focus-within:outline-offset-3"
+            className="flex items-center flex-1 min-w-0 pl-3.25 rounded-[9px] bg-white text-[#7b6c87] overflow-hidden max-[850px]:order-3 max-[850px]:col-span-2 focus-within:outline-solid focus-within:outline-3 focus-within:outline-brand-focus-light focus-within:outline-offset-3"
             onSubmit={search}
             role="search"
           >
@@ -97,7 +96,7 @@ export default function Nav() {
               className="flex-1 py-3 px-2.25 border-0 text-[#2e2239] bg-white text-body min-w-0 w-auto outline-offset-[-3px] max-[600px]:text-[16px] placeholder:text-brand-muted placeholder:opacity-[1]"
               aria-label="Buscar Produtos"
               type="search"
-              placeholder="O Que Sua Empresa Precisa Hoje?"
+              placeholder="Buscar Produtos…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
@@ -109,7 +108,7 @@ export default function Nav() {
               <Search size={22} aria-hidden="true" />
             </button>
           </form>
-          <div className="flex shrink-0 items-center gap-5.75 max-[850px]:ml-auto max-[600px]:gap-2 max-[360px]:gap-1">
+          <div className="flex shrink-0 items-center gap-5.75 max-[850px]:ml-auto max-[600px]:gap-0.5">
             <Link
               className="min-h-11 min-w-11 justify-center flex gap-2.25 items-center text-small hover:text-[#d8beff] focus-visible:outline-brand-focus-light"
               href={user ? '/profile' : '/authentication'}
@@ -146,16 +145,16 @@ export default function Nav() {
             <button
               type="button"
               ref={menuButton}
-              className="h-11 w-11 flex-[0_0_44px] hidden place-items-center bg-transparent text-white border border-[#564365] p-0 rounded-lg max-[1100px]:grid focus-visible:outline-brand-focus-light"
+              className="h-11 w-11 flex-[0_0_44px] hidden place-items-center bg-[#241a31] text-white p-0 rounded-lg hover:bg-[#352046] max-[1100px]:grid focus-visible:outline-brand-focus-light"
               aria-expanded={menuOpen}
               aria-controls="site-navigation"
               aria-label={menuOpen ? 'Fechar Menu' : 'Abrir Menu'}
               onClick={() => setMenuOpen(!menuOpen)}
             >
               {menuOpen ? (
-                <X size={20} aria-hidden="true" />
+                <X size={22} aria-hidden="true" />
               ) : (
-                <Menu size={20} aria-hidden="true" />
+                <Menu size={22} aria-hidden="true" />
               )}
             </button>
           </div>
@@ -169,7 +168,7 @@ export default function Nav() {
         >
           {user?.is_superuser && (
             <nav
-              className="bg-brand-nav border-t border-t-[#34283f] max-[1100px]:p-4 max-[1100px]:border max-[1100px]:border-[#382a46] max-[1100px]:rounded-xl max-[1100px]:bg-[#1c1526] max-[1100px]:mb-3"
+              className="bg-brand-nav border-t border-t-[#34283f] max-[1100px]:border-t-0 max-[1100px]:border-b max-[1100px]:border-b-[#34283f] max-[1100px]:pb-3 max-[1100px]:mb-3"
               aria-label="Administração"
             >
               <div className="mx-auto flex max-w-310 items-center gap-2 px-8 py-1.25 max-[1100px]:block max-[1100px]:p-0">
@@ -177,8 +176,8 @@ export default function Nav() {
                   <ShieldCheck size={16} aria-hidden="true" />
                   Área Administrativa
                 </span>
-                <div className="flex items-center gap-2 min-w-0 max-[1100px]:grid max-[1100px]:grid-cols-3 max-[1100px]:gap-2 max-[700px]:grid-cols-2 max-[520px]:grid-cols-1">
-                  {adminLinks.map(([href, label, Icon]) => navLink(href, label, Icon, true))}
+                <div className="flex items-center gap-2 min-w-0 max-[1100px]:flex-col max-[1100px]:items-stretch max-[1100px]:gap-1">
+                  {adminLinks.map(([href, label, Icon]) => navLink(href, label, Icon))}
                 </div>
               </div>
             </nav>
@@ -187,7 +186,7 @@ export default function Nav() {
             className="border-t border-t-[#34283f] max-[1100px]:border-0"
             aria-label="Navegação Principal"
           >
-            <div className="mx-auto flex max-w-310 items-center gap-2 px-8 py-1.75 max-[1100px]:grid max-[1100px]:grid-cols-5 max-[1100px]:p-0 max-[700px]:grid-cols-2">
+            <div className="mx-auto flex max-w-310 items-center gap-2 px-8 py-1.75 max-[1100px]:flex-col max-[1100px]:items-stretch max-[1100px]:gap-1 max-[1100px]:p-0">
               {storeLinks.map(([href, label, Icon]) => navLink(href, label, Icon))}
             </div>
           </nav>

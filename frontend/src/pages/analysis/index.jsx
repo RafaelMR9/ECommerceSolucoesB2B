@@ -8,18 +8,18 @@ import Alert from '@/components/ui/Alert'
 import Modal from '@/components/shared/Modal'
 import { reviewCredit } from '@/services/userService'
 import { withSession } from '@/lib/server/page'
-import { errorFields } from '@/lib/format'
+import { errorMessage } from '@/lib/format'
 export default function Analysis({ companies }) {
-  const router = useRouter(),
-    [selected, setSelected] = useState(null),
-    [error, setError] = useState('')
+  const router = useRouter()
+  const [selected, setSelected] = useState(null)
+  const [error, setError] = useState('')
   async function confirm() {
     try {
       await reviewCredit(selected.company.id, selected.approved)
       await router.replace(router.asPath)
       setSelected(null)
     } catch (e) {
-      setError(Object.values(errorFields(e)).join(' '))
+      setError(errorMessage(e))
     }
   }
   return (

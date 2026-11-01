@@ -60,7 +60,7 @@ def record_payment(order, paid, administrator):
         Ticket.objects.create(
             sender=administrator,
             recipient=buyer,
-            subject=f"{buyer.name or buyer.username}: Atraso no pagamento.",
+            subject=f"{(buyer.name or buyer.username)[:180]}: Atraso no pagamento.",
             content=f"O pagamento do pedido {order.pk} está pendente. Regularize os pagamentos para voltar a realizar compras.",
         )
 

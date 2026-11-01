@@ -11,7 +11,6 @@ export const registerUser = (data) =>
     address: data.address,
     name: data.name,
     authorizeFature: data.authorizeFature ? false : null,
-    canPurchase: true,
   })
 export const loginUser = (data) => apiRequest('/api/session', 'POST', data)
 export const logoutUser = () => apiRequest('/api/session', 'DELETE')

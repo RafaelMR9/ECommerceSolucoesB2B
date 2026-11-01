@@ -10,16 +10,16 @@ import { errorFields } from '@/lib/format'
 import { checkout } from '@/services/checkoutService'
 
 export default function CheckoutForm() {
-  const { user } = useContext(AuthContext),
-    router = useRouter()
-  const [future, setFuture] = useState(false),
-    [values, setValues] = useState({
-      deliveryDate: '',
-      deliveryFrequency: '',
-      faturedPayment: false,
-    }),
-    [errors, setErrors] = useState({}),
-    [busy, setBusy] = useState(false)
+  const { user } = useContext(AuthContext)
+  const router = useRouter()
+  const [future, setFuture] = useState(false)
+  const [values, setValues] = useState({
+    deliveryDate: '',
+    deliveryFrequency: '',
+    faturedPayment: false,
+  })
+  const [errors, setErrors] = useState({})
+  const [busy, setBusy] = useState(false)
   function change(e) {
     const { name, value, type, checked } = e.target
     setValues((p) => ({ ...p, [name]: type === 'checkbox' ? checked : value }))

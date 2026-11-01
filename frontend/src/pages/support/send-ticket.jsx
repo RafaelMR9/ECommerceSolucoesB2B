@@ -15,11 +15,11 @@ import { registerTicket } from '@/services/supportService'
 import { errorFields } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 export default function SendTicket({ administrator }) {
-  const { user } = useContext(AuthContext),
-    router = useRouter(),
-    [values, setValues] = useState({ subject: '', content: '' }),
-    [errors, setErrors] = useState({}),
-    [busy, setBusy] = useState(false)
+  const { user } = useContext(AuthContext)
+  const router = useRouter()
+  const [values, setValues] = useState({ subject: '', content: '' })
+  const [errors, setErrors] = useState({})
+  const [busy, setBusy] = useState(false)
   function change(e) {
     setValues((p) => ({ ...p, [e.target.name]: e.target.value }))
     setErrors((p) => ({ ...p, [e.target.name]: '' }))
@@ -30,9 +30,8 @@ export default function SendTicket({ administrator }) {
     setBusy(true)
     try {
       await registerTicket({
-        subject: `${user.name || user.username}: ${values.subject}`,
+        subject: `${(user.name || user.username).slice(0, 100)}: ${values.subject}`,
         content: values.content,
-        sender: user.id,
         recipient: administrator.id,
         answer: null,
       })
@@ -71,6 +70,8 @@ export default function SendTicket({ administrator }) {
               tone="tinted"
               name="subject"
               label="Assunto"
+              minLength={5}
+              maxLength={150}
               value={values.subject}
               onChange={change}
               error={errors.subject}
@@ -82,6 +83,7 @@ export default function SendTicket({ administrator }) {
               label="Sua Mensagem"
               as="textarea"
               rows={6}
+              maxLength={300}
               value={values.content}
               onChange={change}
               error={errors.content}

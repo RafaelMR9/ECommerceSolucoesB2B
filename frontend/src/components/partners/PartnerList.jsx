@@ -10,9 +10,9 @@ import { useNavigationLoading } from '@/contexts/navigationContext'
 
 export default function PartnerList({ kind, partners, search }) {
   const loading = useNavigationLoading() === 'results'
-  const suppliers = kind === 'suppliers',
-    title = suppliers ? 'Fornecedores' : 'Transportadoras',
-    Icon = suppliers ? Building2 : Truck
+  const suppliers = kind === 'suppliers'
+  const title = suppliers ? 'Fornecedores' : 'Transportadoras'
+  const Icon = suppliers ? Building2 : Truck
   return (
     <>
       <PageHeader

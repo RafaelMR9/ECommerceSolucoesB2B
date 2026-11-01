@@ -16,6 +16,7 @@ from core.serializers import UserSerializer
 from marketing.models import Promotion
 from products.models import Category, Product
 from suppliers.models import Supplier
+from support.models import Ticket
 
 from .actions import record_payment, restore_stock
 from .models import (
@@ -204,6 +205,27 @@ class CheckoutTests(TestCase):
             self.client.post("/api/orders/checkout/", {}, format="json")
         self.assertFalse(SalesInvoice.objects.exists())
         self.assertFalse(SalesOrder.objects.get().finished)
+
+    def test_compra_com_nome_longo_preserva_o_assunto_da_notificacao(self):
+        self.buyer.name = "A" * 255
+        self.buyer.save(update_fields=["name"])
+        self.add()
+        response = self.client.post("/api/orders/checkout/", {}, format="json")
+        self.assertEqual(response.status_code, 200)
+        subject = Ticket.objects.get().subject
+        self.assertLessEqual(len(subject), 255)
+        self.assertTrue(subject.endswith("Compra realizada com sucesso."))
+
+    def test_pendencia_com_nome_longo_preserva_o_assunto_da_notificacao(self):
+        self.buyer.name = "A" * 255
+        self.buyer.save(update_fields=["name"])
+        order = self.finish()
+        self.client.force_authenticate(self.admin)
+        self.assertEqual(self.action(order, "prepare").status_code, 200)
+        self.assertEqual(self.action(order, "unpaid").status_code, 200)
+        subject = Ticket.objects.latest("pk").subject
+        self.assertLessEqual(len(subject), 255)
+        self.assertTrue(subject.endswith("Atraso no pagamento."))
 
     def test_empty_cart_and_unauthorized_credit_are_rejected(self):
         self.assertEqual(

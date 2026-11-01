@@ -9,10 +9,10 @@ import { errorFields } from '@/lib/format'
 import { validatePassword } from '@/utils/utils'
 import { withSession } from '@/lib/server/page'
 export default function RecoverPassword({ token, resetUserId, valid }) {
-  const router = useRouter(),
-    [values, setValues] = useState({ password: '', confirmPassword: '' }),
-    [errors, setErrors] = useState({}),
-    [busy, setBusy] = useState(false)
+  const router = useRouter()
+  const [values, setValues] = useState({ password: '', confirmPassword: '' })
+  const [errors, setErrors] = useState({})
+  const [busy, setBusy] = useState(false)
   async function submit(e) {
     e.preventDefault()
     if (busy) return

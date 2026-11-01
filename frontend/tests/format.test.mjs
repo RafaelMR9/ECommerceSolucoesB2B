@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { money, date, activePromotion, errorFields } from '../src/lib/format.js'
+import { money, date, activePromotion, errorFields, errorMessage } from '../src/lib/format.js'
 
 test('datas de entrega sem horário não retrocedem um dia no fuso brasileiro', () => {
   assert.equal(date('2026-10-11'), '11/10/2026')
@@ -33,4 +33,11 @@ test('erros de rede mantêm a mensagem e erros de validação permanecem associa
   assert.deepEqual(errorFields(error), {
     quantity: 'Insufficient stock',
   })
+})
+
+test('mensagem geral reúne os erros dos campos sem alterar a mensagem original', () => {
+  assert.equal(errorMessage(new Error('Conexão indisponível.')), 'Conexão indisponível.')
+  const error = new Error('Não foi possível concluir a ação.')
+  error.fields = { name: ['Informe o nome.'], detail: '', image: ['Imagem inválida.'] }
+  assert.equal(errorMessage(error), 'Informe o nome. Imagem inválida.')
 })

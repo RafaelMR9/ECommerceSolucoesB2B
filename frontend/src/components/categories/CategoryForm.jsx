@@ -9,7 +9,7 @@ import { registerCategory, updateCategory, getCategories } from '@/services/prod
 import Field from '@/components/ui/Field'
 import Button from '@/components/ui/Button'
 import Alert from '@/components/ui/Alert'
-import { errorFields } from '@/lib/format'
+import { errorMessage } from '@/lib/format'
 
 export default function CategoryForm({ category, categories: initialCategories }) {
   const router = useRouter()
@@ -18,9 +18,9 @@ export default function CategoryForm({ category, categories: initialCategories }
     name: category?.name || '',
     subCategory: category?.category ?? '',
   })
-  const [error, setError] = useState(''),
-    [success, setSuccess] = useState(''),
-    [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [busy, setBusy] = useState(false)
   function change(e) {
     setValues((p) => ({ ...p, [e.target.name]: e.target.value }))
     setError('')
@@ -53,7 +53,7 @@ export default function CategoryForm({ category, categories: initialCategories }
         setValues({ name: '', subCategory: '' })
       }
     } catch (e) {
-      setError(Object.values(errorFields(e)).join(' '))
+      setError(errorMessage(e))
     } finally {
       setBusy(false)
     }

@@ -6,7 +6,7 @@ import Alert from '@/components/ui/Alert'
 import Modal from '@/components/shared/Modal'
 import OrderStatus, { PaymentStatus } from './OrderStatus'
 import OrderActions from './OrderActions'
-import { money, date, errorFields } from '@/lib/format'
+import { money, date, errorMessage } from '@/lib/format'
 import {
   cancelOrder,
   prepareOrder,
@@ -32,9 +32,9 @@ export default function OrdersTable({
 }) {
   const router = useRouter()
   const companiesById = new Map(companies.map((company) => [company.id, company]))
-  const [action, setAction] = useState(null),
-    [carrier, setCarrier] = useState(''),
-    [error, setError] = useState('')
+  const [action, setAction] = useState(null)
+  const [carrier, setCarrier] = useState('')
+  const [error, setError] = useState('')
   function ask(order, kind, label) {
     setAction({ order, kind, label })
     setCarrier('')
@@ -53,7 +53,7 @@ export default function OrdersTable({
       await router.replace(router.asPath)
       setAction(null)
     } catch (e) {
-      setError(Object.values(errorFields(e)).join(' '))
+      setError(errorMessage(e))
     }
   }
 

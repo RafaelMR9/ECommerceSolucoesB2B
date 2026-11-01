@@ -11,10 +11,10 @@ import { AuthContext } from '@/contexts/authContext'
 import { logoutUser } from '@/services/authService'
 import { withSession } from '@/lib/server/page'
 export default function Profile() {
-  const { user } = useContext(AuthContext),
-    router = useRouter(),
-    [error, setError] = useState(''),
-    [busy, setBusy] = useState(false)
+  const { user } = useContext(AuthContext)
+  const router = useRouter()
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
   async function logout() {
     if (busy) return
     setBusy(true)

@@ -13,10 +13,10 @@ import { registerPromotion } from '@/services/marketingService'
 import { errorFields, money } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 export default function RegisterPromotion({ product }) {
-  const [values, setValues] = useState({ startDate: '', endDate: '', salePrice: '' }),
-    [errors, setErrors] = useState({}),
-    [success, setSuccess] = useState(''),
-    [busy, setBusy] = useState(false)
+  const [values, setValues] = useState({ startDate: '', endDate: '', salePrice: '' })
+  const [errors, setErrors] = useState({})
+  const [success, setSuccess] = useState('')
+  const [busy, setBusy] = useState(false)
   function change(e) {
     setValues((p) => ({ ...p, [e.target.name]: e.target.value }))
     setErrors({})

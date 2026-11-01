@@ -1,16 +1,18 @@
-import { backendFetch } from '@/lib/server/api'
-import { getAccessToken, refreshAccessToken, clearSession, sameOrigin } from '@/lib/server/session'
+import { backendFetch } from '../../../lib/server/api.js'
+import {
+  getAccessToken,
+  refreshAccessToken,
+  clearSession,
+  sameOrigin,
+} from '../../../lib/server/session.js'
 
 export const config = { api: { bodyParser: false } }
 const MAX_REQUEST_BYTES = 5 * 1024 * 1024
-const PATHS_WITHOUT_TRAILING_SLASH = new Set([
-  'users/admin_id',
-  'users/user_id',
-  'products/filterName',
-  'products/filterCategory',
-  'products/categories/filter',
-  'suppliers/filter',
-  'carriers/filter',
+const PATHS_WITHOUT_TRAILING_SLASH = new Set(['users/admin_id', 'users/user_id'])
+const PUBLIC_PATHS = new Set([
+  'users/register',
+  'users/passwordReset/sendResetEmail',
+  'users/passwordReset/checkExistence',
 ])
 
 async function forwardRequest(req, res, path, access) {
@@ -68,7 +70,12 @@ export default async function handler(req, res) {
   if (req.method !== 'GET' && !sameOrigin(req))
     return res.status(403).json({ detail: 'Origem inválida.' })
   const pathname = segments.map(encodeURIComponent).join('/')
-  const publicAuth = segments[0] === 'users' && ['register', 'passwordReset'].includes(segments[1])
+  const passwordReset =
+    segments[0] === 'users' &&
+    segments[1] === 'passwordReset' &&
+    segments.length === 4 &&
+    segments[3] === 'update'
+  const publicAuth = PUBLIC_PATHS.has(pathname) || passwordReset
   try {
     const access = publicAuth ? null : await getAccessToken(req, res)
     if (!publicAuth && !access)

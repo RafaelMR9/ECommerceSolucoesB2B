@@ -5,12 +5,12 @@ import Field from '@/components/ui/Field'
 import Alert from '@/components/ui/Alert'
 import { sendResetPasswordEmail } from '@/services/authService'
 import { withSession } from '@/lib/server/page'
-import { errorFields } from '@/lib/format'
+import { errorMessage } from '@/lib/format'
 export default function ForgotPassword() {
-  const [email, setEmail] = useState(''),
-    [error, setError] = useState(''),
-    [success, setSuccess] = useState(''),
-    [busy, setBusy] = useState(false)
+  const [email, setEmail] = useState('')
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [busy, setBusy] = useState(false)
   async function submit(e) {
     e.preventDefault()
     if (busy) return
@@ -22,7 +22,7 @@ export default function ForgotPassword() {
       if (data.status === 'error') setError(data.message)
       else setSuccess(data.message)
     } catch (e) {
-      setError(Object.values(errorFields(e)).join(' '))
+      setError(errorMessage(e))
     } finally {
       setBusy(false)
     }

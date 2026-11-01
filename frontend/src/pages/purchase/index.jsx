@@ -14,11 +14,11 @@ import { addCartItem } from '@/services/checkoutService'
 import { errorFields, money } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 export default function Purchase({ product, promotion }) {
-  const { user } = useContext(AuthContext),
-    router = useRouter(),
-    [quantity, setQuantity] = useState(1),
-    [errors, setErrors] = useState({}),
-    [busy, setBusy] = useState(false)
+  const { user } = useContext(AuthContext)
+  const router = useRouter()
+  const [quantity, setQuantity] = useState(1)
+  const [errors, setErrors] = useState({})
+  const [busy, setBusy] = useState(false)
   async function submit(e) {
     e.preventDefault()
     if (busy) return

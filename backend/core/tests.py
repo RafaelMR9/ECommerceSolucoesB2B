@@ -350,6 +350,9 @@ class AccountTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertLessEqual(len(Ticket.objects.get().subject), 255)
+        self.assertTrue(
+            Ticket.objects.get().subject.endswith("Resultado da análise de crédito")
+        )
 
 
 class CartCountTests(TestCase):

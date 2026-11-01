@@ -75,8 +75,8 @@ export default function Products({ cards, categories, search, categoryId }) {
   )
 }
 export const getServerSideProps = withSession(async ({ api, query }) => {
-  const search = typeof query.fetchProduct === 'string' ? query.fetchProduct : '',
-    categoryId = typeof query.categoryId === 'string' ? query.categoryId : ''
+  const search = typeof query.fetchProduct === 'string' ? query.fetchProduct : ''
+  const categoryId = typeof query.categoryId === 'string' ? query.categoryId : ''
   const { products: allProducts, categories, promotions } = await api('products/catalog/')
   const normalizedSearch = normalizeSearch(search)
   const products = allProducts.filter(

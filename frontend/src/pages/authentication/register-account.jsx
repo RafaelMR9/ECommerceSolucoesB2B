@@ -18,19 +18,19 @@ const fields = [
   ['confirmPassword', 'Confirmar senha', 'password'],
 ]
 export default function RegisterAccount() {
-  const router = useRouter(),
-    [values, setValues] = useState({
-      name: '',
-      cnpj: '',
-      email: '',
-      address: '',
-      username: '',
-      password: '',
-      confirmPassword: '',
-      authorizeFature: false,
-    }),
-    [errors, setErrors] = useState({}),
-    [busy, setBusy] = useState(false)
+  const router = useRouter()
+  const [values, setValues] = useState({
+    name: '',
+    cnpj: '',
+    email: '',
+    address: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+    authorizeFature: false,
+  })
+  const [errors, setErrors] = useState({})
+  const [busy, setBusy] = useState(false)
   function change(e) {
     const { name, value, checked, type } = e.target
     setValues((p) => ({ ...p, [name]: type === 'checkbox' ? checked : value }))

@@ -8,14 +8,14 @@ import Field from '@/components/ui/Field'
 import Alert from '@/components/ui/Alert'
 import { AuthContext } from '@/contexts/authContext'
 import { registerTicket, getTicketResponses } from '@/services/supportService'
-import { date, errorFields } from '@/lib/format'
+import { date, errorMessage } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 export default function Conversation({ ticket, responses: initialResponses }) {
-  const { user } = useContext(AuthContext),
-    [responses, setResponses] = useState(initialResponses),
-    [message, setMessage] = useState(''),
-    [error, setError] = useState(''),
-    [busy, setBusy] = useState(false)
+  const { user } = useContext(AuthContext)
+  const [responses, setResponses] = useState(initialResponses)
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
   async function submit(e) {
     e.preventDefault()
     if (busy) return
@@ -23,7 +23,6 @@ export default function Conversation({ ticket, responses: initialResponses }) {
     setError('')
     try {
       await registerTicket({
-        sender: user.id,
         recipient: ticket.sender === user.id ? ticket.recipient : ticket.sender,
         subject: null,
         content: message,
@@ -32,7 +31,7 @@ export default function Conversation({ ticket, responses: initialResponses }) {
       setResponses(await getTicketResponses(ticket.id))
       setMessage('')
     } catch (e) {
-      setError(Object.values(errorFields(e)).join(' '))
+      setError(errorMessage(e))
     } finally {
       setBusy(false)
     }
@@ -81,6 +80,7 @@ export default function Conversation({ ticket, responses: initialResponses }) {
             name="response"
             label="Sua Resposta"
             rows={4}
+            maxLength={300}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Digite sua mensagem…"

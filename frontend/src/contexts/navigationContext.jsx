@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import Spinner from '@/components/ui/Spinner'
 import { navigationLoading } from '@/lib/navigation'
 
 const NavigationContext = createContext(null)
@@ -39,11 +38,11 @@ export function NavigationProvider({ children }) {
       {children}
       {pending?.type === 'page' && (
         <div
-          className="pointer-events-none fixed right-6 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] z-50 grid size-11 place-items-center rounded-full border border-brand-border bg-white shadow-panel text-brand-accent"
+          className="pointer-events-none fixed inset-x-0 top-0 z-300 h-1.25 overflow-hidden bg-brand-accent/20"
           role="status"
           aria-live="polite"
         >
-          <Spinner className="size-6" />
+          <div className="h-full w-2/5 animate-navigation rounded-full bg-brand-accent shadow-[0_0_8px_#7c3aed80] motion-reduce:w-full motion-reduce:animate-none" />
           <span className="sr-only">Carregando página…</span>
         </div>
       )}

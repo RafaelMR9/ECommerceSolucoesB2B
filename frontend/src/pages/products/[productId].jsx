@@ -7,20 +7,20 @@ import Alert from '@/components/ui/Alert'
 import Modal from '@/components/shared/Modal'
 import { AuthContext } from '@/contexts/authContext'
 import { removeProduct } from '@/services/productService'
-import { errorFields } from '@/lib/format'
+import { errorMessage } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 
 export default function Product({ product, category, supplier, promotion }) {
-  const { user } = useContext(AuthContext),
-    router = useRouter()
-  const [confirm, setConfirm] = useState(false),
-    [error, setError] = useState('')
+  const { user } = useContext(AuthContext)
+  const router = useRouter()
+  const [confirm, setConfirm] = useState(false)
+  const [error, setError] = useState('')
   async function remove() {
     try {
       await removeProduct(product.id)
       await router.push('/products')
     } catch (e) {
-      setError(Object.values(errorFields(e)).join(' '))
+      setError(errorMessage(e))
     } finally {
       setConfirm(false)
     }

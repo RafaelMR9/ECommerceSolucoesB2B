@@ -12,21 +12,20 @@ import { AuthContext } from '@/contexts/authContext'
 import ResultsLoading from '@/components/shared/ResultsLoading'
 import { useNavigationLoading } from '@/contexts/navigationContext'
 import { getCategories, removeCategory } from '@/services/productService'
-import { errorFields } from '@/lib/format'
-import { normalizeSearch } from '@/lib/format'
+import { errorMessage, normalizeSearch } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 export default function Categories({ categories: initialCategories, search }) {
   const loading = useNavigationLoading() === 'results'
-  const { user } = useContext(AuthContext),
-    [categories, setCategories] = useState(initialCategories),
-    [selected, setSelected] = useState(null),
-    [error, setError] = useState('')
+  const { user } = useContext(AuthContext)
+  const [categories, setCategories] = useState(initialCategories)
+  const [selected, setSelected] = useState(null)
+  const [error, setError] = useState('')
   async function remove() {
     try {
       await removeCategory(selected.id)
       setCategories(await getCategories())
     } catch (e) {
-      setError(Object.values(errorFields(e)).join(' '))
+      setError(errorMessage(e))
     } finally {
       setSelected(null)
     }

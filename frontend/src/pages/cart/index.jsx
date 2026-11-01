@@ -9,17 +9,17 @@ import Button from '@/components/ui/Button'
 import Alert from '@/components/ui/Alert'
 import { AuthContext } from '@/contexts/authContext'
 import { removeCartItem } from '@/services/checkoutService'
-import { money, errorFields } from '@/lib/format'
+import { money, errorMessage } from '@/lib/format'
 import { withSession } from '@/lib/server/page'
 import { loadCart } from '@/lib/server/orderLoaders'
 export default function Cart({ items, products }) {
   const productsById = new Map(products.map((product) => [product.id, product]))
-  const { user, cartCount } = useContext(AuthContext),
-    router = useRouter(),
-    [error, setError] = useState(''),
-    [busy, setBusy] = useState(null)
-  const value = (item) => Number(user.is_superuser ? item.costPrice : item.salePrice),
-    total = items.reduce((sum, item) => sum + value(item), 0)
+  const { user, cartCount } = useContext(AuthContext)
+  const router = useRouter()
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(null)
+  const value = (item) => Number(user.is_superuser ? item.costPrice : item.salePrice)
+  const total = items.reduce((sum, item) => sum + value(item), 0)
   async function remove(item) {
     if (busy) return
     setBusy(item.id)
@@ -28,7 +28,7 @@ export default function Cart({ items, products }) {
       await removeCartItem(item.id)
       await router.replace(router.asPath)
     } catch (e) {
-      setError(Object.values(errorFields(e)).join(' '))
+      setError(errorMessage(e))
     } finally {
       setBusy(null)
     }

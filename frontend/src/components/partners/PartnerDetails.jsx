@@ -7,19 +7,18 @@ import Alert from '@/components/ui/Alert'
 import DetailItem from '@/components/ui/DetailItem'
 import { removeSupplier } from '@/services/supplierService'
 import { removeCarrier } from '@/services/carrierService'
-import { errorFields } from '@/lib/format'
+import { errorMessage } from '@/lib/format'
 
 export default function PartnerDetails({ kind, partner, children }) {
   const router = useRouter()
-  const [confirm, setConfirm] = useState(false),
-    [error, setError] = useState('')
+  const [confirm, setConfirm] = useState(false)
+  const [error, setError] = useState('')
   async function remove() {
     try {
       await (kind === 'suppliers' ? removeSupplier : removeCarrier)(partner.id)
       await router.push(`/${kind}`)
     } catch (e) {
-      const fields = errorFields(e)
-      setError(Object.values(fields).filter(Boolean).join(' '))
+      setError(errorMessage(e))
     } finally {
       setConfirm(false)
     }

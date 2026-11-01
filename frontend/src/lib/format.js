@@ -47,6 +47,9 @@ export function errorFields(error) {
   }
   return { detail: error.message || 'Não foi possível concluir a ação.' }
 }
+export function errorMessage(error) {
+  return Object.values(errorFields(error)).filter(Boolean).join(' ')
+}
 export function activePromotion(product, promotions, now) {
   return promotions.find(
     (p) =>

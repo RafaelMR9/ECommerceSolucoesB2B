@@ -8,13 +8,13 @@ import Field from '@/components/ui/Field'
 import Alert from '@/components/ui/Alert'
 import DemoAccess from '@/components/authentication/DemoAccess'
 import { withSession } from '@/lib/server/page'
-import { errorFields } from '@/lib/format'
+import { errorMessage } from '@/lib/format'
 
 export default function Login({ demoAccounts = [] }) {
   const router = useRouter()
-  const [values, setValues] = useState({ username: '', password: '' }),
-    [error, setError] = useState(''),
-    [pendingLogin, setPendingLogin] = useState(null)
+  const [values, setValues] = useState({ username: '', password: '' })
+  const [error, setError] = useState('')
+  const [pendingLogin, setPendingLogin] = useState(null)
   async function signIn(credentials, source = 'account') {
     if (pendingLogin) return
     setError('')
@@ -31,7 +31,7 @@ export default function Login({ demoAccounts = [] }) {
           : '/'
       )
     } catch (e) {
-      setError(Object.values(errorFields(e)).join(' '))
+      setError(errorMessage(e))
     } finally {
       setPendingLogin(null)
     }
